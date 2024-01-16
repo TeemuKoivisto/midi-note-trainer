@@ -1,0 +1,39 @@
+{
+  "type": "module",
+  "scripts": {
+    "format": "pnpm pretty && pnpm lint",
+    "pretty": "prettier --write \"**/*.+(js|cjs|mjs|jsx|json|html|css|less|scss|ts|tsx|svelte|yml|yaml|md|graphql|mdx)\" .",
+    "lint": "eslint --ignore-path .gitignore --fix --ext .js,.cjs,.ts,.tsx,.svelte,.css,.scss,.html .",
+    "client": "concurrently --kill-others 'pnpm --filter client dev'"
+  },
+  "engines": {
+    "node": ">=16",
+    "pnpm": ">=7.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/kit": "^1.28.0",
+    "@sveltejs/package": "^2.2.3",
+    "@sveltejs/vite-plugin-svelte": "^3.0.1",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-svelte3": "^4.0.0",
+    "prettier": "^3.0.3",
+    "prettier-plugin-svelte": "^3.0.3",
+    "rimraf": "^5.0.5",
+    "svelte": "^4.2.7",
+    "typescript": "^5.2.2",
+    "ts-node": "^10.9.1",
+    "vite": "^5.0.7",
+    "vite-plugin-dts": "^3.6.4",
+    "vite-tsconfig-paths": "^4.2.2"
+  }
+}

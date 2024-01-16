@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom"],
+    "target": "es2018"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
