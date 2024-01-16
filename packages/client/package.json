@@ -26,6 +26,7 @@
     "@iconify-icons/feather": "^1.2.3",
     "@iconify-icons/mdi": "^1.2.48",
     "@iconify/svelte": "^3.1.4",
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.3",
+    "webmidi": "^3.1.8"
   }
 }
