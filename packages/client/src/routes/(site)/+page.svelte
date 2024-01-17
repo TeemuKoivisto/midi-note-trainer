@@ -49,33 +49,32 @@
     input.channels[1].addListener('noteon', e => {
       console.log('noteon', e)
       // @ts-ignore
-      const note = midiToNote(e.rawData[1])
-      console.log(note)
-      switch (note) {
-        case 'E4':
-          // playedEl.style.bottom = '6px'
-          playedEl.style.bottom = '10pt'
-          break
-        case 'F4':
-          // playedEl.style.bottom = '6px'
-          playedEl.style.bottom = '17pt'
-          break
-        case 'G4':
-          // playedEl.style.bottom = '16px'
-          playedEl.style.bottom = '25pt'
-          break
-        case 'A4':
-          // playedEl.style.bottom = '25px'
-          playedEl.style.bottom = '32pt'
-          break
-        case 'B4':
-          playedEl.style.bottom = '39pt'
-          break
-        case 'C4':
-          playedEl.style.bottom = '46pt'
-          break
-      }
+      const data = e.rawData as [number, number, number]
+      const pos = positionNote('g', data[1])
+      console.log(`note ${data[1]} pos ${pos}`)
+      playedEl.style.bottom = `${pos}rem`
+      playedEl.style.display = 'block'
     })
+  }
+
+  function positionNote(clef: 'f' | 'g', note: number) {
+    const middle = 1.36 // rem
+    const step = 0.41809090909 // rem
+    // bottom: -5.75rem; -16
+    // step = (-5.75 - 1.36) / -17 = 0.41823529411
+    // f2 bottom: 1.77rem;
+    // g5 bottom: 3.463rem;
+    // f2 bottom: -5.735rem;
+    // step = (-5.735 -3.463) / -22 = 0.41809090909
+    if (clef === 'f') {
+      // middle note is d3
+      return middle + step * (note - 50)
+    } else if (clef === 'g') {
+      // middle note is b4
+      return middle + step * (note - 71)
+    } else {
+      console.warn('Unrecognized clef: ', clef)
+    }
   }
 </script>
 
@@ -94,7 +93,7 @@
     <div class="line">
       <span class="g-clef">𝄞</span>
       <span class="staff">𝄚</span>
-      <span class="note g4 target">𝅝</span>
+      <span class="note g4 target">𝄰𝅝</span>
       <span class="note played" bind:this={playedEl}>𝅝</span>
     </div>
     <div class="line">
@@ -107,7 +106,7 @@
       <span class="note c4">𝅝</span>
       <span class="note d4">𝅝</span>
       <span class="note e4">𝅝</span>
-      <span class="note g4">𝅝</span>
+      <span class="note g4">𝄰𝅝</span>
     </div>
   </section>
 </section>
@@ -188,6 +187,7 @@
     .played {
       bottom: 2.6rem;
       color: red;
+      display: none;
       left: 7rem;
       position: absolute;
     }
