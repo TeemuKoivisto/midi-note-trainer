@@ -4,13 +4,14 @@
 
   import type { Input } from 'webmidi'
 
+  import { midiToNote } from './midi'
+
   let status = ''
   let error = ''
-  let canvasEl: HTMLCanvasElement
+  let playedEl: HTMLElement
 
   onMount(() => {
     status = ''
-    draw()
     // Enable WebMidi.js and trigger the onEnabled() function when ready.
     WebMidi.enable()
       .then(() => {
@@ -44,32 +45,37 @@
   })
 
   function handleMidiFound(input: Input) {
+    console.log(playedEl)
     input.channels[1].addListener('noteon', e => {
       console.log('noteon', e)
+      // @ts-ignore
+      const note = midiToNote(e.rawData[1])
+      console.log(note)
+      switch (note) {
+        case 'E4':
+          // playedEl.style.bottom = '6px'
+          playedEl.style.bottom = '10pt'
+          break
+        case 'F4':
+          // playedEl.style.bottom = '6px'
+          playedEl.style.bottom = '17pt'
+          break
+        case 'G4':
+          // playedEl.style.bottom = '16px'
+          playedEl.style.bottom = '25pt'
+          break
+        case 'A4':
+          // playedEl.style.bottom = '25px'
+          playedEl.style.bottom = '32pt'
+          break
+        case 'B4':
+          playedEl.style.bottom = '39pt'
+          break
+        case 'C4':
+          playedEl.style.bottom = '46pt'
+          break
+      }
     })
-  }
-
-  function draw() {
-    var img = new Image()
-    img.src = '/g_clef.svg'
-    const ctx = canvasEl.getContext('2d')
-    if (!ctx) return
-    var canvasW = canvasEl.width,
-      canvasH = canvasEl.height
-    var imgW = img.naturalWidth || canvasW,
-      imgH = img.naturalHeight || canvasH
-    var ratio = canvasW / imgW
-    ctx.rect(0, 0, 200, 200)
-    ctx.fillStyle = 'black'
-    ctx.fill()
-    ctx?.drawImage(img, 0, 0, imgW * ratio, imgH * ratio)
-    img.onload = function () {
-      console.log('img', img)
-      ctx?.drawImage(img, 0, 0)
-      ctx.fillStyle = 'red'
-      ctx.fill()
-      // ctx?.drawImage(img, 0, 0, imgW * ratio, imgH * ratio)
-    }
   }
 </script>
 
@@ -77,22 +83,36 @@
   Practise Music Reading
 </h1>
 
-<section class="pl-1">
+<section class="pl-2">
   <p>
     {status}
   </p>
   {#if error}
     <span>{error}</span>
   {/if}
-  <div class="score">
-    <span class="g-clef">𝄞</span>
-    <span class="lines">𝄚</span>
-    <span class="note">𝅝</span>
-  </div>
-  <!-- <canvas id="score" bind:this={canvasEl} /> -->
+  <section class="pt-8 score">
+    <div class="line">
+      <span class="g-clef">𝄞</span>
+      <span class="staff">𝄚</span>
+      <span class="note g4 target">𝅝</span>
+      <span class="note played" bind:this={playedEl}>𝅝</span>
+    </div>
+    <div class="line">
+      <span class="f-clef">𝄢</span>
+      <span class="staff">𝄚</span>
+      <span class="note f3">𝅝</span>
+      <span class="note g3">𝅝</span>
+      <span class="note a3">𝅝</span>
+      <span class="note b3">𝅝</span>
+      <span class="note c4">𝅝</span>
+      <span class="note d4">𝅝</span>
+      <span class="note e4">𝅝</span>
+      <span class="note g4">𝅝</span>
+    </div>
+  </section>
 </section>
 
-<p>hello</p>
+<p class="pl-2">hello</p>
 
 <style lang="scss">
   section {
@@ -100,24 +120,75 @@
   }
   .score {
     display: flex;
-    position: relative;
+    flex-direction: column;
+    .line {
+      position: relative;
+    }
     .g-clef {
-      bottom: 10px;
+      bottom: -0.7rem;
       font-size: 8rem;
-      left: 1.5rem;
+      left: 1rem;
       line-height: 1;
       position: absolute;
     }
-    .lines {
+    .f-clef {
+      bottom: 1.2rem;
+      font-size: 4.4rem;
+      left: 1rem;
+      line-height: 1;
+      position: absolute;
+    }
+    .staff {
       display: block;
-      font-size: 5rem;
-      transform: scale(8, 1);
-      transform-origin: 2% 50%;
+      font-size: 3.5rem;
+      line-height: 1.42;
+      transform: scale(13, 1);
+      transform-origin: 0.4% 50%;
     }
     .note {
-      bottom: 18px;
-      font-size: 4rem;
-      left: 85px;
+      font-size: 3.1rem;
+      // line-height: 1;
+      position: absolute;
+    }
+    .f3 {
+      bottom: 2.2rem;
+      left: 5rem;
+    }
+    .g3 {
+      bottom: 2.62rem;
+      left: 6.1rem;
+    }
+    .a3 {
+      bottom: 3.04rem;
+      left: 7.2rem;
+    }
+    .b3 {
+      bottom: 3.46rem;
+      left: 8.3rem;
+    }
+    .c4 {
+      bottom: 3.88rem;
+      left: 9.4rem;
+    }
+    .d4 {
+      bottom: 4.2rem;
+      left: 8.3rem;
+    }
+    .e4 {
+      bottom: 4.5rem;
+      left: 10.5rem;
+    }
+    .g4 {
+      bottom: 0.5rem;
+      left: 5rem;
+    }
+    .target {
+      left: 5rem;
+    }
+    .played {
+      bottom: 2.6rem;
+      color: red;
+      left: 7rem;
       position: absolute;
     }
   }
