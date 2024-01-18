@@ -34,11 +34,11 @@ export function parseNote(val: string): Result<number> {
     } catch (err) {
       return { err: `Couldn't parse note "${val}" octave`, code: 400 }
     }
-    const found = Object.values(C_MAJOR_NOTES).find(n => n.note === note)
-    if (!found) {
+    const found = Object.values(C_MAJOR_NOTES).findIndex(n => n.note === note)
+    if (found === -1) {
       return { err: `Note "${val}" not found in scale`, code: 400 }
     }
-    return { data: 12 + octave * 7 + found.steps }
+    return { data: 12 + octave * 12 + found }
   } else {
     return { err: `Unrecognized note "${val}"`, code: 400 }
   }
