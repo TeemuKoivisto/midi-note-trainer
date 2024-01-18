@@ -12,6 +12,7 @@
   "devDependencies": {
     "@sveltejs/adapter-static": "2.0.3",
     "@sveltejs/kit": "^1.26.0",
+    "@/types": "workspace:*",
     "autoprefixer": "^10.4.16",
     "cross-fetch": "^4.0.0",
     "postcss": "^8.4.30",

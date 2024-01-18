@@ -1,47 +1,43 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { WebMidi } from 'webmidi'
 
-  import type { Input } from 'webmidi'
+  import MidiInfo from '$components/MidiInfo.svelte'
 
   import { C_MAJOR_NOTES, midiToNote } from './midi'
+  import { midiActions, midiInput } from '$stores/midi'
 
-  let status = ''
-  let error = ''
+  import type { NoteMessageEvent } from 'webmidi'
+
+  let status = 'Finding device...'
   let playedEl: HTMLElement
 
+  let targetNote = 'C4'
+  let playedNote = 'B4'
+
   onMount(() => {
-    status = ''
-    // Enable WebMidi.js and trigger the onEnabled() function when ready.
-    WebMidi.enable()
-      .then(() => {
-        if (WebMidi.inputs.length > 0) {
-          handleMidiFound(WebMidi.inputs[0])
-        } else {
-          status = 'No MIDI device found.'
-        }
-      })
-      .catch(err => {
-        console.error(err)
-        error = err.toString()
-      })
+    handlePromptMIDI()
   })
 
-  function handleMidiFound(input: Input) {
-    console.log(playedEl)
-    input.channels[1].addListener('noteon', e => {
-      console.log('noteon', e)
-      // @ts-ignore
-      const data = e.rawData as [number, number, number]
-      const semiTonesFromC4 = data[1] - 60
-      const note = C_MAJOR_NOTES[(semiTonesFromC4 % 12) as keyof typeof C_MAJOR_NOTES]
-      const pos = positionNote('g', data[1])
-      console.log(`note ${data[1]} pos ${pos}`)
-      console.log(midiToNote(data[1]))
-      playedEl.style.bottom = `${pos}rem`
-      playedEl.style.display = 'block'
-      playedEl.textContent = `${note.flat ? '♭' : note.sharp ? '♯' : ''}𝅝`
-    })
+  midiInput.subscribe(input => {
+    if (input) {
+      input.channels[1].addListener('noteon', noteOnListner)
+    }
+  })
+
+  function noteOnListner(e: NoteMessageEvent) {
+    console.log('noteon', e)
+    // @ts-ignore
+    const data = e.rawData as [number, number, number]
+    const octave = Math.floor((data[1] - 12) / 12)
+    const semiTonesFromC4 = data[1] - 60
+    const note = C_MAJOR_NOTES[(semiTonesFromC4 % 12) as keyof typeof C_MAJOR_NOTES]
+    const pos = positionNote('g', data[1])
+    console.log(`note ${data[1]} pos ${pos}`)
+    console.log(midiToNote(data[1]))
+    playedEl.style.bottom = `${pos}rem`
+    playedEl.style.display = 'block'
+    playedEl.textContent = `${note.flat ? '♭' : note.sharp ? '♯' : ''}𝅝`
+    playedNote = `${note.note}${octave}`
   }
 
   function positionNote(clef: 'f' | 'g', value: number) {
@@ -76,19 +72,32 @@
       console.warn('Unrecognized clef: ', clef)
     }
   }
+
+  async function handlePromptMIDI() {
+    status = 'Finding device...'
+    const res = await midiActions.openMidi()
+    if ('data' in res) {
+      status = res.data.name
+    } else {
+      status = res.err
+    }
+  }
+
+  function playGuess10Notes() {}
 </script>
 
-<h1 class="font-cursive my-8 text-5xl md:text-7xl mt-20 mb-16 tracking-tight">
-  Practise Music Reading
-</h1>
+<h1 class="font-cursive my-8 text-3xl md:text-5xl mt-12 tracking-tight">Practise Music Reading</h1>
+
+<section>
+  <MidiInfo />
+  {#if midiInput}
+    <div>
+      <button class="btn primary" on:click={playGuess10Notes}>Guess 10 Notes</button>
+    </div>
+  {/if}
+</section>
 
 <section class="pl-2">
-  <p>
-    {status}
-  </p>
-  {#if error}
-    <span>{error}</span>
-  {/if}
   <section class="pt-8 score">
     <div class="line">
       <span class="g-clef">𝄞</span>
@@ -109,24 +118,21 @@
       <span class="note g4"></span>
     </div>
   </section>
-  <div class="bravura">
-    𝄆 𝄞𝄰 𝅗𝅥𝅘𝅥𝅮𝅘𝅥𝅮𝅘𝅥 𝄇
-    <div class="line">
-      <span class="g-clef"></span>
-      <span class="f-clef"></span>
-      <span class="f-clef">𝄢</span>
-      <span class="note g4 target">♯𝅝</span>
-    </div>
-    
+  <div class="objective">
+    <div>Target: {targetNote}</div>
+    {#if playedNote}
+      <div>Played: {playedNote}</div>
+    {/if}
   </div>
 </section>
 
-<p class="pl-2">hello</p>
-
 <style lang="scss">
-  .bravura {
-    font-family: 'Bravura Text', sans-serif;
-    font-size: 4rem;
+  .objective {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 25% 25%;
+    grid-template-rows: auto;
+    align-items: center;
   }
   .score {
     display: flex;
