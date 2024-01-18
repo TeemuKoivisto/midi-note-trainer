@@ -25,5 +25,7 @@ export const midiActions = {
       })
       .catch(err => ({ err: err.toString(), code: 403 }))
   },
-  setMidiRange() {}
+  setMidiRange(range: [number, number]) {
+    midiRange.set(range)
+  }
 }

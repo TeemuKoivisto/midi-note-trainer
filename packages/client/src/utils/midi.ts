@@ -1,3 +1,5 @@
+import type { Result } from '@/types'
+
 export const C_MAJOR_NOTES = {
   0: { note: 'C', steps: 0, sharp: false, flat: false },
   1: { note: 'C♯', steps: 0, sharp: true, flat: false },
@@ -21,4 +23,23 @@ export function getNote(value: number) {
   // https://en.wikipedia.org/wiki/C_(musical_note)#Middle_C
   const note = C_MAJOR_NOTES[(semitonesFromC0 % 12) as keyof typeof C_MAJOR_NOTES]
   return { ...note, absolute: `${note.note}${octave}` }
+}
+
+export function parseNote(val: string): Result<number> {
+  if (val.length === 2 || val.length === 3) {
+    const note = val.slice(0, val.length - 1).toUpperCase()
+    let octave: number | undefined
+    try {
+      octave = parseInt(val[val.length - 1])
+    } catch (err) {
+      return { err: `Couldn't parse note "${val}" octave`, code: 400 }
+    }
+    const found = Object.values(C_MAJOR_NOTES).find(n => n.note === note)
+    if (!found) {
+      return { err: `Note "${val}" not found in scale`, code: 400 }
+    }
+    return { data: 12 + octave * 7 + found.steps }
+  } else {
+    return { err: `Unrecognized note "${val}"`, code: 400 }
+  }
 }

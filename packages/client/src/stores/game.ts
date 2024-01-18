@@ -39,7 +39,17 @@ export const gameActions = {
     const range = get(midiRange)
     console.log('range', range)
     for (let i = 0; i < amount; i += 1) {
-      notes.push(range[0] + Math.floor(Math.random() * (range[1] - range[0])))
+      let attempts = 0,
+        val: number = range[1]
+      // Try having all values unique
+      while (attempts < 5) {
+        attempts += 1
+        val = range[0] + Math.floor(Math.random() * (range[1] - range[0]))
+        if (!notes.includes(val)) {
+          attempts = 5
+        }
+      }
+      notes.push(val)
     }
     const game = new GuessGame(notes)
     console.log('new game ', notes)
