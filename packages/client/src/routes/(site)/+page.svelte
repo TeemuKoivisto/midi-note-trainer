@@ -137,15 +137,22 @@
   }
 
   function playGuessNotes() {
+    guessState = 'waiting'
     const game = gameActions.playGuessNotes()
     setTargetNote(game.current)
     setPlayedNote()
   }
+  function clearGame() {
+    guessState = 'waiting'
+    gameActions.clearGame()
+  }
 </script>
 
-<h1 class="font-cursive my-8 text-3xl md:text-5xl mt-12 tracking-tight">Practise Music Reading</h1>
+<h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight">
+  Practise Music Reading
+</h1>
 
-<section>
+<section class="px-4 md:px-0">
   <MidiInfo />
   {#if midiInput}
     <div>
@@ -154,8 +161,8 @@
   {/if}
 </section>
 
-<section class="pl-2">
-  <section class="pt-8 score">
+<section>
+  <section class="pt-12 pb-8 ml-[-0.5rem] md:ml-[-1.6rem] score">
     <div class="line">
       <span class="g-clef">𝄞</span>
       <span class="staff">𝄚</span>
@@ -174,7 +181,11 @@
         <div class="ml-8">Played: {getNote(playedNote).absolute}</div>
       {:else if guessState === 'ended'}
         <div>
-          Result: {$currentGame.correct} / {$currentGame.notes.length}
+          <div>Result: {$currentGame.correct} / {$currentGame.notes.length}</div>
+          <div>
+            <button class="btn primary" on:click={playGuessNotes}>Try Again</button>
+            <button class="btn primary" on:click={clearGame}>Clear</button>
+          </div>
         </div>
       {/if}
     </div>
@@ -201,22 +212,27 @@
     .g-clef {
       bottom: 0.8rem;
       font-size: 3.3rem;
-      left: 1rem;
+      left: 2.5rem;
       line-height: 1;
       position: absolute;
     }
     .f-clef {
       bottom: 0.7rem;
       font-size: 3rem;
-      left: 1rem;
+      left: 2.5rem;
       position: absolute;
     }
     .staff {
       display: block;
       font-size: 3.5rem;
       line-height: 1.42;
-      transform: scale(13, 1);
-      transform-origin: 0.4% 50%;
+      transform: scale(10, 1);
+      transform-origin: 0 50%;
+      width: 61.6px;
+      @media (width <= 605px) {
+        transform: scale(5, 1);
+        transform-origin: -6% 50%;
+      }
     }
     .note {
       font-size: 3.1rem;
@@ -224,13 +240,13 @@
       position: absolute;
     }
     .target {
-      left: 5rem;
+      left: 7rem;
       pointer-events: none;
     }
     .played {
       bottom: 2.6rem;
       display: none;
-      left: 9rem;
+      left: 10rem;
       pointer-events: none;
       position: absolute;
     }

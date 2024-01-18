@@ -88,6 +88,9 @@
     grid-template-columns: 25% 25% 25%;
     grid-template-rows: auto;
     align-items: center;
+    @media (width <= 475px) {
+      grid-template-columns: 50% 50%;
+    }
   }
   .error {
     @apply text-xs text-red-500;
