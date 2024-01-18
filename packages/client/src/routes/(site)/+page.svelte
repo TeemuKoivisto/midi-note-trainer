@@ -52,13 +52,14 @@
       const data = e.rawData as [number, number, number]
       const pos = positionNote('g', data[1])
       console.log(`note ${data[1]} pos ${pos}`)
+      console.log(midiToNote(data[1]))
       playedEl.style.bottom = `${pos}rem`
       playedEl.style.display = 'block'
     })
   }
 
   function positionNote(clef: 'f' | 'g', note: number) {
-    const middle = 1.36 // rem
+    const middle = 0.5 // rem
     const step = 0.41809090909 // rem
     // bottom: -5.75rem; -16
     // step = (-5.75 - 1.36) / -17 = 0.41823529411
@@ -66,12 +67,15 @@
     // g5 bottom: 3.463rem;
     // f2 bottom: -5.735rem;
     // step = (-5.735 -3.463) / -22 = 0.41809090909
+    const noteSeq = (note - 12) % 12
+    const isFlatOrSharp =
+      noteSeq === 1 || noteSeq === 3 || noteSeq === 6 || noteSeq === 8 || noteSeq === 10
     if (clef === 'f') {
       // middle note is d3
       return middle + step * (note - 50)
     } else if (clef === 'g') {
-      // middle note is b4
-      return middle + step * (note - 71)
+      // 0.5rem is the pos for g4
+      return 0.5 + step * (note - 67)
     } else {
       console.warn('Unrecognized clef: ', clef)
     }
@@ -93,7 +97,7 @@
     <div class="line">
       <span class="g-clef">𝄞</span>
       <span class="staff">𝄚</span>
-      <span class="note g4 target">𝄰𝅝</span>
+      <span class="note g4 target">♯𝅝</span>
       <span class="note played" bind:this={playedEl}>𝅝</span>
     </div>
     <div class="line">
@@ -103,38 +107,49 @@
       <span class="note g3">𝅝</span>
       <span class="note a3">𝅝</span>
       <span class="note b3">𝅝</span>
-      <span class="note c4">𝅝</span>
+      <span class="note c4">♯𝅝</span>
       <span class="note d4">𝅝</span>
       <span class="note e4">𝅝</span>
-      <span class="note g4">𝄰𝅝</span>
+      <span class="note g4"></span>
     </div>
   </section>
+  <div class="bravura">
+    𝄆 𝄞𝄰 𝅗𝅥𝅘𝅥𝅮𝅘𝅥𝅮𝅘𝅥 𝄇
+    <div class="line">
+      <span class="g-clef"></span>
+      <span class="f-clef"></span>
+      <span class="f-clef">𝄢</span>
+      <span class="note g4 target">♯𝅝</span>
+    </div>
+    
+  </div>
 </section>
 
 <p class="pl-2">hello</p>
 
 <style lang="scss">
-  section {
-    font-family: 'Noto Music', sans-serif;
+  .bravura {
+    font-family: 'Bravura Text', sans-serif;
+    font-size: 4rem;
   }
   .score {
     display: flex;
     flex-direction: column;
+    font-family: 'Noto Music', sans-serif;
     .line {
       position: relative;
     }
     .g-clef {
-      bottom: -0.7rem;
-      font-size: 8rem;
+      bottom: 0.8rem;
+      font-size: 3.3rem;
       left: 1rem;
       line-height: 1;
       position: absolute;
     }
     .f-clef {
-      bottom: 1.2rem;
-      font-size: 4.4rem;
+      bottom: 0.7rem;
+      font-size: 3rem;
       left: 1rem;
-      line-height: 1;
       position: absolute;
     }
     .staff {

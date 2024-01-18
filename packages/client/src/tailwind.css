@@ -2,7 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Noto+Music&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Noto+Music&display=swap"); */
+
+@font-face {
+  font-family: "Bravura Text"; /*You can use whatever name that you want*/
+  src: url("/BravuraText.otf");
+}
+
+@font-face {
+  font-family: "Noto Music"; /*You can use whatever name that you want*/
+  src: url("/NotoMusic-Regular.ttf");
+}
 
 html {
   font-size: 16px;

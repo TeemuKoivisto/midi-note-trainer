@@ -126,3 +126,9 @@ export function midiToNote(val: number) {
   }
   return n
 }
+
+export function toNote(val: number) {
+  const noteSeq = (val - 12) % 12
+  const isFlatOrSharp =
+    noteSeq === 1 || noteSeq === 3 || noteSeq === 6 || noteSeq === 8 || noteSeq === 10
+}
