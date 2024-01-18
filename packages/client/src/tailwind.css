@@ -5,12 +5,14 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Noto+Music&display=swap"); */
 
 @font-face {
-  font-family: "Bravura Text"; /*You can use whatever name that you want*/
+  /* https://github.com/steinbergmedia/bravura/blob/02e8ed29a29115df35007d1178cebaeee26c20e1/redist/otf/BravuraText.otf */
+  font-family: "Bravura Text";
   src: url("/BravuraText.otf");
 }
 
 @font-face {
-  font-family: "Noto Music"; /*You can use whatever name that you want*/
+  /* https://fonts.google.com/noto/specimen/Noto+Music */
+  font-family: "Noto Music";
   src: url("/NotoMusic-Regular.ttf");
 }
 

@@ -1,3 +1,18 @@
+export const C_MAJOR_NOTES = {
+  0: { note: 'C', steps: 0, sharp: false, flat: false },
+  1: { note: 'C♯', steps: 0, sharp: true, flat: false },
+  2: { note: 'D', steps: 1, sharp: false, flat: false },
+  3: { note: 'E♭', steps: 2, sharp: false, flat: true },
+  4: { note: 'E', steps: 2, sharp: false, flat: false },
+  5: { note: 'F', steps: 3, sharp: false, flat: false },
+  6: { note: 'F♯', steps: 3, sharp: true, flat: false },
+  7: { note: 'G', steps: 4, sharp: false, flat: false },
+  8: { note: 'G♯', steps: 4, sharp: true, flat: false },
+  9: { note: 'A', steps: 5, sharp: false, flat: false },
+  10: { note: 'B♭', steps: 6, sharp: false, flat: true },
+  11: { note: 'B', steps: 6, sharp: false, flat: false }
+} as const
+
 const noteToMidiMap = {
   G9: 0x7f,
   Gb9: 0x7e,

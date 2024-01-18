@@ -4,7 +4,7 @@
 
   import type { Input } from 'webmidi'
 
-  import { midiToNote } from './midi'
+  import { C_MAJOR_NOTES, midiToNote } from './midi'
 
   let status = ''
   let error = ''
@@ -25,23 +25,6 @@
         console.error(err)
         error = err.toString()
       })
-
-    function onEnabled() {
-      if (WebMidi.inputs.length < 1) {
-        status += 'No device detected.'
-      } else {
-        WebMidi.inputs.forEach((device, index) => {
-          status += `${index}: ${device.name} <br>`
-        })
-      }
-
-      const mySynth = WebMidi.inputs[0]
-      // const mySynth = WebMidi.getInputByName("TYPE NAME HERE!")
-
-      mySynth.channels[1].addListener('noteon', e => {
-        status += `${e.note.name} <br>`
-      })
-    }
   })
 
   function handleMidiFound(input: Input) {
@@ -50,32 +33,45 @@
       console.log('noteon', e)
       // @ts-ignore
       const data = e.rawData as [number, number, number]
+      const semiTonesFromC4 = data[1] - 60
+      const note = C_MAJOR_NOTES[(semiTonesFromC4 % 12) as keyof typeof C_MAJOR_NOTES]
       const pos = positionNote('g', data[1])
       console.log(`note ${data[1]} pos ${pos}`)
       console.log(midiToNote(data[1]))
       playedEl.style.bottom = `${pos}rem`
       playedEl.style.display = 'block'
+      playedEl.textContent = `${note.flat ? '♭' : note.sharp ? '♯' : ''}𝅝`
     })
   }
 
-  function positionNote(clef: 'f' | 'g', note: number) {
+  function positionNote(clef: 'f' | 'g', value: number) {
     const middle = 0.5 // rem
-    const step = 0.41809090909 // rem
+    const stepSize = 0.41809090909 // rem
     // bottom: -5.75rem; -16
     // step = (-5.75 - 1.36) / -17 = 0.41823529411
     // f2 bottom: 1.77rem;
     // g5 bottom: 3.463rem;
     // f2 bottom: -5.735rem;
     // step = (-5.735 -3.463) / -22 = 0.41809090909
-    const noteSeq = (note - 12) % 12
-    const isFlatOrSharp =
-      noteSeq === 1 || noteSeq === 3 || noteSeq === 6 || noteSeq === 8 || noteSeq === 10
+    const semiTonesFromC4 = value - 60
+    // Center the note from C0 which equals 12 in MIDI values, then get the sequence after C
+    const note = C_MAJOR_NOTES[(semiTonesFromC4 % 12) as keyof typeof C_MAJOR_NOTES]
+    const octaves = Math.floor(Math.abs(semiTonesFromC4) / 12)
     if (clef === 'f') {
       // middle note is d3
-      return middle + step * (note - 50)
+      return middle + stepSize * (value - 50)
     } else if (clef === 'g') {
-      // 0.5rem is the pos for g4
-      return 0.5 + step * (note - 67)
+      let steps
+      if (semiTonesFromC4 >= 0) {
+        // higher than C4
+        steps = octaves * 7 + note.steps
+      } else {
+        // lower than C4
+        steps = -1 * (octaves * 7 + note.steps === 0 ? 0 : 7 - note.steps)
+      }
+      // Adjust the position -1.2rem being the value for C4 in G-treble
+      console.log(`steps ${steps}`)
+      return -1.2 + stepSize * steps
     } else {
       console.warn('Unrecognized clef: ', clef)
     }
