@@ -4,15 +4,19 @@
   import MidiInfo from '$components/MidiInfo.svelte'
 
   import { C_MAJOR_NOTES, midiToNote } from './midi'
+  import { currentGame, gameActions } from '$stores/game'
   import { midiActions, midiInput } from '$stores/midi'
 
   import type { NoteMessageEvent } from 'webmidi'
 
   let status = 'Finding device...'
   let playedEl: HTMLElement
+  let targetEl: HTMLElement
 
-  let targetNote = 'C4'
-  let playedNote = 'B4'
+  let targetNote = 0
+  let playedNote = 0
+  let timeout: ReturnType<typeof setTimeout> | undefined
+  let guessState: 'waiting' | 'correct' | 'wrong'
 
   onMount(() => {
     handlePromptMIDI()
@@ -25,19 +29,63 @@
   })
 
   function noteOnListner(e: NoteMessageEvent) {
+    if (timeout) return
     console.log('noteon', e)
     // @ts-ignore
     const data = e.rawData as [number, number, number]
-    const octave = Math.floor((data[1] - 12) / 12)
-    const semiTonesFromC4 = data[1] - 60
-    const note = C_MAJOR_NOTES[(semiTonesFromC4 % 12) as keyof typeof C_MAJOR_NOTES]
-    const pos = positionNote('g', data[1])
-    console.log(`note ${data[1]} pos ${pos}`)
-    console.log(midiToNote(data[1]))
-    playedEl.style.bottom = `${pos}rem`
-    playedEl.style.display = 'block'
-    playedEl.textContent = `${note.flat ? '♭' : note.sharp ? '♯' : ''}𝅝`
-    playedNote = `${note.note}${octave}`
+    const value = data[1]
+    setPlayedNote(value)
+    if (!$currentGame) return
+    targetNote = $currentGame.current
+    guessState = $currentGame.guess(value) ? 'correct' : 'wrong'
+    timeout = setTimeout(() => {
+      if ($currentGame?.ended) {
+        gameActions.endGame()
+        setTargetNote()
+      } else if ($currentGame) {
+        setTargetNote($currentGame.current)
+      }
+      setPlayedNote()
+      guessState = 'waiting'
+      timeout = undefined
+    }, 2000)
+  }
+
+  function setPlayedNote(value?: number) {
+    if (value === undefined) {
+      playedEl.style.display = 'none'
+      playedNote = 0
+    } else {
+      const note = getNote(value)
+      const pos = positionNote('g', value)
+      console.log(`played note ${value} pos ${pos}`)
+      playedEl.style.bottom = `${pos}rem`
+      playedEl.style.display = 'block'
+      playedEl.textContent = `${note.includes('♭') ? '♭' : note.includes('♯') ? '♯' : ''}𝅝`
+      playedNote = value
+    }
+  }
+
+  function setTargetNote(value?: number) {
+    if (value === undefined) {
+      gameActions.endGame()
+      targetEl.style.display = 'none'
+      targetNote = 0
+    } else {
+      console.log(`hey new target note ${value}`)
+      const target = getNote(value)
+      const pos = positionNote('g', value)
+      targetEl.style.bottom = `${pos}rem`
+      targetEl.style.display = 'block'
+      targetEl.textContent = `${target.includes('♭') ? '♭' : target.includes('♯') ? '♯' : ''}𝅝`
+    }
+  }
+
+  function getNote(value: number) {
+    const semitonesFromC0 = value - 12
+    const octave = Math.floor(semitonesFromC0 / 12)
+    const note = C_MAJOR_NOTES[(semitonesFromC0 % 12) as keyof typeof C_MAJOR_NOTES]
+    return `${note.note}${octave}`
   }
 
   function positionNote(clef: 'f' | 'g', value: number) {
@@ -83,7 +131,11 @@
     }
   }
 
-  function playGuess10Notes() {}
+  function playGuessNotes() {
+    const game = gameActions.playGuessNotes()
+    setTargetNote(game.current)
+    setPlayedNote()
+  }
 </script>
 
 <h1 class="font-cursive my-8 text-3xl md:text-5xl mt-12 tracking-tight">Practise Music Reading</h1>
@@ -92,7 +144,7 @@
   <MidiInfo />
   {#if midiInput}
     <div>
-      <button class="btn primary" on:click={playGuess10Notes}>Guess 10 Notes</button>
+      <button class="btn primary" on:click={playGuessNotes}>Guess 10 Notes</button>
     </div>
   {/if}
 </section>
@@ -102,28 +154,36 @@
     <div class="line">
       <span class="g-clef">𝄞</span>
       <span class="staff">𝄚</span>
-      <span class="note g4 target">♯𝅝</span>
-      <span class="note played" bind:this={playedEl}>𝅝</span>
+      <span class="note target" bind:this={targetEl}></span>
+      <span class="note played" bind:this={playedEl}></span>
     </div>
     <div class="line">
       <span class="f-clef">𝄢</span>
       <span class="staff">𝄚</span>
-      <span class="note f3">𝅝</span>
+      <!-- <span class="note f3">𝅝</span>
       <span class="note g3">𝅝</span>
       <span class="note a3">𝅝</span>
       <span class="note b3">𝅝</span>
       <span class="note c4">♯𝅝</span>
       <span class="note d4">𝅝</span>
       <span class="note e4">𝅝</span>
-      <span class="note g4"></span>
+      <span class="note g4"></span> -->
     </div>
   </section>
-  <div class="objective">
-    <div>Target: {targetNote}</div>
-    {#if playedNote}
-      <div>Played: {playedNote}</div>
-    {/if}
-  </div>
+  {#if $currentGame}
+    <div class="objective">
+      {#if guessState === 'correct' || guessState === 'wrong'}
+        <div>Target: {getNote(targetNote)}</div>
+        <div>Played: {getNote(playedNote)}</div>
+      {/if}
+    </div>
+  {:else}
+    <div class="objective">
+      {#if playedNote > 0}
+        <div>Played: {getNote(playedNote)}</div>
+      {/if}
+    </div>
+  {/if}
 </section>
 
 <style lang="scss">
@@ -205,7 +265,7 @@
       bottom: 2.6rem;
       color: red;
       display: none;
-      left: 7rem;
+      left: 9rem;
       position: absolute;
     }
   }
