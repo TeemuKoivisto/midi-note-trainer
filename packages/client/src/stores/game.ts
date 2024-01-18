@@ -6,6 +6,7 @@ import { persist } from './persist'
 
 class GuessGame {
   notes: number[]
+  correct = 0
   idx = 0
   constructor(notes: number[]) {
     this.notes = notes
@@ -14,10 +15,13 @@ class GuessGame {
     return this.notes[this.idx]
   }
   get ended() {
-    return this.notes.length === this.idx - 1
+    return this.notes.length === this.idx + 1
   }
   guess(note: number) {
     const result = this.current === note
+    if (result) {
+      this.correct += 1
+    }
     this.idx += 1
     return result
   }
@@ -42,7 +46,7 @@ export const gameActions = {
     currentGame.set(game)
     return game
   },
-  endGame() {
+  clearGame() {
     currentGame.set(undefined)
   }
 }

@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { midiActions, midiInput, midiRange } from '$stores/midi'
+  import { getNote } from '$utils/midi'
 
-  import { midiActions, midiInput } from '$stores/midi'
+  let rangeMin = getNote($midiRange[0]).absolute
+  let rangeMax = getNote($midiRange[1]).absolute
 
   function handleSetRange() {
     // prompt -> press the lowest note in your MIDI device
@@ -23,9 +25,9 @@
       <div class="flex flex-col">
         <label class="font-bold" for="range_min">Range</label>
         <div class="my-1 flex">
-          <input class="w-10" id="range_min" value={'C4'} />
+          <input class="w-10" id="range_min" bind:value={rangeMin} />
           <span class="mx-2">-</span>
-          <input class="w-10" id="range_max" value={'C5'} />
+          <input class="w-10" id="range_max" bind:value={rangeMax} />
         </div>
         <div>
           <button class="btn primary" on:click={handleSetRange}>Use MIDI</button>

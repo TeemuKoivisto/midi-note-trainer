@@ -16,7 +16,7 @@
   let targetNote = 0
   let playedNote = 0
   let timeout: ReturnType<typeof setTimeout> | undefined
-  let guessState: 'waiting' | 'correct' | 'wrong'
+  let guessState: 'waiting' | 'correct' | 'wrong' | 'ended'
 
   onMount(() => {
     handlePromptMIDI()
@@ -44,15 +44,15 @@
       setPlayedNote(value, correct)
       timeout = setTimeout(() => {
         if ($currentGame?.ended) {
-          gameActions.endGame()
           setTargetNote()
+          guessState = 'ended'
         } else if ($currentGame) {
           setTargetNote($currentGame.current)
+          guessState = 'waiting'
         }
         setPlayedNote()
-        guessState = 'waiting'
         timeout = undefined
-      }, 20000000)
+      }, 2000)
     }
   }
 
@@ -82,7 +82,6 @@
 
   function setTargetNote(value?: number) {
     if (value === undefined) {
-      gameActions.endGame()
       targetEl.style.display = 'none'
       targetNote = 0
     } else {
@@ -173,6 +172,10 @@
       {#if guessState === 'correct' || guessState === 'wrong'}
         <div>Target: {getNote(targetNote).absolute}</div>
         <div class="ml-8">Played: {getNote(playedNote).absolute}</div>
+      {:else if guessState === 'ended'}
+        <div>
+          Result: {$currentGame.correct} / {$currentGame.notes.length}
+        </div>
       {/if}
     </div>
   {:else}
