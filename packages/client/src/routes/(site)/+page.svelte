@@ -12,6 +12,7 @@
   let status = 'Finding device...'
   let playedEl: HTMLElement
   let targetEl: HTMLElement
+  let ledgerLines = [] as { bottom: string }[]
 
   let targetNote = 0
   let playedNote = 0
@@ -64,7 +65,7 @@
       playedNote = 0
     } else {
       const note = getNote(value)
-      const pos = positionNote('g', value)
+      const pos = positionNote(value)
       console.log(`played note ${value} pos ${pos}`)
       playedEl.style.bottom = `${pos}rem`
       playedEl.style.display = 'block'
@@ -85,17 +86,28 @@
       targetEl.style.display = 'none'
       targetNote = 0
     } else {
-      console.log(`hey new target note ${value}`)
       const target = getNote(value)
-      const pos = positionNote('g', value)
+      const pos = positionNote(value)
       targetEl.style.bottom = `${pos}rem`
       targetEl.style.display = 'block'
       targetEl.textContent = `${target.flat ? '♭' : target.sharp ? '♯' : ''}𝅝`
     }
   }
 
-  function positionNote(clef: 'f' | 'g', value: number) {
-    const middle = 0.5 // rem
+  function drawLedgerLines(from: number, to: number) {
+    // 81 >= every 3rd step
+    // 60 -> middle C
+    if (from === 60) {
+      ledgerLines = [{ bottom: '0.02rem' }]
+    } else if (from >= 81) {
+      ledgerLines = [{ bottom: '4.97rem' }]
+      for (let s = from; s <= to; s += 3) {
+        console.log('line', s)
+      }
+    }
+  }
+
+  function positionNote(value: number) {
     const stepSize = 0.41809090909 // rem
     // bottom: -5.75rem; -16
     // step = (-5.75 - 1.36) / -17 = 0.41823529411
@@ -106,24 +118,17 @@
     const semiTonesFromC4 = value - 60
     const note = getNote(value)
     const octaves = Math.floor(Math.abs(semiTonesFromC4) / 12)
-    if (clef === 'f') {
-      // middle note is d3
-      return middle + stepSize * (value - 50)
-    } else if (clef === 'g') {
-      let steps
-      if (semiTonesFromC4 >= 0) {
-        // higher than C4
-        steps = octaves * 7 + note.steps
-      } else {
-        // lower than C4
-        steps = -1 * (octaves * 7 + note.steps === 0 ? 0 : 7 - note.steps)
-      }
-      // Adjust the position -1.2rem being the value for C4 in G-treble
-      console.log(`steps ${steps}`)
-      return -1.2 + stepSize * steps
+    let steps
+    if (semiTonesFromC4 >= 0) {
+      // higher than C4
+      steps = octaves * 7 + note.steps
     } else {
-      console.warn('Unrecognized clef: ', clef)
+      // lower than C4
+      steps = -1 * (octaves * 7 + note.steps === 0 ? 0 : 7 - note.steps)
     }
+    // Adjust the position -1.2rem being the value for C4 in G-treble
+    console.log(`steps ${steps}`)
+    return -1.2 + stepSize * steps
   }
 
   async function handlePromptMIDI() {
@@ -135,7 +140,6 @@
       status = res.err
     }
   }
-
   function playGuessNotes() {
     guessState = 'waiting'
     const game = gameActions.playGuessNotes()
@@ -168,6 +172,14 @@
       <span class="staff">𝄚</span>
       <span class="note target" bind:this={targetEl}></span>
       <span class="note played" bind:this={playedEl}></span>
+      <!-- <span class="note ex">𝅝</span>
+      <span class="ledger-line"></span>
+      <span class="note ex2">♯𝅝</span> -->
+      <!-- <span class="note ex2"></span> -->
+      <!-- <span class="ledger-line2"></span> -->
+      <!-- {#each ledgerLines as line}
+        <span class="ledger-line" style:bottom={line.bottom}></span>
+      {/each} -->
     </div>
     <div class="line">
       <span class="f-clef">𝄢</span>
@@ -249,6 +261,43 @@
       left: 10rem;
       pointer-events: none;
       position: absolute;
+    }
+    .ex {
+      bottom: -0.4rem;
+      left: 10rem;
+      line-height: 1;
+    }
+    .ledger-line {
+      border-top: 1.25pt solid #222;
+      bottom: -0.02rem;
+      font-size: 3.1rem;
+      left: 9.8rem;
+      line-height: 1;
+      pointer-events: none;
+      position: absolute;
+      width: 2rem;
+    }
+    .ex2 {
+      bottom: 3.81709rem;
+      left: 12rem;
+      position: absolute;
+      &::after {
+        content: '¯¯¯';
+        font-size: 1.2rem;
+        position: relative;
+        right: 1.69rem;
+        top: 0.55rem;
+      }
+    }
+    .ledger-line2 {
+      border-top: 1.25pt solid #222;
+      bottom: 4.97rem;
+      font-size: 3.1rem;
+      left: 11.8rem;
+      line-height: 1;
+      pointer-events: none;
+      position: absolute;
+      width: 2rem;
     }
   }
   :global(.wrong) {

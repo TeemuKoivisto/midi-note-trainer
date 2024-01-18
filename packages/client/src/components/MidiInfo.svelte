@@ -49,16 +49,16 @@
       </div>
       <div class="flex flex-col">
         <label class="font-bold" for="range_min">Range</label>
-        <div class="my-1 flex">
+        <div class="my-1 flex w-full">
           <input
-            class="w-10"
+            class="w-full"
             id="range_min"
             bind:value={rangeMin}
             on:change={e => handleRangeChanged('min', e)}
           />
-          <span class="mx-2">-</span>
+          <span class="mx-4">—</span>
           <input
-            class="w-10"
+            class="w-full"
             id="range_max"
             bind:value={rangeMax}
             on:change={e => handleRangeChanged('max', e)}
@@ -74,7 +74,7 @@
       <div class="flex flex-col h-full">
         <label class="font-bold" for="sound">Sound</label>
         <div class="my-1 flex">
-          <input class="w-10" id="sound" type="checkbox" value="false" />
+          <input class="h-[20px]" id="sound" type="checkbox" checked={false} />
         </div>
       </div>
     </div>

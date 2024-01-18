@@ -25,9 +25,6 @@ class GuessGame {
     this.idx += 1
     return result
   }
-  next() {
-    this.idx += 1
-  }
 }
 
 export const currentGame = writable<GuessGame | undefined>(undefined)
@@ -52,7 +49,6 @@ export const gameActions = {
       notes.push(val)
     }
     const game = new GuessGame(notes)
-    console.log('new game ', notes)
     currentGame.set(game)
     return game
   },
