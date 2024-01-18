@@ -16,6 +16,9 @@ export default {
       routes: './src/routes',
       lib: './src/lib'
     },
+    paths: {
+      base: process.env.DEPLOY_TO_GH ? '/practise-music-reading' : ''
+    },
     adapter: adapter({
       // default options are shown
       pages: 'build',
