@@ -1,0 +1,26 @@
+name: pnpm
+description: Setup pnpm and install dependencies
+
+runs:
+  using: composite
+  steps:
+    - name: Install pnpm
+      shell: bash
+      run: npm i pnpm -g
+
+    - name: Setup pnpm config
+      shell: bash
+      run: pnpm config set store-dir ~/.pnpm-store
+
+    - name: Setup caching
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.pnpm-store
+          ~/.cache/Cypress
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: ${{ runner.os }}-node-${{ matrix.node-version }}-pnpm-
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm i --frozen-lockfile

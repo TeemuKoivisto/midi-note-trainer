@@ -14,6 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install dependencies with pnpm
+        uses: ./.github/actions/pnpm
+
       - name: Build the web distribution
         run: pnpm --filter client build
 
