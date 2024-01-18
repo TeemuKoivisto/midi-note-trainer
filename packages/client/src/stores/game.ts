@@ -1,12 +1,8 @@
 import { derived, get, writable } from 'svelte/store'
-import { WebMidi } from 'webmidi'
 
 import { midiRange } from './midi'
 
 import { persist } from './persist'
-
-import type { Input } from 'webmidi'
-import type { Result } from '@/types'
 
 class GuessGame {
   notes: number[]
@@ -37,6 +33,7 @@ export const gameActions = {
   playGuessNotes(amount = 10) {
     const notes: number[] = []
     const range = get(midiRange)
+    console.log('range', range)
     for (let i = 0; i < amount; i += 1) {
       notes.push(range[0] + Math.floor(Math.random() * (range[1] - range[0])))
     }

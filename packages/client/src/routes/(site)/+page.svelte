@@ -3,9 +3,9 @@
 
   import MidiInfo from '$components/MidiInfo.svelte'
 
-  import { C_MAJOR_NOTES, midiToNote } from './midi'
   import { currentGame, gameActions } from '$stores/game'
   import { midiActions, midiInput } from '$stores/midi'
+  import { getNote } from '$utils/midi'
 
   import type { NoteMessageEvent } from 'webmidi'
 
@@ -34,26 +34,33 @@
     // @ts-ignore
     const data = e.rawData as [number, number, number]
     const value = data[1]
-    setPlayedNote(value)
-    if (!$currentGame) return
-    targetNote = $currentGame.current
-    guessState = $currentGame.guess(value) ? 'correct' : 'wrong'
-    timeout = setTimeout(() => {
-      if ($currentGame?.ended) {
-        gameActions.endGame()
-        setTargetNote()
-      } else if ($currentGame) {
-        setTargetNote($currentGame.current)
-      }
-      setPlayedNote()
-      guessState = 'waiting'
-      timeout = undefined
-    }, 2000)
+
+    if (!$currentGame) {
+      setPlayedNote(value)
+    } else {
+      targetNote = $currentGame.current
+      const correct = $currentGame.guess(value)
+      guessState = correct ? 'correct' : 'wrong'
+      setPlayedNote(value, correct)
+      timeout = setTimeout(() => {
+        if ($currentGame?.ended) {
+          gameActions.endGame()
+          setTargetNote()
+        } else if ($currentGame) {
+          setTargetNote($currentGame.current)
+        }
+        setPlayedNote()
+        guessState = 'waiting'
+        timeout = undefined
+      }, 20000000)
+    }
   }
 
-  function setPlayedNote(value?: number) {
+  function setPlayedNote(value?: number, correct?: boolean) {
     if (value === undefined) {
       playedEl.style.display = 'none'
+      playedEl.classList.remove('correct')
+      playedEl.classList.remove('wrong')
       playedNote = 0
     } else {
       const note = getNote(value)
@@ -61,7 +68,14 @@
       console.log(`played note ${value} pos ${pos}`)
       playedEl.style.bottom = `${pos}rem`
       playedEl.style.display = 'block'
-      playedEl.textContent = `${note.includes('♭') ? '♭' : note.includes('♯') ? '♯' : ''}𝅝`
+      playedEl.textContent = `${note.flat ? '♭' : note.sharp ? '♯' : ''}𝅝`
+      if (correct) {
+        playedEl.classList.remove('wrong')
+        playedEl.classList.add('correct')
+      } else {
+        playedEl.classList.remove('correct')
+        playedEl.classList.add('wrong')
+      }
       playedNote = value
     }
   }
@@ -77,15 +91,8 @@
       const pos = positionNote('g', value)
       targetEl.style.bottom = `${pos}rem`
       targetEl.style.display = 'block'
-      targetEl.textContent = `${target.includes('♭') ? '♭' : target.includes('♯') ? '♯' : ''}𝅝`
+      targetEl.textContent = `${target.flat ? '♭' : target.sharp ? '♯' : ''}𝅝`
     }
-  }
-
-  function getNote(value: number) {
-    const semitonesFromC0 = value - 12
-    const octave = Math.floor(semitonesFromC0 / 12)
-    const note = C_MAJOR_NOTES[(semitonesFromC0 % 12) as keyof typeof C_MAJOR_NOTES]
-    return `${note.note}${octave}`
   }
 
   function positionNote(clef: 'f' | 'g', value: number) {
@@ -98,8 +105,7 @@
     // f2 bottom: -5.735rem;
     // step = (-5.735 -3.463) / -22 = 0.41809090909
     const semiTonesFromC4 = value - 60
-    // Center the note from C0 which equals 12 in MIDI values, then get the sequence after C
-    const note = C_MAJOR_NOTES[(semiTonesFromC4 % 12) as keyof typeof C_MAJOR_NOTES]
+    const note = getNote(value)
     const octaves = Math.floor(Math.abs(semiTonesFromC4) / 12)
     if (clef === 'f') {
       // middle note is d3
@@ -160,27 +166,19 @@
     <div class="line">
       <span class="f-clef">𝄢</span>
       <span class="staff">𝄚</span>
-      <!-- <span class="note f3">𝅝</span>
-      <span class="note g3">𝅝</span>
-      <span class="note a3">𝅝</span>
-      <span class="note b3">𝅝</span>
-      <span class="note c4">♯𝅝</span>
-      <span class="note d4">𝅝</span>
-      <span class="note e4">𝅝</span>
-      <span class="note g4"></span> -->
     </div>
   </section>
   {#if $currentGame}
     <div class="objective">
       {#if guessState === 'correct' || guessState === 'wrong'}
-        <div>Target: {getNote(targetNote)}</div>
-        <div>Played: {getNote(playedNote)}</div>
+        <div>Target: {getNote(targetNote).absolute}</div>
+        <div class="ml-8">Played: {getNote(playedNote).absolute}</div>
       {/if}
     </div>
   {:else}
     <div class="objective">
       {#if playedNote > 0}
-        <div>Played: {getNote(playedNote)}</div>
+        <div>Played: {getNote(playedNote).absolute}</div>
       {/if}
     </div>
   {/if}
@@ -188,11 +186,7 @@
 
 <style lang="scss">
   .objective {
-    display: grid;
-    gap: 0.5rem;
-    grid-template-columns: 25% 25%;
-    grid-template-rows: auto;
-    align-items: center;
+    display: flex;
   }
   .score {
     display: flex;
@@ -226,47 +220,22 @@
       // line-height: 1;
       position: absolute;
     }
-    .f3 {
-      bottom: 2.2rem;
-      left: 5rem;
-    }
-    .g3 {
-      bottom: 2.62rem;
-      left: 6.1rem;
-    }
-    .a3 {
-      bottom: 3.04rem;
-      left: 7.2rem;
-    }
-    .b3 {
-      bottom: 3.46rem;
-      left: 8.3rem;
-    }
-    .c4 {
-      bottom: 3.88rem;
-      left: 9.4rem;
-    }
-    .d4 {
-      bottom: 4.2rem;
-      left: 8.3rem;
-    }
-    .e4 {
-      bottom: 4.5rem;
-      left: 10.5rem;
-    }
-    .g4 {
-      bottom: 0.5rem;
-      left: 5rem;
-    }
     .target {
       left: 5rem;
+      pointer-events: none;
     }
     .played {
       bottom: 2.6rem;
-      color: red;
       display: none;
       left: 9rem;
+      pointer-events: none;
       position: absolute;
     }
+  }
+  :global(.wrong) {
+    color: red;
+  }
+  :global(.correct) {
+    @apply text-green-500;
   }
 </style>

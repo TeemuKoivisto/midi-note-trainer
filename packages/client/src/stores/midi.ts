@@ -7,7 +7,7 @@ import type { Input } from 'webmidi'
 import type { Result } from '@/types'
 
 export const midiInput = writable<Input | undefined>(undefined)
-export const midiRange = persist(writable<[number, number]>([60, 72]), {
+export const midiRange = persist(writable<[number, number]>([60, 84]), {
   key: 'midi-range',
   storage: 'session'
 })
