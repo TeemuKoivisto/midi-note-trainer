@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>practise-music-reading</title>
+
+    <script>
+      try {
+        if (!('theme' in localStorage)) {
+          localStorage.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
+        }
+
+        document.querySelector('html').classList.add(localStorage.theme)
+      } catch (e) {
+        console.error(e)
+      }
+    </script>
+
+    <!-- <link rel="icon" href="/favicon.png" /> -->
+
+    
+		<link rel="modulepreload" href="/_app/immutable/entry/start.45438445.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/scheduler.e80da8ef.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/singletons.6353f8d1.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/index.7d157e8c.js">
+		<link rel="modulepreload" href="/_app/immutable/entry/app.12d73534.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/index.fbefe97f.js">
+  </head>
+
+  <body>
+    <div id="svelte">
+			<script>
+				{
+					__sveltekit_1h8kwj8 = {
+						base: "",
+						env: {}
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("/_app/immutable/entry/start.45438445.js"),
+						import("/_app/immutable/entry/app.12d73534.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>
