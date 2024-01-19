@@ -55,6 +55,7 @@
         } else if ($currentGame) {
           target = { ...getNote($currentGame.current), value: $currentGame.current }
           guessState = 'waiting'
+          $currentGame.startTime()
         }
         played = undefined
         timeout = undefined
@@ -62,7 +63,7 @@
     }
   }
   function handleKeyDown(e: KeyboardEvent) {
-    if ($useKeyboard) {
+    if ($useKeyboard && !timeout) {
       const pressed = e.key.toUpperCase()
       const zeroPressed = keyboardInput.length === 0
       const onePressed = keyboardInput.length === 1
@@ -137,7 +138,10 @@
         <div class="ml-8">Played: {played?.absolute}</div>
       {:else if guessState === 'ended'}
         <div>
-          <div>Result: {$currentGame.correct} / {$currentGame.notes.length}</div>
+          <div>
+            <span>Result: [{$currentGame.correct} / {$currentGame.notes.length}]</span>
+            <span>avg {$currentGame.avgTime}s</span>
+          </div>
           <div>
             <button class="btn primary" on:click={playGuessNotes}>Try Again</button>
             <button class="btn primary" on:click={clearGame}>Clear</button>
