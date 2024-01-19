@@ -22,7 +22,7 @@ export function getNote(value: number) {
   // @TODO this might not be same in different MIDI devices -> should prob use frequency instead
   // https://en.wikipedia.org/wiki/C_(musical_note)#Middle_C
   const note = C_MAJOR_NOTES[(semitonesFromC0 % 12) as keyof typeof C_MAJOR_NOTES]
-  return { ...note, absolute: `${note.note}${octave}` }
+  return { ...note, octave, absolute: `${note.note}${octave}` }
 }
 
 export function parseNote(val: string): Result<number> {

@@ -14,7 +14,7 @@
     if (note) {
       // console.log('update ', note)
       el.style.display = 'block'
-      el.style.bottom = positionNote(note.value, note.steps) + 'rem'
+      el.style.bottom = positionNote(note) + 'rem'
       if (el.firstChild) {
         el.firstChild.textContent = `${note.flat ? '♭' : note.sharp ? '♯' : ''}𝅝`
       }
@@ -49,21 +49,13 @@
     }
   }
 
-  function positionNote(value: number, noteSteps: number) {
+  function positionNote(note: Note) {
     const stepSize = 0.4272727272727273 // rem
     // bottom: 7.8rem; G5 80
     // bottom: -1.6rem; 22 steps lower
     // 9.4 / 22 = 0.4272727272727273
-    const semiTonesFromC4 = value - 60
-    const octaves = Math.floor(Math.abs(semiTonesFromC4) / 12)
-    let steps
-    if (semiTonesFromC4 >= 0) {
-      // higher than C4
-      steps = octaves * 7 + noteSteps
-    } else {
-      // lower than C4
-      steps = -1 * (octaves * 7 + noteSteps === 0 ? 0 : 7 - noteSteps)
-    }
+    const octavesFromC4 = note.octave - 4
+    const steps = octavesFromC4 * 7 + note.steps
     // Adjust the position 3.1rem being the value for C4 in G-treble
     return 3.1 + stepSize * steps
   }
