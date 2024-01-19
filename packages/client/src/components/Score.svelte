@@ -15,7 +15,7 @@
   function updateNoteEl(el: HTMLElement, note?: Note, correct?: boolean) {
     if (note) {
       el.style.display = 'block'
-      el.style.bottom = positionNote(note.value) + 'rem'
+      el.style.bottom = positionNote(note.value, note.steps) + 'rem'
       el.textContent = `${note.flat ? '♭' : note.sharp ? '♯' : ''}𝅝`
       if (correct !== undefined && correct) {
         el.classList.remove('wrong')
@@ -29,28 +29,27 @@
     }
   }
 
-  function positionNote(value: number) {
+  function positionNote(value: number, noteSteps: number) {
     const stepSize = 0.4227272727272728 // rem
     // bottom: 7.7rem; G5 80
     // bottom: -1.6rem; 22 steps lower
     // 9.3 / 22 = 0.4227272727272728
     const semiTonesFromC4 = value - 60
-    const note = getNote(value)
     const octaves = Math.floor(Math.abs(semiTonesFromC4) / 12)
     let steps
     if (semiTonesFromC4 >= 0) {
       // higher than C4
-      steps = octaves * 7 + note.steps
+      steps = octaves * 7 + noteSteps
     } else {
       // lower than C4
-      steps = -1 * (octaves * 7 + note.steps === 0 ? 0 : 7 - note.steps)
+      steps = -1 * (octaves * 7 + noteSteps === 0 ? 0 : 7 - noteSteps)
     }
     // Adjust the position 3.05rem being the value for C4 in G-treble
     return 3.05 + stepSize * steps
   }
 </script>
 
-<section class={`${$$props.class || ''} score py-4`}>
+<section class={`${$$props.class || ''} score pt-12 pb-8`}>
   <div class="staff">
     <div class="line"></div>
     <div class="line"></div>
@@ -74,11 +73,9 @@
   .staff {
     font-family: 'Noto Music', sans-serif;
     position: relative;
-    .line + .line {
-      margin: 0.75rem 0;
-    }
     .line {
       border-top: 1.25pt solid #222;
+      margin: 0.75rem 0;
       &.invisible {
         border-color: transparent;
       }
@@ -108,5 +105,11 @@
       display: none;
       left: 9rem;
     }
+  }
+  :global(.wrong) {
+    color: red;
+  }
+  :global(.correct) {
+    @apply text-green-500;
   }
 </style>
