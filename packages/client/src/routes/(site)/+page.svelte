@@ -5,8 +5,8 @@
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
-  import { midiActions, midiInput } from '$stores/midi'
-  import { getNote } from '$utils/midi'
+  import { useKeyboard, midiActions, midiInput } from '$stores/midi'
+  import { getNote, parseNote } from '$utils/midi'
 
   import type { NoteMessageEvent } from 'webmidi'
   import type { Note } from '@/types'
@@ -17,6 +17,10 @@
   let played: (Note & { correct: boolean }) | undefined
   let timeout: ReturnType<typeof setTimeout> | undefined
   let guessState: 'waiting' | 'correct' | 'wrong' | 'ended'
+
+  const regexNote = /^[A-G]$/
+  const regexPosInt = /^[0-9]$/
+  let keyboardInput = ''
 
   onMount(() => {
     handlePromptMIDI()
@@ -33,8 +37,9 @@
     console.log('noteon', e)
     // @ts-ignore
     const data = e.rawData as [number, number, number]
-    const value = data[1]
-
+    handlePlayedNote(data[1])
+  }
+  function handlePlayedNote(value: number) {
     if (!$currentGame) {
       played = { ...getNote(value), value, correct: false }
     } else {
@@ -55,7 +60,31 @@
       }, 2000)
     }
   }
-
+  function handleKeyDown(e: KeyboardEvent) {
+    if ($useKeyboard) {
+      const pressed = e.key.toUpperCase()
+      const zeroPressed = keyboardInput.length === 0
+      const onePressed = keyboardInput.length === 1
+      const twoPressed = keyboardInput.length === 2
+      if (zeroPressed && regexNote.test(pressed)) {
+        keyboardInput += pressed
+      } else if (onePressed && pressed === 'B') {
+        keyboardInput += '♭'
+      } else if (onePressed && pressed === 'S') {
+        keyboardInput += '♯'
+      } else if (
+        (onePressed && regexPosInt.test(pressed)) ||
+        (twoPressed && regexPosInt.test(pressed))
+      ) {
+        // Octave pressed
+        const note = parseNote(keyboardInput + pressed)
+        if ('data' in note) {
+          handlePlayedNote(note.data)
+        }
+        keyboardInput = ''
+      }
+    }
+  }
   async function handlePromptMIDI() {
     status = 'Finding device...'
     const res = await midiActions.openMidi()
@@ -76,6 +105,8 @@
     gameActions.clearGame()
   }
 </script>
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight">
   Practise Music Reading
@@ -114,6 +145,9 @@
         <div>Played: {played.absolute}</div>
       {/if}
     </div>
+  {/if}
+  {#if $useKeyboard && keyboardInput}
+    <div>Input: {keyboardInput}</div>
   {/if}
 </section>
 

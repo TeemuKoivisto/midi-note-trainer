@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { midiActions, midiInput, midiRange } from '$stores/midi'
+  import { useKeyboard, midiActions, midiInput, midiRange } from '$stores/midi'
   import { getNote, parseNote } from '$utils/midi'
 
   let rangeMin = getNote($midiRange[0]).absolute
@@ -33,6 +33,13 @@
         rangeMax = getNote($midiRange[1]).absolute
       }
     }
+  }
+  function handleToggleKeyboard(
+    e: Event & {
+      currentTarget: EventTarget & HTMLInputElement
+    }
+  ) {
+    midiActions.setUseKeyboard(e.currentTarget.checked)
   }
 </script>
 
@@ -77,6 +84,18 @@
           <input class="h-[20px]" id="sound" type="checkbox" checked={false} />
         </div>
       </div>
+      <div class="flex flex-col h-full">
+        <label class="font-bold" for="keyboard">Keyboard</label>
+        <div class="my-1 flex">
+          <input
+            class="h-[20px]"
+            id="keyboard"
+            type="checkbox"
+            checked={$useKeyboard}
+            on:change={handleToggleKeyboard}
+          />
+        </div>
+      </div>
     </div>
   </fieldset>
 </div>
@@ -85,7 +104,7 @@
   .midi-body {
     display: grid;
     gap: 0.5rem;
-    grid-template-columns: 25% 25% 25%;
+    grid-template-columns: 25% 25% 25% 25%;
     grid-template-rows: auto;
     align-items: center;
     @media (width <= 475px) {

@@ -115,7 +115,7 @@
     }
     .g-clef {
       font-size: 3.6rem;
-      bottom: 4.2rem;
+      bottom: 4.12rem;
       left: 1rem;
       pointer-events: none;
       position: absolute;
