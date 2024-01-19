@@ -86,6 +86,8 @@
           keyboardError = `Error: ${note.err}`
         }
         keyboardInput = ''
+      } else if (e.key === 'Backspace' && !zeroPressed) {
+        keyboardInput = keyboardInput.slice(0, -1)
       }
     }
   }

@@ -11,7 +11,9 @@ export const midiRange = persist(writable<[number, number]>([60, 84]), {
   key: 'midi-range',
   storage: 'session'
 })
-export const useKeyboard = writable<boolean>(false)
+export const useKeyboard = persist(writable<boolean>(false), {
+  key: 'use-keyboard'
+})
 
 export const midiActions = {
   async openMidi(): Promise<Result<Input>> {
