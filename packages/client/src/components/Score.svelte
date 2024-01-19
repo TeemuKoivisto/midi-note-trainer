@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { getNote } from '$utils/midi'
-
   import type { Note } from '@/types'
 
   export let target: Note | undefined = undefined,
@@ -14,9 +12,12 @@
 
   function updateNoteEl(el: HTMLElement, note?: Note, correct?: boolean) {
     if (note) {
+      // console.log('update ', note)
       el.style.display = 'block'
       el.style.bottom = positionNote(note.value, note.steps) + 'rem'
-      el.textContent = `${note.flat ? '♭' : note.sharp ? '♯' : ''}𝅝`
+      if (el.firstChild) {
+        el.firstChild.textContent = `${note.flat ? '♭' : note.sharp ? '♯' : ''}𝅝`
+      }
       if (correct !== undefined && correct) {
         el.classList.remove('wrong')
         el.classList.add('correct')
@@ -24,16 +25,35 @@
         el.classList.remove('correct')
         el.classList.add('wrong')
       }
+      if ((note.value === 60 || note.value === 61) && el.lastChild instanceof HTMLElement) {
+        // C4 -> add ledger line through it
+        el.lastChild.style.display = 'block'
+        if (note.flat || note.sharp) {
+          el.lastChild.style.left = '1rem'
+        } else {
+          el.lastChild.style.left = ''
+        }
+      } else if (note.value === 81 && el.lastChild instanceof HTMLElement) {
+        // >=A5 -> add ledger lines upwards
+        el.lastChild.style.display = 'block'
+        if (note.flat || note.sharp) {
+          el.lastChild.style.left = '1rem'
+        } else {
+          el.lastChild.style.left = ''
+        }
+      } else if (el.lastChild instanceof HTMLElement) {
+        el.lastChild.style.display = 'none'
+      }
     } else {
       el.style.display = 'none'
     }
   }
 
   function positionNote(value: number, noteSteps: number) {
-    const stepSize = 0.4227272727272728 // rem
-    // bottom: 7.7rem; G5 80
+    const stepSize = 0.4272727272727273 // rem
+    // bottom: 7.8rem; G5 80
     // bottom: -1.6rem; 22 steps lower
-    // 9.3 / 22 = 0.4227272727272728
+    // 9.4 / 22 = 0.4272727272727273
     const semiTonesFromC4 = value - 60
     const octaves = Math.floor(Math.abs(semiTonesFromC4) / 12)
     let steps
@@ -44,8 +64,21 @@
       // lower than C4
       steps = -1 * (octaves * 7 + noteSteps === 0 ? 0 : 7 - noteSteps)
     }
-    // Adjust the position 3.05rem being the value for C4 in G-treble
-    return 3.05 + stepSize * steps
+    // Adjust the position 3.1rem being the value for C4 in G-treble
+    return 3.1 + stepSize * steps
+  }
+
+  function drawLedgerLines(from: number, to: number) {
+    // 81 >= every 3rd step
+    // 60 -> middle C
+    if (from === 60) {
+      // ledgerLines = [{ bottom: '0.02rem' }]
+    } else if (from >= 81) {
+      // ledgerLines = [{ bottom: '4.97rem' }]
+      for (let s = from; s <= to; s += 3) {
+        console.log('line', s)
+      }
+    }
   }
 </script>
 
@@ -64,8 +97,15 @@
     <div class="line"></div>
     <span class="g-clef">𝄞</span>
     <span class="f-clef">𝄢</span>
-    <span class="note target" bind:this={targetEl}></span>
-    <span class="note played" bind:this={playedEl}></span>
+    <div class="note target" bind:this={targetEl}>
+      <div class="note-contents"></div>
+      <div class="ledger-line"></div>
+    </div>
+    <div class="note played" bind:this={playedEl}>
+      <div class="note-contents"></div>
+      <div class="ledger-line"></div>
+    </div>
+    <!-- <span class="ledger-line"></span> -->
   </div>
 </section>
 
@@ -81,20 +121,24 @@
       }
     }
     .g-clef {
-      font-size: 3.3rem;
+      font-size: 3.6rem;
+      bottom: 4.2rem;
       left: 1rem;
+      pointer-events: none;
       position: absolute;
-      top: -0.7rem;
+      user-select: none;
     }
     .f-clef {
-      bottom: -0.1rem;
-      font-size: 3rem;
+      bottom: -0.7rem;
+      font-size: 3.6rem;
       left: 1rem;
+      pointer-events: none;
       position: absolute;
+      user-select: none;
     }
     .note {
       font-size: 3.1rem;
-      pointer-events: none;
+      // pointer-events: none;
       position: absolute;
     }
     .target {
@@ -104,6 +148,24 @@
     .played {
       display: none;
       left: 9rem;
+    }
+    .ledger-line {
+      position: relative;
+      &::after {
+        border-top: 1.25pt solid #222;
+        bottom: 1.14rem;
+        content: ' ';
+        display: block;
+        position: absolute;
+        width: 1.65rem;
+      }
+    }
+    .ledger-line2 {
+      border-top: 1.25pt solid #222;
+      left: 9rem;
+      width: 1.65rem;
+      position: absolute;
+      top: calc(-0.75rem - 1.25pt);
     }
   }
   :global(.wrong) {

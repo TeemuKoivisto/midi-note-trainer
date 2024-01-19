@@ -12,7 +12,6 @@
   import type { Note } from '@/types'
 
   let status = 'Finding device...'
-  let ledgerLines = [] as { bottom: string }[]
 
   let target: Note | undefined
   let played: (Note & { correct: boolean }) | undefined
@@ -54,19 +53,6 @@
         played = undefined
         timeout = undefined
       }, 2000)
-    }
-  }
-
-  function drawLedgerLines(from: number, to: number) {
-    // 81 >= every 3rd step
-    // 60 -> middle C
-    if (from === 60) {
-      ledgerLines = [{ bottom: '0.02rem' }]
-    } else if (from >= 81) {
-      ledgerLines = [{ bottom: '4.97rem' }]
-      for (let s = from; s <= to; s += 3) {
-        console.log('line', s)
-      }
     }
   }
 
