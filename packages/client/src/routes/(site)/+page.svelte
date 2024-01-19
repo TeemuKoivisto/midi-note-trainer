@@ -20,6 +20,7 @@
 
   const regexNote = /^[A-G]$/
   const regexPosInt = /^[0-9]$/
+  let keyboardError = ''
   let keyboardInput = ''
 
   onMount(() => {
@@ -67,7 +68,8 @@
       const onePressed = keyboardInput.length === 1
       const twoPressed = keyboardInput.length === 2
       if (zeroPressed && regexNote.test(pressed)) {
-        keyboardInput += pressed
+        keyboardInput = pressed
+        keyboardError = ''
       } else if (onePressed && pressed === 'B') {
         keyboardInput += '♭'
       } else if (onePressed && pressed === 'S') {
@@ -80,6 +82,8 @@
         const note = parseNote(keyboardInput + pressed)
         if ('data' in note) {
           handlePlayedNote(note.data)
+        } else {
+          keyboardError = `Error: ${note.err}`
         }
         keyboardInput = ''
       }
@@ -109,7 +113,7 @@
 <svelte:window on:keydown={handleKeyDown} />
 
 <h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight">
-  Practise Music Reading
+  MIDI Music Notation Trainer
 </h1>
 
 <section class="px-4 md:px-0">
@@ -146,8 +150,12 @@
       {/if}
     </div>
   {/if}
-  {#if $useKeyboard && keyboardInput}
-    <div>Input: {keyboardInput}</div>
+  {#if $useKeyboard}
+    {#if keyboardError}
+      <div>{keyboardError}</div>
+    {:else if keyboardInput}
+      <div>Input: {keyboardInput}</div>
+    {/if}
   {/if}
 </section>
 
