@@ -17,7 +17,7 @@ export default {
       lib: './src/lib'
     },
     paths: {
-      base: process.env.DEPLOY_TO_GH ? '/practise-music-reading' : ''
+      base: process.env.DEPLOY_TO_GH ? '/midi-music-notation-trainer' : ''
     },
     adapter: adapter({
       // default options are shown
