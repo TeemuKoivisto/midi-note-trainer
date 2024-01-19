@@ -29,7 +29,7 @@
         // C4 -> add ledger line through it
         el.lastChild.style.display = 'block'
         if (note.flat || note.sharp) {
-          el.lastChild.style.left = '1rem'
+          el.lastChild.style.left = '1.18rem'
         } else {
           el.lastChild.style.left = ''
         }
@@ -37,7 +37,7 @@
         // >=A5 -> add ledger lines upwards
         el.lastChild.style.display = 'block'
         if (note.flat || note.sharp) {
-          el.lastChild.style.left = '1rem'
+          el.lastChild.style.left = '1.18rem'
         } else {
           el.lastChild.style.left = ''
         }
@@ -50,14 +50,15 @@
   }
 
   function positionNote(note: Note) {
-    const stepSize = 0.4272727272727273 // rem
-    // bottom: 7.8rem; G5 80
-    // bottom: -1.6rem; 22 steps lower
-    // 9.4 / 22 = 0.4272727272727273
+    // G5 -> 7.5rem
+    // F2 (22 steps lower) -> -1.8rem
+    // Step -> (7.5 + 1.8) / 22 = 0.42272727272
+    // Middle C4 (11 steps lower) -> 7.5 - 11 * 0.42272727272 = 2.8500000000799997
+    const stepSize = 0.42272727272 // rem
     const octavesFromC4 = note.octave - 4
     const steps = octavesFromC4 * 7 + note.steps
-    // Adjust the position 3.1rem being the value for C4 in G-treble
-    return 3.1 + stepSize * steps
+    // Adjust the position with the calculated position for C4 in G-treble
+    return 2.85 + stepSize * steps
   }
 
   function drawLedgerLines(from: number, to: number) {
@@ -106,7 +107,7 @@
     font-family: 'Noto Music', sans-serif;
     position: relative;
     .line {
-      border-top: 1.25pt solid #222;
+      border-top: 0.1rem solid #222;
       margin: 0.75rem 0;
       &.invisible {
         border-color: transparent;
@@ -129,7 +130,7 @@
       user-select: none;
     }
     .note {
-      font-size: 3.1rem;
+      font-size: 3.6rem;
       // pointer-events: none;
       position: absolute;
     }
@@ -144,12 +145,12 @@
     .ledger-line {
       position: relative;
       &::after {
-        border-top: 1.25pt solid #222;
-        bottom: 1.14rem;
+        border-top: 0.1rem solid #222;
+        bottom: 1.35rem;
         content: ' ';
         display: block;
         position: absolute;
-        width: 1.65rem;
+        width: 1.86rem;
       }
     }
     .ledger-line2 {
@@ -157,7 +158,7 @@
       left: 9rem;
       width: 1.65rem;
       position: absolute;
-      top: calc(-0.75rem - 1.25pt);
+      top: calc(-0.75rem - 0.1rem);
     }
   }
   :global(.wrong) {
