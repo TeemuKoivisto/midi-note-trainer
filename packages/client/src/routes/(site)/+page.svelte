@@ -2,12 +2,14 @@
   import { onMount } from 'svelte'
 
   import MidiInfo from '$components/MidiInfo.svelte'
+  import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
   import { midiActions, midiInput } from '$stores/midi'
   import { getNote } from '$utils/midi'
 
   import type { NoteMessageEvent } from 'webmidi'
+  import type { Note } from '@/types'
 
   let status = 'Finding device...'
   let playedEl: HTMLElement
@@ -16,6 +18,8 @@
 
   let targetNote = 0
   let playedNote = 0
+  let target: Note | undefined
+  let played: (Note & { correct: boolean }) | undefined
   let timeout: ReturnType<typeof setTimeout> | undefined
   let guessState: 'waiting' | 'correct' | 'wrong' | 'ended'
 
@@ -38,20 +42,26 @@
 
     if (!$currentGame) {
       setPlayedNote(value)
+      played = { ...getNote(value), value, correct: false }
     } else {
       targetNote = $currentGame.current
+      target = { ...getNote(targetNote), value: targetNote }
       const correct = $currentGame.guess(value)
       guessState = correct ? 'correct' : 'wrong'
       setPlayedNote(value, correct)
+      played = { ...getNote(value), value, correct }
       timeout = setTimeout(() => {
         if ($currentGame?.ended) {
           setTargetNote()
+          target = undefined
           guessState = 'ended'
         } else if ($currentGame) {
           setTargetNote($currentGame.current)
+          target = { ...getNote($currentGame.current), value: $currentGame.current }
           guessState = 'waiting'
         }
         setPlayedNote()
+        played = undefined
         timeout = undefined
       }, 2000)
     }
@@ -143,6 +153,8 @@
   function playGuessNotes() {
     guessState = 'waiting'
     const game = gameActions.playGuessNotes()
+    const note = getNote(game.current)
+    target = { ...note, value: game.current }
     setTargetNote(game.current)
     setPlayedNote()
   }
@@ -164,6 +176,8 @@
     </div>
   {/if}
 </section>
+
+<Score class="my-4 px-4 md:px-0" {target} {played} />
 
 <section>
   <section class="pt-12 pb-8 ml-[-0.5rem] md:ml-[-1.6rem] score">
