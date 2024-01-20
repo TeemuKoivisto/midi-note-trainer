@@ -3,12 +3,19 @@
 
   import { Clock } from '$utils/clock'
   import { SynthPlayer } from '$utils/synth_player'
+  import { Piano } from '$utils/piano'
 
   let context
   let clock
   let synthPlayer
+  let piano: Piano
 
   onMount(() => {
+    context = new AudioContext()
+    piano = new Piano(context)
+  })
+
+  function synth() {
     context = new AudioContext()
     clock = new Clock(
       {
@@ -67,11 +74,12 @@
       },
       context
     )
-  })
+  }
 
   function play() {
     context!.resume().then(() => {
       console.log('Playback resumed successfully')
+      piano.noteOn(60, 120)
     })
   }
 </script>

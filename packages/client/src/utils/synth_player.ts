@@ -2,6 +2,7 @@ import { Synthesizer, type DynamicConfig } from './synth'
 
 import type { Clock } from './clock'
 
+// https://github.com/heiskr/prezzy-webaudio-code/blob/master/teachers_edition_4_synthesizer.html
 export interface SynthPlayerOptions {
   clock: Clock
   pattern: string[]
