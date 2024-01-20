@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MIDI Music Notation Trainer</title>
+
+    <script>
+      try {
+        if (!('theme' in localStorage)) {
+          localStorage.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
+        }
+
+        document.querySelector('html').classList.add(localStorage.theme)
+      } catch (e) {
+        console.error(e)
+      }
+    </script>
+
+    <!-- <link rel="icon" href="/favicon.png" /> -->
+
+    
+		<link href="./_app/immutable/assets/tailwind.d0fa3127.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.19cad8cf.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/scheduler.e80da8ef.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.6fc21786.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.7d157e8c.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.7e8e3c16.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.3d76737d.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.f3efa38e.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.6089d620.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/4.b5b952d7.js">
+  </head>
+
+  <body>
+    <div id="svelte">  <div class="flex-col items-center justify-center"><main class="flex-col items-center justify-center h-full min-h-screen max-w-[732px] mx-[auto]"><h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight" data-svelte-h="svelte-5kacpm">Synth</h1> <section class="px-4 md:px-0"><button class="btn primary" data-svelte-h="svelte-12ba69d">Play</button> </section></main></div> 
+			
+			<script>
+				{
+					__sveltekit_v1ukz9 = {
+						assets: "/midi-music-notation-trainer",
+						base: new URL(".", location).pathname.slice(0, -1),
+						env: {}
+					};
+
+					const element = document.currentScript.parentElement;
+
+					const data = [null,null,null];
+
+					Promise.all([
+						import("./_app/immutable/entry/start.19cad8cf.js"),
+						import("./_app/immutable/entry/app.7e8e3c16.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data,
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>
