@@ -8,16 +8,16 @@ export interface SynthesizerOptions {
   dynamicConfig?: DynamicConfig
 }
 export interface DynamicConfig {
-  attack: number
-  decay: number
-  sustain: number
-  release: number
+  attack?: number
+  decay?: number
+  sustain?: number
+  release?: number
 }
 
 export class Synthesizer {
   context: AudioContext
   clock: Clock
-  staticConfig: () => void
+  staticConfig?: () => void
   dynamicConfig: DynamicConfig
 
   osc1gain: GainNode
@@ -26,11 +26,11 @@ export class Synthesizer {
   pan: PannerNode
   gain: GainNode
 
-  constructor(options: any, context: AudioContext) {
+  constructor(options: SynthesizerOptions, context: AudioContext) {
     this.context = context
     this.clock = options.clock
     this.staticConfig = options.staticConfig
-    this.dynamicConfig = options.dynamicConfig
+    this.dynamicConfig = options.dynamicConfig || {}
     this.osc1gain = this.context.createGain()
     this.osc2gain = this.context.createGain()
     this.filter = this.context.createBiquadFilter()

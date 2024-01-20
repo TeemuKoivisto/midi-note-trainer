@@ -1,9 +1,4 @@
-export interface ADSROptions {
-  attack?: number
-  decay?: number
-  sustain?: number
-  release?: number
-}
+import type { DynamicConfig } from './synth'
 
 export class ADSR {
   attack: number
@@ -12,7 +7,7 @@ export class ADSR {
   release: number
   params: AudioParam[] | null = null
 
-  constructor(options: ADSROptions) {
+  constructor(options: DynamicConfig) {
     this.attack = options.attack || 0.02 // ...in seconds
     this.decay = options.decay || 0.02 // ...in seconds
     this.sustain = options.sustain || 0.5 // ...in amplitude
