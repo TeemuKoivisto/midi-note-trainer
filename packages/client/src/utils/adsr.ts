@@ -1,18 +1,25 @@
+export interface ADSROptions {
+  attack?: number
+  decay?: number
+  sustain?: number
+  release?: number
+}
+
 export class ADSR {
   attack: number
   decay: number
   sustain: number
   release: number
-  params: any[] | null = null
+  params: AudioParam[] | null = null
 
-  constructor(options: any) {
+  constructor(options: ADSROptions) {
     this.attack = options.attack || 0.02 // ...in seconds
     this.decay = options.decay || 0.02 // ...in seconds
     this.sustain = options.sustain || 0.5 // ...in amplitude
     this.release = options.release || 0.02 // ...in seconds
   }
 
-  connect(param: any) {
+  connect(param: AudioParam) {
     this.params = this.params || []
     this.params.push(param)
   }

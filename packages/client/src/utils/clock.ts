@@ -1,6 +1,8 @@
-// Create a central clock so that different modules
-// will all use the same timing.
-// Takes `tempo` and `numBeats`
+interface ClockOptions {
+  tempo: number
+  numBeats: number
+}
+
 export class Clock {
   context: AudioContext
   tempo: number
@@ -11,7 +13,7 @@ export class Clock {
   start: number
   _tick: () => void
 
-  constructor(options: any, context: AudioContext) {
+  constructor(options: ClockOptions, context: AudioContext) {
     this.context = context
     this.tempo = options.tempo
     this.numBeats = options.numBeats

@@ -1,6 +1,14 @@
-import { Synthesizer } from './synth'
+import { Synthesizer, type DynamicConfig } from './synth'
 
 import type { Clock } from './clock'
+
+export interface SynthPlayerOptions {
+  clock: Clock
+  pattern: string[]
+  octave: number
+  staticConfig?: () => void
+  dynamicConfig?: DynamicConfig
+}
 
 export class SynthPlayer {
   context: AudioContext
@@ -9,7 +17,7 @@ export class SynthPlayer {
   pattern: string[]
   octave: number
 
-  constructor(options: any, context: AudioContext) {
+  constructor(options: SynthPlayerOptions, context: AudioContext) {
     this.context = context
     this.clock = options.clock
     this.synthesizer = new Synthesizer(
@@ -52,7 +60,7 @@ export class SynthPlayer {
     return (440 / 32) * Math.pow(2, (note - 9) / 12)
   }
 
-  getDuration(pattern: string, beat: any) {
+  getDuration(pattern: string, beat: number) {
     const note = pattern[beat]
     let length = 1
     for (let i = beat + 1; i < pattern.length; i++) {

@@ -2,11 +2,23 @@ import { ADSR } from './adsr'
 
 import type { Clock } from './clock'
 
+export interface SynthesizerOptions {
+  clock: Clock
+  staticConfig?: () => void
+  dynamicConfig?: DynamicConfig
+}
+export interface DynamicConfig {
+  attack: number
+  decay: number
+  sustain: number
+  release: number
+}
+
 export class Synthesizer {
   context: AudioContext
   clock: Clock
-  staticConfig: any
-  dynamicConfig: any
+  staticConfig: () => void
+  dynamicConfig: DynamicConfig
 
   osc1gain: GainNode
   osc2gain: GainNode
@@ -60,7 +72,7 @@ export class Synthesizer {
     this.gain!.connect(this.context.destination)
   }
 
-  play(now: any, freq: any, duration: any) {
+  play(now: number, freq: number, duration: number) {
     // (1) Create two oscillator nodes.
     const osc1 = this.context.createOscillator()
     const osc2 = this.context.createOscillator()
