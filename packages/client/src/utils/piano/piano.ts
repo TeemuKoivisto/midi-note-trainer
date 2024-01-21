@@ -72,10 +72,7 @@ export class Piano {
     console.log(`play note ${noteNumber} ${velocity}`)
     if (noteNumber < 109 && noteNumber > 20) {
       if (this.notes[noteNumber]) {
-        this.notes[noteNumber].gain.gain.setTargetAtTime(0.0, this.context.currentTime, 1.1)
-        this.notes[noteNumber].noteA.stop(this.context.currentTime + 2)
-        this.notes[noteNumber].noteB!.stop(this.context.currentTime + 2)
-        this.notes[noteNumber].damp = undefined
+        this.notes[noteNumber].repress(this.context.currentTime)
         this.sustained.splice(this.sustained.indexOf(noteNumber), 1)
       }
 
@@ -101,18 +98,29 @@ export class Piano {
         let gain_B = 1 - gain_A;
       }
       //*/
-      this.notes[noteNumber] = new Note(noteNumber, this)
-      this.notes[noteNumber].on(bufNumA, bufNumB, rate_A, rate_B, filtFreq, gain_A, gain_B, gain_)
+      this.notes[noteNumber] = new Note(
+        noteNumber,
+        this.context,
+        this.directGain,
+        this.damper as AudioBuffer
+      )
+      this.notes[noteNumber].on(
+        this.bufferlists[bufNumA],
+        this.bufferlists[bufNumB],
+        rate_A,
+        rate_B,
+        filtFreq,
+        gain_A,
+        gain_B,
+        gain_
+      )
     }
   }
 
   noteOff(noteNumber: number) {
     if (!this.sus) {
       if (noteNumber < 90) {
-        this.notes[noteNumber].gain.gain.setTargetAtTime(0.0, this.context.currentTime + 0.03, 0.08)
-        this.notes[noteNumber].noteA.stop(this.context.currentTime + 2)
-        this.notes[noteNumber].noteB!.stop(this.context.currentTime + 2)
-        this.notes[noteNumber].damp!.start(0)
+        this.notes[noteNumber].off(this.context.currentTime)
       }
       delete this.notes[noteNumber]
     } else {
@@ -134,7 +142,7 @@ export class Piano {
           this.noteOff(this.sustained[i])
         }
       }
-      this.sustained = []
+      this.sustained.length = 0
     }
   }
 }

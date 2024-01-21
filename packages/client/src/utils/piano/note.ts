@@ -1,26 +1,22 @@
-import type { Piano } from './piano'
-
 export class Note {
   noteA: AudioBufferSourceNode
-  noteB: AudioBufferSourceNode | null
+  noteB: AudioBufferSourceNode
   gainA: GainNode
   gainB: GainNode
   gain: GainNode
   biquadFilter: BiquadFilterNode
   damp?: AudioBufferSourceNode
-  piano: Piano
 
-  constructor(val: number, piano: Piano) {
-    this.piano = piano
-    this.noteA = piano.context.createBufferSource()
-    this.noteB = piano.context.createBufferSource()
-    this.gainA = piano.context.createGain()
-    this.gainB = piano.context.createGain()
-    this.gain = piano.context.createGain()
-    this.biquadFilter = piano.context.createBiquadFilter()
+  constructor(val: number, context: AudioContext, directGain: GainNode, damper: AudioBuffer) {
+    this.noteA = context.createBufferSource()
+    this.noteB = context.createBufferSource()
+    this.gainA = context.createGain()
+    this.gainB = context.createGain()
+    this.gain = context.createGain()
+    this.biquadFilter = context.createBiquadFilter()
     this.biquadFilter.type = 'lowpass'
 
-    this.biquadFilter.connect(piano.directGain)
+    this.biquadFilter.connect(directGain)
     this.gain.connect(this.biquadFilter)
     this.gainA.connect(this.gain)
     this.noteA.connect(this.gainA)
@@ -28,15 +24,15 @@ export class Note {
     this.noteB.connect(this.gainB)
 
     if (val < 90) {
-      this.damp = piano.context.createBufferSource()
-      this.damp.buffer = piano.damper as AudioBuffer
-      this.damp.connect(this.piano.directGain)
+      this.damp = context.createBufferSource()
+      this.damp.buffer = damper
+      this.damp.connect(directGain)
     }
   }
 
   on(
-    bufA: number,
-    bufB: number,
+    bufA: AudioBuffer,
+    bufB: AudioBuffer,
     rateA: number,
     rateB: number,
     filtFreq: number,
@@ -44,25 +40,34 @@ export class Note {
     gain_B: number,
     gain_: number
   ) {
-    this.noteA.buffer = this.piano.bufferlists[bufA]
+    this.noteA.buffer = bufA
     this.noteA.playbackRate.value = rateA
     this.biquadFilter.frequency.value = filtFreq
     this.gainA.gain.value = gain_A
     this.gain.gain.value = gain_
 
-    if (this.piano.bufferlists[bufB]) {
-      this.noteB!.buffer = this.piano.bufferlists[bufB]
-      this.noteB!.playbackRate.value = rateB
+    if (bufB) {
+      this.noteB!.buffer = bufB
+      this.noteB.playbackRate.value = rateB
       this.gainB.gain.value = gain_B
-      this.noteB!.start(0)
-    } else {
-      this.noteB = null
+      this.noteB.start(0)
     }
     this.noteA.start(0)
   }
 
-  off() {
-    this.noteA.stop(0)
-    this.noteB!.stop(0)
+  repress(currentTime: number) {
+    this.gain.gain.setTargetAtTime(0.0, currentTime, 1.1)
+    this.noteA.stop(currentTime + 2)
+    this.noteB.stop(currentTime + 2)
+    this.damp = undefined
+  }
+
+  off(currentTime: number) {
+    // this.noteA.stop(0)
+    // this.noteB!.stop(0)
+    this.gain.gain.setTargetAtTime(0.0, currentTime + 0.03, 0.08)
+    this.noteA.stop(currentTime + 2)
+    this.noteB.stop(currentTime + 2)
+    this.damp?.start(0)
   }
 }
