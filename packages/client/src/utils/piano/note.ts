@@ -33,6 +33,7 @@ export class Note {
       this.damp.connect(this.piano.directGain)
     }
   }
+
   on(
     bufA: number,
     bufB: number,
@@ -59,6 +60,7 @@ export class Note {
     }
     this.noteA.start(0)
   }
+
   off() {
     this.noteA.stop(0)
     this.noteB!.stop(0)

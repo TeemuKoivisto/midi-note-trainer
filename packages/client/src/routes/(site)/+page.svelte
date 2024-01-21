@@ -38,7 +38,7 @@
     console.log('noteon', e)
     // @ts-ignore
     const data = e.rawData as [number, number, number]
-    handlePlayedNote(data[1], data[2])
+    handlePlayedNote(data[1], 80)
   }
   function handlePlayedNote(value: number, velocity: number) {
     if (!$currentGame) {

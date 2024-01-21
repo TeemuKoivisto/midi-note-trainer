@@ -1,15 +1,15 @@
-import n21 from './audio/21.mp3?url'
-import n33 from './audio/33.mp3?url'
-import n45 from './audio/45.mp3?url'
-import n57 from './audio/57.mp3?url'
-import n69 from './audio/69.mp3?url'
-import n81 from './audio/81.mp3?url'
-import n93 from './audio/93.mp3?url'
-import n105 from './audio/105.mp3?url'
+import a0 from './audio/a0.mp3?url'
+import a1 from './audio/a1.mp3?url'
+import a2 from './audio/a2.mp3?url'
+import a3 from './audio/a3.mp3?url'
+import a4 from './audio/a4.mp3?url'
+import a5 from './audio/a5.mp3?url'
+import a6 from './audio/a6.mp3?url'
+import a7 from './audio/a7.mp3?url'
 import ndamper from './audio/damper.mp3?url'
 import nimpulse from './audio/Piano Impulse6.mp3?url'
 
-import { BufferLoader } from './bufferloader'
+import { load } from './load'
 import { Note } from './note'
 
 // https://github.com/iBundin/Open-Web-Piano/blob/7f6ae5fae07aaeb62a1d10ee9446b20e8cc7849d/OpenWebPiano.js
@@ -25,7 +25,6 @@ export class Piano {
   sus = false
   sustained: number[] = []
   notes: Record<number, Note> = {}
-  bufferLoader: BufferLoader
 
   constructor(context: AudioContext) {
     this.context = context
@@ -41,20 +40,36 @@ export class Piano {
     this.directGain.gain.value = 0.5
     this.convGain.gain.value = 0
     this.convGainAfter.gain.value = 0
-    this.bufferLoader = new BufferLoader(
-      context,
-      [n21, n33, n45, n57, n69, n81, n93, n105, ndamper, nimpulse],
-      (bufferlist: AudioBuffer[]) => {
-        this.bufferlists = bufferlist
-        this.damper = bufferlist[8]
-        this.convolver.buffer = bufferlist[9]
-      }
-    )
-    this.bufferLoader.load()
+    return this
   }
 
+  async load() {
+    const urls = [a0, a1, a2, a3, a4, a5, a6, a7, ndamper, nimpulse]
+    const loaded = await Promise.all(urls.map(url => load(url, this.context)))
+    this.bufferlists = []
+    loaded.forEach((buf, idx) => {
+      if ('data' in buf) {
+        this.bufferlists.push(buf.data)
+        if (idx === 8) {
+          this.damper = buf.data
+        } else if (idx === 9) {
+          this.convolver.buffer = buf.data
+        }
+      } else {
+        console.error(`Failed to load audio: ${buf.err}`)
+      }
+    })
+  }
+
+  /**
+   * Play single MIDI Note
+   *
+   * https://en.wikipedia.org/wiki/MIDI#Messages
+   * @param noteNumber From 0 (-C1) to 127 (G9)
+   * @param velocity From 1 lowest to 127 highest
+   */
   noteOn(noteNumber: number, velocity: number) {
-    console.log('play note')
+    console.log(`play note ${noteNumber} ${velocity}`)
     if (noteNumber < 109 && noteNumber > 20) {
       if (this.notes[noteNumber]) {
         this.notes[noteNumber].gain.gain.setTargetAtTime(0.0, this.context.currentTime, 1.1)

@@ -22,7 +22,9 @@ export const useKeyboard = persist(writable<boolean>(false), {
 
 useSound.subscribe(val => {
   if (val) {
-    piano.set(new Piano(new AudioContext()))
+    const p = new Piano(new AudioContext())
+    p.load()
+    piano.set(p)
   } else {
     piano.set(undefined)
   }
