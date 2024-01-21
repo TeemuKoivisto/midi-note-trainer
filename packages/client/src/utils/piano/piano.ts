@@ -72,7 +72,7 @@ export class Piano {
     console.log(`play note ${noteNumber} ${velocity}`)
     if (noteNumber < 109 && noteNumber > 20) {
       if (this.notes[noteNumber]) {
-        this.notes[noteNumber].repress(this.context.currentTime)
+        this.notes[noteNumber].off(this.context.currentTime, 1.1, this.context.currentTime + 2)
         this.sustained.splice(this.sustained.indexOf(noteNumber), 1)
       }
 
@@ -120,7 +120,11 @@ export class Piano {
   noteOff(noteNumber: number) {
     if (!this.sus) {
       if (noteNumber < 90) {
-        this.notes[noteNumber].off(this.context.currentTime)
+        this.notes[noteNumber].off(
+          this.context.currentTime + 0.03,
+          0.08,
+          this.context.currentTime + 2
+        )
       }
       delete this.notes[noteNumber]
     } else {

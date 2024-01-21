@@ -55,19 +55,12 @@ export class Note {
     this.noteA.start(0)
   }
 
-  repress(currentTime: number) {
-    this.gain.gain.setTargetAtTime(0.0, currentTime, 1.1)
-    this.noteA.stop(currentTime + 2)
-    this.noteB.stop(currentTime + 2)
-    this.damp = undefined
-  }
-
-  off(currentTime: number) {
+  off(startTime: number, timeConstant: number, stop: number) {
     // this.noteA.stop(0)
     // this.noteB!.stop(0)
-    this.gain.gain.setTargetAtTime(0.0, currentTime + 0.03, 0.08)
-    this.noteA.stop(currentTime + 2)
-    this.noteB.stop(currentTime + 2)
+    this.gain.gain.setTargetAtTime(0.0, startTime, timeConstant)
+    this.noteA.stop(stop)
+    this.noteB.stop(stop)
     this.damp?.start(0)
   }
 }

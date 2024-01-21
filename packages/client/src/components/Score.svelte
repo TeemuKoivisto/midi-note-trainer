@@ -149,8 +149,9 @@
         bottom: 1.35rem;
         content: ' ';
         display: block;
+        left: -0.1rem;
         position: absolute;
-        width: 1.86rem;
+        width: 2.07rem;
       }
     }
     .ledger-line2 {
