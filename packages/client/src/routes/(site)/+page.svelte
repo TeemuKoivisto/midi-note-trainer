@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
+  import GameInfo from '$components/GameInfo.svelte'
   import MidiInfo from '$components/MidiInfo.svelte'
   import Score from '$components/Score.svelte'
 
@@ -53,9 +54,14 @@
           target = undefined
           guessState = 'ended'
         } else if ($currentGame) {
-          target = { ...getNote($currentGame.current), value: $currentGame.current }
           guessState = 'waiting'
           $currentGame.startTime()
+          if ($currentGame.type === 'notes') {
+            target = { ...getNote($currentGame.current), value: $currentGame.current }
+          } else {
+            target = undefined
+            $piano?.noteOn($currentGame.current, 80)
+          }
         }
         played = undefined
         timeout = undefined
@@ -104,15 +110,27 @@
       status = res.err
     }
   }
-  function playGuessNotes() {
-    guessState = 'waiting'
-    const game = gameActions.playGuessNotes()
-    const note = getNote(game.current)
-    target = { ...note, value: game.current }
+  function playGuessNotes(type: 'notes' | 'pitches') {
+    if (type === 'notes') {
+      guessState = 'waiting'
+      const game = gameActions.playGuessNotes(type)
+      const note = getNote(game.current)
+      target = { ...note, value: game.current }
+    } else if (type === 'pitches') {
+      guessState = 'waiting'
+      const game = gameActions.playGuessNotes(type)
+      midiActions.setSound(true)
+      $piano?.noteOn(game.current, 80)
+    }
+  }
+  function tryAgain() {
+    playGuessNotes($currentGame!.type)
   }
   function clearGame() {
     guessState = 'waiting'
     gameActions.clearGame()
+    target = undefined
+    played = undefined
   }
 </script>
 
@@ -126,7 +144,11 @@
   <MidiInfo />
   {#if midiInput}
     <div>
-      <button class="btn primary" on:click={playGuessNotes}>Guess 10 Notes</button>
+      <button class="btn primary" on:click={() => playGuessNotes('notes')}>Guess 10 Notes</button>
+      <button class="btn primary" on:click={() => playGuessNotes('pitches')}
+        >Guess 10 Pitches</button
+      >
+      <button class="btn primary" on:click={clearGame}>Clear</button>
     </div>
   {/if}
 </section>
@@ -134,31 +156,12 @@
 <Score class="px-4 md:px-0" {target} {played} />
 
 <section class="px-4 md:px-0">
-  {#if $currentGame}
-    <div class="objective">
-      {#if guessState === 'correct' || guessState === 'wrong'}
-        <div>Target: {target?.absolute}</div>
-        <div class="ml-8">Played: {played?.absolute}</div>
-      {:else if guessState === 'ended'}
-        <div>
-          <div>
-            <span>Result: [{$currentGame.correct} / {$currentGame.notes.length}]</span>
-            <span>avg {$currentGame.avgTime}s</span>
-          </div>
-          <div>
-            <button class="btn primary" on:click={playGuessNotes}>Try Again</button>
-            <button class="btn primary" on:click={clearGame}>Clear</button>
-          </div>
-        </div>
-      {/if}
+  <GameInfo {target} {played} {guessState}>
+    <div>
+      <button class="btn primary" on:click={tryAgain}>Try Again</button>
+      <button class="btn primary" on:click={clearGame}>Clear</button>
     </div>
-  {:else}
-    <div class="objective">
-      {#if played}
-        <div>Played: {played.absolute}</div>
-      {/if}
-    </div>
-  {/if}
+  </GameInfo>
   {#if $useKeyboard}
     {#if keyboardError}
       <div>{keyboardError}</div>
@@ -169,7 +172,4 @@
 </section>
 
 <style lang="scss">
-  .objective {
-    display: flex;
-  }
 </style>
