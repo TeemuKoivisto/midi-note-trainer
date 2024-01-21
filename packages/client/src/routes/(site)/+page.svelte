@@ -8,6 +8,7 @@
   import { currentGame, gameActions } from '$stores/game'
   import { useKeyboard, midiActions, midiInput, piano } from '$stores/midi'
   import { getNote, parseNote } from '$utils/midi'
+  import { createScale } from '$utils/scales'
 
   import type { NoteMessageEvent } from 'webmidi'
   import type { Note } from '@/types'
@@ -26,6 +27,7 @@
 
   onMount(() => {
     handlePromptMIDI()
+    console.log(createScale('F#', 'major'))
   })
 
   midiInput.subscribe(input => {
