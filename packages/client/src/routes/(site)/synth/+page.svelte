@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
-  import { Clock } from '$utils/clock'
-  import { SynthPlayer } from '$utils/synth_player'
+  import { Clock } from '$utils/synth/clock'
+  import { SynthPlayer } from '$utils/synth/synth_player'
   import { Piano } from '$utils/piano'
 
   let context
