@@ -19,7 +19,7 @@ jobs:
 
       - name: Build the web distribution
         run: |
-          pnpm --filter types music-scales build
+          pnpm --filter types --filter music-scales build
           DEPLOY_TO_GH=true pnpm --filter client build
 
       - name: Deploy to GitHub pages
