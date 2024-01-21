@@ -2,6 +2,7 @@ import { derived, get, writable } from 'svelte/store'
 import { WebMidi } from 'webmidi'
 
 import { persist } from './persist'
+import { Piano } from '$utils/piano'
 
 import type { Input } from 'webmidi'
 import type { Result } from '@/types'
@@ -11,8 +12,20 @@ export const midiRange = persist(writable<[number, number]>([60, 84]), {
   key: 'midi-range',
   storage: 'session'
 })
+export const piano = writable<Piano | undefined>(undefined)
+export const useSound = persist(writable<boolean>(false), {
+  key: 'use-sound'
+})
 export const useKeyboard = persist(writable<boolean>(false), {
   key: 'use-keyboard'
+})
+
+useSound.subscribe(val => {
+  if (val) {
+    piano.set(new Piano(new AudioContext()))
+  } else {
+    piano.set(undefined)
+  }
 })
 
 export const midiActions = {
@@ -33,5 +46,8 @@ export const midiActions = {
   },
   setUseKeyboard(val: boolean) {
     useKeyboard.set(val)
+  },
+  setSound(val: boolean) {
+    useSound.set(val)
   }
 }

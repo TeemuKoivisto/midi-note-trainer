@@ -5,7 +5,7 @@
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
-  import { useKeyboard, midiActions, midiInput } from '$stores/midi'
+  import { useKeyboard, midiActions, midiInput, piano } from '$stores/midi'
   import { getNote, parseNote } from '$utils/midi'
 
   import type { NoteMessageEvent } from 'webmidi'
@@ -29,18 +29,18 @@
 
   midiInput.subscribe(input => {
     if (input) {
-      input.channels[1].addListener('noteon', noteOnListner)
+      input.channels[1].addListener('noteon', noteOnListener)
     }
   })
 
-  function noteOnListner(e: NoteMessageEvent) {
+  function noteOnListener(e: NoteMessageEvent) {
     if (timeout) return
     console.log('noteon', e)
     // @ts-ignore
     const data = e.rawData as [number, number, number]
-    handlePlayedNote(data[1])
+    handlePlayedNote(data[1], data[2])
   }
-  function handlePlayedNote(value: number) {
+  function handlePlayedNote(value: number, velocity: number) {
     if (!$currentGame) {
       played = { ...getNote(value), value, correct: false }
     } else {
@@ -60,6 +60,9 @@
         played = undefined
         timeout = undefined
       }, 2000)
+    }
+    if ($piano) {
+      $piano.noteOn(value, velocity)
     }
   }
   function handleKeyDown(e: KeyboardEvent) {
@@ -82,7 +85,7 @@
         // Octave pressed
         const note = parseNote(keyboardInput + pressed)
         if ('data' in note) {
-          handlePlayedNote(note.data)
+          handlePlayedNote(note.data, 120)
         } else {
           keyboardError = `Error: ${note.err}`
         }

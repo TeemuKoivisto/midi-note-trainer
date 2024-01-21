@@ -9,113 +9,8 @@ import n105 from './audio/105.mp3?url'
 import ndamper from './audio/damper.mp3?url'
 import nimpulse from './audio/Piano Impulse6.mp3?url'
 
-export class BufferLoader {
-  context: AudioContext
-  urlList: string[]
-  onload: (bufferList: AudioBuffer[]) => void
-  bufferList: AudioBuffer[] = []
-  loadCount = 0
-
-  constructor(
-    contexts: AudioContext,
-    urlList: string[],
-    callback: (bufferList: AudioBuffer[]) => void
-  ) {
-    this.context = contexts
-    this.urlList = urlList
-    this.onload = callback
-  }
-
-  loadBuffer(url: string, index: number) {
-    const request = new XMLHttpRequest()
-    request.open('GET', url, true)
-    request.responseType = 'arraybuffer'
-    const loader = this
-    request.onload = function () {
-      loader.context.decodeAudioData(request.response, function (buffer) {
-        if (!buffer) {
-          console.error('error decoding file data: ' + url)
-          return
-        }
-        loader.bufferList[index] = buffer
-        if (++loader.loadCount == loader.urlList.length) loader.onload(loader.bufferList)
-      })
-    }
-    request.onerror = function () {
-      console.error('BufferLoader: XHR error')
-    }
-    request.send()
-  }
-
-  load() {
-    for (let i = 0; i < this.urlList.length; ++i) this.loadBuffer(this.urlList[i], i)
-  }
-}
-
-export class Note {
-  noteA: AudioBufferSourceNode
-  noteB: AudioBufferSourceNode | null
-  gainA: GainNode
-  gainB: GainNode
-  gain: GainNode
-  biquadFilter: BiquadFilterNode
-  damp?: AudioBufferSourceNode
-  piano: Piano
-
-  constructor(val: number, piano: Piano) {
-    this.piano = piano
-    this.noteA = piano.context.createBufferSource()
-    this.noteB = piano.context.createBufferSource()
-    this.gainA = piano.context.createGain()
-    this.gainB = piano.context.createGain()
-    this.gain = piano.context.createGain()
-    this.biquadFilter = piano.context.createBiquadFilter()
-    this.biquadFilter.type = 'lowpass'
-
-    this.biquadFilter.connect(piano.directGain)
-    this.gain.connect(this.biquadFilter)
-    this.gainA.connect(this.gain)
-    this.noteA.connect(this.gainA)
-    this.gainB.connect(this.gain)
-    this.noteB.connect(this.gainB)
-
-    if (val < 90) {
-      this.damp = piano.context.createBufferSource()
-      this.damp.buffer = piano.damper as AudioBuffer
-      this.damp.connect(this.piano.directGain)
-    }
-  }
-  on(
-    bufA: number,
-    bufB: number,
-    rateA: number,
-    rateB: number,
-    filtFreq: number,
-    gain_A: number,
-    gain_B: number,
-    gain_: number
-  ) {
-    this.noteA.buffer = this.piano.bufferlists[bufA]
-    this.noteA.playbackRate.value = rateA
-    this.biquadFilter.frequency.value = filtFreq
-    this.gainA.gain.value = gain_A
-    this.gain.gain.value = gain_
-
-    if (this.piano.bufferlists[bufB]) {
-      this.noteB!.buffer = this.piano.bufferlists[bufB]
-      this.noteB!.playbackRate.value = rateB
-      this.gainB.gain.value = gain_B
-      this.noteB!.start(0)
-    } else {
-      this.noteB = null
-    }
-    this.noteA.start(0)
-  }
-  off() {
-    this.noteA.stop(0)
-    this.noteB!.stop(0)
-  }
-}
+import { BufferLoader } from './bufferloader'
+import { Note } from './note'
 
 // https://github.com/iBundin/Open-Web-Piano/blob/7f6ae5fae07aaeb62a1d10ee9446b20e8cc7849d/OpenWebPiano.js
 // https://github.com/MengLinMaker/Midi-Virtual-Piano/blob/a398e1c5194cb90f4252716c0d43380380605f42/src/pianoAudio/OpenWebPiano.tsx
@@ -159,6 +54,7 @@ export class Piano {
   }
 
   noteOn(noteNumber: number, velocity: number) {
+    console.log('play note')
     if (noteNumber < 109 && noteNumber > 20) {
       if (this.notes[noteNumber]) {
         this.notes[noteNumber].gain.gain.setTargetAtTime(0.0, this.context.currentTime, 1.1)
