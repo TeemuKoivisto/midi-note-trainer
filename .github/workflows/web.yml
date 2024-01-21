@@ -18,7 +18,9 @@ jobs:
         uses: ./.github/actions/pnpm
 
       - name: Build the web distribution
-        run: DEPLOY_TO_GH=true pnpm --filter client build
+        run: |
+          pnpm --filter types music-scales build
+          DEPLOY_TO_GH=true pnpm --filter client build
 
       - name: Deploy to GitHub pages
         uses: peaceiris/actions-gh-pages@v3
