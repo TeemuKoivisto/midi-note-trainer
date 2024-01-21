@@ -1,3 +1,5 @@
+import { scales } from './scales'
+
 import type { Result } from '@/types'
 
 interface NotePos {
@@ -22,16 +24,6 @@ const NOTES = [
   { note: 'B♭', steps: 6, black: true, sharp: false, flat: true },
   { note: 'B', steps: 6, black: false, sharp: false, flat: false }
 ]
-
-// white_keys = [CDEFGBA]
-//
-// intervals = [2, 1, 2, 1, 2, 2, 1, 2]
-//
-
-export const scales = {
-  // major
-  major: [0, 2, 2, 1, 2, 2, 2]
-} as const
 
 const regexScale = /^[a-gA-G][♭b#♯]?$/
 
