@@ -89,8 +89,11 @@ describe('createScale', () => {
   })
   it('should generate all random scales correctly', () => {
     const correct = {
+      dorian: {
+        'D♯': ['D♯', 'E♯', 'F♯', 'G♯', 'A♯', 'B♯', 'C♯'],
+        'A♯': ['A♯', 'B♯', 'C♯', 'D♯', 'E♯', 'F♯♯', 'G♯']
+      },
       locrian: {
-        // Gb Abb Bbb Cb Dbb Ebb Fb
         'G♭': ['G♭', 'A♭♭', 'B♭♭', 'C♭', 'D♭♭', 'E♭♭', 'F♭']
       },
       mixolydianFlat6: {
@@ -100,7 +103,25 @@ describe('createScale', () => {
       harmonicMinor: {
         A: ['A', 'B', 'C', 'D', 'E', 'F', 'G♯'],
         // should first generate minor scale and THEN augment seventh by 1 semitone
-        G: ['G', 'A', 'B♭', 'C', 'D', 'E♭', 'F♯'],
+        G: ['G', 'A', 'B♭', 'C', 'D', 'E♭', 'F♯']
+      },
+      neapolitanMajor: {
+        C: ['C', 'D♭', 'E♭', 'F', 'G', 'A', 'B'],
+        F: ['F', 'G♭', 'A♭', 'B♭', 'C', 'D', 'E']
+      },
+      neapolitanMinor: {
+        C: ['C', 'D♭', 'E♭', 'F', 'G', 'A♭', 'B'],
+        F: ['F', 'G♭', 'A♭', 'B♭', 'C', 'D♭', 'E']
+      },
+      bebopDominant: {
+        // 'D♭': ['D♭', 'E♭', 'F', 'G♭', 'A♭', 'B♭', 'C♭', 'C']
+      },
+      hirojoshi: {
+        'A♯': ['A♯', 'B♯', 'C♯', 'E♯', 'F♯']
+      },
+      algerian: {
+        // 'A♭': ['A♭', 'B♭', 'C♭', 'D♭', 'D', 'E♭', 'F♭', 'G'],
+        // 'G♭': ['G♭', 'A♭', 'B♭♭', 'C♭', 'C', 'D♭', 'E♭♭', 'F']
       }
     }
     Object.entries(correct).forEach(([scale, values]) => {

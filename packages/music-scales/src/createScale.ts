@@ -59,7 +59,7 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
   const letters: string[] = [notes[0].note.charAt(0)]
   const alphabet = 'ABCDEFG'
   let letter = notes[0].note.charAt(0)
-  for (let i = 1; i < scale.length; i += 1) {
+  for (let i = 0; i < scale.length - 1; i += 1) {
     // Here we generate the note names never using the same name twice (as is the convention)
     // The interval of 1-2 in most cases resolves to next letter but when it's over >2,
     // it _usually_ is skipped over and the 2nd next is chosen EXCEPT when the note would be already taken
@@ -73,9 +73,10 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
     }
     letters.push(letter)
   }
+  // console.log('letters', letters)
   let note: NotePos
-  for (let next = 1; next < scale.length; next += 1) {
-    letter = letters[next]
+  for (let next = 0; next < scale.length - 1; next += 1) {
+    letter = letters[next + 1]
     idx = (idx + scale[next]) % 12
     note = NOTES[idx]
     // console.log('letter', letter)
