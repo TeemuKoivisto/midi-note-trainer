@@ -50,7 +50,7 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
   const sharp = key.charAt(1) === '♯'
   const notes = []
   if (idx === -1) {
-    idx = NOTES.findIndex(n => n.note.charAt(0) === key.charAt(0))
+    idx = NOTES.findIndex(n => n.note.charAt(0) === key.charAt(0) && n.note.length === 1)
     idx = flat ? (idx - 1) % 12 : idx + 1
     notes.push({ ...NOTES[idx], flat, sharp, note: key })
   } else {
@@ -63,12 +63,12 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
     letter = alphabet.charAt((alphabet.indexOf(letter) + (scale[i] <= 2 ? 1 : 2)) % alphabet.length)
     letters.push(letter)
   }
+  // console.log('letters', letters)
   let note: NotePos
   for (let next = 1; next < scale.length; next += 1) {
     letter = letters[next]
     idx = (idx + scale[next]) % 12
     note = NOTES[idx]
-    // console.log('letters', letters)
     // console.log('note', note)
     const n = note.note.charAt(0)
     if (n < letter || (n === 'G' && letter === 'A')) {
