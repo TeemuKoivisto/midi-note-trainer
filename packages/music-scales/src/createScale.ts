@@ -25,7 +25,7 @@ const NOTES = [
   { note: 'B', steps: 6, black: false, sharp: false, flat: false }
 ]
 
-const regexScale = /^[a-gA-G][♭b#♯]?$/
+const regexKey = /^[a-gA-G][♭b#♯]?$/
 
 /**
  * Creates a scale from 2-length key and scale name
@@ -36,7 +36,7 @@ const regexScale = /^[a-gA-G][♭b#♯]?$/
  */
 export function createScale(rawKey: string, scaleName: string): Result<NotePos[]> {
   const scale = scales[scaleName as keyof typeof scales]
-  if (!regexScale.test(rawKey)) {
+  if (!regexKey.test(rawKey)) {
     return { err: `Unknown key: ${rawKey}`, code: 400 }
   } else if (!scale) {
     return { err: `Unknown scale: ${scaleName}`, code: 400 }
@@ -57,28 +57,34 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
     notes.push(NOTES[idx])
   }
   const letters: string[] = [notes[0].note.charAt(0)]
-  // console.log(`${flat && 'flat'} ${sharp && 'sharp'}`)
+  const alphabet = 'ABCDEFG'
+  let letter = notes[0].note.charAt(0)
+  for (let i = 0; i < scale.length - 1; i += 1) {
+    letter = alphabet.charAt((alphabet.indexOf(letter) + (scale[i] <= 2 ? 1 : 2)) % alphabet.length)
+    letters.push(letter)
+  }
+  let note: NotePos
   for (let next = 1; next < scale.length; next += 1) {
+    letter = letters[next]
     idx = (idx + scale[next]) % 12
-    const note = NOTES[idx]
+    note = NOTES[idx]
     // console.log('letters', letters)
     // console.log('note', note)
-    if (note.sharp && flat) {
+    const n = note.note.charAt(0)
+    if (n < letter || (n === 'G' && letter === 'A')) {
+      // 'A' < 'B'
       const higher = NOTES[(idx + 1) % 12]
-      // key = Eb, note = G# -> lower = G, higher = A -> Ab
-      notes.push({ ...note, note: higher.note.charAt(0) + '♭', flat: true })
-    } else if (note.flat && sharp) {
-      const lower = NOTES[(idx - 1) % 12]
-      // key = F#, note = Bb -> lower = A, higher = C -> A#
-      notes.push({ ...note, note: lower.note.charAt(0) + '♯', sharp: true })
-    } else if (letters.includes(note.note.charAt(0))) {
-      // key = F#, note = F -> lower = E, higher = F# -> E#
-      const lower = NOTES[(idx - 1) % 12]
-      notes.push({ ...note, note: lower.note.charAt(0) + '♯', sharp: true })
+      // shift upwards -> key = Eb, note = G#, letter = A -> lower = G, higher = A -> Ab
+      notes.push({ ...note, note: higher.note + '♭', flat: true })
+    } else if (n > letter || (n === 'A' && letter === 'G')) {
+      // 'G' > 'F'
+      const lower = NOTES[idx === 0 ? NOTES.length - 1 : idx - 1]
+      // shift downwards -> key = F#, note = Bb -> lower = A, higher = C -> A#
+      notes.push({ ...note, note: lower.note + '♯', sharp: true })
     } else {
+      // Correct letter
       notes.push(note)
     }
-    letters.push(notes[notes.length - 1].note.charAt(0))
   }
   return { data: notes }
 }

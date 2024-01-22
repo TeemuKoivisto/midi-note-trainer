@@ -27,7 +27,7 @@
 
   onMount(() => {
     handlePromptMIDI()
-    console.log(createScale('Db', 'major'))
+    console.log(createScale('C#', 'major'))
   })
 
   midiInput.subscribe(input => {
