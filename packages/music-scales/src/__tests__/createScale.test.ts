@@ -1,7 +1,7 @@
 import { createScale } from '../createScale'
 
 describe('createScale', () => {
-  it('should generate all major scales correctly', async () => {
+  it('should generate all major scales correctly', () => {
     const correct = {
       C: ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
 
@@ -33,8 +33,18 @@ describe('createScale', () => {
         expect(created.data.map(v => v.note)).toEqual(values)
       }
     })
+    Object.entries(correct).forEach(([key, values]) => {
+      const created = createScale(key, 'majorPentatonic')
+      if ('err' in created) {
+        expect(created.err).toEqual('')
+      } else {
+        expect(created.data.map(v => v.note)).toEqual(
+          values.filter((_, idx) => idx !== 3 && idx !== values.length - 1)
+        )
+      }
+    })
   })
-  it('should generate all minor scales correctly', async () => {
+  it('should generate all minor scales correctly', () => {
     const correct = {
       A: ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
 
@@ -64,6 +74,16 @@ describe('createScale', () => {
         expect(created.err).toEqual('')
       } else {
         expect(created.data.map(v => v.note)).toEqual(values)
+      }
+    })
+    Object.entries(correct).forEach(([key, values]) => {
+      const created = createScale(key, 'minorPentatonic')
+      if ('err' in created) {
+        expect(created.err).toEqual('')
+      } else {
+        expect(created.data.map(v => v.note)).toEqual(
+          values.filter((_, idx) => idx !== 1 && idx !== values.length - 2)
+        )
       }
     })
   })

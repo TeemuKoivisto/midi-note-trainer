@@ -59,7 +59,7 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
   const letters: string[] = [notes[0].note.charAt(0)]
   const alphabet = 'ABCDEFG'
   let letter = notes[0].note.charAt(0)
-  for (let i = 0; i < scale.length - 1; i += 1) {
+  for (let i = 1; i < scale.length; i += 1) {
     letter = alphabet.charAt((alphabet.indexOf(letter) + (scale[i] <= 2 ? 1 : 2)) % alphabet.length)
     letters.push(letter)
   }
