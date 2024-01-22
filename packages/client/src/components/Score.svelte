@@ -1,14 +1,13 @@
 <script lang="ts">
-  import type { Note } from '@/types'
+  import { played, target } from '$stores/game'
 
-  export let target: Note | undefined = undefined,
-    played: (Note & { correct: boolean }) | undefined = undefined
+  import type { Note } from '@/types'
 
   let playedEl: HTMLElement
   let targetEl: HTMLElement
 
-  $: targetEl && updateNoteEl(targetEl, target)
-  $: playedEl && updateNoteEl(playedEl, played, played?.correct)
+  $: targetEl && updateNoteEl(targetEl, $target)
+  $: playedEl && updateNoteEl(playedEl, $played, $played?.correct)
 
   function updateNoteEl(el: HTMLElement, note?: Note, correct?: boolean) {
     if (note) {

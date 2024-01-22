@@ -117,11 +117,11 @@
   .midi-body {
     display: grid;
     gap: 0.5rem;
-    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: auto;
     align-items: center;
     @media (width <= 475px) {
-      grid-template-columns: 50% 50%;
+      grid-template-columns: 1fr 1fr;
     }
   }
   .error {

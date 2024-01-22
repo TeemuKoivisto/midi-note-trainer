@@ -3,22 +3,18 @@
 
   import GameInfo from '$components/GameInfo.svelte'
   import MidiInfo from '$components/MidiInfo.svelte'
+  import PlayForm from '$components/PlayForm.svelte'
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
   import { useKeyboard, midiActions, midiInput, piano } from '$stores/midi'
   import { getNote, parseNote } from '$utils/midi'
-  import { createScale } from '@/music-scales'
 
   import type { NoteMessageEvent } from 'webmidi'
-  import type { Note } from '@/types'
 
   let status = 'Finding device...'
 
-  let target: Note | undefined
-  let played: (Note & { correct: boolean }) | undefined
   let timeout: ReturnType<typeof setTimeout> | undefined
-  let guessState: 'waiting' | 'correct' | 'wrong' | 'ended'
 
   const regexNote = /^[A-G]$/
   const regexPosInt = /^[0-9]$/
@@ -27,7 +23,6 @@
 
   onMount(() => {
     handlePromptMIDI()
-    console.log(createScale('C#', 'major'))
   })
 
   midiInput.subscribe(input => {
@@ -45,27 +40,27 @@
   }
   function handlePlayedNote(value: number, velocity: number) {
     if (!$currentGame) {
-      played = { ...getNote(value), value, correct: false }
+      gameActions.setPlayed({ ...getNote(value), value, correct: false })
     } else {
-      target = { ...getNote($currentGame.current), value: $currentGame.current }
+      gameActions.setTarget({ ...getNote($currentGame.current), value: $currentGame.current })
       const correct = $currentGame.guess(value)
-      guessState = correct ? 'correct' : 'wrong'
-      played = { ...getNote(value), value, correct }
+      gameActions.updateState(correct ? 'correct' : 'wrong')
+      gameActions.setPlayed({ ...getNote(value), value, correct })
       timeout = setTimeout(() => {
         if ($currentGame?.ended) {
-          target = undefined
-          guessState = 'ended'
+          gameActions.setTarget()
+          gameActions.updateState('ended')
         } else if ($currentGame) {
-          guessState = 'waiting'
+          gameActions.updateState('waiting')
           $currentGame.startTime()
           if ($currentGame.type === 'notes') {
-            target = { ...getNote($currentGame.current), value: $currentGame.current }
+            gameActions.setTarget({ ...getNote($currentGame.current), value: $currentGame.current })
           } else {
-            target = undefined
+            gameActions.setTarget()
             $piano?.noteOn($currentGame.current, 80)
           }
         }
-        played = undefined
+        gameActions.setPlayed()
         timeout = undefined
       }, 2000)
     }
@@ -112,28 +107,6 @@
       status = res.err
     }
   }
-  function playGuessNotes(type: 'notes' | 'pitches') {
-    if (type === 'notes') {
-      guessState = 'waiting'
-      const game = gameActions.playGuessNotes(type)
-      const note = getNote(game.current)
-      target = { ...note, value: game.current }
-    } else if (type === 'pitches') {
-      guessState = 'waiting'
-      const game = gameActions.playGuessNotes(type)
-      midiActions.setSound(true)
-      $piano?.noteOn(game.current, 80)
-    }
-  }
-  function tryAgain() {
-    playGuessNotes($currentGame!.type)
-  }
-  function clearGame() {
-    guessState = 'waiting'
-    gameActions.clearGame()
-    target = undefined
-    played = undefined
-  }
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
@@ -144,26 +117,14 @@
 
 <section class="px-4 md:px-0">
   <MidiInfo />
-  {#if midiInput}
-    <div>
-      <button class="btn primary" on:click={() => playGuessNotes('notes')}>Guess 10 Notes</button>
-      <button class="btn primary" on:click={() => playGuessNotes('pitches')}
-        >Guess 10 Pitches</button
-      >
-      <button class="btn primary" on:click={clearGame}>Clear</button>
-    </div>
-  {/if}
+  <PlayForm />
+  <div id="output"></div>
 </section>
 
-<Score class="px-4 md:px-0" {target} {played} />
+<Score class="px-4 md:px-0" />
 
 <section class="px-4 md:px-0">
-  <GameInfo {target} {played} {guessState}>
-    <div>
-      <button class="btn primary" on:click={tryAgain}>Try Again</button>
-      <button class="btn primary" on:click={clearGame}>Clear</button>
-    </div>
-  </GameInfo>
+  <GameInfo />
   {#if $useKeyboard}
     {#if keyboardError}
       <div>{keyboardError}</div>

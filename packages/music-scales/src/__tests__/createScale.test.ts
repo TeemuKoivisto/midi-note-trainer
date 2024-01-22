@@ -116,6 +116,9 @@ describe('createScale', () => {
       bebopMajor: {
         'G♭': ['G♭', 'A♭', 'B♭', 'C♭', 'D♭', 'D', 'E♭', 'F']
       },
+      bebopMinor: {
+        // 'A♭': ['A♭', 'B♭', 'C♭', 'C', 'D♭', 'E♭', 'F', 'G♭']
+      },
       bebopDominant: {
         // D-flat major scale with an added minor seventh
         // 'D♭': ['D♭', 'E♭', 'F', 'G♭', 'A♭', 'B♭', 'C♭', 'C']

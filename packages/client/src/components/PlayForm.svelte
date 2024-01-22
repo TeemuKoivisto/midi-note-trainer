@@ -1,0 +1,43 @@
+<script lang="ts">
+  import { gameActions } from '$stores/game'
+
+  function clearGame() {
+    gameActions.clearGame()
+  }
+</script>
+
+<div class={`${$$props.class || ''}`}>
+  <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm">
+    <legend class="px-2 text-0A text-base">Play</legend>
+    <div class="body">
+      <button class="btn primary" on:click={() => gameActions.playGuessNotes('notes')}
+        >Guess 10 Notes</button
+      >
+      <button class="btn primary" on:click={() => gameActions.playGuessNotes('pitches')}
+        >Guess 10 Pitches</button
+      >
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <button class="btn primary" on:click={clearGame}>Clear</button>
+    </div>
+  </fieldset>
+</div>
+
+<style lang="scss">
+  .body {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    align-items: center;
+    @media (width <= 475px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .error {
+    @apply text-xs text-red-500;
+  }
+</style>
