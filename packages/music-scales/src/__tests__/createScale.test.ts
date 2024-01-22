@@ -87,4 +87,31 @@ describe('createScale', () => {
       }
     })
   })
+  it('should generate all random scales correctly', () => {
+    const correct = {
+      locrian: {
+        // Gb Abb Bbb Cb Dbb Ebb Fb
+        'G♭': ['G♭', 'A♭♭', 'B♭♭', 'C♭', 'D♭♭', 'E♭♭', 'F♭']
+      },
+      mixolydianFlat6: {
+        A: ['A', 'B', 'C♯', 'D', 'E', 'F', 'G'],
+        E: ['E', 'F♯', 'G♯', 'A', 'B', 'C', 'D']
+      },
+      harmonicMinor: {
+        A: ['A', 'B', 'C', 'D', 'E', 'F', 'G♯'],
+        // should first generate minor scale and THEN augment seventh by 1 semitone
+        G: ['G', 'A', 'B♭', 'C', 'D', 'E♭', 'F♯'],
+      }
+    }
+    Object.entries(correct).forEach(([scale, values]) => {
+      Object.entries(values).forEach(([key, notes]) => {
+        const created = createScale(key, scale)
+        if ('err' in created) {
+          expect(created.err).toEqual('')
+        } else {
+          expect(created.data.map(v => v.note)).toEqual(notes)
+        }
+      })
+    })
+  })
 })

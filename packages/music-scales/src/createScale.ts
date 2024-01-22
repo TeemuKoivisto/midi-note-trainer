@@ -60,27 +60,49 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
   const alphabet = 'ABCDEFG'
   let letter = notes[0].note.charAt(0)
   for (let i = 1; i < scale.length; i += 1) {
-    letter = alphabet.charAt((alphabet.indexOf(letter) + (scale[i] <= 2 ? 1 : 2)) % alphabet.length)
+    // Here we generate the note names never using the same name twice (as is the convention)
+    // The interval of 1-2 in most cases resolves to next letter but when it's over >2,
+    // it _usually_ is skipped over and the 2nd next is chosen EXCEPT when the note would be already taken
+    // Or something like that...
+    const adjacent = alphabet.charAt((alphabet.indexOf(letter) + 1) % alphabet.length)
+    const twoSteps = alphabet.charAt((alphabet.indexOf(letter) + 2) % alphabet.length)
+    if (scale[i] > 2 && !letters.includes(twoSteps)) {
+      letter = twoSteps
+    } else {
+      letter = adjacent
+    }
     letters.push(letter)
   }
-  // console.log('letters', letters)
   let note: NotePos
   for (let next = 1; next < scale.length; next += 1) {
     letter = letters[next]
     idx = (idx + scale[next]) % 12
     note = NOTES[idx]
+    // console.log('letter', letter)
     // console.log('note', note)
     const n = note.note.charAt(0)
     if (n < letter || (n === 'G' && letter === 'A')) {
       // 'A' < 'B'
-      const higher = NOTES[(idx + 1) % 12]
+      let flats = 1
+      let higher = NOTES[(idx + flats) % 12]
+      while (higher.note.charAt(0) !== letter) {
+        flats += 1
+        higher = NOTES[(idx + flats) % 12]
+      }
       // shift upwards -> key = Eb, note = G#, letter = A -> lower = G, higher = A -> Ab
-      notes.push({ ...note, note: higher.note + '♭', flat: true })
+      notes.push({ ...note, note: higher.note + '♭'.repeat(flats), flat: true })
     } else if (n > letter || (n === 'A' && letter === 'G')) {
       // 'G' > 'F'
-      const lower = NOTES[idx === 0 ? NOTES.length - 1 : idx - 1]
+      let sharps = 1
+      let lowerIndex = idx === 0 ? NOTES.length - 1 : idx - sharps
+      let lower = NOTES[lowerIndex]
+      while (lower.note.charAt(0) !== letter) {
+        sharps += 1
+        lowerIndex = lowerIndex === 0 ? NOTES.length - 1 : lowerIndex - 1
+        lower = NOTES[lowerIndex]
+      }
       // shift downwards -> key = F#, note = Bb -> lower = A, higher = C -> A#
-      notes.push({ ...note, note: lower.note + '♯', sharp: true })
+      notes.push({ ...note, note: lower.note + '♯'.repeat(sharps), sharp: true })
     } else {
       // Correct letter
       notes.push(note)
