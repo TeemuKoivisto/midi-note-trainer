@@ -59,6 +59,7 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
   const letters: string[] = [notes[0].note.charAt(0)]
   const alphabet = 'ABCDEFG'
   let letter = notes[0].note.charAt(0)
+  let doubleHalfTone = false
   for (let i = 0; i < scale.length - 1; i += 1) {
     // Here we generate the note names never using the same name twice (as is the convention)
     // The interval of 1-2 in most cases resolves to next letter but when it's over >2,
@@ -68,6 +69,17 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
     const twoSteps = alphabet.charAt((alphabet.indexOf(letter) + 2) % alphabet.length)
     if (scale[i] > 2 && !letters.includes(twoSteps)) {
       letter = twoSteps
+    } else if (
+      scale.length > 7 &&
+      !doubleHalfTone &&
+      i + 1 !== scale.length - 1 &&
+      scale[i + 1] === 1 &&
+      scale[i] === 1
+    ) {
+      // Double adjacent half-tones in 8-length scale should resolve to base note even though it's not unique
+      // -> bebop major, Algerian etc
+      letter = alphabet.charAt(alphabet.indexOf(letter))
+      doubleHalfTone = true
     } else {
       letter = adjacent
     }

@@ -113,15 +113,19 @@ describe('createScale', () => {
         C: ['C', 'D♭', 'E♭', 'F', 'G', 'A♭', 'B'],
         F: ['F', 'G♭', 'A♭', 'B♭', 'C', 'D♭', 'E']
       },
+      bebopMajor: {
+        'G♭': ['G♭', 'A♭', 'B♭', 'C♭', 'D♭', 'D', 'E♭', 'F']
+      },
       bebopDominant: {
+        // D-flat major scale with an added minor seventh
         // 'D♭': ['D♭', 'E♭', 'F', 'G♭', 'A♭', 'B♭', 'C♭', 'C']
       },
       hirojoshi: {
         'A♯': ['A♯', 'B♯', 'C♯', 'E♯', 'F♯']
       },
       algerian: {
-        // 'A♭': ['A♭', 'B♭', 'C♭', 'D♭', 'D', 'E♭', 'F♭', 'G'],
-        // 'G♭': ['G♭', 'A♭', 'B♭♭', 'C♭', 'C', 'D♭', 'E♭♭', 'F']
+        'A♭': ['A♭', 'B♭', 'C♭', 'D♭', 'D', 'E♭', 'F♭', 'G'],
+        'G♭': ['G♭', 'A♭', 'B♭♭', 'C♭', 'C', 'D♭', 'E♭♭', 'F']
       }
     }
     Object.entries(correct).forEach(([scale, values]) => {
