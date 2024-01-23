@@ -22,50 +22,71 @@
 
   function init() {
     renderer = new Renderer(outputEl, Renderer.Backends.SVG)
-    renderer.resize(732, 200)
+    renderer.resize(732, 300)
     const context = renderer.getContext()
     const s1 = new Stave(10, 40, 200)
-    s1.addClef('treble').addTimeSignature('4/4')
-    // Vex.Flow.Formatter.FormatAndDraw(context, s1, [
-    //   new StaveNote({ keys: ['c#/4'], duration: 'q' }).addModifier(new Accidental("b")),
-    //   new StaveNote({ keys: ['d/4'], duration: 'q' }),
-    //   new StaveNote({ keys: ['b/4'], duration: 'qr' }),
-    //   new StaveNote({ keys: ['c/4', 'e/4', 'g/4'], duration: 'q' })
-    // ])
+    s1.addClef('treble') //.addTimeSignature('4/4')
+    const notes = [
+      new StaveNote({ keys: ['c#/4'], duration: 'q' }).addModifier(new Accidental('b')),
+      new StaveNote({ clef: 'bass', keys: ['d/4'], duration: 'q' }),
+      new StaveNote({ keys: ['b/4'], duration: 'qr' }),
+      new StaveNote({ keys: ['c/4', 'e/4', 'g/4'], duration: 'q' })
+    ]
+    // console.log(notes[1].getStave())
+    Vex.Flow.Formatter.FormatAndDraw(context, s1, notes)
+    const s2 = new Stave(10, 110, 200)
+    s2.addClef('bass')
     s1.setContext(context).draw()
+    s2.setContext(context).draw()
+  }
+
+  function createNote(note: Note): { sn: Vex.StaveNote; clef: 'treble' | 'bass' } {
+    const sn = new Vex.Flow.StaveNote({
+      clef: note.octave >= 4 ? 'treble' : 'bass',
+      keys: [`${note.note}/${note.octave}`.replaceAll('♯', '#').replaceAll('♭', 'b')],
+      duration: 'h'
+    })
+    if (note.flat || note.sharp) {
+      sn.addModifier(new Accidental(note.flat ? 'b' : '#'))
+    }
+    return { sn, clef: note.octave >= 4 ? 'treble' : 'bass' }
   }
 
   function updateNotes(target: Note, played?: Note, correct?: boolean) {
     const ctx = renderer.getContext()
     ctx.clear()
     const s1 = new Stave(10, 40, 200)
-    s1.addClef('treble').addTimeSignature('4/4')
-    const notes = [
-      new Vex.Flow.StaveNote({
-        clef: 'treble',
-        keys: [`${target.note}/${target.octave}`.replaceAll('♯', '#').replaceAll('♭', 'b')],
-        duration: 'h'
-      })
-    ]
-    if (target.flat || target.sharp) {
-      notes[0].addModifier(new Accidental(target.flat ? 'b' : '#'))
+    s1.addClef('treble') //.addTimeSignature('4/4')
+    const s2 = new Stave(10, 110, 200)
+    s2.addClef('bass')
+    const trebleNotes = []
+    const bassNotes = []
+    const t = createNote(target)
+    if (t.clef === 'treble') {
+      trebleNotes.push(t.sn)
+      bassNotes.push(new StaveNote({ keys: ['g/4'], duration: 'hr' }))
+    } else {
+      bassNotes.push(t.sn)
+      trebleNotes.push(new StaveNote({ keys: ['g/4'], duration: 'hr' }))
     }
     if (played) {
-      notes.push(
-        new Vex.Flow.StaveNote({
-          clef: 'treble',
-          keys: [`${played.note}/${played.octave}`.replaceAll('♯', '#').replaceAll('♭', 'b')],
-          duration: 'h'
-        })
-      )
-      if (played.flat || played.sharp) {
-        notes[1].addModifier(new Accidental(played.flat ? 'b' : '#'))
+      const t = createNote(played)
+      if (t.clef === 'treble') {
+        trebleNotes.push(t.sn)
+      } else {
+        bassNotes.push(t.sn)
       }
     } else {
-      notes.push(new StaveNote({ keys: ['g/4'], duration: 'hr' }))
+      if (trebleNotes.length > 0) {
+        trebleNotes.push(new StaveNote({ keys: ['g/4'], duration: 'hr' }))
+      } else {
+        bassNotes.push(new StaveNote({ keys: ['g/4'], duration: 'hr' }))
+      }
     }
-    Vex.Flow.Formatter.FormatAndDraw(ctx, s1, notes)
+    Vex.Flow.Formatter.FormatAndDraw(ctx, s1, trebleNotes)
+    Vex.Flow.Formatter.FormatAndDraw(ctx, s2, bassNotes)
     s1.setContext(ctx).draw()
+    s2.setContext(ctx).draw()
     // console.log('draw ', notes)
   }
 </script>
