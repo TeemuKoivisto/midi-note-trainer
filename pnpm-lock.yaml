@@ -98,6 +98,9 @@ importers:
       tailwindcss:
         specifier: ^3.3.3
         version: 3.3.3(ts-node@10.9.1)
+      vexflow:
+        specifier: ^4.2.3
+        version: 4.2.3
       webmidi:
         specifier: ^3.1.8
         version: 3.1.8
@@ -4506,6 +4509,10 @@ packages:
     resolution: {integrity: sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==}
     engines: {node: '>= 0.10'}
     dev: true
+
+  /vexflow@4.2.3:
+    resolution: {integrity: sha512-YiwYhZYuXPKqPfvvIC0QRYS3xnInDjeAxJeAZsQ+njTEE3q10sZMfo7RRGXj40rg7n74AFWdTiN3FymW8qE1Jw==}
+    dev: false
 
   /vite-node@1.0.4(@types/node@20.11.4):
     resolution: {integrity: sha512-9xQQtHdsz5Qn8hqbV7UKqkm8YkJhzT/zr41Dmt5N7AlD8hJXw/Z7y0QiD5I8lnTthV9Rvcvi0QW7PI0Fq83ZPg==}

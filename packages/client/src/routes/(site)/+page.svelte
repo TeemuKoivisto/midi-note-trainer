@@ -5,6 +5,7 @@
   import MidiInfo from '$components/MidiInfo.svelte'
   import PlayForm from '$components/PlayForm.svelte'
   import Score from '$components/Score.svelte'
+  import Score2 from '$components/Score2.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
   import { useKeyboard, midiActions, midiInput, piano } from '$stores/midi'
@@ -55,6 +56,7 @@
           $currentGame.startTime()
           if ($currentGame.type === 'notes') {
             gameActions.setTarget({ ...getNote($currentGame.current), value: $currentGame.current })
+            $piano?.noteOn($currentGame.current, 80)
           } else {
             gameActions.setTarget()
             $piano?.noteOn($currentGame.current, 80)
@@ -121,6 +123,7 @@
   <div id="output"></div>
 </section>
 
+<Score2 class="px-4 md:px-0" />
 <Score class="px-4 md:px-0" />
 
 <section class="px-4 md:px-0">

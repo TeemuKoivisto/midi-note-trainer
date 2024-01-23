@@ -29,6 +29,7 @@
     "@iconify-icons/mdi": "^1.2.48",
     "@iconify/svelte": "^3.1.4",
     "tailwindcss": "^3.3.3",
+    "vexflow": "^4.2.3",
     "webmidi": "^3.1.8"
   }
 }
