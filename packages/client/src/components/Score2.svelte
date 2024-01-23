@@ -2,7 +2,7 @@
   import { played, target } from '$stores/game'
   import Vex from 'vexflow'
 
-  const { Factory, EasyScore, System, Renderer, Stave, StaveNote } = Vex.Flow
+  const { Accidental, Factory, EasyScore, System, Renderer, Stave, StaveNote } = Vex.Flow
 
   import type { Note } from '@/types'
   import { onMount } from 'svelte'
@@ -22,25 +22,17 @@
 
   function init() {
     renderer = new Renderer(outputEl, Renderer.Backends.SVG)
-    renderer.resize(800, 300)
+    renderer.resize(732, 200)
     const context = renderer.getContext()
     const s1 = new Stave(10, 40, 200)
     s1.addClef('treble').addTimeSignature('4/4')
-    Vex.Flow.Formatter.FormatAndDraw(context, s1, [
-      new StaveNote({ keys: ['c/4'], duration: 'q' }),
-      new StaveNote({ keys: ['d/4'], duration: 'q' }),
-      new StaveNote({ keys: ['b/4'], duration: 'qr' }),
-      new StaveNote({ keys: ['c/4', 'e/4', 'g/4'], duration: 'q' })
-    ])
-    const s2 = new Stave(210, 40, 150)
-    Vex.Flow.Formatter.FormatAndDraw(context, s2, [
-      new StaveNote({ keys: ['c/4'], duration: 'q' }),
-      new StaveNote({ keys: ['d/4'], duration: 'q' }),
-      new StaveNote({ keys: ['b/4'], duration: 'qr' }),
-      new StaveNote({ keys: ['c/4', 'e/4', 'g/4'], duration: 'q' })
-    ])
+    // Vex.Flow.Formatter.FormatAndDraw(context, s1, [
+    //   new StaveNote({ keys: ['c#/4'], duration: 'q' }).addModifier(new Accidental("b")),
+    //   new StaveNote({ keys: ['d/4'], duration: 'q' }),
+    //   new StaveNote({ keys: ['b/4'], duration: 'qr' }),
+    //   new StaveNote({ keys: ['c/4', 'e/4', 'g/4'], duration: 'q' })
+    // ])
     s1.setContext(context).draw()
-    s2.setContext(context).draw()
   }
 
   function updateNotes(target: Note, played?: Note, correct?: boolean) {
@@ -55,6 +47,9 @@
         duration: 'h'
       })
     ]
+    if (target.flat || target.sharp) {
+      notes[0].addModifier(new Accidental(target.flat ? 'b' : '#'))
+    }
     if (played) {
       notes.push(
         new Vex.Flow.StaveNote({
@@ -63,6 +58,9 @@
           duration: 'h'
         })
       )
+      if (played.flat || played.sharp) {
+        notes[1].addModifier(new Accidental(played.flat ? 'b' : '#'))
+      }
     } else {
       notes.push(new StaveNote({ keys: ['g/4'], duration: 'hr' }))
     }
@@ -72,7 +70,7 @@
   }
 </script>
 
-<section class={`${$$props.class || ''} score pt-12 pb-8`}>
+<section class={`${$$props.class || ''}`}>
   <div id="output" bind:this={outputEl}></div>
 </section>
 

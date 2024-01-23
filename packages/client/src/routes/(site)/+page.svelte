@@ -123,8 +123,8 @@
   <div id="output"></div>
 </section>
 
+<!-- <Score class="px-4 md:px-0" /> -->
 <Score2 class="px-4 md:px-0" />
-<Score class="px-4 md:px-0" />
 
 <section class="px-4 md:px-0">
   <GameInfo />
