@@ -2,7 +2,8 @@
   import { onMount } from 'svelte'
 
   import GameInfo from '$components/GameInfo.svelte'
-  import MidiInfo from '$components/MidiInfo.svelte'
+  import Inputs from '$components/Inputs.svelte'
+  import Options from '$components/Options.svelte'
   import PlayForm from '$components/PlayForm.svelte'
   import Score from '$components/Score.svelte'
   import Score2 from '$components/Score2.svelte'
@@ -118,7 +119,8 @@
 </h1>
 
 <section class="px-4 md:px-0">
-  <MidiInfo />
+  <Inputs />
+  <Options />
   <PlayForm />
   <div id="output"></div>
 </section>
