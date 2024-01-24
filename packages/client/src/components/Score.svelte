@@ -20,12 +20,12 @@
 
   function init() {
     renderer = new Renderer(outputEl, Renderer.Backends.SVG)
-    renderer.resize(732, 400)
+    renderer.resize(732, 340)
     ctx = renderer.getContext()
     ctx.scale(2.0, 2.0)
     // console.log('ctx', ctx)
     tickContext = new Vex.Flow.TickContext()
-    const s1 = new Stave(10, 20, 200)
+    const s1 = new Stave(10, 0, 200)
     s1.addClef('treble') //.addTimeSignature('4/4')
     const notes = [
       new StaveNote({ keys: ['c#/4'], duration: 'q' }),
@@ -40,7 +40,7 @@
     voice.draw(ctx, s1)
     // console.log(notes[1].getStave())
     // Vex.Flow.Formatter.FormatAndDraw(context, s1, notes)
-    const s2 = new Stave(10, 90, 200)
+    const s2 = new Stave(10, 60, 200)
     s2.addClef('bass')
     s1.setContext(ctx).draw()
     s2.setContext(ctx).draw()
@@ -90,8 +90,8 @@
     // console.log('hello notes', notes)
     ctx.clear()
     ctx.scale(0.5, 0.5)
-    const s1 = new Stave(10, 20, 200).addClef('treble').addKeySignature(scoreData.key)
-    const s2 = new Stave(10, 90, 200).addClef('bass')
+    const s1 = new Stave(10, 0, 200).addClef('treble').addKeySignature(scoreData.key)
+    const s2 = new Stave(10, 60, 200).addClef('bass')
     const staveNotes = []
     if (scoreData.target) {
       staveNotes.push(drawNote(scoreData.target, s1, s2))

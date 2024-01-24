@@ -14,33 +14,29 @@
   }
 </script>
 
-{#if $currentGame}
-  <div class="flex">
-    {#if $currentGame.type === 'pitches' && $guessState === 'waiting'}
-      <div><button class="btn primary" on:click={replay}>Replay</button></div>
-    {:else if $guessState === 'correct' || $guessState === 'wrong'}
-      <div>Target: {$target?.absolute}</div>
-      <div class="ml-8">Played: {$played?.absolute}</div>
-    {:else if $guessState === 'ended'}
+<div class={`${$$props.class || ''} flex`}>
+  {#if $currentGame?.type === 'pitches' && $guessState === 'waiting'}
+    <div><button class="btn primary" on:click={replay}>Replay</button></div>
+  {:else if ($currentGame && $guessState === 'correct') || $guessState === 'wrong'}
+    <div>Target: {$target?.absolute}</div>
+    <div class="ml-8">Played: {$played?.absolute}</div>
+  {:else if $currentGame && $guessState === 'ended'}
+    <div>
       <div>
-        <div>
-          <span>Result: [{$currentGame.correct} / {$currentGame.notes.length}]</span>
-          <span>avg {$currentGame.avgTime}s</span>
-        </div>
-        <div>
-          <button class="btn primary" on:click={tryAgain}>Try Again</button>
-          <button class="btn primary" on:click={clearGame}>Clear</button>
-        </div>
+        <span>Result: [{$currentGame.correct} / {$currentGame.notes.length}]</span>
+        <span>avg {$currentGame.avgTime}s</span>
       </div>
-    {/if}
-  </div>
-{:else}
-  <div class="flex">
-    {#if $played}
-      <div>Played: {$played.absolute}</div>
-    {/if}
-  </div>
-{/if}
+      <div>
+        <button class="btn primary" on:click={tryAgain}>Try Again</button>
+        <button class="btn primary" on:click={clearGame}>Clear</button>
+      </div>
+    </div>
+  {:else if $played}
+    <div>Played: {$played.absolute}</div>
+  {:else}
+    &nbsp;
+  {/if}
+</div>
 
 <style lang="scss">
 </style>

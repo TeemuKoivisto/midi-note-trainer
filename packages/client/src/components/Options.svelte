@@ -62,8 +62,7 @@
     }
   }
   function handleSelectScale(key: string) {
-    console.log('key', key)
-    selectedScale = key
+    selectedScale = scaleOptions.find(k => key === k.key)?.value as string
     return false
   }
   function handleToggleKeyboard(

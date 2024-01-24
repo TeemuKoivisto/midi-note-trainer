@@ -9,6 +9,7 @@
 
   import { currentGame, gameActions } from '$stores/game'
   import { useKeyboard, midiActions, midiInput, piano } from '$stores/midi'
+  import { scoreActions } from '$stores/score'
   import { getNote, parseNote } from '$utils/midi'
 
   import type { NoteMessageEvent } from 'webmidi'
@@ -41,28 +42,28 @@
   }
   function handlePlayedNote(value: number, velocity: number) {
     if (!$currentGame) {
-      gameActions.setPlayed({ ...getNote(value), correct: false })
+      scoreActions.setPlayed({ ...getNote(value), correct: false })
     } else {
-      gameActions.setTarget(getNote($currentGame.current))
+      scoreActions.setTarget(getNote($currentGame.current))
       const correct = $currentGame.guess(value)
       gameActions.updateState(correct ? 'correct' : 'wrong')
-      gameActions.setPlayed({ ...getNote(value), correct })
+      scoreActions.setPlayed({ ...getNote(value), correct })
       timeout = setTimeout(() => {
         if ($currentGame?.ended) {
-          gameActions.setTarget()
+          scoreActions.setTarget()
           gameActions.updateState('ended')
         } else if ($currentGame) {
           gameActions.updateState('waiting')
           $currentGame.startTime()
           if ($currentGame.type === 'notes') {
-            gameActions.setTarget(getNote($currentGame.current))
+            scoreActions.setTarget(getNote($currentGame.current))
             $piano?.noteOn($currentGame.current, 80)
           } else {
-            gameActions.setTarget()
+            scoreActions.setTarget()
             $piano?.noteOn($currentGame.current, 80)
           }
         }
-        gameActions.setPlayed()
+        scoreActions.setPlayed()
         timeout = undefined
       }, 2000)
     }
@@ -126,15 +127,17 @@
 
 <Score class="px-4 md:px-0" />
 
-<section class="px-4 md:px-0">
-  <GameInfo />
-  {#if $useKeyboard}
-    {#if keyboardError}
-      <div>{keyboardError}</div>
-    {:else if keyboardInput}
-      <div>Input: {keyboardInput}</div>
+<section class="mb-8 px-4 md:px-0">
+  <GameInfo class="min-h-32" />
+  <div class="min-h-32">
+    {#if $useKeyboard && keyboardError}
+      {keyboardError}
+    {:else if $useKeyboard && keyboardInput}
+      Input: {keyboardInput}
+    {:else}
+      &nbsp;
     {/if}
-  {/if}
+  </div>
 </section>
 
 <style lang="scss">
