@@ -60,21 +60,22 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
   const alphabet = 'ABCDEFG'
   let letter = notes[0].note.charAt(0)
   let doubleHalfTone = false
-  for (let i = 0; i < scale.length - 1; i += 1) {
+  const { tones } = scale
+  for (let i = 0; i < tones.length - 1; i += 1) {
     // Here we generate the note names never using the same name twice (as is the convention)
     // The interval of 1-2 in most cases resolves to next letter but when it's over >2,
     // it _usually_ is skipped over and the 2nd next is chosen EXCEPT when the note would be already taken
     // Or something like that...
     const adjacent = alphabet.charAt((alphabet.indexOf(letter) + 1) % alphabet.length)
     const twoSteps = alphabet.charAt((alphabet.indexOf(letter) + 2) % alphabet.length)
-    if (scale[i] > 2 && !letters.includes(twoSteps)) {
+    if (tones[i] > 2 && !letters.includes(twoSteps)) {
       letter = twoSteps
     } else if (
-      scale.length > 7 &&
+      tones.length > 7 &&
       !doubleHalfTone &&
-      i + 1 !== scale.length - 1 &&
-      scale[i + 1] === 1 &&
-      scale[i] === 1
+      i + 1 !== tones.length - 1 &&
+      tones[i + 1] === 1 &&
+      tones[i] === 1
     ) {
       // Double adjacent half-tones in 8-length scale should resolve to base note even though it's not unique
       // -> bebop major, Algerian etc
@@ -87,9 +88,9 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
   }
   // console.log('letters', letters)
   let note: NotePos
-  for (let next = 0; next < scale.length - 1; next += 1) {
+  for (let next = 0; next < tones.length - 1; next += 1) {
     letter = letters[next + 1]
-    idx = (idx + scale[next]) % 12
+    idx = (idx + tones[next]) % 12
     note = NOTES[idx]
     // console.log('letter', letter)
     // console.log('note', note)

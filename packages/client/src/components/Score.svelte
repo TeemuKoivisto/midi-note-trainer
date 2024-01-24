@@ -1,170 +1,119 @@
 <script lang="ts">
-  import { played, target } from '$stores/game'
+  import Vex from 'vexflow'
+
+  import { score } from '$stores/score'
+
+  const { Accidental, EasyScore, Factory, Formatter, System, Renderer, Stave, StaveNote } = Vex.Flow
 
   import type { Note } from '@/types'
+  import { onMount } from 'svelte'
 
-  let playedEl: HTMLElement
-  let targetEl: HTMLElement
+  let outputEl: HTMLDivElement
+  let renderer: Vex.Renderer
+  let ctx: Vex.RenderContext
+  let tickContext: Vex.TickContext
 
-  $: targetEl && updateNoteEl(targetEl, $target)
-  $: playedEl && updateNoteEl(playedEl, $played, $played?.correct)
+  onMount(() => {
+    init()
+    score.subscribe(_ => updateNotes())
+  })
 
-  function updateNoteEl(el: HTMLElement, note?: Note, correct?: boolean) {
-    if (note) {
-      // console.log('update ', note)
-      el.style.display = 'block'
-      el.style.bottom = positionNote(note) + 'rem'
-      if (el.firstChild) {
-        el.firstChild.textContent = `${note.flat ? '♭' : note.sharp ? '♯' : ''}𝅝`
-      }
-      if (correct !== undefined && correct) {
-        el.classList.remove('wrong')
-        el.classList.add('correct')
-      } else if (correct !== undefined) {
-        el.classList.remove('correct')
-        el.classList.add('wrong')
-      }
-      if ((note.value === 60 || note.value === 61) && el.lastChild instanceof HTMLElement) {
-        // C4 -> add ledger line through it
-        el.lastChild.style.display = 'block'
-        if (note.flat || note.sharp) {
-          el.lastChild.style.left = '1.18rem'
-        } else {
-          el.lastChild.style.left = ''
-        }
-      } else if (note.value === 81 && el.lastChild instanceof HTMLElement) {
-        // >=A5 -> add ledger lines upwards
-        el.lastChild.style.display = 'block'
-        if (note.flat || note.sharp) {
-          el.lastChild.style.left = '1.18rem'
-        } else {
-          el.lastChild.style.left = ''
-        }
-      } else if (el.lastChild instanceof HTMLElement) {
-        el.lastChild.style.display = 'none'
-      }
-    } else {
-      el.style.display = 'none'
+  function init() {
+    renderer = new Renderer(outputEl, Renderer.Backends.SVG)
+    renderer.resize(732, 400)
+    ctx = renderer.getContext()
+    ctx.scale(2.0, 2.0)
+    // console.log('ctx', ctx)
+    tickContext = new Vex.Flow.TickContext()
+    const s1 = new Stave(10, 20, 200)
+    s1.addClef('treble') //.addTimeSignature('4/4')
+    const notes = [
+      new StaveNote({ keys: ['c#/4'], duration: 'q' }),
+      new StaveNote({ clef: 'bass', keys: ['d/4'], duration: 'q' }),
+      new StaveNote({ keys: ['b/4'], duration: 'qr' }),
+      new StaveNote({ keys: ['c/4', 'e/4', 'g/4'], duration: 'q' })
+    ]
+    const voice = new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).addTickables(notes)
+    // const formatter = new Vex.Flow.Formatter()
+    // formatter.joinVoices([voice]).formatToStave([voice], s1)
+    const formatter = new Vex.Flow.Formatter().joinVoices([voice]).formatToStave([voice], s1)
+    voice.draw(ctx, s1)
+    // console.log(notes[1].getStave())
+    // Vex.Flow.Formatter.FormatAndDraw(context, s1, notes)
+    const s2 = new Stave(10, 90, 200)
+    s2.addClef('bass')
+    s1.setContext(ctx).draw()
+    s2.setContext(ctx).draw()
+  }
+
+  function drawNote(
+    note: Note,
+    treble: Vex.Stave,
+    bass: Vex.Stave,
+    correct?: boolean
+  ): { note: Vex.StemmableNote; clef: 'treble' | 'bass' } {
+    const clef = note.octave >= 4 ? 'treble' : 'bass'
+    const snote = new Vex.Flow.StaveNote({
+      clef,
+      keys: [`${note.parts[0]}${note.parts[1]}/${note.parts[2]}`],
+      duration: 'w'
+    })
+    if (correct !== undefined) {
+      snote.setStyle({ fillStyle: correct ? 'rgb(34, 197, 94)' : 'red' })
+    }
+    const stave = clef === 'treble' ? treble : bass
+    snote.setContext(ctx).setStave(stave)
+    if (note.parts[1]) {
+      snote.addModifier(new Accidental(note.parts[1]))
+    }
+    tickContext.addTickable(snote)
+    return { note: snote, clef }
+  }
+
+  function drawNotesToStaves(
+    trebleStave: Vex.Stave,
+    bassStave: Vex.Stave,
+    notes: { note: Vex.StemmableNote; clef: 'treble' | 'bass' }[]
+  ) {
+    const trebleNotes = notes.filter(n => n.clef === 'treble').map(n => n.note)
+    const bassNotes = notes.filter(n => n.clef === 'bass').map(n => n.note)
+    if (trebleNotes.length > 0) {
+      Formatter.FormatAndDraw(ctx, trebleStave, trebleNotes)
+    }
+    if (bassNotes.length > 0) {
+      Formatter.FormatAndDraw(ctx, bassStave, bassNotes)
     }
   }
 
-  function positionNote(note: Note) {
-    // G5 -> 7.5rem
-    // F2 (22 steps lower) -> -1.8rem
-    // Step -> (7.5 + 1.8) / 22 = 0.42272727272
-    // Middle C4 (11 steps lower) -> 7.5 - 11 * 0.42272727272 = 2.8500000000799997
-    const stepSize = 0.42272727272 // rem
-    const octavesFromC4 = note.octave - 4
-    const steps = octavesFromC4 * 7 + note.steps
-    // Adjust the position with the calculated position for C4 in G-treble
-    return 2.85 + stepSize * steps
-  }
-
-  function drawLedgerLines(from: number, to: number) {
-    // 81 >= every 3rd step
-    // 60 -> middle C
-    if (from === 60) {
-      // ledgerLines = [{ bottom: '0.02rem' }]
-    } else if (from >= 81) {
-      // ledgerLines = [{ bottom: '4.97rem' }]
-      for (let s = from; s <= to; s += 3) {
-        console.log('line', s)
-      }
+  function updateNotes() {
+    const scoreData = $score
+    // console.log('hello notes', notes)
+    ctx.clear()
+    ctx.scale(0.5, 0.5)
+    const s1 = new Stave(10, 20, 200).addClef('treble').addKeySignature(scoreData.key)
+    const s2 = new Stave(10, 90, 200).addClef('bass')
+    const staveNotes = []
+    if (scoreData.target) {
+      staveNotes.push(drawNote(scoreData.target, s1, s2))
     }
+    if (scoreData.played) {
+      staveNotes.push(
+        drawNote(scoreData.played, s1, s2, scoreData.target ? scoreData.played.correct : undefined)
+      )
+    }
+    drawNotesToStaves(s1, s2, staveNotes)
+    s1.setContext(ctx).draw()
+    s2.setContext(ctx).draw()
+    // console.log('draw ', notes)
   }
 </script>
 
-<section class={`${$$props.class || ''} score pt-12 pb-8`}>
-  <div class="staff">
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line invisible"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-    <span class="g-clef">𝄞</span>
-    <span class="f-clef">𝄢</span>
-    <div class="note target" bind:this={targetEl}>
-      <div class="note-contents"></div>
-      <div class="ledger-line"></div>
-    </div>
-    <div class="note played" bind:this={playedEl}>
-      <div class="note-contents"></div>
-      <div class="ledger-line"></div>
-    </div>
-    <!-- <span class="ledger-line"></span> -->
-  </div>
+<section class={`${$$props.class || ''}`}>
+  <div id="output" bind:this={outputEl}></div>
 </section>
 
 <style lang="scss">
-  .staff {
-    font-family: 'Noto Music', sans-serif;
-    position: relative;
-    .line {
-      border-top: 0.1rem solid #222;
-      margin: 0.75rem 0;
-      &.invisible {
-        border-color: transparent;
-      }
-    }
-    .g-clef {
-      font-size: 3.6rem;
-      bottom: 4.12rem;
-      left: 1rem;
-      pointer-events: none;
-      position: absolute;
-      user-select: none;
-    }
-    .f-clef {
-      bottom: -0.7rem;
-      font-size: 3.6rem;
-      left: 1rem;
-      pointer-events: none;
-      position: absolute;
-      user-select: none;
-    }
-    .note {
-      font-size: 3.6rem;
-      // pointer-events: none;
-      position: absolute;
-    }
-    .target {
-      display: none;
-      left: 6rem;
-    }
-    .played {
-      display: none;
-      left: 9rem;
-    }
-    .ledger-line {
-      position: relative;
-      &::after {
-        border-top: 0.1rem solid #222;
-        bottom: 1.35rem;
-        content: ' ';
-        display: block;
-        left: -0.1rem;
-        position: absolute;
-        width: 2.07rem;
-      }
-    }
-    .ledger-line2 {
-      border-top: 1.25pt solid #222;
-      left: 9rem;
-      width: 1.65rem;
-      position: absolute;
-      top: calc(-0.75rem - 0.1rem);
-    }
-  }
-  :global(.wrong) {
-    color: red;
-  }
-  :global(.correct) {
-    @apply text-green-500;
+  :global(.hidden) {
+    display: none;
   }
 </style>

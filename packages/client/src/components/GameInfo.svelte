@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { currentGame, gameActions, guessState, played, target } from '$stores/game'
+  import { currentGame, gameActions, guessState } from '$stores/game'
+  import { played, target } from '$stores/score'
   import { piano } from '$stores/midi'
 
   function replay() {

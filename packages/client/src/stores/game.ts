@@ -1,18 +1,14 @@
 import { derived, get, writable } from 'svelte/store'
 
 import { midiActions, midiRange, piano } from './midi'
+import { scoreActions } from './score'
 
 import { GuessGame } from '$utils/guess_game'
 import { getNote } from '$utils/midi'
 import { persist } from './persist'
 
-import type { Note } from '@/types'
-
 type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 
-export const target = writable<Note | undefined>(undefined)
-export const played = writable<(Note & { correct: boolean }) | undefined>(undefined)
-export const scoreNotes = derived([target, played], ([t, p]) => ({ target: t, played: p }))
 export const guessState = writable<GuessState>('waiting')
 export const currentGame = writable<GuessGame | undefined>(undefined)
 // scores?
@@ -36,13 +32,13 @@ export const gameActions = {
     }
     const game = new GuessGame(type, notes)
     if (type === 'notes') {
-      target.set(getNote(game.current))
+      scoreActions.setTarget(getNote(game.current))
     } else if (type === 'pitches') {
       midiActions.setSound(true)
       // TODO doesnt work if sound is not currently on
       get(piano)?.noteOn(game.current, 80)
     }
-    played.set(undefined)
+    scoreActions.setPlayed(undefined)
     guessState.set('waiting')
     currentGame.set(game)
     return game
@@ -50,16 +46,9 @@ export const gameActions = {
   updateState(state: GuessState) {
     guessState.set(state)
   },
-  setTarget(val?: Note) {
-    target.set(val)
-  },
-  setPlayed(val?: Note & { correct: boolean }) {
-    played.set(val)
-  },
   clearGame() {
     currentGame.set(undefined)
     guessState.set('waiting')
-    target.set(undefined)
-    played.set(undefined)
+    scoreActions.clearScore()
   }
 }

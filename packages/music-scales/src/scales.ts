@@ -1,111 +1,94 @@
 // https://github.com/Zachacious/MusicTheoryJS/blob/65572a7bf58e0485f250bd92748fdd1e975f4a90/src/scale/scaleTemplates.ts
 // All scales should equal to 12 semitones
 export const scales = {
-  wholeTone: [2, 2, 2, 2, 2, 2],
-
+  wholeTone: { name: 'Whole Tone', tones: [2, 2, 2, 2, 2, 2] },
   // major
-  major: [2, 2, 1, 2, 2, 2, 1],
-  major7s4s5: [2, 2, 2, 2, 1, 2, 1],
-
+  major: { name: 'Major', tones: [2, 2, 1, 2, 2, 2, 1] },
+  major7s4s5: { name: 'Major7s4s5', tones: [2, 2, 2, 2, 1, 2, 1] },
   // modes
-  ionian: [2, 2, 1, 2, 2, 2, 1], // == major
-  aeolian: [2, 1, 2, 2, 1, 2, 2], // == minor
-  dorian: [2, 1, 2, 2, 2, 1, 2],
-  phrygian: [1, 2, 2, 2, 1, 2, 2],
-  lydian: [2, 2, 2, 1, 2, 2, 1],
-  lydianDominant: [2, 2, 2, 1, 2, 1, 2], // EQUAL
-  acoustic: [2, 2, 2, 1, 2, 1, 2], // EQUAL
-  mixolydian: [2, 2, 1, 2, 2, 1, 2],
-  mixolydianFlat6: [2, 2, 1, 2, 1, 2, 2],
-  locrian: [1, 2, 2, 1, 2, 2, 2],
-  superLocrian: [1, 2, 1, 2, 2, 2, 2],
-
+  ionian: { name: 'Ionian', tones: [2, 2, 1, 2, 2, 2, 1] }, // == major
+  aeolian: { name: 'Aeolian', tones: [2, 1, 2, 2, 1, 2, 2] }, // == minor
+  dorian: { name: 'Dorian', tones: [2, 1, 2, 2, 2, 1, 2] },
+  phrygian: { name: 'Phrygian', tones: [1, 2, 2, 2, 1, 2, 2] },
+  lydian: { name: 'Lydian', tones: [2, 2, 2, 1, 2, 2, 1] },
+  lydianDominant: { name: 'Lydian Dominant', tones: [2, 2, 2, 1, 2, 1, 2] }, // EQUAL
+  acoustic: { name: 'Acoustic', tones: [2, 2, 2, 1, 2, 1, 2] }, // EQUAL
+  mixolydian: { name: 'Mixolydian', tones: [2, 2, 1, 2, 2, 1, 2] },
+  mixolydianFlat6: { name: 'Mixolydian Flat-6', tones: [2, 2, 1, 2, 1, 2, 2] },
+  locrian: { name: 'Locrian', tones: [1, 2, 2, 1, 2, 2, 2] },
+  superLocrian: { name: 'Super Locrian', tones: [1, 2, 1, 2, 2, 2, 2] },
   // minor
-  minor: [2, 1, 2, 2, 1, 2, 2],
-  minor7b9: [1, 2, 2, 2, 2, 1, 2],
-  minor7b5: [2, 1, 2, 1, 2, 2, 2], // EQUAL
-  halfDiminished: [2, 1, 2, 1, 2, 2, 2], // EQUAL
-
+  minor: { name: 'Minor', tones: [2, 1, 2, 2, 1, 2, 2] },
+  minor7b9: { name: 'Minor7b9', tones: [1, 2, 2, 2, 2, 1, 2] },
+  minor7b5: { name: 'Minor7b5', tones: [2, 1, 2, 1, 2, 2, 2] }, // EQUAL
+  halfDiminished: { name: 'Half Diminished', tones: [2, 1, 2, 1, 2, 2, 2] }, // EQUAL
   // harmonic
-  harmonicMajor: [2, 2, 1, 2, 1, 3, 1],
-  harmonicMinor: [2, 1, 2, 2, 1, 3, 1],
-  doubleHarmonic: [1, 3, 1, 2, 1, 3, 1], // EQUAL
-  byzantine: [1, 3, 1, 2, 1, 3, 1], // EQUAL
-
+  harmonicMajor: { name: 'Harmonic Major', tones: [2, 2, 1, 2, 1, 3, 1] },
+  harmonicMinor: { name: 'Harmonic Minor', tones: [2, 1, 2, 2, 1, 3, 1] },
+  doubleHarmonic: { name: 'Double Harmonic', tones: [1, 3, 1, 2, 1, 3, 1] },
+  byzantine: { name: 'Byzantine', tones: [1, 3, 1, 2, 1, 3, 1] },
   // melodic
-  melodicMinorAscending: [2, 1, 2, 2, 2, 2, 1],
-  melodicMinorDescending: [2, 2, 1, 2, 2, 1, 2],
-
+  melodicMinorAscending: { name: 'Melodic Minor Ascending', tones: [2, 1, 2, 2, 2, 2, 1] },
+  melodicMinorDescending: { name: 'Melodic Mino rDescending', tones: [2, 2, 1, 2, 2, 1, 2] },
   // pentatonic
-  majorPentatonic: [2, 2, 3, 2, 3],
-  majorPentatonicBlues: [2, 1, 1, 3, 2, 3],
-  minorPentatonic: [3, 2, 2, 3, 2],
-  minorPentatonicBlues: [3, 2, 1, 1, 3, 2],
-  b5Pentatonic: [3, 2, 1, 4, 2],
-  minor6Pentatonic: [3, 2, 2, 2, 3],
-
+  majorPentatonic: { name: 'Major Pentatonic', tones: [2, 2, 3, 2, 3] },
+  majorPentatonicBlues: { name: 'Major Pentatonic Blues', tones: [2, 1, 1, 3, 2, 3] },
+  minorPentatonic: { name: 'Minor Pentatonic', tones: [3, 2, 2, 3, 2] },
+  minorPentatonicBlues: { name: 'Minor Pentatonic Blues', tones: [3, 2, 1, 1, 3, 2] },
+  b5Pentatonic: { name: 'B5-Pentatonic', tones: [3, 2, 1, 4, 2] },
+  minor6Pentatonic: { name: 'Minor6 Pentatonic', tones: [3, 2, 2, 2, 3] },
   // enigmatic
-  enigmaticMajor: [1, 3, 2, 2, 2, 1, 1],
-  enigmaticMinor: [1, 2, 3, 1, 3, 1, 1],
-
+  enigmaticMajor: { name: 'Enigmatic Major', tones: [1, 3, 2, 2, 2, 1, 1] },
+  enigmaticMinor: { name: 'Enigmatic Minor', tones: [1, 2, 3, 1, 3, 1, 1] },
   // 8Tone
-  dim8Tone: [2, 1, 2, 1, 2, 1, 2, 1],
-  dom8Tone: [1, 2, 1, 2, 1, 2, 1, 2],
-
+  dim8Tone: { name: 'Dim8 Tone', tones: [2, 1, 2, 1, 2, 1, 2, 1] },
+  dom8Tone: { name: 'Dom8 Tone', tones: [1, 2, 1, 2, 1, 2, 1, 2] },
   // neapolitan
-  neapolitanMajor: [1, 2, 2, 2, 2, 2, 1],
-  neapolitanMinor: [1, 2, 2, 2, 1, 3, 1],
-
+  neapolitanMajor: { name: 'Neapolitan Major', tones: [1, 2, 2, 2, 2, 2, 1] },
+  neapolitanMinor: { name: 'Neapolitan Minor', tones: [1, 2, 2, 2, 1, 3, 1] },
   // hungarian
-  hungarianMajor: [3, 1, 2, 1, 2, 1, 2],
-  hungarianMinor: [2, 1, 3, 1, 1, 3, 1],
-  hungarianGypsy: [1, 3, 1, 2, 1, 3, 1],
-
+  hungarianMajor: { name: 'Hungarian Major', tones: [3, 1, 2, 1, 2, 1, 2] },
+  hungarianMinor: { name: 'Hungarian Minor', tones: [2, 1, 3, 1, 1, 3, 1] },
+  hungarianGypsy: { name: 'Hungarian Gypsy', tones: [1, 3, 1, 2, 1, 3, 1] },
   // spanish
-  spanish: [1, 2, 1, 2, 2, 2, 2],
-  spanish8Tone: [1, 2, 1, 1, 1, 2, 2, 3], // EQUAL
-  jewish: [1, 2, 1, 1, 1, 2, 2, 2], // EQUAL
-  spanishGypsy: [1, 3, 1, 2, 1, 2, 2],
-
+  spanish: { name: 'Spanish', tones: [1, 2, 1, 2, 2, 2, 2] },
+  spanish8Tone: { name: 'Spanish 8-Tone', tones: [1, 2, 1, 1, 1, 2, 2, 3] },
+  jewish: { name: 'Jewish', tones: [1, 2, 1, 1, 1, 2, 2, 2] },
+  spanishGypsy: { name: 'Spanish Gypsy', tones: [1, 3, 1, 2, 1, 2, 2] },
   // aug dom
-  augmented: [3, 1, 3, 1, 3, 1],
-  dominantSuspended: [2, 3, 2, 2, 1, 2],
-
+  augmented: { name: 'Augmented', tones: [3, 1, 3, 1, 3, 1] },
+  dominantSuspended: { name: 'Dominant Suspended', tones: [2, 3, 2, 2, 1, 2] },
   // bebop
-  bebopMajor: [2, 2, 1, 2, 1, 1, 2, 1],
-  bebopMinor: [2, 1, 1, 1, 2, 2, 1, 2],
-  bebopDominant: [2, 2, 1, 2, 2, 1, 1, 1],
+  bebopMajor: { name: 'Bebop Major', tones: [2, 2, 1, 2, 1, 1, 2, 1] },
+  bebopMinor: { name: 'Bebop Minor', tones: [2, 1, 1, 1, 2, 2, 1, 2] },
+  bebopDominant: { name: 'Bebop Dominant', tones: [2, 2, 1, 2, 2, 1, 1, 1] },
 
-  mystic: [2, 2, 2, 3, 2, 1],
-
-  overtone: [2, 2, 2, 1, 1, 2, 2],
-
-  leadingTone: [2, 2, 2, 2, 2, 1, 1],
-
+  mystic: { name: 'Mystic', tones: [2, 2, 2, 3, 2, 1] },
+  overtone: { name: 'Overtone', tones: [2, 2, 2, 1, 1, 2, 2] },
+  leadingTone: { name: 'Leading Tone', tones: [2, 2, 2, 2, 2, 1, 1] },
   // japanese
-  hirojoshi: [2, 1, 4, 1, 4],
-  japaneseA: [1, 4, 1, 3, 3],
-  japaneseB: [2, 3, 1, 3, 3],
-
+  hirojoshi: { name: 'Hirojoshi', tones: [2, 1, 4, 1, 4] },
+  japaneseA: { name: 'Japanese A', tones: [1, 4, 1, 3, 3] },
+  japaneseB: { name: 'Japanese B', tones: [2, 3, 1, 3, 3] },
   // cultures
-  oriental: [1, 3, 1, 1, 3, 1, 2],
-  persian: [1, 4, 1, 2, 3, 1],
-  arabian: [2, 2, 1, 1, 2, 2, 2],
-  balinese: [1, 2, 4, 1, 4],
-  kumoi: [2, 1, 4, 2, 2, 1],
-  pelog: [1, 2, 3, 1, 1, 4],
-  algerian: [2, 1, 2, 1, 1, 1, 3, 1],
-  chinese: [4, 2, 1, 4, 1],
-  mongolian: [2, 2, 3, 2, 3],
-  egyptian: [2, 3, 2, 3, 2],
-  romainian: [2, 1, 3, 1, 2, 1, 2],
-  hindu: [2, 2, 1, 2, 1, 2, 2],
-  insen: [1, 4, 2, 3, 2],
-  iwato: [1, 4, 1, 4, 2],
-  scottish: [2, 3, 2, 2, 3],
-  yo: [3, 2, 2, 3, 2],
-  istrian: [1, 2, 2, 2, 1, 2, 2],
-  ukranianDorian: [2, 1, 3, 1, 2, 1, 2],
-  petrushka: [1, 3, 2, 1, 3, 2],
-  ahavaraba: [1, 3, 1, 2, 1, 2, 2]
+  oriental: { name: 'Oriental', tones: [1, 3, 1, 1, 3, 1, 2] },
+  persian: { name: 'Persian', tones: [1, 4, 1, 2, 3, 1] },
+  arabian: { name: 'Arabian', tones: [2, 2, 1, 1, 2, 2, 2] },
+  balinese: { name: 'Balinese', tones: [1, 2, 4, 1, 4] },
+  kumoi: { name: 'Kumoi', tones: [2, 1, 4, 2, 2, 1] },
+  pelog: { name: 'Pelog', tones: [1, 2, 3, 1, 1, 4] },
+  algerian: { name: 'Algerian', tones: [2, 1, 2, 1, 1, 1, 3, 1] },
+  chinese: { name: 'Chinese', tones: [4, 2, 1, 4, 1] },
+  mongolian: { name: 'Mongolian', tones: [2, 2, 3, 2, 3] },
+  egyptian: { name: 'Egyptian', tones: [2, 3, 2, 3, 2] },
+  romainian: { name: 'Romainian', tones: [2, 1, 3, 1, 2, 1, 2] },
+  hindu: { name: 'Hindu', tones: [2, 2, 1, 2, 1, 2, 2] },
+  insen: { name: 'Insen', tones: [1, 4, 2, 3, 2] },
+  iwato: { name: 'Iwato', tones: [1, 4, 1, 4, 2] },
+  scottish: { name: 'Scottish', tones: [2, 3, 2, 2, 3] },
+  yo: { name: 'Yo', tones: [3, 2, 2, 3, 2] },
+  istrian: { name: 'Istrian', tones: [1, 2, 2, 2, 1, 2, 2] },
+  ukranianDorian: { name: 'Ukranian Dorian', tones: [2, 1, 3, 1, 2, 1, 2] },
+  petrushka: { name: 'Petrushka', tones: [1, 3, 2, 1, 3, 2] },
+  ahavaraba: { name: 'Ahavaraba', tones: [1, 3, 1, 2, 1, 2, 2] }
 } as const

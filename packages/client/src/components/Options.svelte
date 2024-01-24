@@ -1,11 +1,25 @@
 <script lang="ts">
+  import { scales } from '@/music-scales'
+
   import { midiActions, midiInput, midiRange } from '$stores/midi'
+  import { key, scale, scoreActions } from '$stores/score'
   import { getNote, parseNote } from '$utils/midi'
+
+  import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
 
   let rangeMin = getNote($midiRange[0]).absolute
   let rangeMax = getNote($midiRange[1]).absolute
   let rangeError = ''
   let hidden = false
+
+  const regexValidKey = /^[a-gA-G][♭b#♯]?$/
+  let selectedKey = $key.replaceAll('b', '♭').replaceAll('#', '♯')
+
+  const scaleOptions = Object.entries(scales).map(([k, v]) => ({
+    key: k,
+    value: v.name
+  }))
+  let selectedScale = $scale
 
   function handleSetRange() {
     // prompt -> press the lowest note in your MIDI device
@@ -35,12 +49,22 @@
       }
     }
   }
-  function handleToggleSound(
-    e: Event & {
-      currentTarget: EventTarget & HTMLInputElement
+  function handleKeyChange(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    if (regexValidKey.test(e.currentTarget.value)) {
+      scoreActions.setKey(e.currentTarget.value.replaceAll('♭', 'b').replaceAll('♯', '#'))
     }
-  ) {
-    midiActions.setSound(e.currentTarget.checked)
+  }
+  function handleKeyBlur() {
+    if (!regexValidKey.test(selectedKey)) {
+      selectedKey = $key
+    } else {
+      selectedKey = selectedKey.replaceAll('b', '♭').replaceAll('#', '♯')
+    }
+  }
+  function handleSelectScale(key: string) {
+    console.log('key', key)
+    selectedScale = key
+    return false
   }
   function handleToggleKeyboard(
     e: Event & {
@@ -85,8 +109,29 @@
         </div>
       </div>
       <div class="flex flex-col h-full">
-        <label class="font-bold" for="sound">Scales</label>
-        <div class="my-1 flex"></div>
+        <label class="font-bold" for="key">Key</label>
+        <div class="my-1 flex">
+          <input
+            class="h-[20px]"
+            id="key"
+            bind:value={selectedKey}
+            on:input={handleKeyChange}
+            on:blur={handleKeyBlur}
+          />
+        </div>
+      </div>
+      <div class="flex flex-col h-full">
+        <label class="font-bold" for="scales">Scales</label>
+        <div class="my-1 w-full">
+          <MultiSelectDropdown
+            id="scales"
+            class="p-1"
+            options={scaleOptions}
+            onSelect={handleSelectScale}
+          >
+            <div slot="value">{selectedScale}</div>
+          </MultiSelectDropdown>
+        </div>
       </div>
     </div>
   </fieldset>
