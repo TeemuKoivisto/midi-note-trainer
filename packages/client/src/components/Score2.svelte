@@ -14,7 +14,7 @@
 
   $: {
     if (typeof window !== undefined) {
-      $target && updateNotes($target, $played, $played?.correct)
+      $target && updateNotes()
     }
   }
 
@@ -24,10 +24,12 @@
 
   function init() {
     renderer = new Renderer(outputEl, Renderer.Backends.SVG)
-    renderer.resize(732, 300)
+    renderer.resize(732, 400)
     ctx = renderer.getContext()
+    ctx.scale(2.0, 2.0)
+    // console.log('ctx', ctx)
     tickContext = new Vex.Flow.TickContext()
-    const s1 = new Stave(10, 40, 200)
+    const s1 = new Stave(10, 20, 200).setFontSize('48px')
     s1.addClef('treble') //.addTimeSignature('4/4')
     const notes = [
       new StaveNote({ keys: ['c#/4'], duration: 'q' }),
@@ -42,7 +44,7 @@
     voice.draw(ctx, s1)
     // console.log(notes[1].getStave())
     // Vex.Flow.Formatter.FormatAndDraw(context, s1, notes)
-    const s2 = new Stave(10, 110, 200)
+    const s2 = new Stave(10, 90, 200)
     s2.addClef('bass')
     s1.setContext(ctx).draw()
     s2.setContext(ctx).draw()
@@ -51,7 +53,8 @@
   function drawNote(
     note: Note,
     treble: Vex.Stave,
-    bass: Vex.Stave
+    bass: Vex.Stave,
+    correct?: boolean
   ): { note: Vex.StemmableNote; clef: 'treble' | 'bass' } {
     const clef = note.octave >= 4 ? 'treble' : 'bass'
     const sn = new Vex.Flow.StaveNote({
@@ -59,6 +62,9 @@
       keys: [`${note.parts[0]}${note.parts[1]}/${note.parts[2]}`],
       duration: 'w'
     })
+    if (correct !== undefined) {
+      sn.setStyle({ fillStyle: correct ? 'rgb(34, 197, 94)' : 'red' })
+    }
     const stave = clef === 'treble' ? treble : bass
     sn.setContext(ctx).setStave(stave)
     if (note.parts[1]) {
@@ -85,13 +91,19 @@
     }
   }
 
-  function updateNotes(target: Note, played?: Note, correct?: boolean) {
+  function updateNotes() {
+    const trg = $target
+    const pld = $played
     ctx.clear()
-    const s1 = new Stave(10, 40, 200).addClef('treble') //.addTimeSignature('4/4')
-    const s2 = new Stave(10, 110, 200).addClef('bass')
-    const notes = [drawNote(target, s1, s2)]
-    if (played) {
-      notes.push(drawNote(played, s1, s2))
+    ctx.scale(0.5, 0.5)
+    const s1 = new Stave(10, 20, 200).addClef('treble') //.addTimeSignature('4/4')
+    const s2 = new Stave(10, 90, 200).addClef('bass')
+    const notes = []
+    if (trg) {
+      notes.push(drawNote(trg, s1, s2))
+    }
+    if (pld) {
+      notes.push(drawNote(pld, s1, s2, pld.correct))
     }
     drawNotesToStaves(s1, s2, notes)
     s1.setContext(ctx).draw()
