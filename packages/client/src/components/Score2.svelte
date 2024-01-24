@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { played, target } from '$stores/game'
+  import { scoreNotes } from '$stores/game'
   import Vex from 'vexflow'
 
   const { Accidental, EasyScore, Factory, Formatter, System, Renderer, Stave, StaveNote } = Vex.Flow
@@ -12,14 +12,9 @@
   let ctx: Vex.RenderContext
   let tickContext: Vex.TickContext
 
-  $: {
-    if (typeof window !== undefined) {
-      $target && updateNotes()
-    }
-  }
-
   onMount(() => {
     init()
+    scoreNotes.subscribe(_ => updateNotes())
   })
 
   function init() {
@@ -29,7 +24,7 @@
     ctx.scale(2.0, 2.0)
     // console.log('ctx', ctx)
     tickContext = new Vex.Flow.TickContext()
-    const s1 = new Stave(10, 20, 200).setFontSize('48px')
+    const s1 = new Stave(10, 20, 200)
     s1.addClef('treble') //.addTimeSignature('4/4')
     const notes = [
       new StaveNote({ keys: ['c#/4'], duration: 'q' }),
@@ -57,23 +52,21 @@
     correct?: boolean
   ): { note: Vex.StemmableNote; clef: 'treble' | 'bass' } {
     const clef = note.octave >= 4 ? 'treble' : 'bass'
-    const sn = new Vex.Flow.StaveNote({
+    const snote = new Vex.Flow.StaveNote({
       clef,
       keys: [`${note.parts[0]}${note.parts[1]}/${note.parts[2]}`],
       duration: 'w'
     })
     if (correct !== undefined) {
-      sn.setStyle({ fillStyle: correct ? 'rgb(34, 197, 94)' : 'red' })
+      snote.setStyle({ fillStyle: correct ? 'rgb(34, 197, 94)' : 'red' })
     }
     const stave = clef === 'treble' ? treble : bass
-    sn.setContext(ctx).setStave(stave)
+    snote.setContext(ctx).setStave(stave)
     if (note.parts[1]) {
-      sn.addModifier(new Accidental(note.parts[1]))
+      snote.addModifier(new Accidental(note.parts[1]))
     }
-    tickContext.addTickable(sn)
-    // stave.draw()
-    // Formatter.FormatAndDraw(ctx, stave, [sn]);
-    return { note: sn, clef }
+    tickContext.addTickable(snote)
+    return { note: snote, clef }
   }
 
   function drawNotesToStaves(
@@ -92,20 +85,22 @@
   }
 
   function updateNotes() {
-    const trg = $target
-    const pld = $played
+    const notes = $scoreNotes
+    // console.log('hello notes', notes)
     ctx.clear()
     ctx.scale(0.5, 0.5)
     const s1 = new Stave(10, 20, 200).addClef('treble') //.addTimeSignature('4/4')
     const s2 = new Stave(10, 90, 200).addClef('bass')
-    const notes = []
-    if (trg) {
-      notes.push(drawNote(trg, s1, s2))
+    const staveNotes = []
+    if (notes.target) {
+      staveNotes.push(drawNote(notes.target, s1, s2))
     }
-    if (pld) {
-      notes.push(drawNote(pld, s1, s2, pld.correct))
+    if (notes.played) {
+      staveNotes.push(
+        drawNote(notes.played, s1, s2, notes.target ? notes.played.correct : undefined)
+      )
     }
-    drawNotesToStaves(s1, s2, notes)
+    drawNotesToStaves(s1, s2, staveNotes)
     s1.setContext(ctx).draw()
     s2.setContext(ctx).draw()
     // console.log('draw ', notes)

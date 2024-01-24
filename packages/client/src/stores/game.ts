@@ -12,6 +12,7 @@ type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 
 export const target = writable<Note | undefined>(undefined)
 export const played = writable<(Note & { correct: boolean }) | undefined>(undefined)
+export const scoreNotes = derived([target, played], ([t, p]) => ({ target: t, played: p }))
 export const guessState = writable<GuessState>('waiting')
 export const currentGame = writable<GuessGame | undefined>(undefined)
 // scores?
@@ -41,6 +42,7 @@ export const gameActions = {
       // TODO doesnt work if sound is not currently on
       get(piano)?.noteOn(game.current, 80)
     }
+    played.set(undefined)
     guessState.set('waiting')
     currentGame.set(game)
     return game
