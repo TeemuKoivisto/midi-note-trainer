@@ -41,12 +41,12 @@
   }
   function handlePlayedNote(value: number, velocity: number) {
     if (!$currentGame) {
-      gameActions.setPlayed({ ...getNote(value), value, correct: false })
+      gameActions.setPlayed({ ...getNote(value), correct: false })
     } else {
-      gameActions.setTarget({ ...getNote($currentGame.current), value: $currentGame.current })
+      gameActions.setTarget(getNote($currentGame.current))
       const correct = $currentGame.guess(value)
       gameActions.updateState(correct ? 'correct' : 'wrong')
-      gameActions.setPlayed({ ...getNote(value), value, correct })
+      gameActions.setPlayed({ ...getNote(value), correct })
       timeout = setTimeout(() => {
         if ($currentGame?.ended) {
           gameActions.setTarget()
@@ -55,7 +55,7 @@
           gameActions.updateState('waiting')
           $currentGame.startTime()
           if ($currentGame.type === 'notes') {
-            gameActions.setTarget({ ...getNote($currentGame.current), value: $currentGame.current })
+            gameActions.setTarget(getNote($currentGame.current))
             $piano?.noteOn($currentGame.current, 80)
           } else {
             gameActions.setTarget()

@@ -6,4 +6,5 @@ export interface Note {
   steps: number
   sharp: boolean
   flat: boolean
+  parts: [string, string, number]
 }

@@ -35,7 +35,7 @@ export const gameActions = {
     }
     const game = new GuessGame(type, notes)
     if (type === 'notes') {
-      target.set({ ...getNote(game.current), value: game.current })
+      target.set(getNote(game.current))
     } else if (type === 'pitches') {
       midiActions.setSound(true)
       // TODO doesnt work if sound is not currently on

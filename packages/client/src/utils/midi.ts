@@ -1,4 +1,4 @@
-import type { Result } from '@/types'
+import type { Note, Result } from '@/types'
 
 export const C_MAJOR_NOTES = {
   0: { note: 'C', steps: 0, sharp: false, flat: false },
@@ -15,14 +15,20 @@ export const C_MAJOR_NOTES = {
   11: { note: 'B', steps: 6, sharp: false, flat: false }
 } as const
 
-export function getNote(value: number) {
+export function getNote(value: number): Note {
   const semitonesFromC0 = value - 12
   const octave = Math.floor(semitonesFromC0 / 12)
   // Center the note from C0 which equals 12 in MIDI values, then get the sequence after C
   // @TODO this might not be same in different MIDI devices -> should prob use frequency instead
   // https://en.wikipedia.org/wiki/C_(musical_note)#Middle_C
   const note = C_MAJOR_NOTES[(semitonesFromC0 % 12) as keyof typeof C_MAJOR_NOTES]
-  return { ...note, octave, absolute: `${note.note}${octave}` }
+  return {
+    ...note,
+    octave,
+    value,
+    absolute: `${note.note}${octave}`,
+    parts: [note.note.charAt(0), note.flat ? 'b' : note.sharp ? '#' : '', octave]
+  }
 }
 
 export function parseNote(val: string): Result<number> {
