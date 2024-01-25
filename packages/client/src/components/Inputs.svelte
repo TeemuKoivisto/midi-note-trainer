@@ -1,8 +1,13 @@
 <script lang="ts">
   import { midiActions, midiInput, useKeyboard, useSound } from '$stores/midi'
+  import { fadeTimeout, scoreActions } from '$stores/score'
 
   let hidden = false
+  let fadeMs = $fadeTimeout
 
+  function toggleVisibility() {
+    hidden = !hidden
+  }
   function handleToggleSound(
     e: Event & {
       currentTarget: EventTarget & HTMLInputElement
@@ -17,15 +22,25 @@
   ) {
     midiActions.setUseKeyboard(e.currentTarget.checked)
   }
-  function toggleVisibility() {
-    hidden = !hidden
+  function handleSetFadeTimeout(
+    e: Event & {
+      currentTarget: EventTarget & HTMLInputElement
+    }
+  ) {
+    try {
+      const int = parseInt(e.currentTarget.value)
+      scoreActions.setFadeTimeout(int)
+      fadeMs = int
+    } catch (err: any) {
+      fadeMs = $fadeTimeout
+    }
   }
 </script>
 
 <div class={`${$$props.class || ''}`}>
   <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm">
     <legend class="px-2 text-0A text-base">
-      <button class="hover:bg-gray-100" on:click={toggleVisibility}>Controls</button>
+      <button class="hover:bg-gray-100" on:click={toggleVisibility}>Inputs</button>
     </legend>
     <div class="body" class:hidden>
       <div class="flex flex-col">
@@ -56,6 +71,17 @@
             type="checkbox"
             checked={$useKeyboard}
             on:change={handleToggleKeyboard}
+          />
+        </div>
+      </div>
+      <div class="flex flex-col h-full">
+        <label class="font-bold" for="fade-timeout">Fade timeout</label>
+        <div class="my-1 flex">
+          <input
+            class="h-[20px]"
+            id="fade-timeout"
+            value={fadeMs}
+            on:input={handleSetFadeTimeout}
           />
         </div>
       </div>

@@ -55,16 +55,16 @@
     s2.setContext(ctx).draw()
   }
 
-  function drawNote(
-    note: Note,
+  function drawNotes(
+    notes: Note[],
     treble: Vex.Stave,
     bass: Vex.Stave,
     correct?: boolean
   ): { note: Vex.StemmableNote; clef: 'treble' | 'bass' } {
-    const clef = note.octave >= 4 ? 'treble' : 'bass'
+    const clef = notes[0].octave >= 4 ? 'treble' : 'bass'
     const snote = new Vex.Flow.StaveNote({
       clef,
-      keys: [`${note.parts[0]}${note.parts[1]}/${note.parts[2]}`],
+      keys: notes.map(n => `${n.parts[0]}${n.parts[1]}/${n.parts[2]}`),
       duration: 'w'
     })
     if (correct !== undefined) {
@@ -72,9 +72,11 @@
     }
     const stave = clef === 'treble' ? treble : bass
     snote.setContext(ctx).setStave(stave)
-    if (note.parts[1]) {
-      snote.addModifier(new Accidental(note.parts[1]))
-    }
+    notes.forEach((n, idx) => {
+      if (n.parts[1]) {
+        snote.addModifier(new Accidental(n.parts[1]), idx)
+      }
+    })
     tickContext.addTickable(snote)
     return { note: snote, clef }
   }
@@ -116,12 +118,18 @@
     const s2 = new Stave(10, 60, 200).addClef('bass')
     const staveNotes = []
     if (score.target) {
-      staveNotes.push(drawNote(score.target, s1, s2))
+      staveNotes.push(drawNotes([score.target], s1, s2))
     }
-    score.played.forEach(n => {
-      const correct = game?.guessed === n.value && guessed === 'correct'
-      staveNotes.push(drawNote(n, s1, s2, correct))
-    })
+    if (score.played.length > 0) {
+      staveNotes.push(
+        drawNotes(
+          score.played,
+          s1,
+          s2,
+          game?.guessed === score.played[0].value && guessed === 'correct'
+        )
+      )
+    }
     drawNotesToStaves(s1, s2, staveNotes)
     s1.setContext(ctx).draw()
     s2.setContext(ctx).draw()
