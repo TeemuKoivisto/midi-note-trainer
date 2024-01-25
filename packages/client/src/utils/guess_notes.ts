@@ -1,4 +1,4 @@
-export class GuessGame {
+export class GuessNotes {
   type: 'notes' | 'pitches'
   notes: number[]
   times: number[] = []

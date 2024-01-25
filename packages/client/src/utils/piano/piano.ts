@@ -69,7 +69,7 @@ export class Piano {
    * @param velocity From 1 lowest to 127 highest
    */
   noteOn(noteNumber: number, velocity: number) {
-    console.log(`play note ${noteNumber} ${velocity}`)
+    // console.log(`play note ${noteNumber} ${velocity}`)
     if (noteNumber < 109 && noteNumber > 20) {
       if (this.notes[noteNumber]) {
         this.notes[noteNumber].off(this.context.currentTime, 1.1, this.context.currentTime + 2)

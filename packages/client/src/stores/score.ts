@@ -19,22 +19,24 @@ export const score = derived([key, target, played], ([k, t, p]) => ({
   played: p
 }))
 
-function removePlayedNotes(notes: (Note & { started: number })[]): (Note & { started: number })[] {
+function removePlayedNotes(
+  notes: (Note & { started: number })[],
+  timeoutMs: number
+): (Note & { started: number })[] {
   if (notes.length > 0) {
     const now = Date.now()
-    const fade = get(fadeTimeout)
     let next = now
     const updated = notes.filter(n => {
-      if (n.started + fade <= now) {
+      if (n.started + timeoutMs <= now) {
         next = Math.min(next, n.started)
       }
-      return n.started + fade > now
+      return n.started + timeoutMs > now
     })
     if (!timeout) {
       timeout = setTimeout(
         () => {
           timeout = undefined
-          played.update(removePlayedNotes)
+          played.update(n => removePlayedNotes(n, timeoutMs))
         },
         now - next + 100
       )
@@ -60,16 +62,17 @@ export const scoreActions = {
   setTarget(val?: Note) {
     target.set(val)
   },
-  pushPlayed(note: Note) {
+  pushPlayed(note: Note, timeoutMs?: number) {
     const now = Date.now()
     played.update(v =>
       [...v, { ...note, started: now }].filter(n => n.value !== note.value || n.started === now)
     )
     if (!timeout) {
+      const ms = timeoutMs ?? get(fadeTimeout)
       timeout = setTimeout(() => {
         timeout = undefined
-        played.update(removePlayedNotes)
-      }, get(fadeTimeout))
+        played.update(n => removePlayedNotes(n, ms))
+      }, ms)
     }
   },
   clearPlayed() {

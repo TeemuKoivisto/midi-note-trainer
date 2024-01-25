@@ -1,16 +1,17 @@
 import { derived, get, writable } from 'svelte/store'
 
-import { midiActions, midiRange, piano } from './midi'
+import { midiActions, midiRange, piano } from './inputs'
 import { scoreActions } from './score'
 
-import { GuessGame } from '$utils/guess_game'
+import { GuessNotes } from '$utils/guess_notes'
 import { getNote } from '$utils/midi'
 import { persist } from './persist'
+import { GuessKeys } from '$utils/guess_keys'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 
 export const guessState = writable<GuessState>('waiting')
-export const currentGame = writable<GuessGame | undefined>(undefined)
+export const currentGame = writable<GuessNotes | GuessKeys | undefined>(undefined)
 // scores?
 
 export const gameActions = {
@@ -30,7 +31,7 @@ export const gameActions = {
       }
       notes.push(val)
     }
-    const game = new GuessGame(type, notes)
+    const game = new GuessNotes(type, notes)
     if (type === 'notes') {
       scoreActions.setTarget(getNote(game.current))
     } else if (type === 'pitches') {
@@ -38,6 +39,14 @@ export const gameActions = {
       // TODO doesnt work if sound is not currently on
       get(piano)?.noteOn(game.current, 80)
     }
+    scoreActions.clearPlayed()
+    guessState.set('waiting')
+    currentGame.set(game)
+    return game
+  },
+  playGuessKeys(type: 'major' | 'minor', count = 10) {
+    const game = new GuessKeys(type, count)
+    scoreActions.setKey(game.current)
     scoreActions.clearPlayed()
     guessState.set('waiting')
     currentGame.set(game)

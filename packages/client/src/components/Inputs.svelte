@@ -1,5 +1,12 @@
 <script lang="ts">
-  import { midiActions, midiInput, useKeyboard, useSound } from '$stores/midi'
+  import {
+    midiActions,
+    midiInput,
+    useAutoOctave,
+    useHotkeys,
+    useKeyboard,
+    useSound
+  } from '$stores/inputs'
   import { fadeTimeout, scoreActions } from '$stores/score'
 
   let hidden = false
@@ -7,20 +14,6 @@
 
   function toggleVisibility() {
     hidden = !hidden
-  }
-  function handleToggleSound(
-    e: Event & {
-      currentTarget: EventTarget & HTMLInputElement
-    }
-  ) {
-    midiActions.setSound(e.currentTarget.checked)
-  }
-  function handleToggleKeyboard(
-    e: Event & {
-      currentTarget: EventTarget & HTMLInputElement
-    }
-  ) {
-    midiActions.setUseKeyboard(e.currentTarget.checked)
   }
   function handleSetFadeTimeout(
     e: Event & {
@@ -43,7 +36,7 @@
       <button class="hover:bg-gray-100" on:click={toggleVisibility}>Inputs</button>
     </legend>
     <div class="body" class:hidden>
-      <div class="flex flex-col">
+      <div class="h-full flex flex-col">
         <label class="font-bold" for="device">Device</label>
         <input class="my-1 w-50" id="device" disabled value={$midiInput?.name ?? 'No device'} />
         <div>
@@ -51,26 +44,46 @@
         </div>
       </div>
       <div class="flex flex-col h-full">
-        <label class="font-bold" for="sound">Sound</label>
-        <div class="my-1 flex">
+        <div class="my-1 flex justify-between mr-12">
+          <label class="font-bold" for="sound">Sound</label>
           <input
             class="h-[20px]"
             id="sound"
             type="checkbox"
             checked={$useSound}
-            on:change={handleToggleSound}
+            on:change={e => midiActions.setSound(e.currentTarget.checked)}
           />
         </div>
       </div>
       <div class="flex flex-col h-full">
-        <label class="font-bold" for="keyboard">Keyboard</label>
-        <div class="my-1 flex">
+        <div class="my-1 flex justify-between mr-12">
+          <label class="font-bold" for="keyboard">Keyboard</label>
           <input
             class="h-[20px]"
             id="keyboard"
             type="checkbox"
             checked={$useKeyboard}
-            on:change={handleToggleKeyboard}
+            on:change={e => midiActions.setUseKeyboard(e.currentTarget.checked)}
+          />
+        </div>
+        <div class="my-1 flex justify-between mr-12">
+          <label class="font-bold" for="hotkeys">Hotkeys</label>
+          <input
+            class="h-[20px]"
+            id="hotkeys"
+            type="checkbox"
+            checked={$useHotkeys}
+            on:change={e => midiActions.setUseHotkeys(e.currentTarget.checked)}
+          />
+        </div>
+        <div class="my-1 flex justify-between mr-12">
+          <label class="font-bold" for="auto-octave">Auto-octave</label>
+          <input
+            class="h-[20px]"
+            id="auto-octave"
+            type="checkbox"
+            checked={$useAutoOctave}
+            on:change={e => midiActions.setUseAutoOctave(e.currentTarget.checked)}
           />
         </div>
       </div>

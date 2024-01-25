@@ -1,7 +1,7 @@
 <script lang="ts">
   import { scales } from '@/music-scales'
 
-  import { midiActions, midiInput, midiRange } from '$stores/midi'
+  import { midiActions, midiInput, midiRange } from '$stores/inputs'
   import { key, scale, scoreActions } from '$stores/score'
   import { getNote, parseNote } from '$utils/midi'
 

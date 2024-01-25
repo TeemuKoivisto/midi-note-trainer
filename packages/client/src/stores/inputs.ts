@@ -19,6 +19,12 @@ export const useSound = persist(writable<boolean>(false), {
 export const useKeyboard = persist(writable<boolean>(false), {
   key: 'use-keyboard'
 })
+export const useHotkeys = persist(writable<boolean>(false), {
+  key: 'use-hotkeys'
+})
+export const useAutoOctave = persist(writable<boolean>(false), {
+  key: 'use-auto-octave'
+})
 
 useSound.subscribe(val => {
   if (val) {
@@ -48,6 +54,12 @@ export const midiActions = {
   },
   setUseKeyboard(val: boolean) {
     useKeyboard.set(val)
+  },
+  setUseHotkeys(val: boolean) {
+    useHotkeys.set(val)
+  },
+  setUseAutoOctave(val: boolean) {
+    useAutoOctave.set(val)
   },
   setSound(val: boolean) {
     useSound.set(val)

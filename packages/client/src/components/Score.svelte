@@ -9,7 +9,8 @@
   import type { Note } from '@/types'
   import { onMount } from 'svelte'
   import { derived } from 'svelte/store'
-  import type { GuessGame } from '$utils/guess_game'
+  import type { GuessNotes } from '$utils/guess_notes'
+  import type { GuessKeys } from '$utils/guess_keys'
 
   let outputEl: HTMLDivElement
   let renderer: Vex.Renderer
@@ -101,7 +102,7 @@
     guessed,
     score
   }: {
-    game: GuessGame | undefined
+    game: GuessNotes | GuessKeys | undefined
     guessed: GuessState
     score: {
       key: string

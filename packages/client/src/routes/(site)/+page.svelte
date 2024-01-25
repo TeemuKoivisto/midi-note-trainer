@@ -1,18 +1,21 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
-  import GameInfo from '$components/GameInfo.svelte'
+  import GameKeys from '$components/GameKeys.svelte'
+  import GameNotes from '$components/GameNotes.svelte'
   import Inputs from '$components/Inputs.svelte'
   import Options from '$components/Options.svelte'
   import PlayForm from '$components/PlayForm.svelte'
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
-  import { useKeyboard, midiActions, midiInput, piano } from '$stores/midi'
-  import { scoreActions } from '$stores/score'
+  import { useKeyboard, midiActions, midiInput, piano } from '$stores/inputs'
+  import { played, scoreActions } from '$stores/score'
   import { getNote, parseNote } from '$utils/midi'
 
   import type { NoteMessageEvent } from 'webmidi'
+  import { GuessNotes } from '$utils/guess_notes'
+  import { GuessKeys } from '$utils/guess_keys'
 
   const KEY_MAP = {
     A: { key: 'C', shift: 0 },
@@ -63,36 +66,58 @@
     handlePlayedNote(data[1], 80)
   }
   function handlePlayedNote(value: number, velocity: number) {
-    scoreActions.pushPlayed(getNote(value))
-    if ($currentGame) {
-      scoreActions.setTarget(getNote($currentGame.current))
-      const correct = $currentGame.guess(value)
+    const game = $currentGame
+    if (game instanceof GuessNotes) {
+      scoreActions.setTarget(getNote(game.current))
+      const correct = game.guess(value)
       gameActions.updateState(correct ? 'correct' : 'wrong')
+      scoreActions.pushPlayed(getNote(value), 2000)
       timeout = setTimeout(() => {
-        if ($currentGame?.ended) {
+        if (game?.ended) {
           scoreActions.setTarget()
           gameActions.updateState('ended')
-        } else if ($currentGame) {
+        } else if (game) {
           gameActions.updateState('waiting')
-          $currentGame.startTime()
-          if ($currentGame.type === 'notes') {
-            scoreActions.setTarget(getNote($currentGame.current))
-            $piano?.noteOn($currentGame.current, 80)
+          game.startTime()
+          if (game.type === 'notes') {
+            scoreActions.setTarget(getNote(game.current))
+            $piano?.noteOn(game.current, 80)
           } else {
             scoreActions.setTarget()
-            $piano?.noteOn($currentGame.current, 80)
+            $piano?.noteOn(game.current, 80)
           }
         }
         scoreActions.clearPlayed()
         timeout = undefined
       }, 2000)
+    } else {
+      scoreActions.pushPlayed(getNote(value))
     }
     if ($piano) {
       $piano.noteOn(value, velocity)
     }
   }
   function handleKeyDown(e: KeyboardEvent) {
-    if ($useKeyboard && !timeout) {
+    const game = $currentGame
+    if (game instanceof GuessKeys && !timeout) {
+      const pressed = e.key.toUpperCase()
+      if (keyboardInput.length === 0 && pressed in KEY_MAP) {
+        const value = KEY_MAP[pressed as keyof typeof KEY_MAP].key
+        const correct = game.guess(value)
+        gameActions.updateState(correct ? 'correct' : 'wrong')
+        timeout = setTimeout(() => {
+          if (game.ended) {
+            gameActions.updateState('ended')
+          } else {
+            scoreActions.setKey(game.current)
+            gameActions.updateState('waiting')
+          }
+          timeout = undefined
+        }, 2000)
+      } else if (e.key === 'Backspace' && keyboardInput.length > 0) {
+        keyboardInput = keyboardInput.slice(0, -1)
+      }
+    } else if ($useKeyboard && !timeout) {
       const pressed = e.key.toUpperCase()
       if (keyboardInput.length === 0 && pressed in KEY_MAP) {
         keyboardInput = KEY_MAP[pressed as keyof typeof KEY_MAP].key
@@ -138,7 +163,15 @@
 <Score class="px-4 md:px-0" />
 
 <section class="mb-8 px-4 md:px-0">
-  <GameInfo class="min-h-32" />
+  {#if $currentGame instanceof GuessKeys}
+    <GameKeys game={$currentGame} />
+  {:else if $currentGame instanceof GuessNotes}
+    <GameNotes class="min-h-32" game={$currentGame} />
+  {:else if $played.length > 0}
+    <div class="min-h-32">Played: {$played[0].absolute}</div>
+  {:else}
+    <div class="min-h-32">&nbsp;</div>
+  {/if}
   <div class="min-h-32">
     {#if $useKeyboard && keyboardError}
       {keyboardError}

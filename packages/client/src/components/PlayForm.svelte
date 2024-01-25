@@ -16,8 +16,12 @@
       <button class="btn primary" on:click={() => gameActions.playGuessNotes('pitches')}
         >Guess 10 Pitches</button
       >
-      <div></div>
-      <div></div>
+      <button class="btn primary" on:click={() => gameActions.playGuessKeys('major')}
+        >Guess Major Keys</button
+      >
+      <button class="btn primary" on:click={() => gameActions.playGuessKeys('minor')}
+        >Guess Minor Keys</button
+      >
       <div></div>
       <div></div>
       <div></div>
