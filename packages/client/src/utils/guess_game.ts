@@ -3,6 +3,7 @@ export class GuessGame {
   notes: number[]
   times: number[] = []
   correct = 0
+  guessed = 0
   idx = 0
   timing: number
 
@@ -29,6 +30,7 @@ export class GuessGame {
     if (result) {
       this.correct += 1
     }
+    this.guessed = note
     this.idx += 1
     this.times.push(performance.now() - this.timing)
     return result

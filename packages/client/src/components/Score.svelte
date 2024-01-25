@@ -1,21 +1,30 @@
 <script lang="ts">
   import Vex from 'vexflow'
 
+  import { currentGame, guessState, type GuessState } from '$stores/game'
   import { score } from '$stores/score'
 
   const { Accidental, EasyScore, Factory, Formatter, System, Renderer, Stave, StaveNote } = Vex.Flow
 
   import type { Note } from '@/types'
   import { onMount } from 'svelte'
+  import { derived } from 'svelte/store'
+  import type { GuessGame } from '$utils/guess_game'
 
   let outputEl: HTMLDivElement
   let renderer: Vex.Renderer
   let ctx: Vex.RenderContext
   let tickContext: Vex.TickContext
 
+  const data = derived([currentGame, guessState, score], ([c, g, s]) => ({
+    game: c,
+    guessed: g,
+    score: s
+  }))
+
   onMount(() => {
     init()
-    score.subscribe(_ => updateNotes())
+    data.subscribe(d => updateNotes(d))
   })
 
   function init() {
@@ -85,22 +94,34 @@
     }
   }
 
-  function updateNotes() {
-    const scoreData = $score
+  function updateNotes({
+    game,
+    guessed,
+    score
+  }: {
+    game: GuessGame | undefined
+    guessed: GuessState
+    score: {
+      key: string
+      target: Note | undefined
+      played: (Note & {
+        started: number
+      })[]
+    }
+  }) {
     // console.log('hello notes', notes)
     ctx.clear()
     ctx.scale(0.5, 0.5)
-    const s1 = new Stave(10, 0, 200).addClef('treble').addKeySignature(scoreData.key)
+    const s1 = new Stave(10, 0, 200).addClef('treble').addKeySignature(score.key)
     const s2 = new Stave(10, 60, 200).addClef('bass')
     const staveNotes = []
-    if (scoreData.target) {
-      staveNotes.push(drawNote(scoreData.target, s1, s2))
+    if (score.target) {
+      staveNotes.push(drawNote(score.target, s1, s2))
     }
-    if (scoreData.played) {
-      staveNotes.push(
-        drawNote(scoreData.played, s1, s2, scoreData.target ? scoreData.played.correct : undefined)
-      )
-    }
+    score.played.forEach(n => {
+      const correct = game?.guessed === n.value && guessed === 'correct'
+      staveNotes.push(drawNote(n, s1, s2, correct))
+    })
     drawNotesToStaves(s1, s2, staveNotes)
     s1.setContext(ctx).draw()
     s2.setContext(ctx).draw()

@@ -14,11 +14,33 @@
 
   import type { NoteMessageEvent } from 'webmidi'
 
+  const KEY_MAP = {
+    A: { key: 'C', shift: 0 },
+    W: { key: 'C♯', shift: 0 },
+    S: { key: 'D', shift: 0 },
+    D: { key: 'E', shift: 0 },
+    E: { key: 'E♭', shift: 0 },
+    F: { key: 'F', shift: 0 },
+    R: { key: 'F♯', shift: 0 },
+    G: { key: 'G', shift: 0 },
+    T: { key: 'G♯', shift: 0 },
+    H: { key: 'A', shift: 0 },
+    J: { key: 'B', shift: 0 },
+    U: { key: 'B♭', shift: 0 },
+    K: { key: 'C', shift: 1 },
+    O: { key: 'C♯', shift: 1 },
+    L: { key: 'D', shift: 1 },
+    Ö: { key: 'E', shift: 1 },
+    P: { key: 'E♭', shift: 1 },
+    Ä: { key: 'F', shift: 1 },
+    Å: { key: 'F♯', shift: 1 }
+  }
+
   let status = 'Finding device...'
 
   let timeout: ReturnType<typeof setTimeout> | undefined
 
-  const regexNote = /^[A-G]$/
+  const regexNote = /^[AWSDEFRGTHJU]$/
   const regexPosInt = /^[0-9]$/
   let keyboardError = ''
   let keyboardInput = ''
@@ -41,13 +63,11 @@
     handlePlayedNote(data[1], 80)
   }
   function handlePlayedNote(value: number, velocity: number) {
-    if (!$currentGame) {
-      scoreActions.setPlayed({ ...getNote(value), correct: false })
-    } else {
+    scoreActions.pushPlayed(getNote(value))
+    if ($currentGame) {
       scoreActions.setTarget(getNote($currentGame.current))
       const correct = $currentGame.guess(value)
       gameActions.updateState(correct ? 'correct' : 'wrong')
-      scoreActions.setPlayed({ ...getNote(value), correct })
       timeout = setTimeout(() => {
         if ($currentGame?.ended) {
           scoreActions.setTarget()
@@ -63,7 +83,7 @@
             $piano?.noteOn($currentGame.current, 80)
           }
         }
-        scoreActions.setPlayed()
+        scoreActions.clearPlayed()
         timeout = undefined
       }, 2000)
     }
@@ -74,20 +94,10 @@
   function handleKeyDown(e: KeyboardEvent) {
     if ($useKeyboard && !timeout) {
       const pressed = e.key.toUpperCase()
-      const zeroPressed = keyboardInput.length === 0
-      const onePressed = keyboardInput.length === 1
-      const twoPressed = keyboardInput.length === 2
-      if (zeroPressed && regexNote.test(pressed)) {
-        keyboardInput = pressed
+      if (keyboardInput.length === 0 && pressed in KEY_MAP) {
+        keyboardInput = KEY_MAP[pressed as keyof typeof KEY_MAP].key
         keyboardError = ''
-      } else if (onePressed && pressed === 'B') {
-        keyboardInput += '♭'
-      } else if (onePressed && pressed === 'S') {
-        keyboardInput += '♯'
-      } else if (
-        (onePressed && regexPosInt.test(pressed)) ||
-        (twoPressed && regexPosInt.test(pressed))
-      ) {
+      } else if (keyboardInput.length > 0 && regexPosInt.test(pressed)) {
         // Octave pressed
         const note = parseNote(keyboardInput + pressed)
         if ('data' in note) {
@@ -96,7 +106,7 @@
           keyboardError = `Error: ${note.err}`
         }
         keyboardInput = ''
-      } else if (e.key === 'Backspace' && !zeroPressed) {
+      } else if (e.key === 'Backspace' && keyboardInput.length > 0) {
         keyboardInput = keyboardInput.slice(0, -1)
       }
     }

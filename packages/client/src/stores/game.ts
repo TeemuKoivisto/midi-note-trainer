@@ -7,7 +7,7 @@ import { GuessGame } from '$utils/guess_game'
 import { getNote } from '$utils/midi'
 import { persist } from './persist'
 
-type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
+export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 
 export const guessState = writable<GuessState>('waiting')
 export const currentGame = writable<GuessGame | undefined>(undefined)
@@ -38,7 +38,7 @@ export const gameActions = {
       // TODO doesnt work if sound is not currently on
       get(piano)?.noteOn(game.current, 80)
     }
-    scoreActions.setPlayed(undefined)
+    scoreActions.clearPlayed()
     guessState.set('waiting')
     currentGame.set(game)
     return game

@@ -19,7 +19,9 @@
     <div><button class="btn primary" on:click={replay}>Replay</button></div>
   {:else if ($currentGame && $guessState === 'correct') || $guessState === 'wrong'}
     <div>Target: {$target?.absolute}</div>
-    <div class="ml-8">Played: {$played?.absolute}</div>
+    {#if $played.length > 0}
+      <div class="ml-8">Played: {$played[0].absolute}</div>
+    {/if}
   {:else if $currentGame && $guessState === 'ended'}
     <div>
       <div>
@@ -31,8 +33,8 @@
         <button class="btn primary" on:click={clearGame}>Clear</button>
       </div>
     </div>
-  {:else if $played}
-    <div>Played: {$played.absolute}</div>
+  {:else if $played.length > 0}
+    <div>Played: {$played[0].absolute}</div>
   {:else}
     &nbsp;
   {/if}
