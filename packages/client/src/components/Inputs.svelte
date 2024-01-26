@@ -1,12 +1,5 @@
 <script lang="ts">
-  import {
-    midiActions,
-    midiInput,
-    useAutoOctave,
-    useHotkeys,
-    useKeyboard,
-    useSound
-  } from '$stores/inputs'
+  import { midiActions, midiInput, inputs } from '$stores/inputs'
   import { fadeTimeout, scoreActions } from '$stores/score'
 
   let hidden = false
@@ -50,8 +43,8 @@
             class="h-[20px]"
             id="sound"
             type="checkbox"
-            checked={$useSound}
-            on:change={e => midiActions.setSound(e.currentTarget.checked)}
+            checked={$inputs.useSound}
+            on:change={e => midiActions.setInputValue('useSound', e.currentTarget.checked)}
           />
         </div>
       </div>
@@ -62,8 +55,8 @@
             class="h-[20px]"
             id="keyboard"
             type="checkbox"
-            checked={$useKeyboard}
-            on:change={e => midiActions.setUseKeyboard(e.currentTarget.checked)}
+            checked={$inputs.useKeyboard}
+            on:change={e => midiActions.setInputValue('useKeyboard', e.currentTarget.checked)}
           />
         </div>
         <div class="my-1 flex justify-between mr-12">
@@ -72,8 +65,8 @@
             class="h-[20px]"
             id="hotkeys"
             type="checkbox"
-            checked={$useHotkeys}
-            on:change={e => midiActions.setUseHotkeys(e.currentTarget.checked)}
+            checked={$inputs.useHotkeys}
+            on:change={e => midiActions.setInputValue('useHotkeys', e.currentTarget.checked)}
           />
         </div>
         <div class="my-1 flex justify-between mr-12">
@@ -82,8 +75,8 @@
             class="h-[20px]"
             id="auto-octave"
             type="checkbox"
-            checked={$useAutoOctave}
-            on:change={e => midiActions.setUseAutoOctave(e.currentTarget.checked)}
+            checked={$inputs.useAutoOctave}
+            on:change={e => midiActions.setInputValue('useAutoOctave', e.currentTarget.checked)}
           />
         </div>
       </div>

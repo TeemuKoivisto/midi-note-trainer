@@ -4,12 +4,25 @@
   import Vex from 'vexflow'
 
   import { currentGame, guessState, type GuessState } from '$stores/game'
-  import { score } from '$stores/score'
+  import { scale, score } from '$stores/score'
   import { keys } from '$utils/guess_keys'
 
   import type { Note } from '@/types'
   import { GuessNotes } from '$utils/guess_notes'
   import type { GuessKeys } from '$utils/guess_keys'
+
+  interface Data {
+    game: GuessNotes | GuessKeys | undefined
+    guessed: GuessState
+    scale: string
+    score: {
+      key: string
+      target: Note | undefined
+      played: (Note & {
+        started: number
+      })[]
+    }
+  }
 
   const { Accidental, EasyScore, Factory, Formatter, System, Renderer, Stave, StaveNote } = Vex.Flow
 
@@ -18,9 +31,10 @@
   let ctx: Vex.RenderContext
   let tickContext: Vex.TickContext
 
-  const data = derived([currentGame, guessState, score], ([c, g, s]) => ({
+  const data = derived([currentGame, guessState, scale, score], ([c, g, sc, s]) => ({
     game: c,
     guessed: g,
+    scale: sc,
     score: s
   }))
 
@@ -98,21 +112,7 @@
     }
   }
 
-  function updateNotes({
-    game,
-    guessed,
-    score
-  }: {
-    game: GuessNotes | GuessKeys | undefined
-    guessed: GuessState
-    score: {
-      key: string
-      target: Note | undefined
-      played: (Note & {
-        started: number
-      })[]
-    }
-  }) {
+  function updateNotes({ game, guessed, scale, score }: Data) {
     // console.log('hello notes', notes)
     const key = score.key.replaceAll('♭', 'b').replaceAll('♯', '#')
     ctx.clear()

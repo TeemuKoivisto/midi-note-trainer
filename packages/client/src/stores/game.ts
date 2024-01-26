@@ -20,7 +20,7 @@ export const gameActions = {
     if (type === 'notes') {
       scoreActions.setTarget(getNote(game.current))
     } else if (type === 'pitches') {
-      midiActions.setSound(true)
+      midiActions.setInputValue('useSound', true)
       // TODO doesnt work if sound is not currently on
       get(piano)?.noteOn(game.current, 80)
     }

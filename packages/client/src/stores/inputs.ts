@@ -7,27 +7,33 @@ import { Piano } from '$utils/piano'
 import type { Input } from 'webmidi'
 import type { Result } from '@/types'
 
+interface Inputs {
+  useSound: boolean
+  useKeyboard: boolean
+  useHotkeys: boolean
+  useAutoOctave: boolean
+}
+
 export const midiInput = writable<Input | undefined>(undefined)
 export const midiRange = persist(writable<[number, number]>([60, 84]), {
   key: 'midi-range',
   storage: 'session'
 })
 export const piano = writable<Piano | undefined>(undefined)
-export const useSound = persist(writable<boolean>(false), {
-  key: 'use-sound'
-})
-export const useKeyboard = persist(writable<boolean>(false), {
-  key: 'use-keyboard'
-})
-export const useHotkeys = persist(writable<boolean>(false), {
-  key: 'use-hotkeys'
-})
-export const useAutoOctave = persist(writable<boolean>(false), {
-  key: 'use-auto-octave'
-})
+export const inputs = persist(
+  writable<Inputs>({
+    useSound: true,
+    useKeyboard: true,
+    useHotkeys: true,
+    useAutoOctave: false
+  }),
+  {
+    key: 'inputs'
+  }
+)
 
-useSound.subscribe(val => {
-  if (val) {
+inputs.subscribe(val => {
+  if (val.useSound && typeof window !== 'undefined') {
     const p = new Piano(new AudioContext())
     p.load()
     piano.set(p)
@@ -52,16 +58,7 @@ export const midiActions = {
   setMidiRange(range: [number, number]) {
     midiRange.set(range)
   },
-  setUseKeyboard(val: boolean) {
-    useKeyboard.set(val)
-  },
-  setUseHotkeys(val: boolean) {
-    useHotkeys.set(val)
-  },
-  setUseAutoOctave(val: boolean) {
-    useAutoOctave.set(val)
-  },
-  setSound(val: boolean) {
-    useSound.set(val)
+  setInputValue(key: keyof Inputs, val: boolean) {
+    inputs.update(v => ({ ...v, [key]: val }))
   }
 }

@@ -9,7 +9,7 @@
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
-  import { useKeyboard, midiActions, midiInput, piano } from '$stores/inputs'
+  import { inputs, midiActions, midiInput, piano } from '$stores/inputs'
   import { played, scoreActions } from '$stores/score'
   import { getNote, parseNote } from '$utils/midi'
 
@@ -122,7 +122,7 @@
       } else if (e.key === 'Backspace' && keyboardInput.length > 0) {
         keyboardInput = keyboardInput.slice(0, -1)
       }
-    } else if ($useKeyboard && !timeout) {
+    } else if ($inputs.useKeyboard && !timeout) {
       const pressed = e.key.toUpperCase()
       if (keyboardInput.length === 0 && pressed in KEY_MAP) {
         keyboardInput = KEY_MAP[pressed as keyof typeof KEY_MAP].key
@@ -178,9 +178,9 @@
     <div class="min-h-32">&nbsp;</div>
   {/if}
   <div class="min-h-32">
-    {#if $useKeyboard && keyboardError}
+    {#if $inputs.useKeyboard && keyboardError}
       {keyboardError}
-    {:else if $useKeyboard && keyboardInput}
+    {:else if $inputs.useKeyboard && keyboardInput}
       Input: {keyboardInput}
     {:else}
       &nbsp;

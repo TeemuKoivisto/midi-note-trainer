@@ -105,18 +105,6 @@
         </div>
       </div>
       <div class="flex flex-col h-full">
-        <label class="font-bold" for="key">Key</label>
-        <div class="my-1 flex">
-          <input
-            class="h-[20px]"
-            id="key"
-            bind:value={selectedKey}
-            on:input={handleKeyChange}
-            on:blur={handleKeyBlur}
-          />
-        </div>
-      </div>
-      <div class="flex flex-col h-full">
         <label class="font-bold" for="scales">Scales</label>
         <div class="my-1 w-full">
           <MultiSelectDropdown
@@ -127,6 +115,18 @@
           >
             <div slot="value">{selectedScale}</div>
           </MultiSelectDropdown>
+        </div>
+      </div>
+      <div class="flex flex-col h-full">
+        <label class="font-bold" for="key">Key</label>
+        <div class="my-1 flex">
+          <input
+            class="h-[20px]"
+            id="key"
+            bind:value={selectedKey}
+            on:input={handleKeyChange}
+            on:blur={handleKeyBlur}
+          />
         </div>
       </div>
     </div>
