@@ -79,6 +79,7 @@ export const scoreActions = {
     played.set([])
   },
   clearScore() {
+    key.set('C')
     target.set(undefined)
     played.set([])
   }

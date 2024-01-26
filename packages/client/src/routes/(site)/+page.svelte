@@ -103,7 +103,12 @@
       const pressed = e.key.toUpperCase()
       if (keyboardInput.length === 0 && pressed in KEY_MAP) {
         const value = KEY_MAP[pressed as keyof typeof KEY_MAP].key
-        const correct = game.guess(value)
+        let correct
+        if (game.type === 'minor') {
+          correct = game.guess(value + 'm')
+        } else {
+          correct = game.guess(value)
+        }
         gameActions.updateState(correct ? 'correct' : 'wrong')
         timeout = setTimeout(() => {
           if (game.ended) {

@@ -3,6 +3,7 @@
 
   import { midiActions, midiInput, midiRange } from '$stores/inputs'
   import { key, scale, scoreActions } from '$stores/score'
+  import { keys } from '$utils/guess_keys'
   import { getNote, parseNote } from '$utils/midi'
 
   import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
@@ -12,8 +13,7 @@
   let rangeError = ''
   let hidden = false
 
-  const regexValidKey = /^[a-gA-G][♭b#♯]?$/
-  let selectedKey = $key.replaceAll('b', '♭').replaceAll('#', '♯')
+  let selectedKey = $key
 
   const scaleOptions = Object.entries(scales).map(([k, v]) => ({
     key: k,
@@ -49,28 +49,25 @@
       }
     }
   }
-  function handleKeyChange(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-    if (regexValidKey.test(e.currentTarget.value)) {
-      scoreActions.setKey(e.currentTarget.value.replaceAll('♭', 'b').replaceAll('♯', '#'))
+  function handleKeyChange({
+    currentTarget: { value }
+  }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    let val = value.charAt(0)
+    if (val.length > 1) {
+      val += value.charAt(1).toLowerCase() //.replaceAll('b', '♭').replaceAll('#', '♯')
     }
+    scoreActions.setKey(val)
   }
   function handleKeyBlur() {
-    if (!regexValidKey.test(selectedKey)) {
-      selectedKey = $key
-    } else {
+    if (selectedKey in keys.major || selectedKey in keys.minor) {
       selectedKey = selectedKey.replaceAll('b', '♭').replaceAll('#', '♯')
+    } else {
+      selectedKey = $key
     }
   }
   function handleSelectScale(key: string) {
     selectedScale = scaleOptions.find(k => key === k.key)?.value as string
     return false
-  }
-  function handleToggleKeyboard(
-    e: Event & {
-      currentTarget: EventTarget & HTMLInputElement
-    }
-  ) {
-    midiActions.setUseKeyboard(e.currentTarget.checked)
   }
   function toggleVisibility() {
     hidden = !hidden

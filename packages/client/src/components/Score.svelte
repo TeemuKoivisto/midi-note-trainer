@@ -1,16 +1,17 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
+  import { derived } from 'svelte/store'
   import Vex from 'vexflow'
 
   import { currentGame, guessState, type GuessState } from '$stores/game'
   import { score } from '$stores/score'
-
-  const { Accidental, EasyScore, Factory, Formatter, System, Renderer, Stave, StaveNote } = Vex.Flow
+  import { keys } from '$utils/guess_keys'
 
   import type { Note } from '@/types'
-  import { onMount } from 'svelte'
-  import { derived } from 'svelte/store'
-  import type { GuessNotes } from '$utils/guess_notes'
+  import { GuessNotes } from '$utils/guess_notes'
   import type { GuessKeys } from '$utils/guess_keys'
+
+  const { Accidental, EasyScore, Factory, Formatter, System, Renderer, Stave, StaveNote } = Vex.Flow
 
   let outputEl: HTMLDivElement
   let renderer: Vex.Renderer
@@ -113,15 +114,19 @@
     }
   }) {
     // console.log('hello notes', notes)
+    const key = score.key.replaceAll('♭', 'b').replaceAll('♯', '#')
     ctx.clear()
     ctx.scale(0.5, 0.5)
-    const s1 = new Stave(10, 0, 200).addClef('treble').addKeySignature(score.key)
+    const s1 = new Stave(10, 0, 200).addClef('treble')
+    if (key in keys.major || key in keys.minor) {
+      s1.addKeySignature(key)
+    }
     const s2 = new Stave(10, 60, 200).addClef('bass')
     const staveNotes = []
     if (score.target) {
       staveNotes.push(drawNotes([score.target], s1, s2))
     }
-    if (score.played.length > 0) {
+    if (score.played.length > 0 && (!game || game instanceof GuessNotes)) {
       staveNotes.push(
         drawNotes(
           score.played,

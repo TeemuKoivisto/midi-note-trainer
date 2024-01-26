@@ -5,8 +5,8 @@ import { scoreActions } from './score'
 
 import { GuessNotes } from '$utils/guess_notes'
 import { getNote } from '$utils/midi'
-import { persist } from './persist'
 import { GuessKeys } from '$utils/guess_keys'
+import { persist } from './persist'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 
@@ -16,22 +16,7 @@ export const currentGame = writable<GuessNotes | GuessKeys | undefined>(undefine
 
 export const gameActions = {
   playGuessNotes(type: 'notes' | 'pitches', amount = 10) {
-    const notes: number[] = []
-    const range = get(midiRange)
-    for (let i = 0; i < amount; i += 1) {
-      let attempts = 0,
-        val = range[1]
-      // Try having all values unique
-      while (attempts < 5) {
-        attempts += 1
-        val = range[0] + Math.floor(Math.random() * (range[1] - range[0] + 1))
-        if (!notes.includes(val)) {
-          attempts = 5
-        }
-      }
-      notes.push(val)
-    }
-    const game = new GuessNotes(type, notes)
+    const game = new GuessNotes(type, get(midiRange), amount)
     if (type === 'notes') {
       scoreActions.setTarget(getNote(game.current))
     } else if (type === 'pitches') {

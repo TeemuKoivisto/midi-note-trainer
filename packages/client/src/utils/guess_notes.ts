@@ -7,7 +7,21 @@ export class GuessNotes {
   idx = 0
   timing: number
 
-  constructor(type: 'notes' | 'pitches', notes: number[]) {
+  constructor(type: 'notes' | 'pitches', range: [number, number], amount = 10) {
+    const notes: number[] = []
+    for (let i = 0; i < amount; i += 1) {
+      let attempts = 0,
+        val = range[1]
+      // Try having all values unique
+      while (attempts < 5) {
+        attempts += 1
+        val = range[0] + Math.floor(Math.random() * (range[1] - range[0] + 1))
+        if (!notes.includes(val)) {
+          attempts = 5
+        }
+      }
+      notes.push(val)
+    }
     this.type = type
     this.notes = notes
     this.timing = performance.now()
