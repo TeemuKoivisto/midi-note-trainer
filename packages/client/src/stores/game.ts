@@ -20,6 +20,7 @@ export const gameActions = {
     if (type === 'notes') {
       scoreActions.setTarget(getNote(game.current))
     } else if (type === 'pitches') {
+      scoreActions.setTarget()
       midiActions.setInputValue('useSound', true)
       // TODO doesnt work if sound is not currently on
       get(piano)?.noteOn(game.current, 80)
@@ -32,6 +33,7 @@ export const gameActions = {
   playGuessKeys(type: 'major' | 'minor', count = 10) {
     const game = new GuessKeys(type, count)
     scoreActions.setKey(game.current)
+    scoreActions.setTarget()
     scoreActions.clearPlayed()
     guessState.set('waiting')
     currentGame.set(game)

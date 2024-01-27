@@ -1,6 +1,7 @@
 <script lang="ts">
   import { scales } from '@/music-scales'
 
+  import { currentGame } from '$stores/game'
   import { midiActions, midiInput, midiRange } from '$stores/inputs'
   import { key, scale, scaleNotes, scoreActions } from '$stores/score'
   import { keys } from '$utils/guess_keys'
@@ -130,11 +131,13 @@
             on:blur={handleKeyBlur}
           />
         </div>
-        <div class="my-1">
-          {#each $scaleNotes as note}
-            <span class="mr-[1px]">{note.note}</span>
-          {/each}
-        </div>
+        {#if !$currentGame}
+          <div class="my-1">
+            {#each $scaleNotes as note}
+              <span class="mr-[1px]">{note.note}</span>
+            {/each}
+          </div>
+        {/if}
       </div>
     </div>
   </fieldset>
