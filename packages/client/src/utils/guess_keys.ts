@@ -55,7 +55,7 @@ export class GuessKeys {
       // Try having all values unique
       while (attempts < 5) {
         attempts += 1
-        val = availableKeys[Math.floor(Math.random() * (availableKeys.length + 1))]
+        val = availableKeys[Math.floor(Math.random() * availableKeys.length)]
         if (!scales.includes(val)) {
           attempts = 5
         }

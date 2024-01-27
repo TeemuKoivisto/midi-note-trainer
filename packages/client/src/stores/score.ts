@@ -42,7 +42,6 @@ export const scaleNotes = derived([key, scale], ([k, s]) => {
 })
 export const hotKeyMap = derived([scaleNotes, defaultKeyMap], ([notes, kmap]) => {
   const map = { ...kmap }
-  console.log(notes)
   notes.forEach(note => {
     const found = Object.entries(kmap).find(([_, vals]) => note.order === vals.order)
     if (found) {
