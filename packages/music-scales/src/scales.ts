@@ -72,7 +72,7 @@ export const scales = {
   japaneseB: { name: 'Japanese B', tones: [2, 3, 1, 3, 3] },
   // cultures
   oriental: { name: 'Oriental', tones: [1, 3, 1, 1, 3, 1, 2] },
-  persian: { name: 'Persian', tones: [1, 4, 1, 2, 3, 1] },
+  persian: { name: 'Persian', tones: [1, 3, 1, 1, 2, 3, 1] },
   arabian: { name: 'Arabian', tones: [2, 2, 1, 1, 2, 2, 2] },
   balinese: { name: 'Balinese', tones: [1, 2, 4, 1, 4] },
   kumoi: { name: 'Kumoi', tones: [2, 1, 4, 2, 2, 1] },

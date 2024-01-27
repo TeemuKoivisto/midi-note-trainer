@@ -15,6 +15,16 @@ export const C_MAJOR_NOTES = {
   11: { note: 'B', steps: 6, sharp: false, flat: false }
 } as const
 
+export const BASE_NOTES = {
+  C: { order: 0 },
+  D: { order: 2 },
+  E: { order: 4 },
+  F: { order: 5 },
+  G: { order: 7 },
+  A: { order: 9 },
+  B: { order: 11 }
+}
+
 export function getNote(value: number): Note {
   const semitonesFromC0 = value - 12
   const octave = Math.floor(semitonesFromC0 / 12)
@@ -33,18 +43,25 @@ export function getNote(value: number): Note {
 
 export function parseNote(val: string): Result<number> {
   if (val.length === 2 || val.length === 3) {
-    const note = val.slice(0, val.length - 1).toUpperCase()
+    const baseNote = BASE_NOTES[val.charAt(0).toUpperCase() as keyof typeof BASE_NOTES]
+    if (!baseNote) {
+      return { err: `Base note ${val.charAt(0).toUpperCase()} not in notes ABCDEFG`, code: 400 }
+    }
+    const shifted = val
+      .slice(1, -1)
+      .split('')
+      .reduce(
+        (acc, c) =>
+          acc + c.toLowerCase() === 'b' || c === '♭' ? -1 : c === '#' || c === '♯' ? 1 : 0,
+        0
+      )
     let octave: number | undefined
     try {
       octave = parseInt(val[val.length - 1])
     } catch (err) {
       return { err: `Couldn't parse note "${val}" octave`, code: 400 }
     }
-    const found = Object.values(C_MAJOR_NOTES).findIndex(n => n.note === note)
-    if (found === -1) {
-      return { err: `Note "${val}" not found in scale`, code: 400 }
-    }
-    return { data: 12 + octave * 12 + found }
+    return { data: 12 + octave * 12 + baseNote.order + shifted }
   } else {
     return { err: `Unrecognized note "${val}"`, code: 400 }
   }

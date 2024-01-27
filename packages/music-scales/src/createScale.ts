@@ -2,27 +2,28 @@ import { scales } from './scales'
 
 import type { Result } from '@/types'
 
-interface NotePos {
+export interface NotePos {
   note: string
-  black: boolean
+  order: number
   steps: number
+  black: boolean
   sharp: boolean
   flat: boolean
 }
 
 const NOTES = [
-  { note: 'C', steps: 0, black: false, sharp: false, flat: false },
-  { note: 'C♯', steps: 0, black: true, sharp: true, flat: false },
-  { note: 'D', steps: 1, black: false, sharp: false, flat: false },
-  { note: 'E♭', steps: 2, black: true, sharp: false, flat: true },
-  { note: 'E', steps: 2, black: false, sharp: false, flat: false },
-  { note: 'F', steps: 3, black: false, sharp: false, flat: false },
-  { note: 'F♯', steps: 3, black: true, sharp: true, flat: false },
-  { note: 'G', steps: 4, black: false, sharp: false, flat: false },
-  { note: 'G♯', steps: 4, black: true, sharp: true, flat: false },
-  { note: 'A', steps: 5, black: false, sharp: false, flat: false },
-  { note: 'B♭', steps: 6, black: true, sharp: false, flat: true },
-  { note: 'B', steps: 6, black: false, sharp: false, flat: false }
+  { note: 'C', order: 0, steps: 0, black: false, sharp: false, flat: false },
+  { note: 'C♯', order: 1, steps: 0, black: true, sharp: true, flat: false },
+  { note: 'D', order: 2, steps: 1, black: false, sharp: false, flat: false },
+  { note: 'E♭', order: 3, steps: 2, black: true, sharp: false, flat: true },
+  { note: 'E', order: 4, steps: 2, black: false, sharp: false, flat: false },
+  { note: 'F', order: 5, steps: 3, black: false, sharp: false, flat: false },
+  { note: 'F♯', order: 6, steps: 3, black: true, sharp: true, flat: false },
+  { note: 'G', order: 7, steps: 4, black: false, sharp: false, flat: false },
+  { note: 'G♯', order: 8, steps: 4, black: true, sharp: true, flat: false },
+  { note: 'A', order: 9, steps: 5, black: false, sharp: false, flat: false },
+  { note: 'B♭', order: 10, steps: 6, black: true, sharp: false, flat: true },
+  { note: 'B', order: 11, steps: 6, black: false, sharp: false, flat: false }
 ]
 
 const regexKey = /^[a-gA-G][♭b#♯]?$/
@@ -35,7 +36,12 @@ const regexKey = /^[a-gA-G][♭b#♯]?$/
  * @returns
  */
 export function createScale(rawKey: string, scaleName: string): Result<NotePos[]> {
-  const scale = scales[scaleName as keyof typeof scales]
+  let scale = scales[scaleName as keyof typeof scales]
+  if (!scale) {
+    scale = Object.values(scales).find(
+      v => v.name.toLowerCase() === scaleName.toLowerCase()
+    ) as (typeof scales)[keyof typeof scales]
+  }
   if (!regexKey.test(rawKey)) {
     return { err: `Unknown key: ${rawKey}`, code: 400 }
   } else if (!scale) {
@@ -68,7 +74,8 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
     // Or something like that...
     const adjacent = alphabet.charAt((alphabet.indexOf(letter) + 1) % alphabet.length)
     const twoSteps = alphabet.charAt((alphabet.indexOf(letter) + 2) % alphabet.length)
-    if (tones[i] > 2 && !letters.includes(twoSteps)) {
+    // this is ridiculous
+    if (((tones.length <= 5 && tones[i] > 2) || tones[i] > 3) && !letters.includes(twoSteps)) {
       letter = twoSteps
     } else if (
       tones.length > 7 &&
@@ -86,14 +93,11 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
     }
     letters.push(letter)
   }
-  // console.log('letters', letters)
   let note: NotePos
   for (let next = 0; next < tones.length - 1; next += 1) {
     letter = letters[next + 1]
     idx = (idx + tones[next]) % 12
     note = NOTES[idx]
-    // console.log('letter', letter)
-    // console.log('note', note)
     const n = note.note.charAt(0)
     if (n < letter || (n === 'G' && letter === 'A')) {
       // 'A' < 'B'

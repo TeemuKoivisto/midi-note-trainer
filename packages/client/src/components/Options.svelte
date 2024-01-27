@@ -2,7 +2,7 @@
   import { scales } from '@/music-scales'
 
   import { midiActions, midiInput, midiRange } from '$stores/inputs'
-  import { key, scale, scoreActions } from '$stores/score'
+  import { key, scale, scaleNotes, scoreActions } from '$stores/score'
   import { keys } from '$utils/guess_keys'
   import { getNote, parseNote } from '$utils/midi'
 
@@ -61,12 +61,14 @@
   function handleKeyBlur() {
     if (selectedKey in keys.major || selectedKey in keys.minor) {
       selectedKey = selectedKey.replaceAll('b', '♭').replaceAll('#', '♯')
+      scoreActions.setKey(selectedKey)
     } else {
       selectedKey = $key
     }
   }
   function handleSelectScale(key: string) {
     selectedScale = scaleOptions.find(k => key === k.key)?.value as string
+    scoreActions.setScale(selectedScale)
     return false
   }
   function toggleVisibility() {
@@ -127,6 +129,11 @@
             on:input={handleKeyChange}
             on:blur={handleKeyBlur}
           />
+        </div>
+        <div class="my-1">
+          {#each $scaleNotes as note}
+            <span class="mr-[1px]">{note.note}</span>
+          {/each}
         </div>
       </div>
     </div>

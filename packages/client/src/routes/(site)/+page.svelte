@@ -10,34 +10,12 @@
 
   import { currentGame, gameActions } from '$stores/game'
   import { inputs, midiActions, midiInput, piano } from '$stores/inputs'
-  import { played, scoreActions } from '$stores/score'
+  import { hotKeyMap, played, scoreActions } from '$stores/score'
   import { getNote, parseNote } from '$utils/midi'
 
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessNotes } from '$utils/guess_notes'
   import { GuessKeys } from '$utils/guess_keys'
-
-  const KEY_MAP = {
-    A: { key: 'C', shift: 0 },
-    W: { key: 'C♯', shift: 0 },
-    S: { key: 'D', shift: 0 },
-    D: { key: 'E', shift: 0 },
-    E: { key: 'E♭', shift: 0 },
-    F: { key: 'F', shift: 0 },
-    R: { key: 'F♯', shift: 0 },
-    G: { key: 'G', shift: 0 },
-    T: { key: 'G♯', shift: 0 },
-    H: { key: 'A', shift: 0 },
-    J: { key: 'B', shift: 0 },
-    U: { key: 'B♭', shift: 0 },
-    K: { key: 'C', shift: 1 },
-    O: { key: 'C♯', shift: 1 },
-    L: { key: 'D', shift: 1 },
-    Ö: { key: 'E', shift: 1 },
-    P: { key: 'E♭', shift: 1 },
-    Ä: { key: 'F', shift: 1 },
-    Å: { key: 'F♯', shift: 1 }
-  }
 
   let status = 'Finding device...'
 
@@ -101,8 +79,9 @@
     const game = $currentGame
     if (game instanceof GuessKeys && !timeout) {
       const pressed = e.key.toUpperCase()
-      if (keyboardInput.length === 0 && pressed in KEY_MAP) {
-        const value = KEY_MAP[pressed as keyof typeof KEY_MAP].key
+      const keymap = $hotKeyMap
+      if (keyboardInput.length === 0 && pressed in keymap) {
+        const value = keymap[pressed as keyof typeof keymap].defaultNote
         let correct
         if (game.type === 'minor') {
           correct = game.guess(value + 'm')
@@ -124,8 +103,9 @@
       }
     } else if ($inputs.useKeyboard && !timeout) {
       const pressed = e.key.toUpperCase()
-      if (keyboardInput.length === 0 && pressed in KEY_MAP) {
-        keyboardInput = KEY_MAP[pressed as keyof typeof KEY_MAP].key
+      const keymap = $hotKeyMap
+      if (keyboardInput.length === 0 && pressed in keymap) {
+        keyboardInput = keymap[pressed as keyof typeof keymap].defaultNote
         keyboardError = ''
       } else if (keyboardInput.length > 0 && regexPosInt.test(pressed)) {
         // Octave pressed
@@ -155,7 +135,9 @@
 <svelte:window on:keydown={handleKeyDown} />
 
 <h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight">
-  MIDI Music Notation Trainer
+  <a class="hover:underline" href="https://github.com/TeemuKoivisto/midi-music-notation-trainer">
+    MIDI Music Notation Trainer
+  </a>
 </h1>
 
 <section class="px-4 md:px-0">
