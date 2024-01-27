@@ -1,5 +1,5 @@
 import { derived, get, readable, writable } from 'svelte/store'
-import { createScale, type NotePos } from '@/music-scales'
+import { createScale } from '@/music-scales'
 
 import { persist } from './persist'
 
@@ -44,22 +44,16 @@ export const hotKeyMap = derived([scaleNotes, defaultKeyMap], ([notes, kmap]) =>
   const map = { ...kmap }
   console.log(notes)
   notes.forEach(note => {
-    const found = Object.entries(kmap).find(([k, vals]) => note.order === vals.order)
+    const found = Object.entries(kmap).find(([_, vals]) => note.order === vals.order)
     if (found) {
       const key = found[0] as keyof typeof map
       map[key] = { ...found[1], defaultNote: note.note }
     }
   })
-  console.log('map', map)
   return map
 })
 export const target = writable<Note | undefined>(undefined)
 export const played = writable<(Note & { started: number })[]>([])
-export const score = derived([key, target, played], ([k, t, p]) => ({
-  key: k,
-  target: t,
-  played: p
-}))
 
 function removePlayedNotes(
   notes: (Note & { started: number })[],

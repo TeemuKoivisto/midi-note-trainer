@@ -4,7 +4,7 @@
   import Vex from 'vexflow'
 
   import { currentGame, guessState, type GuessState } from '$stores/game'
-  import { scale, score } from '$stores/score'
+  import { key, played, target, scale } from '$stores/score'
   import { keys } from '$utils/guess_keys'
 
   import type { Note } from '@/types'
@@ -15,13 +15,11 @@
     game: GuessNotes | GuessKeys | undefined
     guessed: GuessState
     scale: string
-    score: {
-      key: string
-      target: Note | undefined
-      played: (Note & {
-        started: number
-      })[]
-    }
+    key: string
+    target: Note | undefined
+    played: (Note & {
+      started: number
+    })[]
   }
 
   const { Accidental, EasyScore, Factory, Formatter, System, Renderer, Stave, StaveNote } = Vex.Flow
@@ -31,12 +29,17 @@
   let ctx: Vex.RenderContext
   let tickContext: Vex.TickContext
 
-  const data = derived([currentGame, guessState, scale, score], ([c, g, sc, s]) => ({
-    game: c,
-    guessed: g,
-    scale: sc,
-    score: s
-  }))
+  const data = derived(
+    [currentGame, guessState, scale, key, played, target],
+    ([c, g, sc, k, p, t]) => ({
+      game: c,
+      guessed: g,
+      scale: sc,
+      key: k,
+      played: p,
+      target: t
+    })
+  )
 
   onMount(() => {
     init()
@@ -112,9 +115,9 @@
     }
   }
 
-  function updateNotes({ game, guessed, scale, score }: Data) {
+  function updateNotes({ game, guessed, scale, key: keyRaw, played, target }: Data) {
     // console.log('hello notes', notes)
-    const key = score.key.replaceAll('♭', 'b').replaceAll('♯', '#')
+    const key = keyRaw.replaceAll('♭', 'b').replaceAll('♯', '#')
     ctx.clear()
     ctx.scale(0.5, 0.5)
     const s1 = new Stave(10, 0, 200).addClef('treble')
@@ -123,17 +126,12 @@
     }
     const s2 = new Stave(10, 60, 200).addClef('bass')
     const staveNotes = []
-    if (score.target) {
-      staveNotes.push(drawNotes([score.target], s1, s2))
+    if (target) {
+      staveNotes.push(drawNotes([target], s1, s2))
     }
-    if (score.played.length > 0 && (!game || game instanceof GuessNotes)) {
+    if (played.length > 0 && (!game || game instanceof GuessNotes)) {
       staveNotes.push(
-        drawNotes(
-          score.played,
-          s1,
-          s2,
-          game?.guessed === score.played[0].value && guessed === 'correct'
-        )
+        drawNotes(played, s1, s2, game?.guessed === played[0].value && guessed === 'correct')
       )
     }
     drawNotesToStaves(s1, s2, staveNotes)
