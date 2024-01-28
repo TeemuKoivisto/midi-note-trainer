@@ -27,7 +27,7 @@
 </script>
 
 <div class={`${$$props.class || ''}`}>
-  <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm">
+  <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm" class:py-0.5={$hidden}>
     <legend class="px-2 text-0A text-base">
       <button class="hover:bg-gray-100" on:click={toggleVisibility}>Inputs</button>
     </legend>

@@ -114,6 +114,7 @@ describe('createScale', () => {
         C: ['C', 'D♭', 'E♭', 'F', 'G', 'A♭', 'B'],
         F: ['F', 'G♭', 'A♭', 'B♭', 'C', 'D♭', 'E']
       },
+      // prometheus C test
       bebopMajor: {
         'G♭': ['G♭', 'A♭', 'B♭', 'C♭', 'D♭', 'D', 'E♭', 'F']
       },

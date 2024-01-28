@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
+  import Chords from '$components/Chords.svelte'
   import GameKeys from '$components/GameKeys.svelte'
   import GameNotes from '$components/GameNotes.svelte'
   import Inputs from '$components/Inputs.svelte'
@@ -143,6 +144,7 @@
 <section class="px-4 md:px-0">
   <Inputs />
   <Options />
+  <Chords />
   <PlayForm />
   <div id="output"></div>
 </section>
