@@ -130,6 +130,8 @@ export const scales = {
     form: ['♭7', '♭6', '5', '4', '♭3', '2', '1']
   },
   // pentatonic
+  // https://en.wikipedia.org/wiki/Pentatonic_scale
+  // https://www.jazz-guitar-licks.com/pages/guitar-scales-modes/pentatonic-scales/
   majorPentatonic: {
     name: 'Major Pentatonic',
     tones: [2, 2, 3, 2, 3],
@@ -160,6 +162,11 @@ export const scales = {
     tones: [2, 3, 2, 3, 2],
     form: ['1', '2', '4', '5', '♭7']
   },
+  scottishPentatonic: {
+    name: 'Scottish Pentatonic',
+    tones: [2, 3, 2, 2, 3],
+    form: ['1', '2', '4', '5', '6']
+  },
   // enigmatic https://en.wikipedia.org/wiki/Enigmatic_scale
   enigmaticMajor: {
     name: 'Enigmatic Major',
@@ -181,6 +188,47 @@ export const scales = {
     name: 'Diminished Half-Whole',
     tones: [1, 2, 1, 2, 1, 2, 1, 2],
     form: ['1', '♭2', '♭3', '♭4', '♭5', '5', '6', '♭7']
+  },
+  augmented: {
+    name: 'Augmented',
+    tones: [3, 1, 3, 1, 3, 1],
+    form: ['1', '♯2', '3', '5', '♯5', '7']
+  },
+  dominant7th: {
+    name: 'Dominant 7th',
+    tones: [2, 3, 2, 2, 1, 2],
+    form: ['1', '2', '4', '5', '6', '♭7']
+  },
+  prometheus: {
+    name: 'Prometheus',
+    tones: [2, 2, 2, 3, 1, 2],
+    form: ['1', '2', '3', '♯4', '6', '♭7']
+  },
+  overtone: {
+    name: 'Overtone',
+    tones: [2, 2, 2, 1, 1, 2, 2],
+    form: ['1', '2', '3', '♯4', '5', '6', '♭7']
+  },
+  leadingTone: {
+    name: 'Leading Tone',
+    tones: [2, 2, 2, 2, 2, 1, 1],
+    form: ['1', '2', '3', '♯4', '♭6', '♭7', '7']
+  },
+  // bebop
+  bebopMajor: {
+    name: 'Bebop Major',
+    tones: [2, 2, 1, 2, 1, 1, 2, 1],
+    form: ['1', '2', '3', '4', '5', '♯5', '6', '7']
+  },
+  bebopMinor: {
+    name: 'Bebop Minor',
+    tones: [2, 1, 1, 1, 2, 2, 1, 2],
+    form: ['1', '2', '♭3', '3', '4', '5', '6', '♭7']
+  },
+  bebopDominant: {
+    name: 'Bebop Dominant',
+    tones: [2, 2, 1, 2, 2, 1, 1, 1],
+    form: ['1', '2', '3', '4', '5', '6', '♭7', '7']
   },
   // neapolitan
   neapolitanMajor: {
@@ -216,13 +264,13 @@ export const scales = {
     tones: [1, 2, 1, 2, 2, 2, 2],
     form: ['1', '♭2', '♭3', '3', '♭5', '♭6', '♭7']
   },
-  spanish8Tone: {
+  spanishEightTone: {
     name: 'Spanish Eight Tone',
     tones: [1, 2, 1, 1, 1, 2, 2, 2],
     form: ['1', '♭2', '♭3', '3', '4', '♭5', '♭6', '♭7']
   },
   /* <- EQUAL -> */
-  jewish: {
+  jewishEightTone: {
     name: 'Jewish Eight Tone',
     tones: [1, 2, 1, 1, 1, 2, 2, 2],
     form: ['1', '♭2', '♭3', '3', '4', '♭5', '♭6', '♭7']
@@ -232,48 +280,6 @@ export const scales = {
     tones: [1, 3, 1, 2, 1, 2, 2],
     form: ['1', '♭2', '3', '4', '5', '♭6', '♭7']
   },
-  // bebop
-  bebopMajor: {
-    name: 'Bebop Major',
-    tones: [2, 2, 1, 2, 1, 1, 2, 1],
-    form: ['1', '2', '3', '4', '5', '♯5', '6', '7']
-  },
-  bebopMinor: {
-    name: 'Bebop Minor',
-    tones: [2, 1, 1, 1, 2, 2, 1, 2],
-    form: ['1', '2', '♭3', '3', '4', '5', '6', '♭7']
-  },
-  bebopDominant: {
-    name: 'Bebop Dominant',
-    tones: [2, 2, 1, 2, 2, 1, 1, 1],
-    form: ['1', '2', '3', '4', '5', '6', '♭7', '7']
-  },
-
-  augmented: {
-    name: 'Augmented',
-    tones: [3, 1, 3, 1, 3, 1],
-    form: ['1', '♯2', '3', '5', '♯5', '7']
-  },
-  dominant7th: {
-    name: 'Dominant 7th',
-    tones: [2, 3, 2, 2, 1, 2],
-    form: ['1', '2', '4', '5', '6', '♭7']
-  },
-  prometheus: {
-    name: 'Prometheus',
-    tones: [2, 2, 2, 3, 1, 2],
-    form: ['1', '2', '3', '♯4', '6', '♭7']
-  },
-  overtone: {
-    name: 'Overtone',
-    tones: [2, 2, 2, 1, 1, 2, 2],
-    form: ['1', '2', '3', '♯4', '5', '6', '♭7']
-  },
-  leadingTone: {
-    name: 'Leading Tone',
-    tones: [2, 2, 2, 2, 2, 1, 1],
-    form: ['1', '2', '3', '♯4', '♭6', '♭7', '7']
-  },
   // japanese
   hirojoshi: { name: 'Hirojoshi', tones: [2, 1, 4, 1, 4], form: ['1', '2', '♭3', '5', '♭6'] },
   japaneseA: { name: 'Japanese A', tones: [1, 4, 1, 3, 3], form: ['1', '♭2', '4', '♭5', '6'] },
@@ -281,7 +287,7 @@ export const scales = {
   yo: { name: 'Yo', tones: [2, 3, 2, 2, 3], form: ['1', '2', '4', '5', '6', '♭7'] },
   insen: { name: 'Insen', tones: [1, 4, 2, 3, 2], form: ['1', '♭2', '4', '5', '♭7'] },
   iwato: { name: 'Iwato', tones: [1, 4, 1, 4, 2], form: ['1', '♭2', '4', '♭5', '♭7'] },
-  // cultures
+  // other
   oriental: {
     name: 'Oriental',
     tones: [1, 3, 1, 1, 3, 1, 2],
@@ -323,15 +329,11 @@ export const scales = {
     tones: [2, 2, 1, 2, 1, 2, 2],
     form: ['1', '2', '3', '4', '5', '♭6', '♭7']
   },
-  scottishPentatonic: {
-    name: 'Scottish Pentatonic',
-    tones: [2, 3, 2, 2, 3],
-    form: ['1', '2', '4', '5', '6']
-  },
   // https://en.wikipedia.org/wiki/Istrian_scale
   istrian: { name: 'Istrian', tones: [1, 2, 1, 2, 1, 5], form: ['1', '♭2', '♭3', '♭4', '♭5', '5'] },
-  ukranianDorian: {
-    name: 'Ukranian Dorian',
+  // https://en.wikipedia.org/wiki/Ukrainian_Dorian_scale
+  ukrainianDorian: {
+    name: 'Ukrainian Dorian',
     tones: [2, 1, 3, 1, 2, 1, 2],
     form: ['1', '2', '♭3', '♯4', '5', '6', '♭7']
   }
