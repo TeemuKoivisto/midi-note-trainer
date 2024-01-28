@@ -1,12 +1,15 @@
 <script lang="ts">
+  import { writable } from 'svelte/store'
+
   import { midiActions, midiInput, inputs } from '$stores/inputs'
+  import { persist } from '$stores/persist'
   import { fadeTimeout, scoreActions } from '$stores/score'
 
-  let hidden = false
+  const hidden = persist(writable(false), { key: 'inputs-hidden' })
   let fadeMs = $fadeTimeout
 
   function toggleVisibility() {
-    hidden = !hidden
+    hidden.update(h => !h)
   }
   function handleSetFadeTimeout(
     e: Event & {
@@ -28,7 +31,7 @@
     <legend class="px-2 text-0A text-base">
       <button class="hover:bg-gray-100" on:click={toggleVisibility}>Inputs</button>
     </legend>
-    <div class="body" class:hidden>
+    <div class="body" class:hidden={$hidden}>
       <div class="h-full flex flex-col">
         <label class="font-bold" for="device">Device</label>
         <input class="my-1 w-50" id="device" disabled value={$midiInput?.name ?? 'No device'} />

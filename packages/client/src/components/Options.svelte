@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { writable } from 'svelte/store'
   import { scales } from '@/music-scales'
 
   import { currentGame } from '$stores/game'
   import { midiActions, midiInput, midiRange } from '$stores/inputs'
+  import { persist } from '$stores/persist'
   import { key, scale, scaleNotes, scoreActions } from '$stores/score'
   import { keys } from '$utils/guess_keys'
   import { getNote, parseNote } from '$utils/midi'
@@ -12,7 +14,7 @@
   let rangeMin = getNote($midiRange[0]).absolute
   let rangeMax = getNote($midiRange[1]).absolute
   let rangeError = ''
-  let hidden = false
+  const hidden = persist(writable(false), { key: 'options-hidden' })
 
   let selectedKey = $key
 
@@ -73,7 +75,7 @@
     return false
   }
   function toggleVisibility() {
-    hidden = !hidden
+    hidden.update(h => !h)
   }
 </script>
 
@@ -82,7 +84,7 @@
     <legend class="px-2 text-0A text-base">
       <button class="hover:bg-gray-100" on:click={toggleVisibility}>Options</button>
     </legend>
-    <div class="body" class:hidden>
+    <div class="body" class:hidden={$hidden}>
       <div class="flex flex-col">
         <label class="font-bold" for="range_min">Range</label>
         <div class="my-1 flex w-full">
