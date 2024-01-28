@@ -23,6 +23,7 @@
     value: v.name
   }))
   let selectedScale = $scale
+  $: scaleForm = Object.values(scales).find(v => v.name === selectedScale)?.form || []
 
   function handleSetRange() {
     // prompt -> press the lowest note in your MIDI device
@@ -121,12 +122,19 @@
             <div slot="value">{selectedScale}</div>
           </MultiSelectDropdown>
         </div>
+        {#if !$currentGame}
+          <div class="intervals my-1">
+            {#each scaleForm as interval}
+              <span>{interval}</span>
+            {/each}
+          </div>
+        {/if}
       </div>
       <div class="flex flex-col h-full">
         <label class="font-bold" for="key">Key</label>
         <div class="my-1 flex">
           <input
-            class="h-[20px]"
+            class="h-[28px]"
             id="key"
             bind:value={selectedKey}
             on:input={handleKeyChange}
@@ -134,9 +142,9 @@
           />
         </div>
         {#if !$currentGame}
-          <div class="my-1">
+          <div class="intervals my-1">
             {#each $scaleNotes as note}
-              <span class="mr-[1px]">{note.note}</span>
+              <span>{note.note}</span>
             {/each}
           </div>
         {/if}
@@ -161,5 +169,11 @@
   }
   .error {
     @apply text-xs text-red-500;
+  }
+  .intervals {
+    & > span + span::before {
+      content: '-';
+      @apply mx-[1px];
+    }
   }
 </style>
