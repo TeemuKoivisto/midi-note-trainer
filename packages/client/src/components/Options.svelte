@@ -23,7 +23,7 @@
     value: v.name
   }))
   let selectedScale = $scale
-  $: scaleForm = Object.values(scales).find(v => v.name === selectedScale)?.form || []
+  $: selectedScaleNotes = Object.values(scales).find(v => v.name === selectedScale)?.notes || []
 
   function handleSetRange() {
     // prompt -> press the lowest note in your MIDI device
@@ -124,7 +124,7 @@
         </div>
         {#if !$currentGame}
           <div class="intervals my-1">
-            {#each scaleForm as interval}
+            {#each selectedScaleNotes as interval}
               <span>{interval}</span>
             {/each}
           </div>

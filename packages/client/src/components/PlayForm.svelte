@@ -22,10 +22,16 @@
       <button class="btn primary" on:click={() => gameActions.playGuessKeys('minor')}
         >Guess Minor Keys</button
       >
+      <button class="btn primary" on:click={() => gameActions.playGuessChords()}
+        >Guess Chords</button
+      >
       <div></div>
       <div></div>
       <div></div>
-      <button class="btn primary" on:click={clearGame}>Clear</button>
+      <div></div>
+      <div></div>
+      <div></div>
+      <button class="btn hover:bg-gray-200" on:click={clearGame}>Clear</button>
     </div>
   </fieldset>
 </div>

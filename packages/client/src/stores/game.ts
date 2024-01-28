@@ -39,6 +39,7 @@ export const gameActions = {
     currentGame.set(game)
     return game
   },
+  playGuessChords() {},
   updateState(state: GuessState) {
     guessState.set(state)
   },

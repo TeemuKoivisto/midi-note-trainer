@@ -25,7 +25,7 @@
         {#each leftList as chord}
           <div class="flex items-center justify-center px-1 bg-gray-200">{chord[0]}</div>
           <div class="intervals">
-            {#each chord[1].shape as interval}
+            {#each chord[1].notes as interval}
               <span>{interval}</span>
             {/each}
           </div>
@@ -36,7 +36,7 @@
         {#each rightList as chord}
           <div class="flex items-center justify-center px-1 bg-gray-200">{chord[0]}</div>
           <div class="intervals">
-            {#each chord[1].shape as interval}
+            {#each chord[1].notes as interval}
               <span>{interval}</span>
             {/each}
           </div>
