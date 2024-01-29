@@ -48,19 +48,13 @@ export class GuessKeys {
     this.type = type
     this.timing = performance.now()
     const scales: string[] = []
-    const availableKeys = Object.keys(keys[type])
+    const available = Object.keys(keys[type])
     for (let i = 0; i < count; i += 1) {
-      let attempts = 0,
-        val = ''
-      // Try having all values unique
-      while (attempts < 5) {
-        attempts += 1
-        val = availableKeys[Math.floor(Math.random() * availableKeys.length)]
-        if (!scales.includes(val)) {
-          attempts = 5
-        }
+      const idx = Math.floor(Math.random() * available.length)
+      const val = available.splice(idx, 1)
+      if (val.length > 0) {
+        scales.push(val[0])
       }
-      scales.push(val)
     }
     this.keys = scales
   }

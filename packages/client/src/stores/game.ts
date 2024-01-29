@@ -1,4 +1,5 @@
 import { derived, get, writable } from 'svelte/store'
+import { chords } from '@/music-scales'
 
 import { midiActions, midiRange, piano } from './inputs'
 import { scoreActions } from './score'
@@ -7,6 +8,7 @@ import { GuessNotes } from '$utils/guess_notes'
 import { getNote } from '$utils/midi'
 import { GuessKeys } from '$utils/guess_keys'
 import { persist } from './persist'
+import { GuessChords } from '$utils/guess_chords'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 
@@ -39,7 +41,15 @@ export const gameActions = {
     currentGame.set(game)
     return game
   },
-  playGuessChords() {},
+  playGuessChords(count = 10) {
+    const game = new GuessChords('C', [], Array.from(chords.entries()), count)
+    // scoreActions.setKey(game.current)
+    scoreActions.setTarget()
+    scoreActions.clearPlayed()
+    guessState.set('waiting')
+    // currentGame.set(game)
+    return game
+  },
   updateState(state: GuessState) {
     guessState.set(state)
   },

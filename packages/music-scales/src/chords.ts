@@ -11,7 +11,7 @@ export type ChordType =
   | 'bitonal'
   | 'atonal'
 
-interface Chord {
+export interface Chord {
   name: string
   notes: string[]
   type: ChordType
