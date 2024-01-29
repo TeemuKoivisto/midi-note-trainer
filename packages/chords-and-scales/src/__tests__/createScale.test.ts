@@ -29,17 +29,17 @@ describe('createScale', () => {
     Object.entries(correct).forEach(([key, values]) => {
       const created = createScale(key, 'major')
       if ('err' in created) {
-        expect(created.err).toEqual('')
+        expect(created.err).toEqual(undefined)
       } else {
-        expect(created.data.map(v => v.note)).toEqual(values)
+        expect(created.data.scaleNotes.map(v => v.note)).toEqual(values)
       }
     })
     Object.entries(correct).forEach(([key, values]) => {
       const created = createScale(key, 'majorPentatonic')
       if ('err' in created) {
-        expect(created.err).toEqual('')
+        expect(created.err).toEqual(undefined)
       } else {
-        expect(created.data.map(v => v.note)).toEqual(
+        expect(created.data.scaleNotes.map(v => v.note)).toEqual(
           values.filter((_, idx) => idx !== 3 && idx !== values.length - 1)
         )
       }
@@ -72,17 +72,17 @@ describe('createScale', () => {
     Object.entries(correct).forEach(([key, values]) => {
       const created = createScale(key, 'minor')
       if ('err' in created) {
-        expect(created.err).toEqual('')
+        expect(created.err).toEqual(undefined)
       } else {
-        expect(created.data.map(v => v.note)).toEqual(values)
+        expect(created.data.scaleNotes.map(v => v.note)).toEqual(values)
       }
     })
     Object.entries(correct).forEach(([key, values]) => {
       const created = createScale(key, 'minorPentatonic')
       if ('err' in created) {
-        expect(created.err).toEqual('')
+        expect(created.err).toEqual(undefined)
       } else {
-        expect(created.data.map(v => v.note)).toEqual(
+        expect(created.data.scaleNotes.map(v => v.note)).toEqual(
           values.filter((_, idx) => idx !== 1 && idx !== values.length - 2)
         )
       }
@@ -140,9 +140,9 @@ describe('createScale', () => {
       Object.entries(values).forEach(([key, notes]) => {
         const created = createScale(key, scale)
         if ('err' in created) {
-          expect(created.err).toEqual('')
+          expect(created.err).toEqual(undefined)
         } else {
-          expect(created.data.map(v => v.note)).toEqual(notes)
+          expect(created.data.scaleNotes.map(v => v.note)).toEqual(notes)
         }
       })
     })

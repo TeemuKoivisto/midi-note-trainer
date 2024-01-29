@@ -1,10 +1,9 @@
 import { chords, createChord } from '@/chords-and-scales'
 
-import type { Chord, NotePos, ScaleNote } from '@/chords-and-scales'
+import type { Chord, Scale, ScaleNote } from '@/chords-and-scales'
 
 export class GuessChords {
-  key: string
-  scale: NotePos[]
+  scale: Scale
   chords: [string, ScaleNote[]][]
   times: number[] = []
   correct = 0
@@ -12,8 +11,7 @@ export class GuessChords {
   idx = 0
   timing: number
 
-  constructor(key: string, scale: NotePos[], chords: [string, Chord][], count = 10) {
-    this.key = key
+  constructor(scale: Scale, chords: [string, Chord][], count = 10) {
     this.scale = scale
     const randomChords: [string, Chord][] = []
     const available: [string, Chord][] = chords.map(v => [v[0], { ...v[1] }])
@@ -24,18 +22,7 @@ export class GuessChords {
         randomChords.push(val[0])
       }
     }
-    const majorNotes = ['1', '2', '3', '4', '5', '6', '7']
-    const majorScale = 'CDEFGAB'
-    const scale2 = {
-      key,
-      notes: majorNotes.map((n, idx) => ({
-        note: majorScale[idx],
-        interval: idx + 1,
-        flats: 0,
-        sharps: 0
-      }))
-    }
-    this.chords = randomChords.map(c => [c[0], createChord(c[1].notes, 0, scale2)])
+    this.chords = randomChords.map(c => [c[0], createChord(0, scale, c[1])])
     console.log('CHORDS', this.chords)
     this.timing = performance.now()
   }

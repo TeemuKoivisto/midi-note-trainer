@@ -5,7 +5,7 @@
   import { currentGame } from '$stores/game'
   import { midiActions, midiInput, midiRange } from '$stores/inputs'
   import { persist } from '$stores/persist'
-  import { key, scale, scaleNotes, scoreActions } from '$stores/score'
+  import { key, scale, scaleData, scoreActions } from '$stores/score'
   import { keys } from '$utils/guess_keys'
   import { getNote, parseNote } from '$utils/midi'
 
@@ -143,7 +143,7 @@
         </div>
         {#if !$currentGame}
           <div class="intervals my-1">
-            {#each $scaleNotes as note}
+            {#each $scaleData.scaleNotes as note}
               <span>{note.note}</span>
             {/each}
           </div>

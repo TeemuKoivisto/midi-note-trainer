@@ -1,5 +1,5 @@
 import { derived, get, writable } from 'svelte/store'
-import { chords } from '@/chords-and-scales'
+import { chords, createScale } from '@/chords-and-scales'
 
 import { midiActions, midiRange, piano } from './inputs'
 import { scoreActions } from './score'
@@ -42,13 +42,16 @@ export const gameActions = {
     return game
   },
   playGuessChords(count = 10) {
-    const game = new GuessChords('C', [], Array.from(chords.entries()), count)
+    const scale = createScale('C', 'major')
+    if ('data' in scale) {
+      const game = new GuessChords(scale.data, Array.from(chords.entries()), count)
+    }
     // scoreActions.setKey(game.current)
     scoreActions.setTarget()
     scoreActions.clearPlayed()
     guessState.set('waiting')
     // currentGame.set(game)
-    return game
+    // return game
   },
   updateState(state: GuessState) {
     guessState.set(state)

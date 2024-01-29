@@ -1,28 +1,12 @@
+import type { Chord } from './chords'
+import type { Scale, ScaleNote } from './createScale'
+
 function parseInteger(str: string) {
   try {
     return parseInt(str)
   } catch (err: any) {
     return 0
   }
-}
-
-interface Chord {
-  // midiStart: number
-  suffix: string
-  notes: string[]
-}
-
-export interface Scale {
-  key: string
-  notes: ScaleNote[]
-}
-
-export interface ScaleNote {
-  note: string
-  interval: number
-  // order: number ??
-  flats: number
-  sharps: number
 }
 
 function parseNote(note: string) {
@@ -43,17 +27,17 @@ function parseNote(note: string) {
 
 const regexPosInt = /^[0-9]$/
 
-export function createChord(notes: string[], octave: number, scale: Scale) {
-  const chord: ScaleNote[] = []
-  const scaleIntervals = scale.notes.reduce(
-    (acc, n) => {
-      acc[n.interval] = n
-      return acc
-    },
-    {} as Record<number, ScaleNote>
-  )
-  for (let i = 0; i < notes.length; i += 1) {
-    const note = notes[i].trim()
+export function createChord(rootNote: number, scale: Scale, chord: Chord) {
+  const chordNotes: ScaleNote[] = []
+  // const scaleIntervals = chord.notes.reduce(
+  //   (acc, n) => {
+  //     acc[n.interval] = n
+  //     return acc
+  //   },
+  //   {} as Record<number, ScaleNote>
+  // )
+  for (let i = 0; i < chord.notes.length; i += 1) {
+    const note = chord.notes[i].trim()
     let intervalStr = ''
     let flats = 0
     let sharps = 0
@@ -68,25 +52,25 @@ export function createChord(notes: string[], octave: number, scale: Scale) {
     }
     const interval = parseInteger(intervalStr)
     if (interval === 0) continue
-    const foundInScale = { ...scaleIntervals[interval] }
-    if (Object.keys(foundInScale).length > 0) {
-      if (foundInScale.flats === flats && foundInScale.sharps === sharps) {
-        chord.push(foundInScale)
+    const intervalIdx = scale.intervals.findIndex(x => x.seq === interval)
+    if (intervalIdx >= 0) {
+      const interval = scale.intervals[intervalIdx]
+      const note = { ...scale.scaleNotes[intervalIdx] }
+      if (interval.flats === flats && interval.sharps === sharps) {
+        chordNotes.push(note)
       } else {
         // debugger
-        foundInScale.flats -= sharps
-        foundInScale.sharps -= flats
-        foundInScale.flats = foundInScale.sharps < 0 ? foundInScale.sharps * -1 : 0
-        foundInScale.sharps = foundInScale.flats < 0 ? foundInScale.flats * -1 : 0
-        console.log('note ', foundInScale)
-        foundInScale.note = `${'♭'.repeat(foundInScale.flats)}${'♯'.repeat(foundInScale.sharps)}${
-          foundInScale.note
-        }`
-        chord.push(foundInScale)
+        note.flats -= sharps
+        note.sharps -= flats
+        note.flats = interval.sharps < 0 ? interval.sharps * -1 : 0
+        note.sharps = interval.flats < 0 ? interval.flats * -1 : 0
+        console.log('note ', interval)
+        note.note = `${'♭'.repeat(interval.flats)}${'♯'.repeat(interval.sharps)}${note.note}`
+        chordNotes.push(note)
       }
     } else {
       console.log('TODO')
     }
   }
-  return chord
+  return chordNotes
 }

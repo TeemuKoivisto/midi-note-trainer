@@ -1,5 +1,5 @@
 import { derived, get, readable, writable } from 'svelte/store'
-import { createScale } from '@/chords-and-scales'
+import { createScale, type Scale } from '@/chords-and-scales'
 
 import { persist } from './persist'
 
@@ -33,16 +33,23 @@ export const fadeTimeout = persist(writable(1500), {
 })
 export const key = writable<string>('C')
 export const scale = writable<string>('Major')
-export const scaleNotes = derived([key, scale], ([k, s]) => {
+export const scaleData = derived([key, scale], ([k, s]): Scale => {
   const res = createScale(k, s)
   if ('data' in res) {
     return res.data
   }
-  return []
+  return {
+    key: k,
+    scale: s,
+    keySignature: 'C',
+    intervals: [],
+    scaleNotes: [],
+    notesMap: new Map()
+  } as Scale
 })
-export const hotKeyMap = derived([scaleNotes, defaultKeyMap], ([notes, kmap]) => {
+export const hotKeyMap = derived([scaleData, defaultKeyMap], ([scl, kmap]) => {
   const map = { ...kmap }
-  notes.forEach(note => {
+  scl.scaleNotes.forEach(note => {
     const found = Object.entries(kmap).find(([_, vals]) => note.order === vals.order)
     if (found) {
       const key = found[0] as keyof typeof map

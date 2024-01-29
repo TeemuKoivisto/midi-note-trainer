@@ -2,28 +2,67 @@ import { scales } from './scales'
 
 import type { Result } from '@/types'
 
-export interface NotePos {
+export interface Interval {
+  seq: number
+  flats: number
+  sharps: number
+}
+export interface ScaleNote {
   note: string
   order: number
-  steps: number
-  black: boolean
-  sharp: boolean
-  flat: boolean
+  flats: number
+  sharps: number
+}
+export interface Scale {
+  key: string // eg C
+  scale: string // eg major
+  keySignature: string // using standard diatonic accidentals
+  intervals: Interval[]
+  scaleNotes: ScaleNote[]
+  notesMap: Map<number, ScaleNote> // all 12 semitones of octave
+}
+
+const regexPosInt = /^[0-9]$/
+
+function parseInteger(str: string) {
+  try {
+    return parseInt(str)
+  } catch (err: any) {
+    return 0
+  }
+}
+
+export function createIntervals(intervals: readonly string[]): Interval[] {
+  return intervals.map(str => {
+    let intervalStr = ''
+    let flats = 0
+    let sharps = 0
+    for (let j = 0; j < str.length; j += 1) {
+      if (str[j] === 'b' || str[j] === '♭') {
+        flats += 1
+      } else if (str[j] === '#' || str[j] === '♯' || str[j] === 's') {
+        sharps += 1
+      } else if (regexPosInt.test(str[j])) {
+        intervalStr += str[j]
+      }
+    }
+    return { seq: parseInteger(intervalStr), flats, sharps }
+  })
 }
 
 const NOTES = [
-  { note: 'C', order: 0, steps: 0, black: false, sharp: false, flat: false },
-  { note: 'C♯', order: 1, steps: 0, black: true, sharp: true, flat: false },
-  { note: 'D', order: 2, steps: 1, black: false, sharp: false, flat: false },
-  { note: 'E♭', order: 3, steps: 2, black: true, sharp: false, flat: true },
-  { note: 'E', order: 4, steps: 2, black: false, sharp: false, flat: false },
-  { note: 'F', order: 5, steps: 3, black: false, sharp: false, flat: false },
-  { note: 'F♯', order: 6, steps: 3, black: true, sharp: true, flat: false },
-  { note: 'G', order: 7, steps: 4, black: false, sharp: false, flat: false },
-  { note: 'G♯', order: 8, steps: 4, black: true, sharp: true, flat: false },
-  { note: 'A', order: 9, steps: 5, black: false, sharp: false, flat: false },
-  { note: 'B♭', order: 10, steps: 6, black: true, sharp: false, flat: true },
-  { note: 'B', order: 11, steps: 6, black: false, sharp: false, flat: false }
+  { note: 'C', order: 0, black: false, sharp: false, flat: false },
+  { note: 'C♯', order: 1, black: true, sharp: true, flat: false },
+  { note: 'D', order: 2, black: false, sharp: false, flat: false },
+  { note: 'E♭', order: 3, black: true, sharp: false, flat: true },
+  { note: 'E', order: 4, black: false, sharp: false, flat: false },
+  { note: 'F', order: 5, black: false, sharp: false, flat: false },
+  { note: 'F♯', order: 6, black: true, sharp: true, flat: false },
+  { note: 'G', order: 7, black: false, sharp: false, flat: false },
+  { note: 'G♯', order: 8, black: true, sharp: true, flat: false },
+  { note: 'A', order: 9, black: false, sharp: false, flat: false },
+  { note: 'B♭', order: 10, black: true, sharp: false, flat: true },
+  { note: 'B', order: 11, black: false, sharp: false, flat: false }
 ]
 
 const regexKey = /^[a-gA-G][♭b#♯]?$/
@@ -35,7 +74,7 @@ const regexKey = /^[a-gA-G][♭b#♯]?$/
  * @param scaleName
  * @returns
  */
-export function createScale(rawKey: string, scaleName: string): Result<NotePos[]> {
+export function createScale(rawKey: string, scaleName: string): Result<Scale> {
   let scale = scales[scaleName as keyof typeof scales]
   if (!scale) {
     scale = Object.values(scales).find(
@@ -54,17 +93,28 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
   let idx = NOTES.findIndex(n => n.note === key)
   const flat = key.charAt(1) === '♭'
   const sharp = key.charAt(1) === '♯'
-  const notes = []
+  const scaleNotes: ScaleNote[] = []
+  const notesMap = new Map<number, ScaleNote>()
   if (idx === -1) {
     idx = NOTES.findIndex(n => n.note.charAt(0) === key.charAt(0) && n.note.length === 1)
-    idx = flat ? (idx - 1) % 12 : idx + 1
-    notes.push({ ...NOTES[idx], flat, sharp, note: key })
+    idx = flat ? (idx === 0 ? NOTES.length - 1 : idx - 1) : (idx + 1) % 12
+    scaleNotes.push({
+      order: NOTES[idx].order,
+      note: key,
+      flats: flat ? 1 : 0,
+      sharps: sharp ? 1 : 0
+    })
   } else {
-    notes.push(NOTES[idx])
+    scaleNotes.push({
+      order: NOTES[idx].order,
+      note: NOTES[idx].note,
+      flats: flat ? 1 : 0,
+      sharps: sharp ? 1 : 0
+    })
   }
-  const letters: string[] = [notes[0].note.charAt(0)]
+  const letters: string[] = [scaleNotes[0].note.charAt(0)]
   const alphabet = 'ABCDEFG'
-  let letter = notes[0].note.charAt(0)
+  let letter = scaleNotes[0].note.charAt(0)
   let doubleHalfTone = false
   const { tones } = scale
   for (let i = 0; i < tones.length - 1; i += 1) {
@@ -93,7 +143,8 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
     }
     letters.push(letter)
   }
-  let note: NotePos
+  const intervals = createIntervals(scale.notes)
+  let note: { note: string; order: number; black: boolean; sharp: boolean; flat: boolean }
   for (let next = 0; next < tones.length - 1; next += 1) {
     letter = letters[next + 1]
     idx = (idx + tones[next]) % 12
@@ -108,7 +159,12 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
         higher = NOTES[(idx + flats) % 12]
       }
       // shift upwards -> key = Eb, note = G#, letter = A -> lower = G, higher = A -> Ab
-      notes.push({ ...note, note: higher.note + '♭'.repeat(flats), flat: true })
+      scaleNotes.push({
+        order: note.order,
+        note: higher.note + '♭'.repeat(flats),
+        flats,
+        sharps: 0
+      })
     } else if (n > letter || (n === 'A' && letter === 'G')) {
       // 'G' > 'F'
       let sharps = 1
@@ -120,11 +176,28 @@ export function createScale(rawKey: string, scaleName: string): Result<NotePos[]
         lower = NOTES[lowerIndex]
       }
       // shift downwards -> key = F#, note = Bb -> lower = A, higher = C -> A#
-      notes.push({ ...note, note: lower.note + '♯'.repeat(sharps), sharp: true })
+      scaleNotes.push({
+        order: note.order,
+        note: lower.note + '♯'.repeat(sharps),
+        flats: 0,
+        sharps
+      })
     } else {
       // Correct letter
-      notes.push(note)
+      scaleNotes.push({ order: note.order, note: note.note, flats: 0, sharps: 0 })
     }
   }
-  return { data: notes }
+  scaleNotes.forEach(n => {
+    notesMap.set(n.order, n)
+  })
+  return {
+    data: {
+      key,
+      scale: scale.name,
+      keySignature: 'C',
+      intervals,
+      scaleNotes,
+      notesMap
+    }
+  }
 }
