@@ -74,20 +74,25 @@
       $piano.noteOn(value, velocity)
     }
   }
+  function gameUpdate() {
+    const game = $currentGame
+    if (game?.ended) {
+      gameActions.updateState('ended')
+    } else if (game instanceof GuessChords) {
+      scoreActions.setTarget(game.currentNotes)
+      gameActions.updateState('waiting')
+    } else if (game instanceof GuessKeys) {
+      scoreActions.setKey(game.current)
+      gameActions.updateState('waiting')
+    }
+    timeout = undefined
+  }
   function handleGuessedChord(e: CustomEvent<string>) {
     const game = $currentGame
     if (!(game instanceof GuessChords)) return
     const correct = game.guess(e.detail)
     gameActions.updateState(correct ? 'correct' : 'wrong')
-    timeout = setTimeout(() => {
-      if (game.ended) {
-        gameActions.updateState('ended')
-      } else {
-        scoreActions.setTarget(game.currentNotes)
-        gameActions.updateState('waiting')
-      }
-      timeout = undefined
-    }, 2000)
+    timeout = setTimeout(gameUpdate, 2000)
   }
   function handleGuessedKey(e: CustomEvent<string>) {
     const game = $currentGame
@@ -100,15 +105,7 @@
       correct = game.guess(note)
     }
     gameActions.updateState(correct ? 'correct' : 'wrong')
-    timeout = setTimeout(() => {
-      if (game.ended) {
-        gameActions.updateState('ended')
-      } else {
-        scoreActions.setKey(game.current)
-        gameActions.updateState('waiting')
-      }
-      timeout = undefined
-    }, 2000)
+    timeout = setTimeout(gameUpdate, 2000)
   }
   function handleNote(e: CustomEvent<number>) {
     handlePlayedNote(e.detail, 120)
