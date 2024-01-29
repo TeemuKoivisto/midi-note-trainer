@@ -1,6 +1,6 @@
-import { chords, createChord } from '@/music-scales'
+import { chords, createChord } from '@/chords-and-scales'
 
-import type { Chord, NotePos, ScaleNote } from '@/music-scales'
+import type { Chord, NotePos, ScaleNote } from '@/chords-and-scales'
 
 export class GuessChords {
   key: string

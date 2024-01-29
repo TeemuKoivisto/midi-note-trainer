@@ -1,5 +1,5 @@
 import { derived, get, readable, writable } from 'svelte/store'
-import { createScale } from '@/music-scales'
+import { createScale } from '@/chords-and-scales'
 
 import { persist } from './persist'
 

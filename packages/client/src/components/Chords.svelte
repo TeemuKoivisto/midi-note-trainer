@@ -1,6 +1,6 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { chords } from '@/music-scales'
+  import { chords } from '@/chords-and-scales'
 
   import { persist } from '$stores/persist'
 

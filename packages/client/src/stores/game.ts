@@ -1,5 +1,5 @@
 import { derived, get, writable } from 'svelte/store'
-import { chords } from '@/music-scales'
+import { chords } from '@/chords-and-scales'
 
 import { midiActions, midiRange, piano } from './inputs'
 import { scoreActions } from './score'

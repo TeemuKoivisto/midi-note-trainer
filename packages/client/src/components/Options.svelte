@@ -1,6 +1,6 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { scales } from '@/music-scales'
+  import { scales } from '@/chords-and-scales'
 
   import { currentGame } from '$stores/game'
   import { midiActions, midiInput, midiRange } from '$stores/inputs'

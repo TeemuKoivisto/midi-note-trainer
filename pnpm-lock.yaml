@@ -81,6 +81,15 @@ importers:
         specifier: ^4.2.2
         version: 4.2.2(typescript@5.2.2)(vite@5.0.7)
 
+  packages/chords-and-scales:
+    devDependencies:
+      '@/types':
+        specifier: workspace:*
+        version: link:../types
+      vitest:
+        specifier: ^1.0.4
+        version: 1.0.4(@types/node@20.11.4)
+
   packages/client:
     dependencies:
       '@iconify-icons/fe':
@@ -105,9 +114,9 @@ importers:
         specifier: ^3.1.8
         version: 3.1.8
     devDependencies:
-      '@/music-scales':
+      '@/chords-and-scales':
         specifier: workspace:*
-        version: link:../music-scales
+        version: link:../chords-and-scales
       '@/types':
         specifier: workspace:*
         version: link:../types
@@ -141,15 +150,6 @@ importers:
       svelte-preprocess:
         specifier: ^5.0.4
         version: 5.0.4(postcss-load-config@4.0.1)(postcss@8.4.30)(sass@1.68.0)(svelte@4.2.7)(typescript@5.2.2)
-
-  packages/music-scales:
-    devDependencies:
-      '@/types':
-        specifier: workspace:*
-        version: link:../types
-      vitest:
-        specifier: ^1.0.4
-        version: 1.0.4(@types/node@20.11.4)
 
   packages/types: {}
 
