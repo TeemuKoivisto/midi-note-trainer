@@ -7,7 +7,7 @@
   import { persist } from '$stores/persist'
   import { key, scale, scaleData, scoreActions } from '$stores/score'
   import { keys } from '$utils/guess_keys'
-  import { getNote, parseNote } from '$utils/midi'
+  import { getNote, parseNote } from '$utils/getNote'
 
   import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
 
@@ -18,12 +18,13 @@
 
   let selectedKey = $key
 
-  const scaleOptions = Object.entries(scales).map(([k, v]) => ({
+  const scaleOptions = Array.from(scales.entries()).map(([k, v]) => ({
     key: k,
     value: v.name
   }))
   let selectedScale = $scale
-  $: selectedScaleNotes = Object.values(scales).find(v => v.name === selectedScale)?.notes || []
+  $: selectedScaleNotes =
+    Array.from(scales.entries()).find(([k, v]) => v.name === selectedScale)?.[1].intervals || []
 
   function handleSetRange() {
     // prompt -> press the lowest note in your MIDI device
@@ -125,7 +126,7 @@
         {#if !$currentGame}
           <div class="intervals my-1">
             {#each selectedScaleNotes as interval}
-              <span>{interval}</span>
+              <span>{interval.str}</span>
             {/each}
           </div>
         {/if}

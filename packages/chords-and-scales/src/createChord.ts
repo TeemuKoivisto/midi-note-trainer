@@ -1,13 +1,10 @@
-import { createIntervals } from './utils'
-
 import type { Chord, Scale, ScaleNote } from './types'
 
 export function createChord(noteIndex: number, scale: Scale, chord: Chord) {
   const rootNote = scale.notesMap.get(noteIndex)
   const chordNotes: ScaleNote[] = []
-  const chordIntervals = createIntervals(chord.notes)
-  for (let i = 0; i < chordIntervals.length; i += 1) {
-    const interval = chordIntervals[i]
+  for (let i = 0; i < chord.intervals.length; i += 1) {
+    const interval = chord.intervals[i]
     const intervalIdx = scale.intervals.findIndex(x =>
       interval.seq < 8 ? x.seq === interval.seq : x.seq === interval.seq % 7
     )

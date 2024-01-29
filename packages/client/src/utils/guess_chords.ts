@@ -1,6 +1,7 @@
 import { chords, createChord } from '@/chords-and-scales'
 
 import type { Chord, Scale, ScaleNote } from '@/chords-and-scales'
+import type { Note } from '@/types'
 
 export class GuessChords {
   scale: Scale
@@ -11,7 +12,7 @@ export class GuessChords {
   idx = 0
   timing: number
 
-  constructor(scale: Scale, chords: [string, Chord][], count = 10) {
+  constructor(scale: Scale, chords: [string, Chord][], range: [Note, Note], count = 10) {
     this.scale = scale
     const randomChords: [string, Chord][] = []
     const available: [string, Chord][] = chords.map(v => [v[0], { ...v[1] }])

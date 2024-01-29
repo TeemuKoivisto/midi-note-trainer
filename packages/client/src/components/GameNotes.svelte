@@ -4,7 +4,7 @@
   import { piano } from '$stores/inputs'
 
   import type { GuessNotes } from '$utils/guess_notes'
-  import { getNote } from '$utils/midi'
+  import { getNote } from '$utils/getNote'
 
   export let game: GuessNotes
 

@@ -10,7 +10,7 @@ export function parseInteger(str: string) {
   }
 }
 
-export function createIntervals(intervals: readonly string[]): Interval[] {
+export function parseIntervals(intervals: readonly string[]): Interval[] {
   return intervals.map(str => {
     let intervalStr = ''
     let flats = 0
@@ -24,6 +24,6 @@ export function createIntervals(intervals: readonly string[]): Interval[] {
         intervalStr += str[j]
       }
     }
-    return { seq: parseInteger(intervalStr), flats, sharps }
+    return { str, seq: parseInteger(intervalStr), flats, sharps }
   })
 }

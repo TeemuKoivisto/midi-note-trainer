@@ -3,7 +3,6 @@ export interface Note {
   absolute: string
   value: number
   octave: number
-  steps: number
   sharp: boolean
   flat: boolean
   parts: [string, string, number]

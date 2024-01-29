@@ -2,10 +2,11 @@ import { derived, get, writable } from 'svelte/store'
 import { WebMidi } from 'webmidi'
 
 import { persist } from './persist'
+import { getNote } from '$utils/getNote'
 import { Piano } from '$utils/piano'
 
 import type { Input } from 'webmidi'
-import type { Result } from '@/types'
+import type { Note, Result } from '@/types'
 
 interface Inputs {
   useSound: boolean
@@ -19,6 +20,10 @@ export const midiRange = persist(writable<[number, number]>([60, 84]), {
   key: 'midi-range',
   storage: 'session'
 })
+export const midiRangeNotes = derived(
+  midiRange,
+  r => [getNote(r[0]), getNote(r[1])] as [Note, Note]
+)
 export const piano = writable<Piano | undefined>(undefined)
 export const inputs = persist(
   writable<Inputs>({

@@ -9,10 +9,11 @@
 
   import type { Note } from '@/types'
   import { GuessNotes } from '$utils/guess_notes'
+  import type { GuessChords } from '$utils/guess_chords'
   import type { GuessKeys } from '$utils/guess_keys'
 
   interface Data {
-    game: GuessNotes | GuessKeys | undefined
+    game: GuessNotes | GuessKeys | GuessChords | undefined
     guessed: GuessState
     scale: string
     key: string

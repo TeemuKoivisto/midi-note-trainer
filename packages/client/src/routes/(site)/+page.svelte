@@ -12,7 +12,7 @@
   import { currentGame, gameActions } from '$stores/game'
   import { inputs, midiActions, midiInput, piano } from '$stores/inputs'
   import { hotKeyMap, played, scoreActions } from '$stores/score'
-  import { getNote, parseNote } from '$utils/midi'
+  import { getNote, parseNote } from '$utils/getNote'
 
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessNotes } from '$utils/guess_notes'

@@ -13,17 +13,24 @@ export type ChordType =
 
 export interface Chord {
   name: string
-  notes: string[]
+  intervals: Interval[]
   type: ChordType
 }
 export interface Interval {
+  str: string
   seq: number
   flats: number
   sharps: number
 }
+export interface RawScale {
+  name: string
+  synonyms?: string[]
+  tones: number[]
+  intervals: Interval[]
+}
 export interface ScaleNote {
   note: string
-  order: number
+  order: number // convert to semitones from C???
   flats: number
   sharps: number
 }

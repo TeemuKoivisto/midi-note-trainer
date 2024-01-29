@@ -1,5 +1,4 @@
 import { scales } from './scales'
-import { createIntervals } from './utils'
 
 import type { Result } from '@/types'
 import type { Scale, ScaleNote } from './types'
@@ -29,11 +28,18 @@ const regexKey = /^[a-gA-G][♭b#♯]?$/
  * @returns
  */
 export function createScale(rawKey: string, scaleName: string): Result<Scale> {
-  let scale = scales[scaleName as keyof typeof scales]
+  let scale = scales.get(scaleName)
   if (!scale) {
-    scale = Object.values(scales).find(
-      v => v.name.toLowerCase() === scaleName.toLowerCase()
-    ) as (typeof scales)[keyof typeof scales]
+    const name = scaleName.toLowerCase()
+    const found = Array.from(scales.entries()).find(
+      ([k, v]) =>
+        k.toLowerCase() === name ||
+        v.name.toLowerCase() === scaleName ||
+        v.synonyms?.find(n => n.toLowerCase() === scaleName)
+    )
+    if (found) {
+      scale = found[1]
+    }
   }
   if (!regexKey.test(rawKey)) {
     return { err: `Unknown key: ${rawKey}`, code: 400 }
@@ -97,7 +103,6 @@ export function createScale(rawKey: string, scaleName: string): Result<Scale> {
     }
     letters.push(letter)
   }
-  const intervals = createIntervals(scale.notes)
   let note: { note: string; order: number; black: boolean; sharp: boolean; flat: boolean }
   for (let next = 0; next < tones.length - 1; next += 1) {
     letter = letters[next + 1]
@@ -149,7 +154,7 @@ export function createScale(rawKey: string, scaleName: string): Result<Scale> {
       key,
       scale: scale.name,
       keySignature: 'C',
-      intervals,
+      intervals: scale.intervals,
       scaleNotes,
       notesMap
     }

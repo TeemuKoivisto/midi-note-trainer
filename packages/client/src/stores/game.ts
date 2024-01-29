@@ -1,19 +1,19 @@
 import { derived, get, writable } from 'svelte/store'
 import { chords, createScale } from '@/chords-and-scales'
 
-import { midiActions, midiRange, piano } from './inputs'
+import { midiActions, midiRange, midiRangeNotes, piano } from './inputs'
+import { persist } from './persist'
 import { scoreActions } from './score'
 
-import { GuessNotes } from '$utils/guess_notes'
-import { getNote } from '$utils/midi'
+import { getNote } from '$utils/getNote'
 import { GuessKeys } from '$utils/guess_keys'
-import { persist } from './persist'
 import { GuessChords } from '$utils/guess_chords'
+import { GuessNotes } from '$utils/guess_notes'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 
 export const guessState = writable<GuessState>('waiting')
-export const currentGame = writable<GuessNotes | GuessKeys | undefined>(undefined)
+export const currentGame = writable<GuessNotes | GuessKeys | GuessChords | undefined>(undefined)
 // scores?
 
 export const gameActions = {
@@ -43,14 +43,16 @@ export const gameActions = {
   },
   playGuessChords(count = 10) {
     const scale = createScale('C', 'major')
-    if ('data' in scale) {
-      const game = new GuessChords(scale.data, Array.from(chords.entries()), count)
+    const range = get(midiRangeNotes)
+    if ('err' in scale) {
+      return console.error(scale)
     }
-    // scoreActions.setKey(game.current)
+    const game = new GuessChords(scale.data, Array.from(chords.entries()), range, count)
     scoreActions.setTarget()
+    scoreActions.setKey(scale.data.key)
     scoreActions.clearPlayed()
     guessState.set('waiting')
-    // currentGame.set(game)
+    currentGame.set(game)
     // return game
   },
   updateState(state: GuessState) {
