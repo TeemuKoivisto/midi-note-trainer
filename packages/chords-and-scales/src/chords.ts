@@ -293,6 +293,17 @@ export const chords = new Map<string, Chord>([
     }
   ],
   [
+    '5',
+    {
+      name: 'Power Chord',
+      type: 'indeterminate',
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 }
+      ]
+    }
+  ],
+  [
     'dim',
     {
       name: 'Diminished Chord',
@@ -327,17 +338,6 @@ export const chords = new Map<string, Chord>([
         { str: '♭3', seq: 3, flats: 1, sharps: 0 },
         { str: '♭5', seq: 5, flats: 1, sharps: 0 },
         { str: '♭7', seq: 7, flats: 1, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    '5',
-    {
-      name: 'Power Chord',
-      type: 'indeterminate',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 }
       ]
     }
   ],

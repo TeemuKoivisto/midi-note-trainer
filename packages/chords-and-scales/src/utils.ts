@@ -27,3 +27,22 @@ export function parseIntervals(intervals: readonly string[]): Interval[] {
     return { str, seq: parseInteger(intervalStr), flats, sharps }
   })
 }
+
+const SEMI_TONES: Record<number, number> = {
+  1: 0,
+  2: 2,
+  3: 4,
+  4: 5,
+  5: 7,
+  6: 9,
+  7: 11
+}
+
+export function intervalToSemitones(interval: Interval) {
+  return (
+    (interval.seq < 8 ? SEMI_TONES[interval.seq] : SEMI_TONES[interval.seq % 7]) -
+    interval.flats +
+    interval.sharps +
+    Math.floor(interval.seq / 8) * 12
+  )
+}

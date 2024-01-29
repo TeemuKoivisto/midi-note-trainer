@@ -31,9 +31,11 @@ export function getNote(value: number): Note {
   // Center the note from C0 which equals 12 in MIDI values, then get the sequence after C
   // @TODO this might not be same in different MIDI devices -> should prob use frequency instead
   // https://en.wikipedia.org/wiki/C_(musical_note)#Middle_C
-  const note = NOTES[(semitonesFromC0 % 12) as keyof typeof NOTES]
+  const order = semitonesFromC0 % 12
+  const note = NOTES[order as keyof typeof NOTES]
   return {
     ...note,
+    order,
     octave,
     value,
     absolute: `${note.note}${octave}`,

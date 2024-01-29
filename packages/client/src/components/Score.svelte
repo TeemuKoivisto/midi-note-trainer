@@ -17,7 +17,7 @@
     guessed: GuessState
     scale: string
     key: string
-    target: Note | undefined
+    target: Note[]
     played: (Note & {
       started: number
     })[]
@@ -127,8 +127,8 @@
     }
     const s2 = new Stave(10, 60, 200).addClef('bass')
     const staveNotes = []
-    if (target) {
-      staveNotes.push(drawNotes([target], s1, s2))
+    if (target?.length > 0) {
+      staveNotes.push(drawNotes(target, s1, s2))
     }
     if (played.length > 0 && (!game || game instanceof GuessNotes)) {
       staveNotes.push(

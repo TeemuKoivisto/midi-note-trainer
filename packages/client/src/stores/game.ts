@@ -20,7 +20,7 @@ export const gameActions = {
   playGuessNotes(type: 'notes' | 'pitches', amount = 10) {
     const game = new GuessNotes(type, get(midiRange), amount)
     if (type === 'notes') {
-      scoreActions.setTarget(getNote(game.current))
+      scoreActions.setTarget([getNote(game.current)])
     } else if (type === 'pitches') {
       scoreActions.setTarget()
       midiActions.setInputValue('useSound', true)
@@ -48,7 +48,7 @@ export const gameActions = {
       return console.error(scale)
     }
     const game = new GuessChords(scale.data, Array.from(chords.entries()), range, count)
-    scoreActions.setTarget()
+    scoreActions.setTarget(game.currentNotes)
     scoreActions.setKey(scale.data.key)
     scoreActions.clearPlayed()
     guessState.set('waiting')

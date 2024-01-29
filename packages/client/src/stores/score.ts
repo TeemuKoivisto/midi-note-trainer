@@ -58,7 +58,7 @@ export const hotKeyMap = derived([scaleData, defaultKeyMap], ([scl, kmap]) => {
   })
   return map
 })
-export const target = writable<Note | undefined>(undefined)
+export const target = writable<Note[]>([])
 export const played = writable<(Note & { started: number })[]>([])
 
 function removePlayedNotes(
@@ -101,7 +101,7 @@ export const scoreActions = {
   // setScore(v: any[]) {
   //   score.set(v)
   // },
-  setTarget(val?: Note) {
+  setTarget(val: Note[] = []) {
     target.set(val)
   },
   pushPlayed(note: Note, timeoutMs?: number) {
@@ -122,7 +122,7 @@ export const scoreActions = {
   },
   clearScore() {
     key.set('C')
-    target.set(undefined)
+    target.set([])
     played.set([])
   }
 }

@@ -1,11 +1,12 @@
-import { chords, createChord } from '@/chords-and-scales'
+import { chords, createChord, intervalToSemitones } from '@/chords-and-scales'
 
-import type { Chord, Scale, ScaleNote } from '@/chords-and-scales'
+import type { Chord, MidiNote, Scale, ScaleNote } from '@/chords-and-scales'
 import type { Note } from '@/types'
+import { getNote } from './getNote'
 
 export class GuessChords {
   scale: Scale
-  chords: [string, ScaleNote[]][]
+  chords: [string, MidiNote[]][]
   times: number[] = []
   correct = 0
   latestGuess: { target: string; guessed: string } = { target: '', guessed: '' }
@@ -23,17 +24,28 @@ export class GuessChords {
         randomChords.push(val[0])
       }
     }
-    // const c = chords.find(([k, c]) => k === 'm7b5')
-    // if (c) {
-    //   createChord(0, scale, c[1])
-    // }
-    // this.chords = []
-    this.chords = randomChords.map(c => [c[0], createChord(0, scale, c[1])])
+    this.chords = chords
+      .map(c => {
+        const maxInterval = c[1].intervals[c[1].intervals.length - 1]
+        const maxSemitones = intervalToSemitones(maxInterval)
+        const availableRange: [number, number] = [range[0].value, range[1].value - maxSemitones]
+        const notes = Array.from(new Array(availableRange[1] - availableRange[0])).map(
+          (_, i) => [range[0].value + i, (range[0].order + i) % 12] as [number, number]
+        )
+        const availableNotes = notes.filter(v => scale.scaleNotes.find(note => note.order === v[1]))
+        const startingNoteInScale =
+          availableNotes[Math.floor(Math.random() * availableNotes.length)]
+        const scaleNote = scale.notesMap.get(startingNoteInScale[1]) as ScaleNote
+        return [c[0], createChord({ ...scaleNote, midi: startingNoteInScale[0] }, scale, c[1])]
+      })
     console.log('CHORDS', this.chords)
     this.timing = performance.now()
   }
   get current() {
     return this.chords[this.idx]
+  }
+  get currentNotes(): Note[] {
+    return this.current[1].map(n => ({ ...n, ...getNote(n.midi) }))
   }
   get ended() {
     return this.chords.length === this.idx + 1

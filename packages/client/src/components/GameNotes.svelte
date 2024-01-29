@@ -23,7 +23,7 @@
   {#if game.type === 'pitches' && $guessState === 'waiting'}
     <div><button class="btn primary" on:click={replay}>Replay</button></div>
   {:else if $guessState === 'correct' || $guessState === 'wrong'}
-    <div>Target: {$target?.absolute}</div>
+    <div>Target: {$target[0]?.absolute}</div>
     <div class="ml-8">Played: {getNote(game.guessed).absolute}</div>
   {:else if $guessState === 'ended'}
     <div>
