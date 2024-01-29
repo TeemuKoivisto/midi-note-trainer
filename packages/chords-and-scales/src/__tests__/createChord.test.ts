@@ -6,7 +6,7 @@ describe('createChord', () => {
   it('should generate chords from root of C major scale', () => {
     const correct = {
       maj: ['C', 'E', 'G'],
-      add6: ['C', 'E', 'G', 'A'],
+      '6': ['C', 'E', 'G', 'A'],
       '6/9': ['C', 'E', 'G', 'A', 'D'],
       maj7: ['C', 'E', 'G', 'B'],
       maj9: ['C', 'E', 'G', 'B', 'D'],
@@ -15,7 +15,6 @@ describe('createChord', () => {
       m: ['C', 'E♭', 'G'],
       m6: ['C', 'E♭', 'G', 'A'],
       m7: ['C', 'E♭', 'G', 'B♭'],
-      m7b5: ['C', 'E♭', 'G♭', 'B♭'],
       m9: ['C', 'E♭', 'G', 'B♭', 'D'],
       m11: ['C', 'E♭', 'G', 'B♭', 'D', 'F'],
       m13: ['C', 'E♭', 'G', 'B♭', 'D', 'F', 'A'],
@@ -23,11 +22,13 @@ describe('createChord', () => {
       sus4: ['C', 'F♭', 'G'],
       '7sus4': ['C', 'F', 'G', 'B♭'],
       '7': ['C', 'E', 'G', 'B♭'],
+      '7#9': ['C', 'E', 'G', 'B♭', 'D♯'],
       '9': ['C', 'E', 'G', 'B♭', 'D'],
       '11': ['C', 'E', 'G', 'B♭', 'D', 'F'],
       '13': ['C', 'E', 'G', 'B♭', 'D', 'F', 'A'],
       dim: ['C', 'E♭', 'G♭'],
-      dim7: ['C', 'E♭', 'G♭', 'B♭'],
+      dim7: ['C', 'E♭', 'G♭', 'B♭♭'],
+      m7b5: ['C', 'E♭', 'G♭', 'B♭'],
       '5': ['C', 'G'],
       aug: ['C', 'E', 'G♯'],
       aug7: ['C', 'E', 'G♯', 'B♭']

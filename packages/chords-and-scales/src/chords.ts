@@ -16,7 +16,7 @@ export const chords = new Map<string, Chord>([
     }
   ],
   [
-    'add6',
+    '6',
     {
       name: 'Major 6th Chord',
       type: 'major',
@@ -139,19 +139,6 @@ export const chords = new Map<string, Chord>([
     }
   ],
   [
-    'm7b5',
-    {
-      name: 'Minor 7th Flat Five Chord',
-      type: 'minor',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '♭5', seq: 5, flats: 1, sharps: 0 },
-        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
-      ]
-    }
-  ],
-  [
     'm9',
     {
       name: 'Minor 9th Chord',
@@ -247,6 +234,20 @@ export const chords = new Map<string, Chord>([
     }
   ],
   [
+    '7#9',
+    {
+      name: 'Dominant 7th Sharp 9th Chord',
+      type: 'major',
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '3', seq: 3, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '♭7', seq: 7, flats: 1, sharps: 0 },
+        { str: '♯9', seq: 9, flats: 0, sharps: 1 }
+      ]
+    }
+  ],
+  [
     '9',
     {
       name: 'Dominant 9th Chord',
@@ -307,6 +308,19 @@ export const chords = new Map<string, Chord>([
     'dim7',
     {
       name: 'Diminished 7th Chord',
+      type: 'diminished',
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
+        { str: '♭5', seq: 5, flats: 1, sharps: 0 },
+        { str: '♭♭7', seq: 7, flats: 2, sharps: 0 }
+      ]
+    }
+  ],
+  [
+    'm7b5',
+    {
+      name: 'Half-Diminished 7th Chord',
       type: 'diminished',
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
