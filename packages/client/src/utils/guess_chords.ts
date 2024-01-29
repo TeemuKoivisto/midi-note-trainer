@@ -24,7 +24,7 @@ export class GuessChords {
         randomChords.push(val[0])
       }
     }
-    this.chords = chords.map(c => {
+    this.chords = randomChords.map(c => {
       const maxInterval = c[1].intervals[c[1].intervals.length - 1]
       const maxSemitones = intervalToSemitones(maxInterval)
       const availableRange: [number, number] = [range[0].value, range[1].value - maxSemitones]

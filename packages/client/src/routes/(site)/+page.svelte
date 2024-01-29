@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
 
   import Chords from '$components/Chords.svelte'
+  import GameChords from '$components/GameChords.svelte'
   import GameKeys from '$components/GameKeys.svelte'
   import GameNotes from '$components/GameNotes.svelte'
   import InputSettings from '$components/InputSettings.svelte'
@@ -18,6 +19,7 @@
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessNotes } from '$utils/guess_notes'
   import { GuessKeys } from '$utils/guess_keys'
+  import { GuessChords } from '$utils/guess_chords'
 
   let status = 'Finding device...'
 
@@ -71,6 +73,21 @@
     if ($piano) {
       $piano.noteOn(value, velocity)
     }
+  }
+  function handleGuessedChord(e: CustomEvent<string>) {
+    const game = $currentGame
+    if (!(game instanceof GuessChords)) return
+    const correct = game.guess(e.detail)
+    gameActions.updateState(correct ? 'correct' : 'wrong')
+    timeout = setTimeout(() => {
+      if (game.ended) {
+        gameActions.updateState('ended')
+      } else {
+        scoreActions.setTarget(game.currentNotes)
+        gameActions.updateState('waiting')
+      }
+      timeout = undefined
+    }, 2000)
   }
   function handleGuessedKey(e: CustomEvent<string>) {
     const game = $currentGame
@@ -128,6 +145,8 @@
     <GameKeys game={$currentGame} />
   {:else if $currentGame instanceof GuessNotes}
     <GameNotes class="min-h-32" game={$currentGame} />
+  {:else if $currentGame instanceof GuessChords}
+    <GameChords class="min-h-32" game={$currentGame} />
   {:else if $played.length > 0}
     <div class="min-h-32">Played: {$played[0].absolute}</div>
   {:else}
@@ -136,6 +155,7 @@
   <KeyboardInput
     class="min-h-32"
     debounced={!!timeout}
+    on:guessed-chord={handleGuessedChord}
     on:guessed-key={handleGuessedKey}
     on:note={handleNote}
   />

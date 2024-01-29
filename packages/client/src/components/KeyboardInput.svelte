@@ -7,27 +7,43 @@
   import { parseNote } from '$utils/getNote'
 
   import { GuessKeys } from '$utils/guess_keys'
+  import { GuessChords } from '$utils/guess_chords'
 
   export let debounced: boolean
 
-  const dispatch = createEventDispatcher<{ 'guessed-key': string; note: number }>()
+  const dispatch = createEventDispatcher<{
+    'guessed-key': string
+    'guessed-chord': any
+    note: number
+  }>()
 
   const regexPosInt = /^[0-9]$/
   let keyboardError = ''
   let keyboardInput = ''
 
   function handleKeyDown(e: KeyboardEvent) {
+    if (debounced) return
     const game = $currentGame
-    if (game instanceof GuessKeys && !debounced) {
+    if (game instanceof GuessKeys) {
       const pressed = e.key.toUpperCase()
       const keymap = $hotKeyMap
       if (keyboardInput.length === 0 && pressed in keymap) {
         const value = keymap[pressed as keyof typeof keymap].defaultNote
         dispatch('guessed-key', value)
-      } else if (e.key === 'Backspace' && keyboardInput.length > 0) {
+        keyboardInput = ''
+      } else if (e.key === 'Backspace') {
         keyboardInput = keyboardInput.slice(0, -1)
       }
-    } else if ($inputs.useKeyboard && !debounced) {
+    } else if (game instanceof GuessChords) {
+      if (e.key === 'Enter' && keyboardInput.length > 0) {
+        dispatch('guessed-chord', keyboardInput)
+        keyboardInput = ''
+      } else if (e.key === 'Backspace') {
+        keyboardInput = keyboardInput.slice(0, -1)
+      } else if (e.key.length === 1) {
+        keyboardInput += e.key
+      }
+    } else if ($inputs.useKeyboard) {
       const pressed = e.key.toUpperCase()
       const keymap = $hotKeyMap
       let octave
@@ -48,7 +64,7 @@
           keyboardError = `Error: ${note.err}`
         }
         keyboardInput = ''
-      } else if (e.key === 'Backspace' && keyboardInput.length > 0) {
+      } else if (e.key === 'Backspace') {
         keyboardInput = keyboardInput.slice(0, -1)
       }
     }
