@@ -47,7 +47,7 @@
   function handlePlayedNote(value: number, velocity: number) {
     const game = $currentGame
     if (game instanceof GuessNotes) {
-      scoreActions.setTarget(getNote(game.current))
+      scoreActions.setTarget([getNote(game.current)])
       const correct = game.guess(value)
       gameActions.updateState(correct ? 'correct' : 'wrong')
       scoreActions.pushPlayed(getNote(value), 2000)
@@ -59,7 +59,7 @@
           gameActions.updateState('waiting')
           game.startTime()
           if (game.type === 'notes') {
-            scoreActions.setTarget(getNote(game.current))
+            scoreActions.setTarget([getNote(game.current)])
             $piano?.noteOn(game.current, 80)
           } else {
             scoreActions.setTarget()
