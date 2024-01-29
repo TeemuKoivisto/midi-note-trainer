@@ -1,54 +1,8 @@
 import { scales } from './scales'
+import { createIntervals } from './utils'
 
 import type { Result } from '@/types'
-
-export interface Interval {
-  seq: number
-  flats: number
-  sharps: number
-}
-export interface ScaleNote {
-  note: string
-  order: number
-  flats: number
-  sharps: number
-}
-export interface Scale {
-  key: string // eg C
-  scale: string // eg major
-  keySignature: string // using standard diatonic accidentals
-  intervals: Interval[]
-  scaleNotes: ScaleNote[]
-  notesMap: Map<number, ScaleNote> // all 12 semitones of octave
-}
-
-const regexPosInt = /^[0-9]$/
-
-function parseInteger(str: string) {
-  try {
-    return parseInt(str)
-  } catch (err: any) {
-    return 0
-  }
-}
-
-export function createIntervals(intervals: readonly string[]): Interval[] {
-  return intervals.map(str => {
-    let intervalStr = ''
-    let flats = 0
-    let sharps = 0
-    for (let j = 0; j < str.length; j += 1) {
-      if (str[j] === 'b' || str[j] === '♭') {
-        flats += 1
-      } else if (str[j] === '#' || str[j] === '♯' || str[j] === 's') {
-        sharps += 1
-      } else if (regexPosInt.test(str[j])) {
-        intervalStr += str[j]
-      }
-    }
-    return { seq: parseInteger(intervalStr), flats, sharps }
-  })
-}
+import type { Scale, ScaleNote } from './types'
 
 const NOTES = [
   { note: 'C', order: 0, black: false, sharp: false, flat: false },

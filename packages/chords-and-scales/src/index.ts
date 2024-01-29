@@ -1,4 +1,5 @@
-export { chords, type Chord, type ChordType } from './chords'
+export { chords } from './chords'
 export { createChord } from './createChord'
-export { createScale, type Interval, type Scale, type ScaleNote } from './createScale'
+export { createScale } from './createScale'
 export { scales } from './scales'
+export * from './types'

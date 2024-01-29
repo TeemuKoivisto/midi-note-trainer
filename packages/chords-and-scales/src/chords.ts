@@ -1,21 +1,5 @@
-export type ChordType =
-  | 'major'
-  | 'minor'
-  | 'augmented'
-  | 'diminished'
-  | 'indeterminate'
-  | 'predominant'
-  | 'suspended'
-  | 'M3+d5'
-  | 'just'
-  | 'bitonal'
-  | 'atonal'
+import type { Chord } from './types'
 
-export interface Chord {
-  name: string
-  notes: string[]
-  type: ChordType
-}
 // https://en.wikipedia.org/wiki/List_of_chords
 // https://en.wikibooks.org/wiki/Music_Theory/Complete_List_of_Chord_Patterns
 export const chords = new Map<string, Chord>([
