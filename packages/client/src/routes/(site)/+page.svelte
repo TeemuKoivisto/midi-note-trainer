@@ -10,7 +10,7 @@
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
-  import { inputs, midiActions, midiInput, piano } from '$stores/inputs'
+  import { inputs, midiActions, midiInput, midiRangeNotes, piano } from '$stores/inputs'
   import { hotKeyMap, played, scoreActions } from '$stores/score'
   import { getNote, parseNote } from '$utils/getNote'
 
@@ -105,12 +105,18 @@
     } else if ($inputs.useKeyboard && !timeout) {
       const pressed = e.key.toUpperCase()
       const keymap = $hotKeyMap
+      let octave
       if (keyboardInput.length === 0 && pressed in keymap) {
-        keyboardInput = keymap[pressed as keyof typeof keymap].defaultNote
+        const key = keymap[pressed as keyof typeof keymap]
+        keyboardInput = key.defaultNote
         keyboardError = ''
-      } else if (keyboardInput.length > 0 && regexPosInt.test(pressed)) {
+        if ($inputs.useAutoOctave) {
+          octave = $midiRangeNotes[0].octave + Math.floor(key.order / 12)
+        }
+      }
+      if ((keyboardInput.length > 0 && regexPosInt.test(pressed)) || octave !== undefined) {
         // Octave pressed
-        const note = parseNote(keyboardInput + pressed)
+        const note = parseNote(keyboardInput + octave ?? pressed)
         if ('data' in note) {
           handlePlayedNote(note.data, 120)
         } else {
