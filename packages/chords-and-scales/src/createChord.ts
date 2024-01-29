@@ -2,13 +2,15 @@ import { createIntervals } from './utils'
 
 import type { Chord, Scale, ScaleNote } from './types'
 
-export function createChord(rootIndex: number, scale: Scale, chord: Chord) {
-  const rootNote = scale.notesMap.get(rootIndex)
+export function createChord(noteIndex: number, scale: Scale, chord: Chord) {
+  const rootNote = scale.notesMap.get(noteIndex)
   const chordNotes: ScaleNote[] = []
-  const intervals = createIntervals(chord.notes)
-  for (let i = 0; i < intervals.length; i += 1) {
-    const interval = intervals[i]
-    const intervalIdx = scale.intervals.findIndex(x => x.seq === interval.seq)
+  const chordIntervals = createIntervals(chord.notes)
+  for (let i = 0; i < chordIntervals.length; i += 1) {
+    const interval = chordIntervals[i]
+    const intervalIdx = scale.intervals.findIndex(x =>
+      interval.seq < 8 ? x.seq === interval.seq : x.seq === interval.seq % 7
+    )
     if (intervalIdx >= 0) {
       const scaleInterval = scale.intervals[intervalIdx]
       const note = { ...scale.scaleNotes[intervalIdx] }
@@ -16,14 +18,12 @@ export function createChord(rootIndex: number, scale: Scale, chord: Chord) {
         chordNotes.push(note)
       } else {
         // debugger
-        note.flats -= interval.sharps
-        note.sharps -= interval.flats
-        note.flats = scaleInterval.sharps < 0 ? scaleInterval.sharps * -1 : 0
-        note.sharps = scaleInterval.flats < 0 ? scaleInterval.flats * -1 : 0
-        console.log('note ', scaleInterval)
-        note.note = `${'♭'.repeat(scaleInterval.flats)}${'♯'.repeat(scaleInterval.sharps)}${
-          note.note
-        }`
+        const flats = note.flats - interval.sharps
+        const sharps = note.sharps - interval.flats
+        note.flats = sharps < 0 ? sharps * -1 : 0
+        note.sharps = flats < 0 ? flats * -1 : 0
+        // console.log('note ', scaleInterval)
+        note.note = `${note.note}${'♭'.repeat(note.flats)}${'♯'.repeat(note.sharps)}`
         chordNotes.push(note)
       }
     } else {

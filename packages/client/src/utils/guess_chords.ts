@@ -22,6 +22,11 @@ export class GuessChords {
         randomChords.push(val[0])
       }
     }
+    // const c = chords.find(([k, c]) => k === 'm7b5')
+    // if (c) {
+    //   createChord(0, scale, c[1])
+    // }
+    // this.chords = []
     this.chords = randomChords.map(c => [c[0], createChord(0, scale, c[1])])
     console.log('CHORDS', this.chords)
     this.timing = performance.now()

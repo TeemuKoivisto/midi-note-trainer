@@ -3,7 +3,7 @@ import { createChord } from '../createChord'
 import { createScale } from '../createScale'
 
 describe('createChord', () => {
-  it('should generate standard chords from C major scale', () => {
+  it('should generate chords from root of C major scale', () => {
     const correct = {
       maj: ['C', 'E', 'G'],
       add6: ['C', 'E', 'G', 'A'],
@@ -15,7 +15,7 @@ describe('createChord', () => {
       m: ['C', 'E♭', 'G'],
       m6: ['C', 'E♭', 'G', 'A'],
       m7: ['C', 'E♭', 'G', 'B♭'],
-      m7b5: ['C', 'E♭', '♭G', 'B♭'],
+      m7b5: ['C', 'E♭', 'G♭', 'B♭'],
       m9: ['C', 'E♭', 'G', 'B♭', 'D'],
       m11: ['C', 'E♭', 'G', 'B♭', 'D', 'F'],
       m13: ['C', 'E♭', 'G', 'B♭', 'D', 'F', 'A'],
