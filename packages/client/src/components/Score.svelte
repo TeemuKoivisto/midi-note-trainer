@@ -49,12 +49,12 @@
 
   function init() {
     renderer = new Renderer(outputEl, Renderer.Backends.SVG)
-    renderer.resize(732, 340)
+    renderer.resize(732, 360)
     ctx = renderer.getContext()
     ctx.scale(2.0, 2.0)
     // console.log('ctx', ctx)
     tickContext = new Vex.Flow.TickContext()
-    const s1 = new Stave(10, 0, 200)
+    const s1 = new Stave(0, 0, 200)
     s1.addClef('treble') //.addTimeSignature('4/4')
     const notes = [
       new StaveNote({ keys: ['c#/4'], duration: 'q' }),
@@ -69,7 +69,7 @@
     voice.draw(ctx, s1)
     // console.log(notes[1].getStave())
     // Vex.Flow.Formatter.FormatAndDraw(context, s1, notes)
-    const s2 = new Stave(10, 60, 200)
+    const s2 = new Stave(0, 60, 200)
     s2.addClef('bass')
     s1.setContext(ctx).draw()
     s2.setContext(ctx).draw()
@@ -121,11 +121,11 @@
     const key = keyRaw.replaceAll('♭', 'b').replaceAll('♯', '#')
     ctx.clear()
     ctx.scale(0.5, 0.5)
-    const s1 = new Stave(10, 0, 200).addClef('treble')
+    const s1 = new Stave(0, 0, 200).addClef('treble')
     if (key in keys.major || key in keys.minor) {
       s1.addKeySignature(key)
     }
-    const s2 = new Stave(10, 60, 200).addClef('bass')
+    const s2 = new Stave(0, 60, 200).addClef('bass')
     const staveNotes = []
     if (target?.length > 0) {
       staveNotes.push(drawNotes(target, s1, s2))
