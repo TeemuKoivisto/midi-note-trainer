@@ -66,13 +66,16 @@ export const inputsActions = {
     inputs.update(v => ({ ...v, [key]: val }))
     if (key === 'useSound' && !val) {
       piano.set(undefined)
-    } else if (key === 'useSound' && get(piano)) {
+    } else if (key === 'useSound' && !get(piano)) {
       this.initAudio()
     }
   },
   initAudio() {
-    const ctx = get(audioContext) ?? new AudioContext()
-    audioContext.set(ctx)
+    let ctx = get(audioContext)
+    if (!ctx) {
+      ctx = new AudioContext()
+      audioContext.set(ctx)
+    }
     if (!get(piano)) {
       const p = new Piano(ctx)
       p.load()

@@ -144,9 +144,10 @@
   }
 </script>
 
-<section class={`${$$props.class || ''} relative`}>
-  <ReplayButton />
-  <div id="output" bind:this={outputEl}></div>
+<section class={`${$$props.class || ''}`}>
+  <div class="relative" id="output" bind:this={outputEl}>
+    <ReplayButton />
+  </div>
 </section>
 
 <style lang="scss">
