@@ -96,7 +96,7 @@
             bind:value={rangeMin}
             on:change={e => handleRangeChanged('min', e)}
           />
-          <span class="mx-4">—</span>
+          <span class="mx-2">—</span>
           <input
             class="w-full"
             id="range_max"
@@ -104,11 +104,12 @@
             on:change={e => handleRangeChanged('max', e)}
           />
         </div>
-        <div>
+        <div class="flex justify-between">
           {#if rangeError}
             <div class="error">{rangeError}</div>
           {/if}
-          <button class="btn primary" on:click={handleSetRange}>Use MIDI</button>
+          <button class="btn-sm primary" on:click={handleSetRange}>Set left</button>
+          <button class="btn-sm primary" on:click={handleSetRange}>Set right</button>
         </div>
       </div>
       <div class="flex flex-col h-full">

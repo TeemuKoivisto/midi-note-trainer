@@ -9,6 +9,7 @@
   import KeyboardInput from '$components/KeyboardInput.svelte'
   import Options from '$components/Options.svelte'
   import PlayForm from '$components/PlayForm.svelte'
+  import Scales from '$components/Scales.svelte'
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
@@ -135,6 +136,7 @@
 <section class="px-4 md:px-0">
   <IOSettings />
   <Options />
+  <Scales />
   <Chords />
   <PlayForm />
   <div id="output"></div>
