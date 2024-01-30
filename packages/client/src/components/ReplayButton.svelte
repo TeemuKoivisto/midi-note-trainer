@@ -1,6 +1,5 @@
 <script lang="ts">
   import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
-  // import volume from '@iconify-icons/feather/volume'
   import volume from '@iconify-icons/mdi/volume-high'
 
   import { currentGame } from '$stores/game'
@@ -29,8 +28,8 @@
 
 <style lang="scss">
   .wrapper {
-    left: -3rem;
-    top: 18rem;
+    left: 0;
+    top: 18.5rem;
     @apply absolute;
   }
 </style>
