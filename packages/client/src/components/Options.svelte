@@ -81,85 +81,80 @@
   }
 </script>
 
-<div class={`${$$props.class || ''}`}>
-  <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm" class:collapsed={$hidden}>
-    <legend class="px-2 text-0A text-base">
-      <button class="hover:bg-gray-100" on:click={toggleVisibility}>Options</button>
-    </legend>
-    <div class="body" class:hidden={$hidden}>
-      <div class="flex flex-col">
-        <label class="font-bold" for="range_min">Range</label>
-        <div class="my-1 flex w-full">
-          <input
-            class="w-full"
-            id="range_min"
-            bind:value={rangeMin}
-            on:change={e => handleRangeChanged('min', e)}
-          />
-          <span class="mx-2">—</span>
-          <input
-            class="w-full"
-            id="range_max"
-            bind:value={rangeMax}
-            on:change={e => handleRangeChanged('max', e)}
-          />
-        </div>
-        <div class="flex justify-between">
-          {#if rangeError}
-            <div class="error">{rangeError}</div>
-          {/if}
-          <button class="btn-sm primary" on:click={handleSetRange}>Set left</button>
-          <button class="btn-sm primary" on:click={handleSetRange}>Set right</button>
-        </div>
-      </div>
-      <div class="flex flex-col h-full">
-        <label class="font-bold" for="scales">Scales</label>
-        <div class="my-1 w-full">
-          <MultiSelectDropdown
-            id="scales"
-            class="p-1"
-            options={scaleOptions}
-            onSelect={handleSelectScale}
-          >
-            <div slot="value">{selectedScale}</div>
-          </MultiSelectDropdown>
-        </div>
-        {#if !$currentGame}
-          <div class="intervals my-1">
-            {#each selectedScaleNotes as interval}
-              <span>{interval.str}</span>
-            {/each}
-          </div>
-        {/if}
-      </div>
-      <div class="flex flex-col h-full">
-        <label class="font-bold" for="key">Key</label>
-        <div class="my-1 flex">
-          <input
-            class="h-[28px]"
-            id="key"
-            bind:value={selectedKey}
-            on:input={handleKeyChange}
-            on:blur={handleKeyBlur}
-          />
-        </div>
-        {#if !$currentGame}
-          <div class="intervals my-1">
-            {#each $scaleData.scaleNotes as note}
-              <span>{note.note}</span>
-            {/each}
-          </div>
-        {/if}
-      </div>
+<div class={`${$$props.class || ''} options`}>
+  <div class="flex flex-col h-full">
+    <label class="font-bold" for="range_min">Range</label>
+    <div class="my-1 flex w-full">
+      <input
+        class="h-[28px] w-full"
+        id="range_min"
+        bind:value={rangeMin}
+        on:change={e => handleRangeChanged('min', e)}
+      />
+      <span class="mx-2 mt-1">—</span>
+      <input
+        class="h-[28px] w-full"
+        id="range_max"
+        bind:value={rangeMax}
+        on:change={e => handleRangeChanged('max', e)}
+      />
     </div>
-  </fieldset>
+    <div class="flex justify-between h-[20px] my-1">
+      {#if rangeError}
+        <div class="error">{rangeError}</div>
+      {/if}
+      &nbsp;
+      <!-- <button class="btn-sm primary" on:click={handleSetRange}>Set left</button>
+      <button class="btn-sm primary" on:click={handleSetRange}>Set right</button> -->
+    </div>
+  </div>
+  <div class="flex flex-col h-full">
+    <label class="font-bold" for="scales">Scale</label>
+    <div class="my-1 w-full">
+      <MultiSelectDropdown
+        id="scales"
+        class="p-1"
+        options={scaleOptions}
+        onSelect={handleSelectScale}
+      >
+        <div slot="value">{selectedScale}</div>
+      </MultiSelectDropdown>
+    </div>
+    {#if !$currentGame}
+      <div class="intervals my-1">
+        {#each selectedScaleNotes as interval}
+          <span>{interval.str}</span>
+        {/each}
+      </div>
+    {/if}
+  </div>
+  <div class="flex flex-col h-full">
+    <label class="font-bold" for="key">Key</label>
+    <div class="my-1 flex">
+      <input
+        class="h-[28px]"
+        id="key"
+        bind:value={selectedKey}
+        on:input={handleKeyChange}
+        on:blur={handleKeyBlur}
+      />
+    </div>
+    {#if !$currentGame}
+      <div class="intervals my-1">
+        {#each $scaleData.scaleNotes as note}
+          <span>{note.note}</span>
+        {/each}
+      </div>
+    {/if}
+  </div>
+  <div></div>
 </div>
 
 <style lang="scss">
   .collapsed {
     @apply py-0.5;
   }
-  .body {
+  .options {
     display: grid;
     gap: 0.5rem;
     grid-template-columns: 1fr 1fr 1fr 1fr;

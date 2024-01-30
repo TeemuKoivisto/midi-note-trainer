@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Options from '$components/Options.svelte'
+
   import { gameActions } from '$stores/game'
 
   function clearGame() {
@@ -12,7 +14,8 @@
 <div class={`${$$props.class || ''}`}>
   <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm">
     <legend class="px-2 text-0A text-base">Play</legend>
-    <div class="body">
+    <Options class="border-b-2 pb-4" />
+    <div class="body pt-6">
       <button class="btn primary" on:click={() => gameActions.playGuessNotes('notes')}
         >Guess 10 Notes</button
       >

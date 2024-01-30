@@ -7,7 +7,6 @@
   import GameNotes from '$components/GameNotes.svelte'
   import IOSettings from '$components/IOSettings.svelte'
   import KeyboardInput from '$components/KeyboardInput.svelte'
-  import Options from '$components/Options.svelte'
   import PlayForm from '$components/PlayForm.svelte'
   import Scales from '$components/Scales.svelte'
   import Score from '$components/Score.svelte'
@@ -135,7 +134,6 @@
 
 <section class="px-4 md:px-0">
   <IOSettings />
-  <Options />
   <Scales />
   <Chords />
   <PlayForm />
