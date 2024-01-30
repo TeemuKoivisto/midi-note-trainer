@@ -4,6 +4,9 @@
   function clearGame() {
     gameActions.clearGame()
   }
+  function playChords() {
+    gameActions.playGuessChords()
+  }
 </script>
 
 <div class={`${$$props.class || ''}`}>
@@ -22,9 +25,7 @@
       <button class="btn primary" on:click={() => gameActions.playGuessKeys('minor')}
         >Guess Minor Keys</button
       >
-      <button class="btn primary" on:click={() => gameActions.playGuessChords()}
-        >Guess Chords</button
-      >
+      <button class="btn primary" on:click={playChords}>Guess Chords</button>
       <div></div>
       <div></div>
       <div></div>

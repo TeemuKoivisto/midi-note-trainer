@@ -13,7 +13,7 @@
 
   const dispatch = createEventDispatcher<{
     'guessed-key': string
-    'guessed-chord': any
+    'guessed-chord': { note: string; flats: number; sharps: number; chord: string }
     note: number
   }>()
 
@@ -36,12 +36,29 @@
       }
     } else if (game instanceof GuessChords) {
       if (e.key === 'Enter' && keyboardInput.length > 0) {
-        dispatch('guessed-chord', keyboardInput)
+        let value = { note: '', flats: 0, sharps: 0, chord: '' }
+        for (let i = 0; i < keyboardInput.length; i += 1) {
+          if (i === 0) {
+            value.note += keyboardInput[i]
+          } else if (value.chord.length > 0) {
+            value.chord += keyboardInput[i]
+          } else if (keyboardInput[i] === 'b' || keyboardInput[i] === '♭') {
+            value.flats += 1
+          } else if (keyboardInput[i] === '#' || keyboardInput[i] === '♯') {
+            value.sharps += 1
+          } else {
+            value.chord += keyboardInput[i]
+          }
+        }
+        dispatch('guessed-chord', value)
         keyboardInput = ''
       } else if (e.key === 'Backspace') {
         keyboardInput = keyboardInput.slice(0, -1)
       } else if (e.key.length === 1) {
         keyboardInput += e.key
+        if (keyboardInput.length === 1) {
+          keyboardInput = keyboardInput.toUpperCase()
+        }
       }
     } else if ($inputs.useKeyboard) {
       const pressed = e.key.toUpperCase()

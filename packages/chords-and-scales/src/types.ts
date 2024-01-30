@@ -16,6 +16,11 @@ export interface Chord {
   intervals: Interval[]
   type: ChordType
 }
+export type MidiChord = Chord & {
+  note: string
+  short: string
+  notes: MidiNote[]
+}
 export interface Interval {
   str: string
   seq: number

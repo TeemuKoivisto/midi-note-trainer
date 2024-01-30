@@ -1,12 +1,12 @@
-import { chords, createChord, intervalToSemitones } from '@/chords-and-scales'
+import { chords, createChord, intervalToSemitones, noteIntoString } from '@/chords-and-scales'
 
-import type { Chord, MidiNote, Scale, ScaleNote } from '@/chords-and-scales'
+import type { Chord, MidiChord, Scale, ScaleNote } from '@/chords-and-scales'
 import type { Note } from '@/types'
 import { getNote } from './getNote'
 
 export class GuessChords {
   scale: Scale
-  chords: [string, MidiNote[]][]
+  chords: MidiChord[]
   times: number[] = []
   correct = 0
   latestGuess: { target: string; guessed: string } = { target: '', guessed: '' }
@@ -34,7 +34,12 @@ export class GuessChords {
       const availableNotes = notes.filter(v => scale.scaleNotes.find(note => note.order === v[1]))
       const startingNoteInScale = availableNotes[Math.floor(Math.random() * availableNotes.length)]
       const scaleNote = scale.notesMap.get(startingNoteInScale[1]) as ScaleNote
-      return [c[0], createChord({ ...scaleNote, midi: startingNoteInScale[0] }, scale, c[1])]
+      return {
+        ...c[1],
+        short: c[0],
+        note: scaleNote.note,
+        notes: createChord({ ...scaleNote, midi: startingNoteInScale[0] }, scale, c[1])
+      }
     })
     console.log('CHORDS', this.chords)
     this.timing = performance.now()
@@ -43,7 +48,7 @@ export class GuessChords {
     return this.chords[this.idx]
   }
   get currentNotes(): Note[] {
-    return this.current[1].map(n => ({ ...n, ...getNote(n.midi) }))
+    return this.current.notes.map(n => getNote(n.midi))
   }
   get ended() {
     return this.chords.length === this.idx + 1
@@ -55,12 +60,14 @@ export class GuessChords {
     }
     return Math.round(avgMs / 10 / this.times.length) / 100
   }
-  guess(key: string) {
-    const result = this.current[0] === key
+  guess(value: { note: string; flats: number; sharps: number; chord: string }) {
+    const target = `${this.current.note}${this.current.short}`
+    const guessed = `${noteIntoString(value)}${value.chord.toLowerCase()}`
+    const result = target === guessed
     if (result) {
       this.correct += 1
     }
-    this.latestGuess = { target: this.current[0], guessed: key }
+    this.latestGuess = { target, guessed }
     this.idx += 1
     this.times.push(performance.now() - this.timing)
     return result

@@ -28,6 +28,12 @@ export function parseIntervals(intervals: readonly string[]): Interval[] {
   })
 }
 
+export function noteIntoString(val: { note: string; flats: number; sharps: number }) {
+  return `${val.note.trim().charAt(0).toUpperCase()}${'♭'.repeat(val.flats)}${'♯'.repeat(
+    val.sharps
+  )}`
+}
+
 const SEMI_TONES: Record<number, number> = {
   1: 0,
   2: 2,

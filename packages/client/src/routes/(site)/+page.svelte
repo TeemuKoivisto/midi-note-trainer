@@ -87,7 +87,9 @@
     }
     timeout = undefined
   }
-  function handleGuessedChord(e: CustomEvent<string>) {
+  function handleGuessedChord(
+    e: CustomEvent<{ note: string; flats: number; sharps: number; chord: string }>
+  ) {
     const game = $currentGame
     if (!(game instanceof GuessChords)) return
     const correct = game.guess(e.detail)

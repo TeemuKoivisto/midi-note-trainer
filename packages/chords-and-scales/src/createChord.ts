@@ -1,6 +1,6 @@
 import { intervalToSemitones } from './utils'
 
-import type { Chord, MidiNote, Scale } from './types'
+import type { Chord, MidiChord, MidiNote, Scale } from './types'
 
 export function createChord(startingNote: MidiNote, scale: Scale, chord: Chord) {
   const chordNotes: MidiNote[] = []
