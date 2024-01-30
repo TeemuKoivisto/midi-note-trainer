@@ -1,7 +1,7 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
 
-  import { midiActions, midiInput, inputs } from '$stores/inputs'
+  import { inputsActions, midiInput, inputs } from '$stores/inputs'
   import { persist } from '$stores/persist'
   import { fadeTimeout, scoreActions } from '$stores/score'
 
@@ -36,8 +36,8 @@
         <label class="font-bold" for="device">Device</label>
         <input class="my-1 w-50" id="device" disabled value={$midiInput?.name ?? 'No device'} />
         <div class="flex my-[auto]">
-          <button class="btn-sm primary mr-2" on:click={midiActions.openMidi}>Prompt</button>
-          <button class="btn-sm primary" on:click={midiActions.disableMidi}>Disable</button>
+          <button class="btn-sm primary mr-2" on:click={inputsActions.openMidi}>Prompt</button>
+          <button class="btn-sm primary" on:click={inputsActions.disableMidi}>Disable</button>
         </div>
       </div>
       <div class="flex flex-col h-full">
@@ -48,7 +48,7 @@
             id="sound"
             type="checkbox"
             checked={$inputs.useSound}
-            on:change={e => midiActions.setInputValue('useSound', e.currentTarget.checked)}
+            on:change={e => inputsActions.setInputValue('useSound', e.currentTarget.checked)}
           />
         </div>
       </div>
@@ -60,7 +60,7 @@
             id="keyboard"
             type="checkbox"
             checked={$inputs.useKeyboard}
-            on:change={e => midiActions.setInputValue('useKeyboard', e.currentTarget.checked)}
+            on:change={e => inputsActions.setInputValue('useKeyboard', e.currentTarget.checked)}
           />
         </div>
         <div class="my-1 flex justify-between mr-12">
@@ -70,7 +70,7 @@
             id="hotkeys"
             type="checkbox"
             checked={$inputs.useHotkeys}
-            on:change={e => midiActions.setInputValue('useHotkeys', e.currentTarget.checked)}
+            on:change={e => inputsActions.setInputValue('useHotkeys', e.currentTarget.checked)}
           />
         </div>
         <div class="my-1 flex justify-between mr-12">
@@ -80,7 +80,7 @@
             id="auto-octave"
             type="checkbox"
             checked={$inputs.useAutoOctave}
-            on:change={e => midiActions.setInputValue('useAutoOctave', e.currentTarget.checked)}
+            on:change={e => inputsActions.setInputValue('useAutoOctave', e.currentTarget.checked)}
           />
         </div>
       </div>

@@ -1,16 +1,12 @@
 <script lang="ts">
   import { gameActions, guessState } from '$stores/game'
-  import { played, target } from '$stores/score'
-  import { piano } from '$stores/inputs'
+  import { target } from '$stores/score'
 
   import type { GuessNotes } from '$utils/guess_notes'
   import { getNote } from '$utils/getNote'
 
   export let game: GuessNotes
 
-  function replay() {
-    $piano?.noteOn(game.current, 80)
-  }
   function tryAgain() {
     gameActions.playGuessNotes(game.type)
   }
@@ -20,9 +16,7 @@
 </script>
 
 <div class={`${$$props.class || ''} flex`}>
-  {#if game.type === 'pitches' && $guessState === 'waiting'}
-    <div><button class="btn primary" on:click={replay}>Replay</button></div>
-  {:else if $guessState === 'correct' || $guessState === 'wrong'}
+  {#if $guessState === 'correct' || $guessState === 'wrong'}
     <div>Target: {$target[0]?.absolute}</div>
     <div class="ml-8">Played: {getNote(game.guessed).absolute}</div>
   {:else if $guessState === 'ended'}

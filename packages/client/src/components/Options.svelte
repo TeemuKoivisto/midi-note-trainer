@@ -3,7 +3,7 @@
   import { scales } from '@/chords-and-scales'
 
   import { currentGame } from '$stores/game'
-  import { midiActions, midiInput, midiRange } from '$stores/inputs'
+  import { inputsActions, midiInput, midiRange } from '$stores/inputs'
   import { persist } from '$stores/persist'
   import { key, scale, scaleData, scoreActions } from '$stores/score'
   import { keys } from '$utils/guess_keys'
@@ -43,7 +43,7 @@
         rang === 'min' ? parsed.data : old[0],
         rang === 'max' ? parsed.data : old[1]
       ] as [number, number]
-      midiActions.setMidiRange(range)
+      inputsActions.setMidiRange(range)
       rangeError = ''
     } else {
       rangeError = parsed.err

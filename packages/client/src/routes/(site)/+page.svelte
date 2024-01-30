@@ -12,7 +12,7 @@
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
-  import { midiActions, midiGranted, midiInput, piano } from '$stores/inputs'
+  import { audioContext, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
   import { played, scoreActions } from '$stores/score'
   import { getNote } from '$utils/getNote'
 
@@ -29,6 +29,14 @@
     if ($midiGranted) {
       handlePromptMIDI()
     }
+    window.addEventListener('keydown', initAudio)
+    window.addEventListener('mousedown', initAudio)
+    window.addEventListener('touchstart', initAudio)
+    return () => {
+      window.removeEventListener('keydown', initAudio)
+      window.removeEventListener('mousedown', initAudio)
+      window.removeEventListener('touchstart', initAudio)
+    }
   })
 
   midiInput.subscribe(input => {
@@ -37,6 +45,12 @@
     }
   })
 
+  function initAudio() {
+    inputsActions.initAudio()
+    window.removeEventListener('keydown', initAudio)
+    window.removeEventListener('mousedown', initAudio)
+    window.removeEventListener('touchstart', initAudio)
+  }
   function noteOnListener(e: NoteMessageEvent) {
     if (timeout) return
     console.log('noteon', e)
@@ -117,7 +131,7 @@
   }
   async function handlePromptMIDI() {
     status = 'Finding device...'
-    const res = await midiActions.openMidi()
+    const res = await inputsActions.openMidi()
     if ('data' in res) {
       status = res.data.name
     } else {
@@ -150,7 +164,12 @@
   {:else if $currentGame instanceof GuessChords}
     <GameChords class="min-h-32" game={$currentGame} />
   {:else if $played.length > 0}
-    <div class="min-h-32">Played: {$played[0].absolute}</div>
+    <div class="min-h-32">
+      <span>Played: </span>
+      {#each $played as note}
+        <span class="mx-1">{note.absolute}</span>
+      {/each}
+    </div>
   {:else}
     <div class="min-h-32">&nbsp;</div>
   {/if}

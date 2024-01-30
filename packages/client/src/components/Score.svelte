@@ -3,6 +3,8 @@
   import { derived } from 'svelte/store'
   import Vex from 'vexflow'
 
+  import ReplayButton from './ReplayButton.svelte'
+
   import { currentGame, guessState, type GuessState } from '$stores/game'
   import { key, played, target, scale } from '$stores/score'
   import { keys } from '$utils/guess_keys'
@@ -142,7 +144,8 @@
   }
 </script>
 
-<section class={`${$$props.class || ''}`}>
+<section class={`${$$props.class || ''} relative`}>
+  <ReplayButton />
   <div id="output" bind:this={outputEl}></div>
 </section>
 

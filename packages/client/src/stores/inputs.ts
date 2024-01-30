@@ -27,6 +27,7 @@ export const midiRangeNotes = derived(
   midiRange,
   r => [getNote(r[0]), getNote(r[1])] as [Note, Note]
 )
+export const audioContext = writable<AudioContext | undefined>(undefined)
 export const piano = writable<Piano | undefined>(undefined)
 export const inputs = persist(
   writable<Inputs>({
@@ -40,17 +41,7 @@ export const inputs = persist(
   }
 )
 
-inputs.subscribe(val => {
-  if (val.useSound && typeof window !== 'undefined') {
-    const p = new Piano(new AudioContext())
-    p.load()
-    piano.set(p)
-  } else {
-    piano.set(undefined)
-  }
-})
-
-export const midiActions = {
+export const inputsActions = {
   async openMidi(): Promise<Result<Input>> {
     return WebMidi.enable()
       .then(() => {
@@ -73,5 +64,19 @@ export const midiActions = {
   },
   setInputValue(key: keyof Inputs, val: boolean) {
     inputs.update(v => ({ ...v, [key]: val }))
+    if (key === 'useSound' && !val) {
+      piano.set(undefined)
+    } else if (key === 'useSound' && get(piano)) {
+      this.initAudio()
+    }
+  },
+  initAudio() {
+    const ctx = get(audioContext) ?? new AudioContext()
+    audioContext.set(ctx)
+    if (!get(piano)) {
+      const p = new Piano(ctx)
+      p.load()
+      piano.set(p)
+    }
   }
 }

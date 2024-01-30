@@ -1,7 +1,7 @@
 import { derived, get, writable } from 'svelte/store'
 import { chords, createScale } from '@/chords-and-scales'
 
-import { midiActions, midiRange, midiRangeNotes, piano } from './inputs'
+import { inputsActions, midiRange, midiRangeNotes, piano } from './inputs'
 import { persist } from './persist'
 import { scoreActions } from './score'
 
@@ -23,7 +23,7 @@ export const gameActions = {
       scoreActions.setTarget([getNote(game.current)])
     } else if (type === 'pitches') {
       scoreActions.setTarget()
-      midiActions.setInputValue('useSound', true)
+      inputsActions.setInputValue('useSound', true)
       // TODO doesnt work if sound is not currently on
       get(piano)?.noteOn(game.current, 80)
     }
