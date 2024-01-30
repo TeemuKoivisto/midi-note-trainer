@@ -5,14 +5,14 @@
   import GameChords from '$components/GameChords.svelte'
   import GameKeys from '$components/GameKeys.svelte'
   import GameNotes from '$components/GameNotes.svelte'
-  import InputSettings from '$components/InputSettings.svelte'
+  import IOSettings from '$components/IOSettings.svelte'
   import KeyboardInput from '$components/KeyboardInput.svelte'
   import Options from '$components/Options.svelte'
   import PlayForm from '$components/PlayForm.svelte'
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
-  import { midiActions, midiInput, piano } from '$stores/inputs'
+  import { midiActions, midiGranted, midiInput, piano } from '$stores/inputs'
   import { played, scoreActions } from '$stores/score'
   import { getNote } from '$utils/getNote'
 
@@ -26,7 +26,9 @@
   let timeout: ReturnType<typeof setTimeout> | undefined
 
   onMount(() => {
-    handlePromptMIDI()
+    if ($midiGranted) {
+      handlePromptMIDI()
+    }
   })
 
   midiInput.subscribe(input => {
@@ -131,7 +133,7 @@
 </h1>
 
 <section class="px-4 md:px-0">
-  <InputSettings />
+  <IOSettings />
   <Options />
   <Chords />
   <PlayForm />

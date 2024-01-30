@@ -29,14 +29,15 @@
 <div class={`${$$props.class || ''}`}>
   <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm" class:collapsed={$hidden}>
     <legend class="px-2 text-0A text-base">
-      <button class="hover:bg-gray-100" on:click={toggleVisibility}>Inputs</button>
+      <button class="hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
     </legend>
     <div class="body" class:hidden={$hidden}>
       <div class="h-full flex flex-col">
         <label class="font-bold" for="device">Device</label>
         <input class="my-1 w-50" id="device" disabled value={$midiInput?.name ?? 'No device'} />
-        <div>
-          <button class="btn primary" on:click={midiActions.openMidi}>Prompt</button>
+        <div class="flex my-[auto]">
+          <button class="btn-sm primary mr-2" on:click={midiActions.openMidi}>Prompt</button>
+          <button class="btn-sm primary" on:click={midiActions.disableMidi}>Disable</button>
         </div>
       </div>
       <div class="flex flex-col h-full">

@@ -15,6 +15,9 @@ interface Inputs {
   useAutoOctave: boolean
 }
 
+export const midiGranted = persist(writable<boolean>(false), {
+  key: 'midi-access'
+})
 export const midiInput = writable<Input | undefined>(undefined)
 export const midiRange = persist(writable<[number, number]>([60, 84]), {
   key: 'midi-range',
@@ -51,6 +54,7 @@ export const midiActions = {
   async openMidi(): Promise<Result<Input>> {
     return WebMidi.enable()
       .then(() => {
+        midiGranted.set(true)
         if (WebMidi.inputs.length > 0) {
           midiInput.set(WebMidi.inputs[0])
           return { data: WebMidi.inputs[0] }
@@ -59,6 +63,10 @@ export const midiActions = {
         }
       })
       .catch(err => ({ err: err.toString(), code: 403 }))
+  },
+  disableMidi() {
+    midiGranted.set(false)
+    midiInput.set(undefined)
   },
   setMidiRange(range: [number, number]) {
     midiRange.set(range)
