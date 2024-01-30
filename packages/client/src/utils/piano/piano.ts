@@ -12,6 +12,8 @@ import nimpulse from './audio/Piano Impulse6.mp3?url'
 import { load } from './load'
 import { Note } from './note'
 
+import type { MidiChord } from '@/chords-and-scales'
+
 // https://github.com/iBundin/Open-Web-Piano/blob/7f6ae5fae07aaeb62a1d10ee9446b20e8cc7849d/OpenWebPiano.js
 // https://github.com/MengLinMaker/Midi-Virtual-Piano/blob/a398e1c5194cb90f4252716c0d43380380605f42/src/pianoAudio/OpenWebPiano.tsx
 export class Piano {
@@ -58,6 +60,12 @@ export class Piano {
       } else {
         console.error(`Failed to load audio: ${buf.err}`)
       }
+    })
+  }
+
+  playChord(chord: MidiChord, velocity = 80) {
+    chord.notes.forEach(n => {
+      this.noteOn(n.midi, velocity)
     })
   }
 
