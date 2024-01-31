@@ -1,18 +1,16 @@
-import a0 from './audio/a0.mp3?url'
-import a1 from './audio/a1.mp3?url'
-import a2 from './audio/a2.mp3?url'
-import a3 from './audio/a3.mp3?url'
-import a4 from './audio/a4.mp3?url'
-import a5 from './audio/a5.mp3?url'
-import a6 from './audio/a6.mp3?url'
-import a7 from './audio/a7.mp3?url'
-import ndamper from './audio/damper.mp3?url'
-import nimpulse from './audio/Piano Impulse6.mp3?url'
+// import a0 from '../audio/a0.mp3?url'
+// import a1 from '../audio/a1.mp3?url'
+// import a2 from '../audio/a2.mp3?url'
+// import a3 from '../audio/a3.mp3?url'
+// import a4 from '../audio/a4.mp3?url'
+// import a5 from '../audio/a5.mp3?url'
+// import a6 from '../audio/a6.mp3?url'
+// import a7 from '../audio/a7.mp3?url'
+// import ndamper from '../audio/damper.mp3?url'
+// import nimpulse from '../audio/Piano Impulse6.mp3?url'
 
-import { load } from './load'
+import { load, fetchSounds } from './load'
 import { Note } from './note'
-
-import type { MidiChord } from '@/chords-and-scales'
 
 // https://github.com/iBundin/Open-Web-Piano/blob/7f6ae5fae07aaeb62a1d10ee9446b20e8cc7849d/OpenWebPiano.js
 // https://github.com/MengLinMaker/Midi-Virtual-Piano/blob/a398e1c5194cb90f4252716c0d43380380605f42/src/pianoAudio/OpenWebPiano.tsx
@@ -46,27 +44,20 @@ export class Piano {
     return this
   }
 
-  async load() {
-    const urls = [a0, a1, a2, a3, a4, a5, a6, a7, ndamper, nimpulse]
-    const loaded = await Promise.all(urls.map(url => load(url, this.context)))
-    this.bufferlists = []
-    loaded.forEach((buf, idx) => {
-      if ('data' in buf) {
-        this.bufferlists.push(buf.data)
-        if (idx === 8) {
-          this.damper = buf.data
-        } else if (idx === 9) {
-          this.convolver.buffer = buf.data
-        }
-      } else {
-        console.error(`Failed to load audio: ${buf.err}`)
+  load(buffers: AudioBuffer[]) {
+    buffers.forEach((buf, idx) => {
+      this.bufferlists.push(buf)
+      if (idx === 8) {
+        this.damper = buf
+      } else if (idx === 9) {
+        this.convolver.buffer = buf
       }
     })
   }
 
-  playChord(chord: MidiChord, velocity = 80) {
-    chord.notes.forEach(n => {
-      this.noteOn(n.midi, velocity)
+  playChord(notes: number[], velocity = 80) {
+    notes.forEach(n => {
+      this.noteOn(n, velocity)
     })
   }
 
@@ -100,8 +91,8 @@ export class Piano {
       // Gives each note in octave its own unique gain to make chords sound less bricky
       const gain_A = 1 - ((noteNumber % 12) / 12 + 1) / 12
       const rate_A = Math.pow(2, (noteNumber - noteNum) / 12)
-      let rate_B = 0
-      let gain_B = 0
+      const rate_B = 0
+      const gain_B = 0
       const gain_ = velo ** 1.4
       // Adds weird echo
       // if (bufNumB < 8) {

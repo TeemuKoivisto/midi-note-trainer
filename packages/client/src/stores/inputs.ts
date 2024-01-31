@@ -3,7 +3,7 @@ import { WebMidi } from 'webmidi'
 
 import { persist } from './persist'
 import { getNote } from '$utils/getNote'
-import { Piano } from '$utils/piano'
+import { fetchSounds, Piano } from '@/midi-piano'
 
 import type { Input } from 'webmidi'
 import type { Note, Result } from '@/types'
@@ -70,7 +70,7 @@ export const inputsActions = {
       this.initAudio()
     }
   },
-  initAudio() {
+  async initAudio() {
     let ctx = get(audioContext)
     if (!ctx) {
       ctx = new AudioContext()
@@ -78,7 +78,8 @@ export const inputsActions = {
     }
     if (!get(piano)) {
       const p = new Piano(ctx)
-      p.load()
+      const sounds = await fetchSounds('audio', ctx)
+      p.load(sounds)
       piano.set(p)
     }
   }
