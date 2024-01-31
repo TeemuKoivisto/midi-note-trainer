@@ -26,7 +26,7 @@ export class Piano {
   damper?: AudioBuffer
   sus = false
   sustained: number[] = []
-  notes: Record<number, Note> = {}
+  notes: Map<number, Note> = new Map()
 
   constructor(context: AudioContext) {
     this.context = context
@@ -39,7 +39,8 @@ export class Piano {
     this.convGainAfter.connect(context.destination)
     this.directGain.connect(context.destination)
     this.directGain.connect(this.convGain)
-    this.directGain.gain.value = 0.5
+    // Master gain, at 1.0 it will definitely clip at least with these piano samples
+    this.directGain.gain.value = 0.75
     this.convGain.gain.value = 0
     this.convGainAfter.gain.value = 0
     return this
@@ -76,11 +77,12 @@ export class Piano {
    * @param noteNumber From 0 (-C1) to 127 (G9)
    * @param velocity From 1 lowest to 127 highest
    */
-  noteOn(noteNumber: number, velocity: number) {
+  noteOn(noteNumber: number, velocity = 80) {
     // console.log(`play note ${noteNumber} ${velocity}`)
     if (noteNumber < 109 && noteNumber > 20) {
-      if (this.notes[noteNumber]) {
-        this.notes[noteNumber].off(this.context.currentTime, 1.1, this.context.currentTime + 2)
+      const oldNote = this.notes.get(noteNumber)
+      if (oldNote) {
+        oldNote.off(this.context.currentTime, 1.1, this.context.currentTime + 2)
         this.sustained.splice(this.sustained.indexOf(noteNumber), 1)
       }
 
@@ -95,24 +97,19 @@ export class Piano {
       let filtFreq = freq * (2 - (noteNumber - 21) / 50) + 3 * freq * velo
       if (noteNumber < 60) filtFreq = 440 * (3 - (60 - 21) / 50) + 3 * freq * velo
 
-      const gain_A = 2 // equalGain( 1 - ((noteNumber-21)%12) / 11 );
+      // Gives each note in octave its own unique gain to make chords sound less bricky
+      const gain_A = 1 - ((noteNumber % 12) / 12 + 1) / 12
       const rate_A = Math.pow(2, (noteNumber - noteNum) / 12)
-      const rate_B = 0
-      const gain_B = 0
+      let rate_B = 0
+      let gain_B = 0
       const gain_ = velo ** 1.4
-      /*/
-      if (bufNumB<8) {
-        let rate_B = Math.pow(2, (noteNumber-(noteNum+12))/12);
-        let gain_B = 1 - gain_A;
-      }
-      //*/
-      this.notes[noteNumber] = new Note(
-        noteNumber,
-        this.context,
-        this.directGain,
-        this.damper as AudioBuffer
-      )
-      this.notes[noteNumber].on(
+      // Adds weird echo
+      // if (bufNumB < 8) {
+      //   rate_B = Math.pow(2, (noteNumber - (noteNum + 12)) / 12)
+      //   gain_B = 1 - gain_A
+      // }
+      const note = new Note(noteNumber, this.context, this.directGain, this.damper as AudioBuffer)
+      note.on(
         this.bufferlists[bufNumA],
         this.bufferlists[bufNumB],
         rate_A,
@@ -122,19 +119,17 @@ export class Piano {
         gain_B,
         gain_
       )
+      this.notes.set(noteNumber, note)
     }
   }
 
   noteOff(noteNumber: number) {
     if (!this.sus) {
-      if (noteNumber < 90) {
-        this.notes[noteNumber].off(
-          this.context.currentTime + 0.03,
-          0.08,
-          this.context.currentTime + 2
-        )
+      const oldNote = this.notes.get(noteNumber)
+      if (noteNumber < 90 && oldNote) {
+        oldNote.off(this.context.currentTime + 0.03, 0.08, this.context.currentTime + 2)
       }
-      delete this.notes[noteNumber]
+      this.notes.delete(noteNumber)
     } else {
       this.sustained.push(noteNumber)
     }
@@ -150,7 +145,7 @@ export class Piano {
       this.convGain.gain.value = 0.0
       this.convGainAfter.gain.value = 0
       for (let i = 0; i < this.sustained.length; i++) {
-        if (this.notes[this.sustained[i]]) {
+        if (this.notes.has(this.sustained[i])) {
           this.noteOff(this.sustained[i])
         }
       }

@@ -74,10 +74,10 @@
           game.startTime()
           if (game.type === 'notes') {
             scoreActions.setTarget([getNote(game.current)])
-            $piano?.noteOn(game.current, 80)
+            $piano?.noteOn(game.current)
           } else {
             scoreActions.setTarget()
-            $piano?.noteOn(game.current, 80)
+            $piano?.noteOn(game.current)
           }
         }
         scoreActions.clearPlayed()

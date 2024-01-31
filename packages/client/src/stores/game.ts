@@ -24,8 +24,7 @@ export const gameActions = {
     } else if (type === 'pitches') {
       scoreActions.setTarget()
       inputsActions.setInputValue('useSound', true)
-      // TODO doesnt work if sound is not currently on
-      get(piano)?.noteOn(game.current, 80)
+      get(piano)?.noteOn(game.current)
     }
     scoreActions.clearPlayed()
     guessState.set('waiting')

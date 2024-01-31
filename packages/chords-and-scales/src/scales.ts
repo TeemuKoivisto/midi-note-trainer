@@ -23,6 +23,38 @@ export const scales = new Map<string, RawScale>([
     }
   ],
   [
+    'harmonicMajor',
+    {
+      name: 'Harmonic Major',
+      tones: [2, 2, 1, 2, 1, 3, 1],
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '2', seq: 2, flats: 0, sharps: 0 },
+        { str: '3', seq: 3, flats: 0, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
+        { str: '7', seq: 7, flats: 0, sharps: 0 }
+      ]
+    }
+  ],
+  [
+    'doubleHarmonic',
+    {
+      name: 'Double Harmonic',
+      tones: [1, 3, 1, 2, 1, 3, 1],
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '♭2', seq: 2, flats: 1, sharps: 0 },
+        { str: '3', seq: 3, flats: 0, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
+        { str: '7', seq: 7, flats: 0, sharps: 0 }
+      ]
+    }
+  ],
+  [
     'minor',
     {
       name: 'Minor',
@@ -38,6 +70,23 @@ export const scales = new Map<string, RawScale>([
       ]
     }
   ],
+  [
+    'harmonicMinor',
+    {
+      name: 'Harmonic Minor',
+      tones: [2, 1, 2, 2, 1, 3, 1],
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '2', seq: 2, flats: 0, sharps: 0 },
+        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
+        { str: '7', seq: 7, flats: 0, sharps: 0 }
+      ]
+    }
+  ],
+
   [
     'minor7b9',
     {
@@ -264,54 +313,7 @@ export const scales = new Map<string, RawScale>([
       ]
     }
   ],
-  [
-    'harmonicMajor',
-    {
-      name: 'Harmonic Major',
-      tones: [2, 2, 1, 2, 1, 3, 1],
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '2', seq: 2, flats: 0, sharps: 0 },
-        { str: '3', seq: 3, flats: 0, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
-        { str: '7', seq: 7, flats: 0, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'harmonicMinor',
-    {
-      name: 'Harmonic Minor',
-      tones: [2, 1, 2, 2, 1, 3, 1],
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '2', seq: 2, flats: 0, sharps: 0 },
-        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
-        { str: '7', seq: 7, flats: 0, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'doubleHarmonic',
-    {
-      name: 'Double Harmonic',
-      tones: [1, 3, 1, 2, 1, 3, 1],
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♭2', seq: 2, flats: 1, sharps: 0 },
-        { str: '3', seq: 3, flats: 0, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
-        { str: '7', seq: 7, flats: 0, sharps: 0 }
-      ]
-    }
-  ],
+
   [
     'byzantine',
     {

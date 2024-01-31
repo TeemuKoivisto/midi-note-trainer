@@ -45,7 +45,6 @@ export class Note {
     this.biquadFilter.frequency.value = filtFreq
     this.gainA.gain.value = gain_A
     this.gain.gain.value = gain_
-
     if (bufB) {
       this.noteB!.buffer = bufB
       this.noteB.playbackRate.value = rateB
