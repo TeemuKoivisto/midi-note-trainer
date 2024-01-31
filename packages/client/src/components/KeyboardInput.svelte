@@ -21,6 +21,32 @@
   let keyboardError = ''
   let keyboardInput = ''
 
+  function parseNotes(e: KeyboardEvent) {
+    const pressed = e.key.toUpperCase()
+    const keymap = $hotKeyMap
+    let octave
+    if (keyboardInput.length === 0 && pressed in keymap) {
+      const key = keymap[pressed as keyof typeof keymap]
+      keyboardInput = key.defaultNote
+      keyboardError = ''
+      if ($inputs.useAutoOctave) {
+        octave = $midiRangeNotes[0].octave + Math.floor(key.order / 12)
+      }
+    }
+    if ((keyboardInput.length > 0 && regexPosInt.test(pressed)) || octave !== undefined) {
+      // Octave pressed
+      const note = parseNote(keyboardInput + (octave ?? pressed))
+      if ('data' in note) {
+        dispatch('note', note.data)
+      } else {
+        keyboardError = `Error: ${note.err}`
+      }
+      keyboardInput = ''
+    } else if (e.key === 'Backspace') {
+      keyboardInput = keyboardInput.slice(0, -1)
+    }
+  }
+
   function handleKeyDown(e: KeyboardEvent) {
     if (debounced) return
     const game = $currentGame
@@ -34,7 +60,7 @@
       } else if (e.key === 'Backspace') {
         keyboardInput = keyboardInput.slice(0, -1)
       }
-    } else if (game instanceof GuessChords) {
+    } else if (game instanceof GuessChords && game.type === 'write') {
       if (e.key === 'Enter' && keyboardInput.length > 0) {
         let value = { note: '', flats: 0, sharps: 0, chord: '' }
         for (let i = 0; i < keyboardInput.length; i += 1) {
@@ -61,29 +87,7 @@
         }
       }
     } else if ($inputs.useKeyboard) {
-      const pressed = e.key.toUpperCase()
-      const keymap = $hotKeyMap
-      let octave
-      if (keyboardInput.length === 0 && pressed in keymap) {
-        const key = keymap[pressed as keyof typeof keymap]
-        keyboardInput = key.defaultNote
-        keyboardError = ''
-        if ($inputs.useAutoOctave) {
-          octave = $midiRangeNotes[0].octave + Math.floor(key.order / 12)
-        }
-      }
-      if ((keyboardInput.length > 0 && regexPosInt.test(pressed)) || octave !== undefined) {
-        // Octave pressed
-        const note = parseNote(keyboardInput + (octave ?? pressed))
-        if ('data' in note) {
-          dispatch('note', note.data)
-        } else {
-          keyboardError = `Error: ${note.err}`
-        }
-        keyboardInput = ''
-      } else if (e.key === 'Backspace') {
-        keyboardInput = keyboardInput.slice(0, -1)
-      }
+      parseNotes(e)
     }
   }
 </script>

@@ -7,6 +7,7 @@
   import GameNotes from '$components/GameNotes.svelte'
   import IOSettings from '$components/IOSettings.svelte'
   import KeyboardInput from '$components/KeyboardInput.svelte'
+  import PlayChords from '$components/PlayChords.svelte'
   import PlayForm from '$components/PlayForm.svelte'
   import Scales from '$components/Scales.svelte'
   import Score from '$components/Score.svelte'
@@ -20,10 +21,12 @@
   import { GuessNotes } from '$utils/guess_notes'
   import { GuessKeys } from '$utils/guess_keys'
   import { GuessChords } from '$utils/guess_chords'
+  import { PlayChordsGame } from '$utils/play_chords'
 
   let status = 'Finding device...'
 
   let timeout: ReturnType<typeof setTimeout> | undefined
+  let chordTimeout: ReturnType<typeof setTimeout> | undefined
 
   onMount(() => {
     if ($midiGranted) {
@@ -83,6 +86,9 @@
         scoreActions.clearPlayed()
         timeout = undefined
       }, 2000)
+    } else if (game instanceof PlayChordsGame) {
+      game.addPlayedNote(value)
+      if (!chordTimeout) chordTimeout = setTimeout(flushPlayedChords, 2000)
     } else {
       scoreActions.pushPlayed(getNote(value))
     }
@@ -94,7 +100,7 @@
     const game = $currentGame
     if (game?.ended) {
       gameActions.updateState('ended')
-    } else if (game instanceof GuessChords) {
+    } else if (game instanceof GuessChords || game instanceof PlayChordsGame) {
       scoreActions.setTarget(game.currentNotes)
       $piano?.playChord(game?.current.notes.map(n => n.midi))
       gameActions.updateState('waiting')
@@ -103,6 +109,15 @@
       gameActions.updateState('waiting')
     }
     timeout = undefined
+  }
+  function flushPlayedChords() {
+    const game = $currentGame
+    if (game instanceof PlayChordsGame) {
+      const correct = game.guess()
+      gameActions.updateState(correct ? 'correct' : 'wrong')
+      timeout = setTimeout(gameUpdate, 5000)
+    }
+    chordTimeout = undefined
   }
   function handleGuessedChord(
     e: CustomEvent<{ note: string; flats: number; sharps: number; chord: string }>
@@ -127,6 +142,7 @@
     timeout = setTimeout(gameUpdate, 2000)
   }
   function handleNote(e: CustomEvent<number>) {
+    console.log('note', e.detail)
     handlePlayedNote(e.detail, 120)
   }
   async function handlePromptMIDI() {
@@ -136,6 +152,7 @@
       status = res.data.name
     } else {
       status = res.err
+      console.error(res.err)
     }
   }
 </script>
@@ -163,6 +180,8 @@
     <GameNotes class="min-h-32" game={$currentGame} />
   {:else if $currentGame instanceof GuessChords}
     <GameChords class="min-h-32" game={$currentGame} />
+  {:else if $currentGame instanceof PlayChordsGame}
+    <PlayChords class="min-h-32" game={$currentGame} />
   {:else if $played.length > 0}
     <div class="min-h-32">
       <span>Played: </span>

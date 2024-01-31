@@ -1,36 +1,27 @@
 import { chords, createChord, intervalToSemitones, noteIntoString } from '@/chords-and-scales'
+import { getNote } from './getNote'
 
 import type { Chord, MidiChord, Scale, ScaleNote } from '@/chords-and-scales'
 import type { Note } from '@/types'
-import { getNote } from './getNote'
 
-export class GuessChords {
-  type: 'write' | 'play'
+export class PlayChordsGame {
   scale: Scale
   chords: MidiChord[]
   times: number[] = []
   correct = 0
+  played = new Set<number>()
   latestGuess: { target: string; guessed: string } = { target: '', guessed: '' }
   idx = 0
   timing: number
 
-  constructor(
-    type: 'write' | 'play',
-    scale: Scale,
-    chords: [string, Chord][],
-    range: [Note, Note],
-    count = 10
-  ) {
-    this.type = type
+  constructor(scale: Scale, chords: [string, Chord][], range: [Note, Note], count = 10) {
     this.scale = scale
     const randomChords: [string, Chord][] = []
     const available: [string, Chord][] = chords.map(v => [v[0], { ...v[1] }])
     for (let i = 0; i < count; i += 1) {
       const idx = Math.floor(Math.random() * available.length)
-      const val = available.splice(idx, 1)
-      if (val.length > 0) {
-        randomChords.push(val[0])
-      }
+      const val = [available[idx][0], { ...available[idx][1] }] as [string, Chord]
+      randomChords.push(val)
     }
     this.chords = randomChords.map(c => {
       const maxInterval = c[1].intervals[c[1].intervals.length - 1]
@@ -68,10 +59,21 @@ export class GuessChords {
     }
     return Math.round(avgMs / 10 / this.times.length) / 100
   }
-  guess(value: { note: string; flats: number; sharps: number; chord: string }) {
-    const target = `${this.current.note}${this.current.short}`
-    const guessed = `${noteIntoString(value)}${value.chord.toLowerCase()}`
-    const result = target === guessed
+  addPlayedNote(midi: number) {
+    this.played.add(midi)
+  }
+  guess() {
+    const notes = Array.from(this.played.values()).map(v => getNote(v))
+    this.played.clear()
+    const target = `${this.current.note}${this.current.short}: ${this.current.notes
+      .map(n => noteIntoString(n))
+      .join(' ')}`
+    const guessed = `${notes.map(n => `${n.note}${n.parts[1]}`).join(' ')}`
+    console.log(`target ${target} guessed ${guessed}`)
+    const result = this.current.notes.every(n =>
+      notes.find(note => note.value % 12 === n.midi % 12)
+    )
+    console.log('result', result)
     if (result) {
       this.correct += 1
     }

@@ -9,11 +9,14 @@ import { getNote } from '$utils/getNote'
 import { GuessKeys } from '$utils/guess_keys'
 import { GuessChords } from '$utils/guess_chords'
 import { GuessNotes } from '$utils/guess_notes'
+import { PlayChordsGame } from '$utils/play_chords'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 
 export const guessState = writable<GuessState>('waiting')
-export const currentGame = writable<GuessNotes | GuessKeys | GuessChords | undefined>(undefined)
+export const currentGame = writable<
+  GuessNotes | GuessKeys | GuessChords | PlayChordsGame | undefined
+>(undefined)
 // scores?
 
 export const gameActions = {
@@ -40,13 +43,19 @@ export const gameActions = {
     currentGame.set(game)
     return game
   },
-  playGuessChords(count = 10) {
+  playGuessChords(type: 'write' | 'play', count = 10) {
     const scale = createScale('C', 'major')
     const range = get(midiRangeNotes)
     if ('err' in scale) {
       return console.error(scale)
     }
-    const game = new GuessChords(scale.data, Array.from(chords.entries()), range, count)
+    let game
+    if (type === 'write') {
+      game = new GuessChords(type, scale.data, Array.from(chords.entries()), range, count)
+    } else {
+      const basicChords = Array.from(chords.entries()).filter(c => c[0] === 'maj' || c[0] === 'm')
+      game = new PlayChordsGame(scale.data, basicChords, range, count)
+    }
     scoreActions.setTarget(game.currentNotes)
     get(piano)?.playChord(game?.current.notes.map(n => n.midi))
     scoreActions.setKey(scale.data.key)

@@ -1,12 +1,13 @@
 <script lang="ts">
   import { gameActions, guessState } from '$stores/game'
+  import { played } from '$stores/score'
 
-  import type { GuessChords } from '$utils/guess_chords'
+  import type { PlayChordsGame } from '$utils/play_chords'
 
-  export let game: GuessChords
+  export let game: PlayChordsGame
 
   function tryAgain() {
-    gameActions.playGuessChords(game.type)
+    gameActions.playGuessChords('play')
   }
   function clearGame() {
     gameActions.clearGame()
@@ -14,7 +15,14 @@
 </script>
 
 <div class={`${$$props.class || ''} flex`}>
-  {#if $guessState === 'correct' || $guessState === 'wrong'}
+  {#if $guessState === 'waiting'}
+    <div class="min-h-32">
+      <span>Played: </span>
+      {#each $played as note}
+        <span class="mx-1">{note.absolute}</span>
+      {/each}
+    </div>
+  {:else if $guessState === 'correct' || $guessState === 'wrong'}
     <div>Target: {game.latestGuess.target}</div>
     <div class="ml-8">Guessed: {game.latestGuess.guessed}</div>
   {:else if $guessState === 'ended'}
