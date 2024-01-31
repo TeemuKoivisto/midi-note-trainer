@@ -12,7 +12,7 @@
   function replay() {
     const game = $currentGame
     if (game instanceof GuessChords) {
-      $piano?.playChord(game?.current)
+      $piano?.playChord(game?.current.notes.map(n => n.midi))
     } else if (game instanceof GuessNotes) {
       $piano?.noteOn(game.current)
     }

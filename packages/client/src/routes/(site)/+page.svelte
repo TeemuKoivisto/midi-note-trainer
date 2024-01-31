@@ -96,7 +96,7 @@
       gameActions.updateState('ended')
     } else if (game instanceof GuessChords) {
       scoreActions.setTarget(game.currentNotes)
-      $piano?.playChord(game.current)
+      $piano?.playChord(game?.current.notes.map(n => n.midi))
       gameActions.updateState('waiting')
     } else if (game instanceof GuessKeys) {
       scoreActions.setKey(game.current)

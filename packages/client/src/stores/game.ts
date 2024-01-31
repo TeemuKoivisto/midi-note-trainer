@@ -48,7 +48,7 @@ export const gameActions = {
     }
     const game = new GuessChords(scale.data, Array.from(chords.entries()), range, count)
     scoreActions.setTarget(game.currentNotes)
-    get(piano)?.playChord(game.current)
+    get(piano)?.playChord(game?.current.notes.map(n => n.midi))
     scoreActions.setKey(scale.data.key)
     scoreActions.clearPlayed()
     guessState.set('waiting')
