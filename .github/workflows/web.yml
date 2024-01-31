@@ -19,7 +19,7 @@ jobs:
 
       - name: Build the web distribution
         run: |
-          pnpm --filter types --filter chords-and-scales build --filter midi-piano build
+          pnpm --filter types --filter chords-and-scales --filter midi-piano build
           DEPLOY_TO_GH=true pnpm --filter client build
 
       - name: Deploy to GitHub pages
