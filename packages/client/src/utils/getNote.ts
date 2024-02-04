@@ -1,18 +1,19 @@
+import type { MidiNote } from '@/chords-and-scales'
 import type { Note, Result } from '@/types'
 
 export const NOTES = {
-  0: { note: 'C', sharp: false, flat: false },
-  1: { note: 'C♯', sharp: true, flat: false },
-  2: { note: 'D', sharp: false, flat: false },
-  3: { note: 'E♭', sharp: false, flat: true },
-  4: { note: 'E', sharp: false, flat: false },
-  5: { note: 'F', sharp: false, flat: false },
-  6: { note: 'F♯', sharp: true, flat: false },
-  7: { note: 'G', sharp: false, flat: false },
-  8: { note: 'G♯', sharp: true, flat: false },
-  9: { note: 'A', sharp: false, flat: false },
-  10: { note: 'B♭', sharp: false, flat: true },
-  11: { note: 'B', sharp: false, flat: false }
+  0: { note: 'C', sharps: 0, flats: 0 },
+  1: { note: 'C♯', sharps: 1, flats: 0 },
+  2: { note: 'D', sharps: 0, flats: 0 },
+  3: { note: 'E♭', sharps: 0, flats: 1 },
+  4: { note: 'E', sharps: 0, flats: 0 },
+  5: { note: 'F', sharps: 0, flats: 0 },
+  6: { note: 'F♯', sharps: 1, flats: 0 },
+  7: { note: 'G', sharps: 0, flats: 0 },
+  8: { note: 'G♯', sharps: 1, flats: 0 },
+  9: { note: 'A', sharps: 0, flats: 0 },
+  10: { note: 'B♭', sharps: 0, flats: 1 },
+  11: { note: 'B', sharps: 0, flats: 0 }
 } as const
 
 export const BASE_NOTES = {
@@ -23,6 +24,25 @@ export const BASE_NOTES = {
   G: { order: 7 },
   A: { order: 9 },
   B: { order: 11 }
+}
+
+export function getOctave(midi: number) {
+  return Math.floor((midi - 12) / 12)
+}
+
+export function getNoteAbsolute(note: Note) {
+  return `${note.note}${getOctave(note.midi)}`
+}
+
+export function addParts(note: MidiNote): Note {
+  return {
+    ...note,
+    parts: [
+      note.note.charAt(0),
+      `${'b'.repeat(note.flats)}${'#'.repeat(note.sharps)}`,
+      getOctave(note.midi)
+    ]
+  }
 }
 
 export function getNote(value: number): Note {
@@ -36,10 +56,8 @@ export function getNote(value: number): Note {
   return {
     ...note,
     order,
-    octave,
-    value,
-    absolute: `${note.note}${octave}`,
-    parts: [note.note.charAt(0), note.flat ? 'b' : note.sharp ? '#' : '', octave]
+    midi: value,
+    parts: [note.note.charAt(0), `${'b'.repeat(note.flats)}${'#'.repeat(note.sharps)}`, octave]
   }
 }
 

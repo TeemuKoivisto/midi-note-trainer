@@ -3,7 +3,7 @@
   import { target } from '$stores/score'
 
   import type { GuessNotes } from '$utils/guess_notes'
-  import { getNote } from '$utils/getNote'
+  import { getNote, getNoteAbsolute } from '$utils/getNote'
 
   export let game: GuessNotes
 
@@ -17,8 +17,8 @@
 
 <div class={`${$$props.class || ''} flex`}>
   {#if $guessState === 'correct' || $guessState === 'wrong'}
-    <div>Target: {$target[0]?.absolute}</div>
-    <div class="ml-8">Played: {getNote(game.guessed).absolute}</div>
+    <div>Target: {getNoteAbsolute($target[0])}</div>
+    <div class="ml-8">Played: {getNoteAbsolute(getNote(game.guessed))}</div>
   {:else if $guessState === 'ended'}
     <div>
       <div>

@@ -7,15 +7,17 @@
 
   import { currentGame, guessState, type GuessState } from '$stores/game'
   import { key, played, target, scale } from '$stores/score'
+  import { getOctave } from '$utils/getNote'
   import { keys } from '$utils/guess_keys'
 
   import type { Note } from '@/types'
   import { GuessNotes } from '$utils/guess_notes'
   import type { GuessChords } from '$utils/guess_chords'
   import type { GuessKeys } from '$utils/guess_keys'
+  import type { PlayChordsGame } from '$utils/play_chords'
 
   interface Data {
-    game: GuessNotes | GuessKeys | GuessChords | undefined
+    game: GuessNotes | GuessKeys | GuessChords | PlayChordsGame | undefined
     guessed: GuessState
     scale: string
     key: string
@@ -83,7 +85,7 @@
     bass: Vex.Stave,
     correct?: boolean
   ): { note: Vex.StemmableNote; clef: 'treble' | 'bass' } {
-    const clef = notes[0].octave >= 4 ? 'treble' : 'bass'
+    const clef = getOctave(notes[0].midi) >= 4 ? 'treble' : 'bass'
     const snote = new Vex.Flow.StaveNote({
       clef,
       keys: notes.map(n => `${n.parts[0]}${n.parts[1]}/${n.parts[2]}`),
@@ -134,7 +136,7 @@
     }
     if (played.length > 0 && (!game || game instanceof GuessNotes)) {
       staveNotes.push(
-        drawNotes(played, s1, s2, game?.guessed === played[0].value && guessed === 'correct')
+        drawNotes(played, s1, s2, game?.guessed === played[0].midi && guessed === 'correct')
       )
     }
     drawNotesToStaves(s1, s2, staveNotes)

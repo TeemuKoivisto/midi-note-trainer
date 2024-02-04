@@ -2,6 +2,8 @@
   import { gameActions, guessState } from '$stores/game'
   import { played } from '$stores/score'
 
+  import { getNoteAbsolute } from '$utils/getNote'
+
   import type { PlayChordsGame } from '$utils/play_chords'
 
   export let game: PlayChordsGame
@@ -19,7 +21,7 @@
     <div class="min-h-32">
       <span>Played: </span>
       {#each $played as note}
-        <span class="mx-1">{note.absolute}</span>
+        <span class="mx-1">{getNoteAbsolute(note)}</span>
       {/each}
     </div>
   {:else if $guessState === 'correct' || $guessState === 'wrong'}

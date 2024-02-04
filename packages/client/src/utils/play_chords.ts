@@ -26,9 +26,9 @@ export class PlayChordsGame {
     this.chords = randomChords.map(c => {
       const maxInterval = c[1].intervals[c[1].intervals.length - 1]
       const maxSemitones = intervalToSemitones(maxInterval)
-      const availableRange: [number, number] = [range[0].value, range[1].value - maxSemitones]
+      const availableRange: [number, number] = [range[0].midi, range[1].midi - maxSemitones]
       const notes = Array.from(new Array(availableRange[1] - availableRange[0])).map(
-        (_, i) => [range[0].value + i, (range[0].order + i) % 12] as [number, number]
+        (_, i) => [range[0].midi + i, (range[0].order + i) % 12] as [number, number]
       )
       const availableNotes = notes.filter(v => scale.scaleNotes.find(note => note.order === v[1]))
       const startingNoteInScale = availableNotes[Math.floor(Math.random() * availableNotes.length)]
@@ -46,9 +46,6 @@ export class PlayChordsGame {
   get current() {
     return this.chords[this.idx]
   }
-  get currentNotes(): Note[] {
-    return this.current.notes.map(n => getNote(n.midi))
-  }
   get ended() {
     return this.chords.length === this.idx + 1
   }
@@ -65,16 +62,16 @@ export class PlayChordsGame {
   guess() {
     const notes = Array.from(this.played.values())
       .map(v => getNote(v))
-      .sort((a, b) => a.value - b.value)
+      .sort((a, b) => a.midi - b.midi)
     this.played.clear()
     const target = `${this.current.note}${this.current.short}: ${this.current.notes
       .map(n => noteIntoString(n))
       .join(' ')}`
-    const guessed = `${notes.map(n => `${n.note}${n.parts[1]}`).join(' ')}`
+    const guessed = `${notes
+      .map(n => `${n.note.charAt(0)}${'♭'.repeat(n.flats)}${'♯'.repeat(n.sharps)}`)
+      .join(' ')}`
     console.log(`target ${target} guessed ${guessed}`)
-    const result = this.current.notes.every(n =>
-      notes.find(note => note.value % 12 === n.midi % 12)
-    )
+    const result = this.current.notes.every(n => notes.find(note => note.midi % 12 === n.midi % 12))
     console.log('result', result)
     if (result) {
       this.correct += 1

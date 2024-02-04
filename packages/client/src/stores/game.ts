@@ -5,7 +5,7 @@ import { inputsActions, midiRange, midiRangeNotes, piano } from './inputs'
 import { persist } from './persist'
 import { scoreActions } from './score'
 
-import { getNote } from '$utils/getNote'
+import { addParts, getNote } from '$utils/getNote'
 import { GuessKeys } from '$utils/guess_keys'
 import { GuessChords } from '$utils/guess_chords'
 import { GuessNotes } from '$utils/guess_notes'
@@ -56,7 +56,7 @@ export const gameActions = {
       const basicChords = Array.from(chords.entries()).filter(c => c[0] === 'maj' || c[0] === 'm')
       game = new PlayChordsGame(scale.data, basicChords, range, count)
     }
-    scoreActions.setTarget(game.currentNotes)
+    scoreActions.setTarget(game.current.notes.map(n => addParts(n)))
     get(piano)?.playChord(game?.current.notes.map(n => n.midi))
     scoreActions.setKey(scale.data.key)
     scoreActions.clearPlayed()

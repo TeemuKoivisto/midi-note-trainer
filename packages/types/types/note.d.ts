@@ -1,10 +1,8 @@
 export interface Note {
   note: string
-  absolute: string
   order: number
-  value: number
-  octave: number
-  sharp: boolean
-  flat: boolean
+  midi: number
+  sharps: number
+  flats: number
   parts: [string, string, number]
 }

@@ -35,7 +35,7 @@ export const inputs = persist(
     useSound: true,
     useKeyboard: true,
     useHotkeys: true,
-    useAutoOctave: false
+    useAutoOctave: true
   }),
   {
     key: 'inputs'

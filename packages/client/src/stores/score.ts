@@ -107,7 +107,7 @@ export const scoreActions = {
   pushPlayed(note: Note, timeoutMs?: number) {
     const now = Date.now()
     played.update(v =>
-      [...v, { ...note, started: now }].filter(n => n.value !== note.value || n.started === now)
+      [...v, { ...note, started: now }].filter(n => n.midi !== note.midi || n.started === now)
     )
     if (!timeout) {
       const ms = timeoutMs ?? get(fadeTimeout)

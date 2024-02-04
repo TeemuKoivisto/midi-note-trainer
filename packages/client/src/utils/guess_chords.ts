@@ -35,9 +35,9 @@ export class GuessChords {
     this.chords = randomChords.map(c => {
       const maxInterval = c[1].intervals[c[1].intervals.length - 1]
       const maxSemitones = intervalToSemitones(maxInterval)
-      const availableRange: [number, number] = [range[0].value, range[1].value - maxSemitones]
+      const availableRange: [number, number] = [range[0].midi, range[1].midi - maxSemitones]
       const notes = Array.from(new Array(availableRange[1] - availableRange[0])).map(
-        (_, i) => [range[0].value + i, (range[0].order + i) % 12] as [number, number]
+        (_, i) => [range[0].midi + i, (range[0].order + i) % 12] as [number, number]
       )
       const availableNotes = notes.filter(v => scale.scaleNotes.find(note => note.order === v[1]))
       const startingNoteInScale = availableNotes[Math.floor(Math.random() * availableNotes.length)]
@@ -54,9 +54,6 @@ export class GuessChords {
   }
   get current() {
     return this.chords[this.idx]
-  }
-  get currentNotes(): Note[] {
-    return this.current.notes.map(n => getNote(n.midi))
   }
   get ended() {
     return this.chords.length === this.idx + 1

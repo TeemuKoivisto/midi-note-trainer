@@ -4,7 +4,7 @@
   import { currentGame } from '$stores/game'
   import { inputs, midiRangeNotes } from '$stores/inputs'
   import { hotKeyMap } from '$stores/score'
-  import { parseNote } from '$utils/getNote'
+  import { getOctave, parseNote } from '$utils/getNote'
 
   import { GuessKeys } from '$utils/guess_keys'
   import { GuessChords } from '$utils/guess_chords'
@@ -30,7 +30,7 @@
       keyboardInput = key.defaultNote
       keyboardError = ''
       if ($inputs.useAutoOctave) {
-        octave = $midiRangeNotes[0].octave + Math.floor(key.order / 12)
+        octave = getOctave($midiRangeNotes[0].midi)
       }
     }
     if ((keyboardInput.length > 0 && regexPosInt.test(pressed)) || octave !== undefined) {

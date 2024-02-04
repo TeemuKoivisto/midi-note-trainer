@@ -3,16 +3,16 @@
   import { scales } from '@/chords-and-scales'
 
   import { currentGame } from '$stores/game'
-  import { inputsActions, midiInput, midiRange } from '$stores/inputs'
+  import { inputsActions, midiRangeNotes } from '$stores/inputs'
   import { persist } from '$stores/persist'
   import { key, scale, scaleData, scoreActions } from '$stores/score'
   import { keys } from '$utils/guess_keys'
-  import { getNote, parseNote } from '$utils/getNote'
+  import { getNoteAbsolute, parseNote } from '$utils/getNote'
 
   import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
 
-  let rangeMin = getNote($midiRange[0]).absolute
-  let rangeMax = getNote($midiRange[1]).absolute
+  let rangeMin = getNoteAbsolute($midiRangeNotes[0])
+  let rangeMax = getNoteAbsolute($midiRangeNotes[1])
   let rangeError = ''
   const hidden = persist(writable(false), { key: 'options-hidden' })
 
@@ -38,7 +38,7 @@
   ) {
     const parsed = parseNote(e.currentTarget.value)
     if ('data' in parsed) {
-      const old = $midiRange
+      const old = $midiRangeNotes
       const range = [
         rang === 'min' ? parsed.data : old[0],
         rang === 'max' ? parsed.data : old[1]
@@ -48,9 +48,9 @@
     } else {
       rangeError = parsed.err
       if (rang === 'min') {
-        rangeMin = getNote($midiRange[0]).absolute
+        rangeMin = getNoteAbsolute($midiRangeNotes[0])
       } else {
-        rangeMax = getNote($midiRange[1]).absolute
+        rangeMax = getNoteAbsolute($midiRangeNotes[1])
       }
     }
   }
