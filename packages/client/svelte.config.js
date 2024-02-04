@@ -16,9 +16,10 @@ export default {
       routes: './src/routes',
       lib: './src/lib'
     },
-    paths: {
-      base: process.env.DEPLOY_TO_GH ? '/midi-music-notation-trainer' : ''
-    },
+    // paths: {
+		// 	base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
+    //   base: process.env.DEPLOY_TO_GH ? '/midi-music-notation-trainer' : ''
+		// },
     adapter: adapter({
       // default options are shown
       pages: 'build',

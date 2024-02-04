@@ -4,6 +4,7 @@ import { WebMidi } from 'webmidi'
 import { persist } from './persist'
 import { getNote } from '$utils/getNote'
 import { fetchSounds, Piano } from '@/midi-piano'
+import { GH_BASE_URL } from '$config'
 
 import type { Input } from 'webmidi'
 import type { Note, Result } from '@/types'
@@ -78,8 +79,7 @@ export const inputsActions = {
     }
     if (!get(piano)) {
       const p = new Piano(ctx)
-      const basePath = import.meta.env.BASE_URL
-      const sounds = await fetchSounds(`${basePath}audio`, ctx)
+      const sounds = await fetchSounds(`${GH_BASE_URL}audio`, ctx)
       p.load(sounds)
       piano.set(p)
     }

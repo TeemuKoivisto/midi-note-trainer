@@ -7,7 +7,6 @@ export default defineConfig({
   plugins: [sveltekit()],
   assetsInclude: ['**/*.dict'],
   server: {},
-  base: process.env.DEPLOY_TO_GH ? '/midi-music-notation-trainer/' : '',
   resolve: {
     alias: {
       $api: resolve('./src/api'),
