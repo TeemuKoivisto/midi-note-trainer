@@ -63,7 +63,9 @@ export class PlayChordsGame {
     this.played.add(midi)
   }
   guess() {
-    const notes = Array.from(this.played.values()).map(v => getNote(v)).sort((a, b) => a.value - b.value)
+    const notes = Array.from(this.played.values())
+      .map(v => getNote(v))
+      .sort((a, b) => a.value - b.value)
     this.played.clear()
     const target = `${this.current.note}${this.current.short}: ${this.current.notes
       .map(n => noteIntoString(n))

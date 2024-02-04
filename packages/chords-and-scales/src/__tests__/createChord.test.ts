@@ -44,7 +44,7 @@ describe('createChord', () => {
         if (!chord) {
           expect(chord).toBeTruthy()
         } else {
-          const notes = createChord(0, scale, chord)
+          const notes = createChord(0, scale, chord.intervals)
           acc[name] = notes.map(n => n.note)
         }
         return acc

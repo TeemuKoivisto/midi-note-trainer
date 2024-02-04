@@ -2,12 +2,14 @@ import { intervalToSemitones } from './utils'
 
 import type { Chord, Interval, MidiChord, MidiNote, Scale, ScaleNote } from './types'
 
-function createNote(note: ScaleNote, shift: number, midi: number) {
-  const flats = note.flats > 0 ? note.flats - shift : 0
-  const sharps = note.sharps > 0 ? note.sharps + shift : 0
+function createNote(note: ScaleNote, shiftUpOrDown: number, midi: number) {
+  // Shift note down x flats, note double negation -> regular sum
+  const flats = shiftUpOrDown < 0 ? note.flats - shiftUpOrDown : 0
+  // Shift note up x sharps
+  const sharps = shiftUpOrDown > 0 ? note.sharps + shiftUpOrDown : 0
   return {
     ...note,
-    order: (note.order + shift) % 12,
+    order: (note.order + shiftUpOrDown) % 12,
     flats,
     sharps,
     note: `${note.note.charAt(0)}${'♭'.repeat(flats)}${'♯'.repeat(sharps)}`,
@@ -28,14 +30,14 @@ export function createChord(note: number, scale: Scale, chordIntervals: Interval
     const chordInt = chordIntervals[i]
     const midi = note + intervalToSemitones(chordInt)
     const scaleNote = scale.scaleNotes.find(n => n.order === midi % 12)
-    if (scaleNote) {
-      chordNotes.push(createNote(scaleNote, 0, midi))
-    } else if (chordInt.flats > 0) {
-      chordNotes.push(createNote(scale.notesMap.get((midi + 1) % 12) as ScaleNote, 1, midi))
+    if (chordInt.flats > 0) {
+      chordNotes.push(createNote(scale.notesMap.get((midi + 1) % 12) as ScaleNote, -1, midi))
     } else if (chordInt.sharps > 0) {
-      chordNotes.push(createNote(scale.notesMap.get((midi - 1) % 12) as ScaleNote, -1, midi))
+      chordNotes.push(createNote(scale.notesMap.get((midi - 1) % 12) as ScaleNote, 1, midi))
     } else {
-      chordNotes.push(createNote(scale.notesMap.get(midi % 12) as ScaleNote, 0, midi))
+      chordNotes.push(
+        createNote(scaleNote ?? (scale.notesMap.get(midi % 12) as ScaleNote), 0, midi)
+      )
     }
   }
   return chordNotes
