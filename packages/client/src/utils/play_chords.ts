@@ -1,4 +1,4 @@
-import { chords, createChord, intervalToSemitones, noteIntoString } from '@/chords-and-scales'
+import { createChord, intervalToSemitones, noteIntoString } from '@/chords-and-scales'
 import { getNote } from './getNote'
 
 import type { Chord, MidiChord, Scale, ScaleNote } from '@/chords-and-scales'
@@ -37,7 +37,7 @@ export class PlayChordsGame {
         ...c[1],
         short: c[0],
         note: scaleNote.note,
-        notes: createChord({ ...scaleNote, midi: startingNoteInScale[0] }, scale, c[1])
+        notes: createChord(startingNoteInScale[0], scale, c[1].intervals)
       }
     })
     console.log('CHORDS', this.chords)
@@ -63,7 +63,7 @@ export class PlayChordsGame {
     this.played.add(midi)
   }
   guess() {
-    const notes = Array.from(this.played.values()).map(v => getNote(v))
+    const notes = Array.from(this.played.values()).map(v => getNote(v)).sort((a, b) => a.value - b.value)
     this.played.clear()
     const target = `${this.current.note}${this.current.short}: ${this.current.notes
       .map(n => noteIntoString(n))

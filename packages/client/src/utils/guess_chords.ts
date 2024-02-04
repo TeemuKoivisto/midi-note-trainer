@@ -46,7 +46,7 @@ export class GuessChords {
         ...c[1],
         short: c[0],
         note: scaleNote.note,
-        notes: createChord({ ...scaleNote, midi: startingNoteInScale[0] }, scale, c[1])
+        notes: createChord(startingNoteInScale[0], scale, c[1].intervals)
       }
     })
     console.log('CHORDS', this.chords)
