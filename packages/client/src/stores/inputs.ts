@@ -78,7 +78,8 @@ export const inputsActions = {
     }
     if (!get(piano)) {
       const p = new Piano(ctx)
-      const sounds = await fetchSounds('audio', ctx)
+      const basePath = import.meta.env.BASE_URL
+      const sounds = await fetchSounds(`${basePath}audio`, ctx)
       p.load(sounds)
       piano.set(p)
     }
