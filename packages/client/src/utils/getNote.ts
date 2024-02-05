@@ -27,7 +27,7 @@ export const BASE_NOTES = {
 }
 
 export function getOctave(midi: number) {
-  return Math.floor((midi - 12) / 12)
+  return midi === 12 ? 1 : Math.floor((midi - 12) / 12)
 }
 
 export function getNoteAbsolute(note: Note) {

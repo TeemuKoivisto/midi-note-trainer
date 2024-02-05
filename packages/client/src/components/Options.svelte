@@ -40,8 +40,8 @@
     if ('data' in parsed) {
       const old = $midiRangeNotes
       const range = [
-        rang === 'min' ? parsed.data : old[0],
-        rang === 'max' ? parsed.data : old[1]
+        rang === 'min' ? parsed.data : old[0].midi,
+        rang === 'max' ? parsed.data : old[1].midi
       ] as [number, number]
       inputsActions.setMidiRange(range)
       rangeError = ''

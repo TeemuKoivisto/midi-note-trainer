@@ -30,7 +30,7 @@
       keyboardInput = key.defaultNote
       keyboardError = ''
       if ($inputs.useAutoOctave) {
-        octave = getOctave($midiRangeNotes[0].midi)
+        octave = getOctave($midiRangeNotes[0].midi) + Math.floor(key.order / 12)
       }
     }
     if ((keyboardInput.length > 0 && regexPosInt.test(pressed)) || octave !== undefined) {
