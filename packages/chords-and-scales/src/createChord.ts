@@ -4,15 +4,20 @@ import type { Chord, Interval, MidiChord, MidiNote, Scale, ScaleNote } from './t
 
 function createNote(note: ScaleNote, shiftUpOrDown: number, midi: number) {
   // Shift note down x flats, note double negation -> regular sum
-  const flats = shiftUpOrDown < 0 ? note.flats - shiftUpOrDown : 0
+  let flats = shiftUpOrDown < 0 ? note.flats - shiftUpOrDown : note.flats
   // Shift note up x sharps
-  const sharps = shiftUpOrDown > 0 ? note.sharps + shiftUpOrDown : 0
+  let sharps = shiftUpOrDown > 0 ? note.sharps + shiftUpOrDown : note.sharps
+  if (flats > 0 && sharps > 0) {
+    const diff = Math.min(flats, sharps)
+    flats -= diff
+    sharps -= diff
+  }
   return {
     ...note,
     order: (note.order + shiftUpOrDown) % 12,
+    note: `${note.note.charAt(0)}${'♭'.repeat(flats)}${'♯'.repeat(sharps)}`,
     flats,
     sharps,
-    note: `${note.note.charAt(0)}${'♭'.repeat(flats)}${'♯'.repeat(sharps)}`,
     midi
   }
 }

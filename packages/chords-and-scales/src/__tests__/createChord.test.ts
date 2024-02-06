@@ -53,4 +53,29 @@ describe('createChord', () => {
     )
     expect(obj).toEqual(correct)
   })
+  it('should generate other chords from C major scale', () => {
+    const correct = [
+      ['A', 'maj', ['A', 'C♯', 'E']],
+      ['A', 'm', ['A', 'C', 'E']]
+    ] as [string, string, string[]][]
+    const created = createScale('C', 'major')
+    if ('err' in created) {
+      return expect(created.err).toEqual(undefined)
+    }
+    const scale = created.data
+    const obj = correct.reduce(
+      (acc, val) => {
+        const chord = chords.get(val[1])
+        if (!chord) {
+          expect(chord).toBeTruthy()
+        } else {
+          const notes = createChord(57, scale, chord.intervals)
+          acc.push([val[0], val[1], notes.map(n => n.note)])
+        }
+        return acc
+      },
+      [] as [string, string, string[]][]
+    )
+    expect(obj).toEqual(correct)
+  })
 })

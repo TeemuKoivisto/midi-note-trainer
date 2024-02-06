@@ -3,7 +3,7 @@ import { scales } from './scales'
 import type { Result } from '@/types'
 import type { Scale, ScaleNote } from './types'
 
-const NOTES = [
+export const NOTES = [
   { note: 'C', order: 0, black: false, sharps: 0, flats: 0 },
   { note: 'C♯', order: 1, black: true, sharps: 1, flats: 0 },
   { note: 'D', order: 2, black: false, sharps: 0, flats: 0 },
