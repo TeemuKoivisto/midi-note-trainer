@@ -30,7 +30,6 @@ export interface Interval {
 export interface RawScale {
   name: string
   synonyms?: string[]
-  tones: number[]
   intervals: Interval[]
 }
 export interface ScaleNote {

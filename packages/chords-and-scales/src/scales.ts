@@ -27,7 +27,6 @@ export const scales = new Map<string, RawScale>([
     'major',
     {
       name: 'Major',
-      tones: [2, 2, 1, 2, 2, 2, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -43,7 +42,6 @@ export const scales = new Map<string, RawScale>([
     'harmonicMajor',
     {
       name: 'Harmonic Major',
-      tones: [2, 2, 1, 2, 1, 3, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -59,7 +57,6 @@ export const scales = new Map<string, RawScale>([
     'doubleHarmonic',
     {
       name: 'Double Harmonic',
-      tones: [1, 3, 1, 2, 1, 3, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -75,7 +72,6 @@ export const scales = new Map<string, RawScale>([
     'minor',
     {
       name: 'Minor',
-      tones: [2, 1, 2, 2, 1, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -91,7 +87,6 @@ export const scales = new Map<string, RawScale>([
     'harmonicMinor',
     {
       name: 'Harmonic Minor',
-      tones: [2, 1, 2, 2, 1, 3, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -108,7 +103,6 @@ export const scales = new Map<string, RawScale>([
     'minor7b9',
     {
       name: 'Minor7b9',
-      tones: [1, 2, 2, 2, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -124,7 +118,6 @@ export const scales = new Map<string, RawScale>([
     'minor7b5',
     {
       name: 'Minor7b5',
-      tones: [2, 1, 2, 1, 2, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -140,7 +133,6 @@ export const scales = new Map<string, RawScale>([
     'ionian',
     {
       name: 'Ionian',
-      tones: [2, 2, 1, 2, 2, 2, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -156,7 +148,6 @@ export const scales = new Map<string, RawScale>([
     'aeolian',
     {
       name: 'Aeolian',
-      tones: [2, 1, 2, 2, 1, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -172,7 +163,6 @@ export const scales = new Map<string, RawScale>([
     'dorian',
     {
       name: 'Dorian',
-      tones: [2, 1, 2, 2, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -188,7 +178,6 @@ export const scales = new Map<string, RawScale>([
     'phrygian',
     {
       name: 'Phrygian',
-      tones: [1, 2, 2, 2, 1, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -204,7 +193,6 @@ export const scales = new Map<string, RawScale>([
     'phrygianDominant',
     {
       name: 'Phrygian dominant',
-      tones: [1, 3, 1, 2, 1, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -220,7 +208,6 @@ export const scales = new Map<string, RawScale>([
     'lydian',
     {
       name: 'Lydian',
-      tones: [2, 2, 2, 1, 2, 2, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -237,7 +224,6 @@ export const scales = new Map<string, RawScale>([
     {
       name: 'Lydian Dominant',
       synonyms: ['Acoustic'],
-      tones: [2, 2, 2, 1, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -253,7 +239,6 @@ export const scales = new Map<string, RawScale>([
     'mixolydian',
     {
       name: 'Mixolydian',
-      tones: [2, 2, 1, 2, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -269,7 +254,6 @@ export const scales = new Map<string, RawScale>([
     'mixolydianFlat6',
     {
       name: 'Mixolydian Flat-6',
-      tones: [2, 2, 1, 2, 1, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -285,7 +269,6 @@ export const scales = new Map<string, RawScale>([
     'locrian',
     {
       name: 'Locrian',
-      tones: [1, 2, 2, 1, 2, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -301,7 +284,6 @@ export const scales = new Map<string, RawScale>([
     'superLocrian',
     {
       name: 'Super Locrian',
-      tones: [1, 2, 1, 2, 2, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -318,7 +300,6 @@ export const scales = new Map<string, RawScale>([
     'halfDiminished',
     {
       name: 'Half Diminished',
-      tones: [2, 1, 2, 1, 2, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -335,7 +316,6 @@ export const scales = new Map<string, RawScale>([
     'byzantine',
     {
       name: 'Byzantine',
-      tones: [1, 3, 1, 2, 1, 3, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -351,7 +331,6 @@ export const scales = new Map<string, RawScale>([
     'melodicMinorAscending',
     {
       name: 'Melodic Minor Ascending',
-      tones: [2, 1, 2, 2, 2, 2, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -367,7 +346,6 @@ export const scales = new Map<string, RawScale>([
     'melodicMinorDescending',
     {
       name: 'Melodic Minor Descending',
-      tones: [2, 2, 1, 2, 2, 1, 2],
       intervals: [
         { str: '♭7', seq: 7, flats: 1, sharps: 0 },
         { str: '♭6', seq: 6, flats: 1, sharps: 0 },
@@ -383,7 +361,6 @@ export const scales = new Map<string, RawScale>([
     'majorPentatonic',
     {
       name: 'Major Pentatonic',
-      tones: [2, 2, 3, 2, 3],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -397,7 +374,6 @@ export const scales = new Map<string, RawScale>([
     'majorPentatonicBlues',
     {
       name: 'Major Pentatonic Blues',
-      tones: [2, 1, 1, 3, 2, 3],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -412,7 +388,6 @@ export const scales = new Map<string, RawScale>([
     'minorPentatonic',
     {
       name: 'Minor Pentatonic',
-      tones: [3, 2, 2, 3, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭3', seq: 3, flats: 1, sharps: 0 },
@@ -426,7 +401,6 @@ export const scales = new Map<string, RawScale>([
     'minorPentatonicBlues',
     {
       name: 'Minor Pentatonic Blues',
-      tones: [3, 2, 1, 1, 3, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭3', seq: 3, flats: 1, sharps: 0 },
@@ -441,7 +415,6 @@ export const scales = new Map<string, RawScale>([
     'minor6Pentatonic',
     {
       name: 'Minor 6th Pentatonic',
-      tones: [3, 2, 2, 2, 3],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭3', seq: 3, flats: 1, sharps: 0 },
@@ -456,7 +429,6 @@ export const scales = new Map<string, RawScale>([
     {
       name: 'Suspended Pentatonic',
       synonyms: ['Egyptian'],
-      tones: [2, 3, 2, 3, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -470,7 +442,6 @@ export const scales = new Map<string, RawScale>([
     'scottishPentatonic',
     {
       name: 'Scottish Pentatonic',
-      tones: [2, 3, 2, 2, 3],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -484,7 +455,6 @@ export const scales = new Map<string, RawScale>([
     'enigmaticMajor',
     {
       name: 'Enigmatic Major',
-      tones: [1, 3, 2, 2, 2, 1, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -500,7 +470,6 @@ export const scales = new Map<string, RawScale>([
     'enigmaticMinor',
     {
       name: 'Enigmatic Minor',
-      tones: [1, 2, 3, 1, 3, 1, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -516,7 +485,6 @@ export const scales = new Map<string, RawScale>([
     'diminishedWholeHalf',
     {
       name: 'Diminished Whole-Half',
-      tones: [2, 1, 2, 1, 2, 1, 2, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -533,7 +501,6 @@ export const scales = new Map<string, RawScale>([
     'diminishedHalfWhole',
     {
       name: 'Diminished Half-Whole',
-      tones: [1, 2, 1, 2, 1, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -550,7 +517,6 @@ export const scales = new Map<string, RawScale>([
     'wholeTone',
     {
       name: 'Whole Tone',
-      tones: [2, 2, 2, 2, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -565,7 +531,6 @@ export const scales = new Map<string, RawScale>([
     'augmented',
     {
       name: 'Augmented',
-      tones: [3, 1, 3, 1, 3, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♯2', seq: 2, flats: 0, sharps: 1 },
@@ -580,7 +545,6 @@ export const scales = new Map<string, RawScale>([
     'dominant7th',
     {
       name: 'Dominant 7th',
-      tones: [2, 3, 2, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -596,7 +560,6 @@ export const scales = new Map<string, RawScale>([
     {
       name: 'Prometheus',
       synonyms: ['Mystic'],
-      tones: [2, 2, 2, 3, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -611,7 +574,6 @@ export const scales = new Map<string, RawScale>([
     'overtone',
     {
       name: 'Overtone',
-      tones: [2, 2, 2, 1, 1, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -627,7 +589,6 @@ export const scales = new Map<string, RawScale>([
     'leadingTone',
     {
       name: 'Leading Tone',
-      tones: [2, 2, 2, 2, 2, 1, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -643,7 +604,6 @@ export const scales = new Map<string, RawScale>([
     'bebopMajor',
     {
       name: 'Bebop Major',
-      tones: [2, 2, 1, 2, 1, 1, 2, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -660,7 +620,6 @@ export const scales = new Map<string, RawScale>([
     'bebopMinor',
     {
       name: 'Bebop Minor',
-      tones: [2, 1, 1, 1, 2, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -677,7 +636,6 @@ export const scales = new Map<string, RawScale>([
     'bebopDominant',
     {
       name: 'Bebop Dominant',
-      tones: [2, 2, 1, 2, 2, 1, 1, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -694,7 +652,6 @@ export const scales = new Map<string, RawScale>([
     'neapolitanMajor',
     {
       name: 'Neapolitan Major',
-      tones: [1, 2, 2, 2, 2, 2, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -710,7 +667,6 @@ export const scales = new Map<string, RawScale>([
     'neapolitanMinor',
     {
       name: 'Neapolitan Minor',
-      tones: [1, 2, 2, 2, 1, 3, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -726,7 +682,6 @@ export const scales = new Map<string, RawScale>([
     'hungarianMajor',
     {
       name: 'Hungarian Major',
-      tones: [3, 1, 2, 1, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♯2', seq: 2, flats: 0, sharps: 1 },
@@ -742,7 +697,6 @@ export const scales = new Map<string, RawScale>([
     'hungarianMinor',
     {
       name: 'Hungarian Minor',
-      tones: [2, 1, 3, 1, 1, 3, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -758,7 +712,6 @@ export const scales = new Map<string, RawScale>([
     'hungarianGypsy',
     {
       name: 'Hungarian Gypsy',
-      tones: [2, 1, 3, 1, 1, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -774,7 +727,6 @@ export const scales = new Map<string, RawScale>([
     'spanish',
     {
       name: 'Spanish',
-      tones: [1, 2, 1, 2, 2, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -791,7 +743,6 @@ export const scales = new Map<string, RawScale>([
     {
       name: 'Spanish Eight Tone',
       synonyms: ['Jewish Eight Tone'],
-      tones: [1, 2, 1, 1, 1, 2, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -808,7 +759,6 @@ export const scales = new Map<string, RawScale>([
     'spanishGypsy',
     {
       name: 'Spanish Gypsy',
-      tones: [1, 3, 1, 2, 1, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -824,7 +774,6 @@ export const scales = new Map<string, RawScale>([
     'hirojoshi',
     {
       name: 'Hirojoshi',
-      tones: [2, 1, 4, 1, 4],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -838,7 +787,6 @@ export const scales = new Map<string, RawScale>([
     'japaneseA',
     {
       name: 'Japanese A',
-      tones: [1, 4, 1, 3, 3],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -852,7 +800,6 @@ export const scales = new Map<string, RawScale>([
     'japaneseB',
     {
       name: 'Japanese B',
-      tones: [2, 3, 1, 3, 3],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -866,7 +813,6 @@ export const scales = new Map<string, RawScale>([
     'yo',
     {
       name: 'Yo',
-      tones: [2, 3, 2, 2, 3],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -881,7 +827,6 @@ export const scales = new Map<string, RawScale>([
     'insen',
     {
       name: 'Insen',
-      tones: [1, 4, 2, 3, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -895,7 +840,6 @@ export const scales = new Map<string, RawScale>([
     'iwato',
     {
       name: 'Iwato',
-      tones: [1, 4, 1, 4, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -909,7 +853,6 @@ export const scales = new Map<string, RawScale>([
     'oriental',
     {
       name: 'Oriental',
-      tones: [1, 3, 1, 1, 3, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -925,7 +868,6 @@ export const scales = new Map<string, RawScale>([
     'persian',
     {
       name: 'Persian',
-      tones: [1, 3, 1, 1, 2, 3, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -941,7 +883,6 @@ export const scales = new Map<string, RawScale>([
     'arabian',
     {
       name: 'Arabian',
-      tones: [2, 2, 1, 1, 2, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -957,7 +898,6 @@ export const scales = new Map<string, RawScale>([
     'balinese',
     {
       name: 'Balinese',
-      tones: [1, 2, 4, 1, 4],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -971,7 +911,6 @@ export const scales = new Map<string, RawScale>([
     'kumoi',
     {
       name: 'Kumoi',
-      tones: [2, 1, 4, 2, 2, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -985,7 +924,6 @@ export const scales = new Map<string, RawScale>([
     'pelog',
     {
       name: 'Pelog',
-      tones: [1, 2, 3, 1, 1, 4],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -999,7 +937,6 @@ export const scales = new Map<string, RawScale>([
     'algerian',
     {
       name: 'Algerian',
-      tones: [2, 1, 2, 1, 1, 1, 3, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -1016,7 +953,6 @@ export const scales = new Map<string, RawScale>([
     'chinese',
     {
       name: 'Chinese',
-      tones: [4, 2, 1, 4, 1],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♯4', seq: 4, flats: 0, sharps: 1 },
@@ -1029,7 +965,6 @@ export const scales = new Map<string, RawScale>([
     'mongolian',
     {
       name: 'Mongolian',
-      tones: [2, 2, 3, 2, 3],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -1043,7 +978,6 @@ export const scales = new Map<string, RawScale>([
     'romanianMajor',
     {
       name: 'Romanian Major',
-      tones: [1, 3, 2, 1, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -1059,7 +993,6 @@ export const scales = new Map<string, RawScale>([
     'romanianMinor',
     {
       name: 'Romanian Minor',
-      tones: [2, 1, 3, 1, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -1075,7 +1008,6 @@ export const scales = new Map<string, RawScale>([
     'hindu',
     {
       name: 'Hindu',
-      tones: [2, 2, 1, 2, 1, 2, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
@@ -1091,7 +1023,6 @@ export const scales = new Map<string, RawScale>([
     'istrian',
     {
       name: 'Istrian',
-      tones: [1, 2, 1, 2, 1, 5],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -1106,7 +1037,6 @@ export const scales = new Map<string, RawScale>([
     'ukrainianDorian',
     {
       name: 'Ukrainian Dorian',
-      tones: [2, 1, 3, 1, 2, 1, 2],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
