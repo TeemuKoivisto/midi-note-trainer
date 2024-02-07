@@ -1,6 +1,7 @@
 import { chords } from '../chords'
 import { createChord } from '../createChord'
 import { createScale } from '../createScale'
+import { NOTES } from '../utils'
 
 describe('createChord', () => {
   it('should generate chords from root of C major scale', () => {
@@ -56,8 +57,27 @@ describe('createChord', () => {
   it('should generate other chords from C major scale', () => {
     const correct = [
       ['A', 'maj', ['A', 'C♯', 'E']],
-      ['A', 'm', ['A', 'C', 'E']]
+      ['A', 'maj13', ['A', 'C♯', 'E', 'G♯', 'B', 'D', 'F♯']],
+      ['A', 'm', ['A', 'C', 'E']],
+      ['A', 'm13', ['A', 'C', 'E', 'G', 'B', 'D', 'F♯']],
+      ['A', '7#9', ['A', 'C♯', 'E', 'G', 'B♯']],
+      ['A', 'm7b5', ['A', 'C', 'E♭', 'G']],
+      ['A', 'aug7', ['A', 'C♯', 'E♯', 'G']],
+      ['B♭', 'maj', ['B♭', 'D', 'F']],
+      ['B♭', 'maj13', ['B♭', 'D', 'F', 'A', 'C', 'E♭', 'G']],
+      ['B♭', 'm', ['B♭', 'D♭', 'F']],
+      ['B♭', 'm13', ['B♭', 'D♭', 'F', 'A♭', 'C', 'E♭', 'G']],
+      ['B♭', '7#9', ['B♭', 'D', 'F', 'A♭', 'C♯']],
+      ['B♭', 'm7b5', ['B♭', 'D♭', 'F♭', 'A♭']],
+      ['B♭', 'aug7', ['B♭', 'D', 'F♯', 'A♭']],
+      // F# is normally denoted as below, but since we are in C major we use the notes of the scale
+      // ['F♯', 'maj13', ['F♯', 'A♯', 'C♯', 'E♯', 'G♯', 'B', 'D♯']],
+      ['F♯', 'maj13', ['F♯', 'B♭', 'C♯', 'F', 'G♯', 'B', 'E♭']],
+      ['F♯', 'm13', ['F♯', 'B♭♭', 'C♯', 'F♭', 'G♯', 'B', 'E♭']],
+      ['F♯', 'm7b5', ['F♯', 'B♭♭', 'C', 'F♭']],
+      ['F♯', 'aug7', ['F♯', 'B♭', 'C♯♯', 'F♭']]
     ] as [string, string, string[]][]
+
     const created = createScale('C', 'major')
     if ('err' in created) {
       return expect(created.err).toEqual(undefined)
@@ -66,10 +86,12 @@ describe('createChord', () => {
     const obj = correct.reduce(
       (acc, val) => {
         const chord = chords.get(val[1])
-        if (!chord) {
+        const note = NOTES.find(n => n.note === val[0])
+        if (!chord || !note) {
           expect(chord).toBeTruthy()
+          expect(note).toBeTruthy()
         } else {
-          const notes = createChord(57, scale, chord.intervals)
+          const notes = createChord(0 + note.order, scale, chord.intervals)
           acc.push([val[0], val[1], notes.map(n => n.note)])
         }
         return acc

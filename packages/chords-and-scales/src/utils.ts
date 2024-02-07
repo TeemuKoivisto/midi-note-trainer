@@ -2,6 +2,21 @@ import type { Interval } from './types'
 
 const regexPosInt = /^[0-9]$/
 
+export const NOTES = [
+  { note: 'C', order: 0, black: false, sharps: 0, flats: 0 },
+  { note: 'C♯', order: 1, black: true, sharps: 1, flats: 0 },
+  { note: 'D', order: 2, black: false, sharps: 0, flats: 0 },
+  { note: 'E♭', order: 3, black: true, sharps: 0, flats: 1 },
+  { note: 'E', order: 4, black: false, sharps: 0, flats: 0 },
+  { note: 'F', order: 5, black: false, sharps: 0, flats: 0 },
+  { note: 'F♯', order: 6, black: true, sharps: 1, flats: 0 },
+  { note: 'G', order: 7, black: false, sharps: 0, flats: 0 },
+  { note: 'G♯', order: 8, black: true, sharps: 1, flats: 0 },
+  { note: 'A', order: 9, black: false, sharps: 0, flats: 0 },
+  { note: 'B♭', order: 10, black: true, sharps: 0, flats: 1 },
+  { note: 'B', order: 11, black: false, sharps: 0, flats: 0 }
+]
+
 export function parseInteger(str: string) {
   try {
     return parseInt(str)
