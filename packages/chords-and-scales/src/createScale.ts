@@ -53,7 +53,7 @@ function createScaleNotes(startingOrder: number, letters: string[], intervals: I
       return {
         order,
         note: higher.note + '♭'.repeat(flats),
-        flats,
+        flats: flats + (higher.note.includes('♭') ? 1 : 0),
         sharps: 0
       }
     } else if (n > letter || (n === 'A' && letter === 'G')) {
@@ -71,11 +71,11 @@ function createScaleNotes(startingOrder: number, letters: string[], intervals: I
         order,
         note: lower.note + '♯'.repeat(sharps),
         flats: 0,
-        sharps
+        sharps: sharps + (lower.note.includes('♯') ? 1 : 0)
       }
     } else {
       // Correct letter
-      return { order, note: note.note, flats: 0, sharps: 0 }
+      return { order, note: note.note, flats: note.flats, sharps: note.sharps }
     }
   })
 }

@@ -73,12 +73,45 @@ describe('createChord', () => {
       // F# is normally denoted as below, but since we are in C major we use the notes of the scale
       // ['F♯', 'maj13', ['F♯', 'A♯', 'C♯', 'E♯', 'G♯', 'B', 'D♯']],
       ['F♯', 'maj13', ['F♯', 'B♭', 'C♯', 'F', 'G♯', 'B', 'E♭']],
+      // @TODO should use A instead of Bbb since Bb is not in scale, Fb -> E probably as well
       ['F♯', 'm13', ['F♯', 'B♭♭', 'C♯', 'F♭', 'G♯', 'B', 'E♭']],
       ['F♯', 'm7b5', ['F♯', 'B♭♭', 'C', 'F♭']],
       ['F♯', 'aug7', ['F♯', 'B♭', 'C♯♯', 'F♭']]
     ] as [string, string, string[]][]
 
     const created = createScale('C', 'major')
+    if ('err' in created) {
+      return expect(created.err).toEqual(undefined)
+    }
+    const scale = created.data
+    const obj = correct.reduce(
+      (acc, val) => {
+        const chord = chords.get(val[1])
+        const note = NOTES.find(n => n.note === val[0])
+        if (!chord || !note) {
+          expect(chord).toBeTruthy()
+          expect(note).toBeTruthy()
+        } else {
+          const notes = createChord(0 + note.order, scale, chord.intervals)
+          acc.push([val[0], val[1], notes.map(n => n.note)])
+        }
+        return acc
+      },
+      [] as [string, string, string[]][]
+    )
+    expect(obj).toEqual(correct)
+  })
+  it('should generate chords from F# major scale using scale notes correctly', () => {
+    const correct = [
+      ['F♯', 'maj', ['F♯', 'A♯', 'C♯']],
+      ['F♯', 'maj13', ['F♯', 'A♯', 'C♯', 'E♯', 'G♯', 'B', 'D♯']],
+      ['F♯', 'm13', ['F♯', 'A', 'C♯', 'E', 'G♯', 'B', 'D♯']],
+      ['F♯', 'm7b5', ['F♯', 'A', 'C', 'E']],
+      ['F♯', 'aug7', ['F♯', 'A♯', 'C♯♯', 'E']]
+    ] as [string, string, string[]][]
+
+    // F♯, G♯, A♯, B, C♯, D♯, E♯
+    const created = createScale('F♯', 'major')
     if ('err' in created) {
       return expect(created.err).toEqual(undefined)
     }

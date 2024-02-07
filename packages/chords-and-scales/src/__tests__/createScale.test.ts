@@ -141,7 +141,14 @@ describe('createScale', () => {
         if ('err' in created) {
           expect(created.err).toEqual(undefined)
         } else {
-          expect(created.data.scaleNotes.map(v => v.note)).toEqual(notes)
+          expect(created.data.scaleNotes).toEqual(
+            notes.map((n, idx) => ({
+              note: n,
+              order: created.data.scaleNotes[idx].order,
+              flats: Array.from(n.matchAll(/♭/g)).length,
+              sharps: Array.from(n.matchAll(/♯/g)).length
+            }))
+          )
         }
       })
     })
