@@ -20,7 +20,7 @@ describe('createChord', () => {
       m11: ['C', 'E♭', 'G', 'B♭', 'D', 'F'],
       m13: ['C', 'E♭', 'G', 'B♭', 'D', 'F', 'A'],
       sus2: ['C', 'D', 'G'],
-      sus4: ['C', 'F♭', 'G'],
+      sus4: ['C', 'E', 'G'],
       '7sus4': ['C', 'F', 'G', 'B♭'],
       '7': ['C', 'E', 'G', 'B♭'],
       '7#9': ['C', 'E', 'G', 'B♭', 'D♯'],
@@ -28,7 +28,7 @@ describe('createChord', () => {
       '11': ['C', 'E', 'G', 'B♭', 'D', 'F'],
       '13': ['C', 'E', 'G', 'B♭', 'D', 'F', 'A'],
       dim: ['C', 'E♭', 'G♭'],
-      dim7: ['C', 'E♭', 'G♭', 'B♭♭'],
+      dim7: ['C', 'E♭', 'G♭', 'A'],
       m7b5: ['C', 'E♭', 'G♭', 'B♭'],
       '5': ['C', 'G'],
       aug: ['C', 'E', 'G♯'],
@@ -60,23 +60,25 @@ describe('createChord', () => {
       ['A', 'maj13', ['A', 'C♯', 'E', 'G♯', 'B', 'D', 'F♯']],
       ['A', 'm', ['A', 'C', 'E']],
       ['A', 'm13', ['A', 'C', 'E', 'G', 'B', 'D', 'F♯']],
-      ['A', '7#9', ['A', 'C♯', 'E', 'G', 'B♯']],
+      ['A', '7#9', ['A', 'C♯', 'E', 'G', 'C']],
       ['A', 'm7b5', ['A', 'C', 'E♭', 'G']],
-      ['A', 'aug7', ['A', 'C♯', 'E♯', 'G']],
+      ['A', 'aug7', ['A', 'C♯', 'F', 'G']],
       ['B♭', 'maj', ['B♭', 'D', 'F']],
       ['B♭', 'maj13', ['B♭', 'D', 'F', 'A', 'C', 'E♭', 'G']],
       ['B♭', 'm', ['B♭', 'D♭', 'F']],
       ['B♭', 'm13', ['B♭', 'D♭', 'F', 'A♭', 'C', 'E♭', 'G']],
       ['B♭', '7#9', ['B♭', 'D', 'F', 'A♭', 'C♯']],
-      ['B♭', 'm7b5', ['B♭', 'D♭', 'F♭', 'A♭']],
+      ['B♭', 'm7b5', ['B♭', 'D♭', 'E', 'A♭']],
       ['B♭', 'aug7', ['B♭', 'D', 'F♯', 'A♭']],
+      ['B', 'maj13', ['B', 'E♭', 'F♯', 'B♭', 'C♯', 'E', 'G♯']],
+      ['B', 'm13', ['B', 'D', 'F♯', 'A', 'C♯', 'E', 'G♯']],
       // F# is normally denoted as below, but since we are in C major we use the notes of the scale
       // ['F♯', 'maj13', ['F♯', 'A♯', 'C♯', 'E♯', 'G♯', 'B', 'D♯']],
       ['F♯', 'maj13', ['F♯', 'B♭', 'C♯', 'F', 'G♯', 'B', 'E♭']],
       // @TODO should use A instead of Bbb since Bb is not in scale, Fb -> E probably as well
-      ['F♯', 'm13', ['F♯', 'B♭♭', 'C♯', 'F♭', 'G♯', 'B', 'E♭']],
-      ['F♯', 'm7b5', ['F♯', 'B♭♭', 'C', 'F♭']],
-      ['F♯', 'aug7', ['F♯', 'B♭', 'C♯♯', 'F♭']]
+      ['F♯', 'm13', ['F♯', 'A', 'C♯', 'E', 'G♯', 'B', 'E♭']],
+      ['F♯', 'm7b5', ['F♯', 'A', 'C', 'E']],
+      ['F♯', 'aug7', ['F♯', 'B♭', 'D', 'E']]
     ] as [string, string, string[]][]
 
     const created = createScale('C', 'major')

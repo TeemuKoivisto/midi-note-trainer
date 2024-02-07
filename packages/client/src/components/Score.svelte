@@ -8,7 +8,6 @@
   import { currentGame, guessState, type GuessState } from '$stores/game'
   import { played, target, scaleData } from '$stores/score'
   import { getOctave } from '$utils/getNote'
-  import { keys } from '$utils/guess_keys'
 
   import type { Scale } from '@/chords-and-scales'
   import type { Note } from '@/types'
