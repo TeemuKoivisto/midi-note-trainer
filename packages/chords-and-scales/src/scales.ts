@@ -1,5 +1,22 @@
 import type { RawScale } from './types'
 
+export function findScale(scaleName: string): RawScale | undefined {
+  let scale = scales.get(scaleName)
+  if (!scale) {
+    const name = scaleName.toLowerCase()
+    const found = Array.from(scales.entries()).find(
+      ([k, v]) =>
+        k.toLowerCase() === name ||
+        v.name.toLowerCase() === name ||
+        v.synonyms?.find(n => n.toLowerCase() === name)
+    )
+    if (found) {
+      scale = found[1]
+    }
+  }
+  return scale
+}
+
 // https://github.com/Zachacious/MusicTheoryJS/blob/65572a7bf58e0485f250bd92748fdd1e975f4a90/src/scale/scaleTemplates.ts
 // All scales should equal to 12 semitones
 // https://en.wikipedia.org/wiki/List_of_musical_scales_and_modes

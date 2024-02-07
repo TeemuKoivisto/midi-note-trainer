@@ -4,7 +4,7 @@ describe('createScale', () => {
   it('should generate all major scales correctly', () => {
     const correct = {
       C: ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
-      // Cb Gb Db Ab Eb Bb F C
+
       // flats
       F: ['F', 'G', 'A', 'B♭', 'C', 'D', 'E'],
       'B♭': ['B♭', 'C', 'D', 'E♭', 'F', 'G', 'A'],
@@ -14,8 +14,7 @@ describe('createScale', () => {
       'G♭': ['G♭', 'A♭', 'B♭', 'C♭', 'D♭', 'E♭', 'F'],
       'C♭': ['C♭', 'D♭', 'E♭', 'F♭', 'G♭', 'A♭', 'B♭'],
       'F♭': ['F♭', 'G♭', 'A♭', 'B♭♭', 'C♭', 'D♭', 'E♭'],
-      // -> E, F#, G#, A, B, C#, D#
-      // C G D A E B F# C#
+
       // sharps
       G: ['G', 'A', 'B', 'C', 'D', 'E', 'F♯'],
       D: ['D', 'E', 'F♯', 'G', 'A', 'B', 'C♯'],
@@ -119,11 +118,11 @@ describe('createScale', () => {
         'G♭': ['G♭', 'A♭', 'B♭', 'C♭', 'D♭', 'D', 'E♭', 'F']
       },
       bebopMinor: {
-        // 'A♭': ['A♭', 'B♭', 'C♭', 'C', 'D♭', 'E♭', 'F', 'G♭']
+        'A♭': ['A♭', 'B♭', 'C♭', 'C', 'D♭', 'E♭', 'F', 'G♭']
       },
       bebopDominant: {
         // D-flat major scale with an added minor seventh
-        // 'D♭': ['D♭', 'E♭', 'F', 'G♭', 'A♭', 'B♭', 'C♭', 'C']
+        'D♭': ['D♭', 'E♭', 'F', 'G♭', 'A♭', 'B♭', 'C♭', 'C']
       },
       hirojoshi: {
         'A♯': ['A♯', 'B♯', 'C♯', 'E♯', 'F♯']

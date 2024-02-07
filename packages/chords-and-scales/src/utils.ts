@@ -1,21 +1,37 @@
-import type { Interval } from './types'
+import type { Interval, ScaleNote } from './types'
 
 const regexPosInt = /^[0-9]$/
 
 export const NOTES = [
-  { note: 'C', order: 0, black: false, sharps: 0, flats: 0 },
-  { note: 'C♯', order: 1, black: true, sharps: 1, flats: 0 },
-  { note: 'D', order: 2, black: false, sharps: 0, flats: 0 },
-  { note: 'E♭', order: 3, black: true, sharps: 0, flats: 1 },
-  { note: 'E', order: 4, black: false, sharps: 0, flats: 0 },
-  { note: 'F', order: 5, black: false, sharps: 0, flats: 0 },
-  { note: 'F♯', order: 6, black: true, sharps: 1, flats: 0 },
-  { note: 'G', order: 7, black: false, sharps: 0, flats: 0 },
-  { note: 'G♯', order: 8, black: true, sharps: 1, flats: 0 },
-  { note: 'A', order: 9, black: false, sharps: 0, flats: 0 },
-  { note: 'B♭', order: 10, black: true, sharps: 0, flats: 1 },
-  { note: 'B', order: 11, black: false, sharps: 0, flats: 0 }
+  { note: 'C', order: 0, sharps: 0, flats: 0 },
+  { note: 'C♯', order: 1, sharps: 1, flats: 0 },
+  { note: 'D', order: 2, sharps: 0, flats: 0 },
+  { note: 'E♭', order: 3, sharps: 0, flats: 1 },
+  { note: 'E', order: 4, sharps: 0, flats: 0 },
+  { note: 'F', order: 5, sharps: 0, flats: 0 },
+  { note: 'F♯', order: 6, sharps: 1, flats: 0 },
+  { note: 'G', order: 7, sharps: 0, flats: 0 },
+  { note: 'G♯', order: 8, sharps: 1, flats: 0 },
+  { note: 'A', order: 9, sharps: 0, flats: 0 },
+  { note: 'B♭', order: 10, sharps: 0, flats: 1 },
+  { note: 'B', order: 11, sharps: 0, flats: 0 }
 ]
+
+export function getRootNote(note: string): ScaleNote | undefined {
+  const rootNote = NOTES.find(n => n.note.charAt(0) === note.charAt(0) && n.note.length === 1)
+  if (rootNote) {
+    const flats = note.charAt(1) === '♭' ? 1 : 0
+    const sharps = note.charAt(1) === '♯' ? 1 : 0
+    const order = flats > 0 ? rootNote.order - 1 : sharps > 0 ? rootNote.order + 1 : rootNote.order
+    return {
+      note,
+      order: order < 0 ? 11 : order > 11 ? 0 : order,
+      flats,
+      sharps
+    }
+  }
+  return undefined
+}
 
 export function parseInteger(str: string) {
   try {
