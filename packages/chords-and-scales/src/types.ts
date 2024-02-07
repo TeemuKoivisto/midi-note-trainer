@@ -42,7 +42,9 @@ export type MidiNote = ScaleNote & { midi: number }
 export interface Scale {
   key: string // eg C
   scale: string // eg major
-  keySignature: string // using standard diatonic accidentals
+  flats: number
+  sharps: number
+  majorSignature: string // using standard diatonic accidentals
   intervals: Interval[]
   scaleNotes: ScaleNote[]
   notesMap: Map<number, ScaleNote> // all 12 semitones of octave

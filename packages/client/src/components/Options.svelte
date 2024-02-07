@@ -5,7 +5,7 @@
   import { currentGame } from '$stores/game'
   import { inputsActions, midiRangeNotes } from '$stores/inputs'
   import { persist } from '$stores/persist'
-  import { key, scale, scaleData, scoreActions } from '$stores/score'
+  import { keyAndScale, scaleData, scoreActions } from '$stores/score'
   import { keys } from '$utils/guess_keys'
   import { getNoteAbsolute, parseNote } from '$utils/getNote'
 
@@ -16,13 +16,13 @@
   let rangeError = ''
   const hidden = persist(writable(false), { key: 'options-hidden' })
 
-  let selectedKey = $key
+  let selectedKey = $keyAndScale[0]
 
   const scaleOptions = Array.from(scales.entries()).map(([k, v]) => ({
     key: k,
     value: v.name
   }))
-  let selectedScale = $scale
+  let selectedScale = $keyAndScale[1]
   $: selectedScaleNotes =
     Array.from(scales.entries()).find(([k, v]) => v.name === selectedScale)?.[1].intervals || []
 
@@ -68,7 +68,7 @@
       selectedKey = selectedKey.replaceAll('b', '♭').replaceAll('#', '♯')
       scoreActions.setKey(selectedKey)
     } else {
-      selectedKey = $key
+      selectedKey = $keyAndScale[0]
     }
   }
   function handleSelectScale(key: string) {

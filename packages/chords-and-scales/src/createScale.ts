@@ -1,3 +1,4 @@
+import { getKeySignature } from './getKeySignature'
 import { findScale } from './scales'
 import { NOTES, getRootNote, intervalToSemitones } from './utils'
 
@@ -119,8 +120,7 @@ export function createScale(rawKey: string, scaleName: string): Result<Scale> {
     data: {
       key,
       scale: scale.name,
-      // @TODO count accidentals using diatonic scale order & transform to major key signature
-      keySignature: 'C',
+      ...getKeySignature(scaleNotes),
       intervals: scale.intervals.map(int => ({ ...int })),
       scaleNotes,
       notesMap

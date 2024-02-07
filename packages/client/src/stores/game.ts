@@ -36,7 +36,7 @@ export const gameActions = {
   },
   playGuessKeys(type: 'major' | 'minor', count = 10) {
     const game = new GuessKeys(type, count)
-    scoreActions.setKey(game.current)
+    scoreActions.setKeyAndScale(game.current, type)
     scoreActions.setTarget()
     scoreActions.clearPlayed()
     guessState.set('waiting')
@@ -53,12 +53,12 @@ export const gameActions = {
     if (type === 'write') {
       game = new GuessChords(type, scale.data, Array.from(chords.entries()), range, count)
     } else {
-      const basicChords = Array.from(chords.entries()).filter(c => c[0] === 'maj' || c[0] === 'm')
+      const basicChords = Array.from(chords.entries()).filter(c => c[0] === 'maj')
       game = new PlayChordsGame(scale.data, basicChords, range, count)
     }
-    scoreActions.setTarget(game.current.notes.map(n => addParts(n)))
     get(piano)?.playChord(game?.current.notes.map(n => n.midi))
-    scoreActions.setKey(scale.data.key)
+    scoreActions.setKeyAndScale(scale.data.key, scale.data.scale)
+    scoreActions.setTarget(game.current.notes.map(n => addParts(n)))
     scoreActions.clearPlayed()
     guessState.set('waiting')
     currentGame.set(game)

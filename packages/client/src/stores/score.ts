@@ -31,17 +31,18 @@ export const defaultKeyMap = readable({
 export const fadeTimeout = persist(writable(1500), {
   key: 'fade-timeout'
 })
-export const key = writable<string>('C')
-export const scale = writable<string>('Major')
-export const scaleData = derived([key, scale], ([k, s]): Scale => {
-  const res = createScale(k, s)
+export const keyAndScale = writable<[string, string]>(['C', 'Major'])
+export const scaleData = derived(keyAndScale, (val): Scale => {
+  const res = createScale(val[0], val[1])
   if ('data' in res) {
     return res.data
   }
   return {
-    key: k,
-    scale: s,
-    keySignature: 'C',
+    key: val[0],
+    scale: val[1],
+    flats: 0,
+    sharps: 0,
+    majorSignature: 'C',
     intervals: [],
     scaleNotes: [],
     notesMap: new Map()
@@ -92,11 +93,14 @@ export const scoreActions = {
   setFadeTimeout(ms: number) {
     fadeTimeout.set(ms)
   },
-  setKey(v: string) {
-    key.set(v)
+  setKey(k: string) {
+    keyAndScale.update(v => [k, v[1]])
   },
-  setScale(v: string) {
-    scale.set(v)
+  setScale(s: string) {
+    keyAndScale.update(v => [v[0], s])
+  },
+  setKeyAndScale(k: string, s: string) {
+    keyAndScale.set([k, s])
   },
   // setScore(v: any[]) {
   //   score.set(v)
@@ -121,7 +125,7 @@ export const scoreActions = {
     played.set([])
   },
   clearScore() {
-    key.set('C')
+    keyAndScale.set(['C', 'Major'])
     target.set([])
     played.set([])
   }

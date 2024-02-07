@@ -1,4 +1,5 @@
 import { createScale } from '../createScale'
+import { FLAT_NOTES, SHARP_NOTES, MAJOR_KEY_MAP } from '../getKeySignature'
 
 describe('createScale', () => {
   it('should generate all major scales correctly', () => {
@@ -30,7 +31,30 @@ describe('createScale', () => {
       if ('err' in created) {
         expect(created.err).toEqual(undefined)
       } else {
-        expect(created.data.scaleNotes.map(v => v.note)).toEqual(values)
+        const { scaleNotes } = created.data
+        const flats = scaleNotes.reduce(
+          (acc, cur) => acc + Array.from(cur.note.matchAll(/♭/g)).length,
+          0
+        )
+        const sharps = scaleNotes.reduce(
+          (acc, cur) => acc + Array.from(cur.note.matchAll(/♯/g)).length,
+          0
+        )
+        const majorSignature =
+          flats <= 7 && sharps <= 7 ? key : MAJOR_KEY_MAP.get(flats > sharps ? -7 : 7)
+        expect({
+          key,
+          flats: Math.min(flats, 7),
+          sharps: Math.min(sharps, 7),
+          majorSignature,
+          scaleNotes: scaleNotes.map(v => v.note)
+        }).toEqual({
+          key: created.data.key,
+          flats: created.data.flats,
+          sharps: created.data.sharps,
+          majorSignature: created.data.majorSignature,
+          scaleNotes: values
+        })
       }
     })
     Object.entries(correct).forEach(([key, values]) => {
@@ -38,7 +62,8 @@ describe('createScale', () => {
       if ('err' in created) {
         expect(created.err).toEqual(undefined)
       } else {
-        expect(created.data.scaleNotes.map(v => v.note)).toEqual(
+        const { scaleNotes } = created.data
+        expect(scaleNotes.map(v => v.note)).toEqual(
           values.filter((_, idx) => idx !== 3 && idx !== values.length - 1)
         )
       }
@@ -73,7 +98,29 @@ describe('createScale', () => {
       if ('err' in created) {
         expect(created.err).toEqual(undefined)
       } else {
-        expect(created.data.scaleNotes.map(v => v.note)).toEqual(values)
+        const { scaleNotes } = created.data
+        const flats = Math.min(
+          scaleNotes.reduce((acc, cur) => acc + Array.from(cur.note.matchAll(/♭/g)).length, 0),
+          7
+        )
+        const sharps = Math.min(
+          scaleNotes.reduce((acc, cur) => acc + Array.from(cur.note.matchAll(/♯/g)).length, 0),
+          7
+        )
+        const majorSignature = MAJOR_KEY_MAP.get(flats > sharps ? flats * -1 : sharps)
+        expect({
+          key,
+          flats,
+          sharps,
+          majorSignature,
+          scaleNotes: scaleNotes.map(v => v.note)
+        }).toEqual({
+          key: created.data.key,
+          flats: created.data.flats,
+          sharps: created.data.sharps,
+          majorSignature: created.data.majorSignature,
+          scaleNotes: values
+        })
       }
     })
     Object.entries(correct).forEach(([key, values]) => {
@@ -141,14 +188,36 @@ describe('createScale', () => {
         if ('err' in created) {
           expect(created.err).toEqual(undefined)
         } else {
-          expect(created.data.scaleNotes).toEqual(
-            notes.map((n, idx) => ({
+          const { key: createdKey, scaleNotes } = created.data
+          let flats = 0
+          let sharps = 0
+          for (let i = 0; i < FLAT_NOTES.length; i += 1) {
+            const flat = scaleNotes.find(n => n.note.slice(0, 2) === FLAT_NOTES[i])
+            const sharp = scaleNotes.find(n => n.note.slice(0, 2) === SHARP_NOTES[i])
+            if (flat && sharps === 0) {
+              flats += 1
+            } else if (sharp && flats === 0) {
+              sharps += 1
+            } else {
+              break
+            }
+          }
+          const majorSignature = MAJOR_KEY_MAP.get(
+            flats > sharps ? Math.min(flats, 7) * -1 : Math.min(sharps, 7)
+          )
+          expect({ key, flats, sharps, majorSignature, scale, scaleNotes }).toEqual({
+            key: createdKey,
+            flats: created.data.flats,
+            sharps: created.data.sharps,
+            majorSignature: created.data.majorSignature,
+            scale,
+            scaleNotes: notes.map((n, idx) => ({
               note: n,
-              order: created.data.scaleNotes[idx].order,
+              order: scaleNotes[idx].order,
               flats: Array.from(n.matchAll(/♭/g)).length,
               sharps: Array.from(n.matchAll(/♯/g)).length
             }))
-          )
+          })
         }
       })
     })

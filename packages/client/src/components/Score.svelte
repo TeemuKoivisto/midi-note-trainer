@@ -6,10 +6,11 @@
   import ReplayButton from './ReplayButton.svelte'
 
   import { currentGame, guessState, type GuessState } from '$stores/game'
-  import { key, played, target, scale } from '$stores/score'
+  import { played, target, scaleData } from '$stores/score'
   import { getOctave } from '$utils/getNote'
   import { keys } from '$utils/guess_keys'
 
+  import type { Scale } from '@/chords-and-scales'
   import type { Note } from '@/types'
   import { GuessNotes } from '$utils/guess_notes'
   import type { GuessChords } from '$utils/guess_chords'
@@ -19,8 +20,7 @@
   interface Data {
     game: GuessNotes | GuessKeys | GuessChords | PlayChordsGame | undefined
     guessed: GuessState
-    scale: string
-    key: string
+    scale: Scale
     target: Note[]
     played: (Note & {
       started: number
@@ -35,12 +35,11 @@
   let tickContext: Vex.TickContext
 
   const data = derived(
-    [currentGame, guessState, scale, key, played, target],
-    ([c, g, sc, k, p, t]) => ({
+    [currentGame, guessState, scaleData, played, target],
+    ([c, g, sc, p, t]) => ({
       game: c,
       guessed: g,
       scale: sc,
-      key: k,
       played: p,
       target: t
     })
@@ -120,15 +119,13 @@
     }
   }
 
-  function updateNotes({ game, guessed, scale, key: keyRaw, played, target }: Data) {
+  function updateNotes({ game, guessed, scale, played, target }: Data) {
     // console.log('hello notes', notes)
-    const key = keyRaw.replaceAll('♭', 'b').replaceAll('♯', '#')
+    const key = scale.majorSignature.replaceAll('♭', 'b').replaceAll('♯', '#')
     ctx.clear()
     ctx.scale(0.5, 0.5)
     const s1 = new Stave(0, 0, 200).addClef('treble')
-    if (key in keys.major || key in keys.minor) {
-      s1.addKeySignature(key)
-    }
+    s1.addKeySignature(key)
     const s2 = new Stave(0, 60, 200).addClef('bass')
     const staveNotes = []
     if (target?.length > 0) {
