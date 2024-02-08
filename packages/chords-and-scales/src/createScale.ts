@@ -25,18 +25,34 @@ function createScaleLetters(first: string, intervals: Interval[]) {
 
 function createScaleNotes(startingOrder: number, letters: string[], intervals: Interval[]) {
   return intervals.map((int, next) => {
-    const letter = letters[next]
+    const targetNote = letters[next]
     // Convert the interval into semitones
     const semitones = intervalToSemitones(int)
     // Get the next note in order by summing the starting note's order and the added semitones
     const order = (startingOrder + semitones) % 12
     const note = NOTES[order]
     const n = note.note.charAt(0)
-    if (n < letter || (n === 'G' && letter === 'A')) {
+    // ['B', 'C', 'D♯', 'E♯', 'F♯♯', 'G♯♯', 'A♯'] enigmatic B
+    // F < E [letters] -> false -> E#
+    // G < F [letters] -> false -> F##
+    // A < G [letters] -> true -> Gbbbbbb (G##)
+
+    // [Eb, F, G, Ab, Bb, C, D] major Eb
+    // G# < A [letters] -> false -> A####### (Ab)
+    // (n === 'G' && letter === 'A') -> true -> Ab
+
+    // [Ab, Bb, C, Db, Eb, F, G]
+    // G# < A [letters] -> false -> A####### (Ab)
+    // C# < D [letters] -> true -> Db
+    //  && n !== 'A' && targetNote === 'G'
+    if (
+      (n < targetNote && (n !== 'A' || targetNote !== 'G')) ||
+      (n === 'G' && targetNote === 'A')
+    ) {
       // 'A' < 'B'
       let flats = 1
       let higher = NOTES[(order + flats) % 12]
-      while (higher.note.charAt(0) !== letter) {
+      while (higher.note.charAt(0) !== targetNote) {
         flats += 1
         higher = NOTES[(order + flats) % 12]
       }
@@ -47,12 +63,13 @@ function createScaleNotes(startingOrder: number, letters: string[], intervals: I
         flats: flats + (higher.note.includes('♭') ? 1 : 0),
         sharps: 0
       }
-    } else if (n > letter || (n === 'A' && letter === 'G')) {
+    } else if (n > targetNote || (n === 'A' && targetNote === 'G')) {
+      // else if (n > letter || (n === 'A' && letter === 'G')) {
       // 'G' > 'F'
       let sharps = 1
       let lowerIndex = order === 0 ? NOTES.length - 1 : order - sharps
       let lower = NOTES[lowerIndex]
-      while (lower.note.charAt(0) !== letter) {
+      while (lower.note.charAt(0) !== targetNote) {
         sharps += 1
         lowerIndex = lowerIndex === 0 ? NOTES.length - 1 : lowerIndex - 1
         lower = NOTES[lowerIndex]
