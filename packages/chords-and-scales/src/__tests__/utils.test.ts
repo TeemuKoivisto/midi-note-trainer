@@ -16,10 +16,10 @@ describe('getRootNote', () => {
         sharps: 1
       },
       'C♯♯': {
-        note: 'C♯',
-        order: 1,
+        note: 'C♯♯',
+        order: 2,
         flats: 0,
-        sharps: 1
+        sharps: 2
       },
       Db: {
         note: 'Db',
@@ -31,6 +31,12 @@ describe('getRootNote', () => {
         note: 'F♭',
         order: 4,
         flats: 1,
+        sharps: 0
+      },
+      'F♭♭': {
+        note: 'F♭♭',
+        order: 3,
+        flats: 2,
         sharps: 0
       },
       'A#': {

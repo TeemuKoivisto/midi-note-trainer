@@ -20,15 +20,20 @@ export const NOTES = [
 export function getRootNote(note: string): ScaleNote | undefined {
   const rootNote = NOTES.find(n => n.note.charAt(0) === note.charAt(0) && n.note.length === 1)
   if (rootNote) {
-    const acc = note.charAt(1).toLowerCase()
-    const flats = acc === 'b' || acc === '♭' ? 1 : 0
-    const sharps = acc === '#' || acc === '♯' ? 1 : 0
-    const order = flats > 0 ? rootNote.order - 1 : sharps > 0 ? rootNote.order + 1 : rootNote.order
+    const shifted = note
+      .slice(1)
+      .split('')
+      .reduce(
+        (acc, c) =>
+          acc + (c.toLowerCase() === 'b' || c === '♭' ? -1 : c === '#' || c === '♯' ? 1 : 0),
+        0
+      )
+    const order = (rootNote.order + shifted) % 12
     return {
-      note: note.charAt(0) + acc,
-      order: order < 0 ? 11 : order > 11 ? 0 : order,
-      flats,
-      sharps
+      note,
+      order: order < 0 ? order + 12 : order,
+      flats: shifted < 0 ? shifted * -1 : 0,
+      sharps: shifted > 0 ? shifted : 0
     }
   }
   return undefined

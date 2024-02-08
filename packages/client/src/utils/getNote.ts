@@ -68,7 +68,7 @@ export function parseNote(val: string): Result<number> {
       return { err: `Base note ${val.charAt(0).toUpperCase()} not in notes ABCDEFG`, code: 400 }
     }
     const shifted = val
-      .slice(1, -1)
+      .slice(1)
       .split('')
       .reduce(
         (acc, c) =>

@@ -12,9 +12,10 @@ function createNote(note: ScaleNote, shiftUpOrDown: number, midi: number) {
     flats -= diff
     sharps -= diff
   }
+  const order = (note.order + shiftUpOrDown) % 12
   return {
     ...note,
-    order: (note.order + shiftUpOrDown) % 12,
+    order: order < 0 ? order + 12 : order,
     note: `${note.note.charAt(0)}${'♭'.repeat(flats)}${'♯'.repeat(sharps)}`,
     flats,
     sharps,

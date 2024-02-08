@@ -1,7 +1,8 @@
+import { Scale } from 'types'
 import { chords } from '../chords'
 import { createChord } from '../createChord'
 import { createScale } from '../createScale'
-import { NOTES } from '../utils'
+import { NOTES, getRootNote } from '../utils'
 
 describe('createChord', () => {
   it('should generate chords from root of C major scale', () => {
@@ -102,35 +103,60 @@ describe('createChord', () => {
     )
     expect(obj).toEqual(correct)
   })
-  it('should generate chords from F# major scale using scale notes correctly', () => {
-    const correct = [
-      ['F♯', 'maj', ['F♯', 'A♯', 'C♯']],
-      ['F♯', 'maj13', ['F♯', 'A♯', 'C♯', 'E♯', 'G♯', 'B', 'D♯']],
-      ['F♯', 'm13', ['F♯', 'A', 'C♯', 'E', 'G♯', 'B', 'D♯']],
-      ['F♯', 'm7b5', ['F♯', 'A', 'C', 'E']],
-      ['F♯', 'aug7', ['F♯', 'A♯', 'C♯♯', 'E']]
-    ] as [string, string, string[]][]
+  it('should generate chords from other major scales correctly', () => {
+    const correct = {
+      // E♭ F G A♭ B♭ C D
+      'E♭': [['A♭', 'm13', ['A♭', 'C♭', 'E♭', 'G♭', 'B♭', 'C♯', 'F']]],
+      // F♯, G♯, A♯, B, C♯, D♯, E♯
+      'F♯': [
+        ['F♯', 'maj', ['F♯', 'A♯', 'C♯']],
+        ['F♯', 'maj13', ['F♯', 'A♯', 'C♯', 'E♯', 'G♯', 'B', 'D♯']],
+        ['F♯', 'm13', ['F♯', 'A', 'C♯', 'E', 'G♯', 'B', 'D♯']],
+        ['F♯', 'm7b5', ['F♯', 'A', 'C', 'E']],
+        ['F♯', 'aug7', ['F♯', 'A♯', 'C♯♯', 'E']]
+      ]
+    } as Record<string, [string, string, string[]][]>
 
-    // F♯, G♯, A♯, B, C♯, D♯, E♯
-    const created = createScale('F♯', 'major')
-    if ('err' in created) {
-      return expect(created.err).toEqual(undefined)
-    }
-    const scale = created.data
-    const obj = correct.reduce(
-      (acc, val) => {
-        const chord = chords.get(val[1])
-        const note = NOTES.find(n => n.note === val[0])
-        if (!chord || !note) {
-          expect(chord).toBeTruthy()
-          expect(note).toBeTruthy()
+    const scales = Object.keys(correct).reduce(
+      (acc, key) => {
+        const scale = createScale(key, 'major')
+        if ('err' in scale) {
+          expect(scale.err).toEqual(undefined)
         } else {
-          const notes = createChord(0 + note.order, scale, chord.intervals)
-          acc.push([val[0], val[1], notes.map(n => n.note)])
+          acc[key] = scale.data
         }
         return acc
       },
-      [] as [string, string, string[]][]
+      {} as Record<string, Scale>
+    )
+    const obj = Object.entries(correct).reduce(
+      (topLevel, entry) => {
+        const scale = scales[entry[0]]
+        topLevel[entry[0]] = entry[1].reduce(
+          (acc, val) => {
+            const chord = chords.get(val[1])
+            const note = getRootNote(val[0])
+            if (!chord || !note) {
+              expect(chord).toBeTruthy()
+              expect(note).toBeTruthy()
+            } else {
+              const notes = createChord(0 + note.order, scale, chord.intervals)
+              notes.forEach(n => {
+                expect(n.order).toBeGreaterThanOrEqual(0)
+                expect(n.order).toBeLessThanOrEqual(11)
+                expect({ note: n.note, order: n.order, flats: n.flats, sharps: n.sharps }).toEqual(
+                  getRootNote(n.note)
+                )
+              })
+              acc.push([val[0], val[1], notes.map(n => n.note)])
+            }
+            return acc
+          },
+          [] as [string, string, string[]][]
+        )
+        return topLevel
+      },
+      {} as Record<string, [string, string, string[]][]>
     )
     expect(obj).toEqual(correct)
   })

@@ -123,7 +123,7 @@ export const scoreActions = {
     played.set([])
   },
   clearScore() {
-    keyAndScale.set(['C', 'Major'])
+    // keyAndScale.set(['C', 'Major'])
     target.set([])
     played.set([])
   }
