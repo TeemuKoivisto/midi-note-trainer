@@ -152,6 +152,12 @@ describe('createScale', () => {
         // should first generate minor scale and THEN augment seventh by 1 semitone
         G: ['G', 'A', 'B♭', 'C', 'D', 'E♭', 'F♯']
       },
+      melodicMinorAscending: {
+        A: ['A', 'B', 'C', 'D', 'E', 'F♯', 'G♯']
+      },
+      melodicMinorDescending: {
+        A: ['A', 'G', 'F', 'E', 'D', 'C', 'B', 'A']
+      },
       neapolitanMajor: {
         C: ['C', 'D♭', 'E♭', 'F', 'G', 'A', 'B'],
         F: ['F', 'G♭', 'A♭', 'B♭', 'C', 'D', 'E']
@@ -180,6 +186,9 @@ describe('createScale', () => {
       algerian: {
         'A♭': ['A♭', 'B♭', 'C♭', 'D♭', 'D', 'E♭', 'F♭', 'G'],
         'G♭': ['G♭', 'A♭', 'B♭♭', 'C♭', 'C', 'D♭', 'E♭♭', 'F']
+      },
+      chinese: {
+        A: ['A', 'D♯', 'E', 'G♯']
       }
     }
     Object.entries(correct).forEach(([scale, values]) => {

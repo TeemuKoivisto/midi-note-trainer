@@ -337,7 +337,7 @@ export const scales = new Map<string, RawScale>([
         { str: '♭3', seq: 3, flats: 1, sharps: 0 },
         { str: '4', seq: 4, flats: 0, sharps: 0 },
         { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
+        { str: '6', seq: 6, flats: 0, sharps: 0 },
         { str: '7', seq: 7, flats: 0, sharps: 0 }
       ]
     }
@@ -347,6 +347,7 @@ export const scales = new Map<string, RawScale>([
     {
       name: 'Melodic Minor Descending',
       intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭7', seq: 7, flats: 1, sharps: 0 },
         { str: '♭6', seq: 6, flats: 1, sharps: 0 },
         { str: '5', seq: 5, flats: 0, sharps: 0 },

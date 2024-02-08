@@ -75,7 +75,6 @@ describe('createChord', () => {
       // F# is normally denoted as below, but since we are in C major we use the notes of the scale
       // ['F♯', 'maj13', ['F♯', 'A♯', 'C♯', 'E♯', 'G♯', 'B', 'D♯']],
       ['F♯', 'maj13', ['F♯', 'B♭', 'C♯', 'F', 'G♯', 'B', 'E♭']],
-      // @TODO should use A instead of Bbb since Bb is not in scale, Fb -> E probably as well
       ['F♯', 'm13', ['F♯', 'A', 'C♯', 'E', 'G♯', 'B', 'E♭']],
       ['F♯', 'm7b5', ['F♯', 'A', 'C', 'E']],
       ['F♯', 'aug7', ['F♯', 'B♭', 'D', 'E']]

@@ -15,22 +15,12 @@ const alphabet = 'ABCDEFG'
  * @returns
  */
 function createScaleLetters(first: string, intervals: Interval[]) {
-  let letter = first
-  let prev: Interval | undefined
-  return intervals.map(int => {
-    if (prev?.seq === int.seq || int.seq === 1) {
-      // Tonic or same interval as previous -> reuse letter (all 8-note scales eg Bebop)
-      letter = alphabet.charAt(alphabet.indexOf(letter) % alphabet.length)
-    } else if (prev && prev.seq < int.seq - 1) {
-      // Jump of two intervals -> skip letter
-      letter = alphabet.charAt((alphabet.indexOf(letter) + 2) % alphabet.length)
-    } else {
-      // Take the next letter in order
-      letter = alphabet.charAt((alphabet.indexOf(letter) + 1) % alphabet.length)
-    }
-    prev = int
-    return letter
-  })
+  return intervals.map(int =>
+    // To get the scale letters, we take the index of the root letter (eg C) and shift to right
+    // by the sequence of the interval - 1 (which go from 1 to 7)
+    // Pretty rudimentary but it seems to work
+    alphabet.charAt((alphabet.indexOf(first) + int.seq - 1) % alphabet.length)
+  )
 }
 
 function createScaleNotes(startingOrder: number, letters: string[], intervals: Interval[]) {
