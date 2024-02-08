@@ -20,11 +20,12 @@ export const NOTES = [
 export function getRootNote(note: string): ScaleNote | undefined {
   const rootNote = NOTES.find(n => n.note.charAt(0) === note.charAt(0) && n.note.length === 1)
   if (rootNote) {
-    const flats = note.charAt(1) === '♭' ? 1 : 0
-    const sharps = note.charAt(1) === '♯' ? 1 : 0
+    const acc = note.charAt(1).toLowerCase()
+    const flats = acc === 'b' || acc === '♭' ? 1 : 0
+    const sharps = acc === '#' || acc === '♯' ? 1 : 0
     const order = flats > 0 ? rootNote.order - 1 : sharps > 0 ? rootNote.order + 1 : rootNote.order
     return {
-      note,
+      note: note.charAt(0) + acc,
       order: order < 0 ? 11 : order > 11 ? 0 : order,
       flats,
       sharps

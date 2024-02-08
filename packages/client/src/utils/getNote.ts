@@ -62,7 +62,7 @@ export function getNote(value: number): Note {
 }
 
 export function parseNote(val: string): Result<number> {
-  if (val.length === 2 || val.length === 3) {
+  if (val.length !== 0 && val.length <= 3) {
     const baseNote = BASE_NOTES[val.charAt(0).toUpperCase() as keyof typeof BASE_NOTES]
     if (!baseNote) {
       return { err: `Base note ${val.charAt(0).toUpperCase()} not in notes ABCDEFG`, code: 400 }
@@ -72,7 +72,7 @@ export function parseNote(val: string): Result<number> {
       .split('')
       .reduce(
         (acc, c) =>
-          acc + c.toLowerCase() === 'b' || c === '♭' ? -1 : c === '#' || c === '♯' ? 1 : 0,
+          acc + (c.toLowerCase() === 'b' || c === '♭' ? -1 : c === '#' || c === '♯' ? 1 : 0),
         0
       )
     let octave: number | undefined

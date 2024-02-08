@@ -40,8 +40,8 @@
 
 <div class={`${$$props.class || ''}`}>
   <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm" class:collapsed={$hidden}>
-    <legend class="px-2 text-0A text-base">
-      <button class="hover:bg-gray-100" on:click={toggleVisibility}>Scales</button>
+    <legend class="text-0A text-base">
+      <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>Scales</button>
     </legend>
     <div class="body" class:hidden={$hidden}>
       <div class="flex w-1/2 mb-2 input">
