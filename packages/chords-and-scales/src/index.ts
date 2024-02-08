@@ -1,6 +1,7 @@
 export * from './chords'
 export * from './createChord'
 export * from './createScale'
+export * from './getKeySignature'
 export * from './scales'
 export * from './types'
 export * from './utils'

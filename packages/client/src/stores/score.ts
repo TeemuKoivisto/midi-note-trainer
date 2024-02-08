@@ -1,9 +1,7 @@
 import { derived, get, readable, writable } from 'svelte/store'
-import { createScale, type Scale } from '@/chords-and-scales'
+import { createScale, type MidiNote, type Scale } from '@/chords-and-scales'
 
 import { persist } from './persist'
-
-import type { Note } from '@/types'
 
 let timeout: ReturnType<typeof setTimeout> | undefined
 
@@ -59,13 +57,13 @@ export const hotKeyMap = derived([scaleData, defaultKeyMap], ([scl, kmap]) => {
   })
   return map
 })
-export const target = writable<Note[]>([])
-export const played = writable<(Note & { started: number })[]>([])
+export const target = writable<MidiNote[]>([])
+export const played = writable<(MidiNote & { started: number })[]>([])
 
 function removePlayedNotes(
-  notes: (Note & { started: number })[],
+  notes: (MidiNote & { started: number })[],
   timeoutMs: number
-): (Note & { started: number })[] {
+): (MidiNote & { started: number })[] {
   if (notes.length > 0) {
     const now = Date.now()
     let next = now
@@ -105,10 +103,10 @@ export const scoreActions = {
   // setScore(v: any[]) {
   //   score.set(v)
   // },
-  setTarget(val: Note[] = []) {
+  setTarget(val: MidiNote[] = []) {
     target.set(val)
   },
-  pushPlayed(note: Note, timeoutMs?: number) {
+  pushPlayed(note: MidiNote, timeoutMs?: number) {
     const now = Date.now()
     played.update(v =>
       [...v, { ...note, started: now }].filter(n => n.midi !== note.midi || n.started === now)

@@ -30,7 +30,7 @@ export function getOctave(midi: number) {
   return midi === 12 ? 1 : Math.floor((midi - 12) / 12)
 }
 
-export function getNoteAbsolute(note: Note) {
+export function getNoteAbsolute(note: Note | MidiNote) {
   return `${note.note}${getOctave(note.midi)}`
 }
 

@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import { derived } from 'svelte/store'
   import Vex from 'vexflow'
+  import { FLAT_NOTES, SHARP_NOTES } from '@/chords-and-scales'
 
   import ReplayButton from './ReplayButton.svelte'
 
@@ -9,7 +10,7 @@
   import { played, target, scaleData } from '$stores/score'
   import { getOctave } from '$utils/getNote'
 
-  import type { Scale } from '@/chords-and-scales'
+  import type { MidiNote, Scale } from '@/chords-and-scales'
   import type { Note } from '@/types'
   import { GuessNotes } from '$utils/guess_notes'
   import type { GuessChords } from '$utils/guess_chords'
@@ -20,8 +21,8 @@
     game: GuessNotes | GuessKeys | GuessChords | PlayChordsGame | undefined
     guessed: GuessState
     scale: Scale
-    target: Note[]
-    played: (Note & {
+    target: MidiNote[]
+    played: (MidiNote & {
       started: number
     })[]
   }
@@ -48,6 +49,23 @@
     init()
     data.subscribe(d => updateNotes(d))
   })
+
+  function addParts(note: MidiNote, scale: Scale): Note {
+    const flats = FLAT_NOTES.slice(0, scale.flats).find(n => n === note.note.slice(0, 2))
+      ? note.flats - 1
+      : note.flats
+    const sharps = SHARP_NOTES.slice(0, scale.sharps).find(n => n === note.note.slice(0, 2))
+      ? note.sharps - 1
+      : note.sharps
+    return {
+      ...note,
+      parts: [
+        note.note.charAt(0),
+        `${'b'.repeat(flats)}${'#'.repeat(sharps)}`,
+        getOctave(note.midi)
+      ]
+    }
+  }
 
   function init() {
     renderer = new Renderer(outputEl, Renderer.Backends.SVG)
@@ -123,16 +141,17 @@
     const key = scale.majorSignature.replaceAll('♭', 'b').replaceAll('♯', '#')
     ctx.clear()
     ctx.scale(0.5, 0.5)
-    const s1 = new Stave(0, 0, 200).addClef('treble')
-    s1.addKeySignature(key)
-    const s2 = new Stave(0, 60, 200).addClef('bass')
+    const s1 = new Stave(0, 0, 200).addClef('treble').addKeySignature(key)
+    const s2 = new Stave(0, 60, 200).addClef('bass').addKeySignature(key)
     const staveNotes = []
     if (target?.length > 0) {
-      staveNotes.push(drawNotes(target, s1, s2))
+      const targetNotes = target.map(t => addParts(t, scale))
+      staveNotes.push(drawNotes(targetNotes, s1, s2))
     }
     if (played.length > 0 && (!game || game instanceof GuessNotes)) {
+      const playedNotes = played.map(p => addParts(p, scale))
       staveNotes.push(
-        drawNotes(played, s1, s2, game?.guessed === played[0].midi && guessed === 'correct')
+        drawNotes(playedNotes, s1, s2, game?.guessed === played[0].midi && guessed === 'correct')
       )
     }
     drawNotesToStaves(s1, s2, staveNotes)

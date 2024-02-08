@@ -15,7 +15,7 @@
   import { currentGame, gameActions } from '$stores/game'
   import { audioContext, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
   import { played, scoreActions } from '$stores/score'
-  import { addParts, getNote, getNoteAbsolute } from '$utils/getNote'
+  import { getNote, getNoteAbsolute } from '$utils/getNote'
 
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessNotes } from '$utils/guess_notes'
@@ -101,7 +101,7 @@
     if (game?.ended) {
       gameActions.updateState('ended')
     } else if (game instanceof GuessChords || game instanceof PlayChordsGame) {
-      scoreActions.setTarget(game.current.notes.map(n => addParts(n)))
+      scoreActions.setTarget(game.current.notes)
       $piano?.playChord(game?.current.notes.map(n => n.midi))
       gameActions.updateState('waiting')
     } else if (game instanceof GuessKeys) {
