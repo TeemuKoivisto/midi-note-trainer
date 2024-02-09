@@ -31,11 +31,13 @@
   function updateChords() {
     const midi = scaleNote && 60 + scaleNote.order
     if ('err' in scale || !midi) {
-      return
+      leftChords = []
+      rightChords = []
+    } else {
+      const scl = scale.data
+      leftChords = leftList.map(s => createChord(midi, scl, s[1].intervals))
+      rightChords = rightList.map(s => createChord(midi, scl, s[1].intervals))
     }
-    const scl = scale.data
-    leftChords = leftList.map(s => createChord(midi, scl, s[1].intervals))
-    rightChords = rightList.map(s => createChord(midi, scl, s[1].intervals))
   }
   function handleKeyChange({
     currentTarget: { value }

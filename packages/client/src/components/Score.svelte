@@ -27,7 +27,7 @@
     })[]
   }
 
-  const { Accidental, EasyScore, Factory, Formatter, System, Renderer, Stave, StaveNote } = Vex.Flow
+  const { Accidental, Formatter, Renderer, Stave, StaveNote } = Vex.Flow
 
   let outputEl: HTMLDivElement
   let renderer: Vex.Renderer
@@ -74,66 +74,87 @@
     ctx.scale(2.0, 2.0)
     // console.log('ctx', ctx)
     tickContext = new Vex.Flow.TickContext()
-    const s1 = new Stave(0, 0, 200)
-    s1.addClef('treble') //.addTimeSignature('4/4')
-    const notes = [
-      new StaveNote({ keys: ['c#/4'], duration: 'q' }),
-      new StaveNote({ clef: 'bass', keys: ['d/4'], duration: 'q' }),
+    const tclef = new Stave(0, 0, 200).addClef('treble') //.addTimeSignature('4/4')
+    const bclef = new Stave(0, 60, 200).addClef('bass')
+    const trebleNotes = [
+      new StaveNote({ keys: ['g#/4'], duration: 'q' }),
       new StaveNote({ keys: ['b/4'], duration: 'qr' }),
-      new StaveNote({ keys: ['c/4', 'e/4', 'g/4'], duration: 'q' })
+      new StaveNote({ keys: ['c/4'], duration: 'q' }),
+      new StaveNote({ keys: ['a/4', 'c/5', 'e/5'], duration: 'q' })
     ]
-    const voice = new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).addTickables(notes)
-    // const formatter = new Vex.Flow.Formatter()
+    const bassNotes = [
+      new StaveNote({ clef: 'bass', keys: ['f/3'], duration: 'q' }),
+      new StaveNote({ clef: 'bass', keys: ['b/3'], duration: 'qr' }),
+      new StaveNote({ clef: 'bass', keys: ['b/2'], duration: 'q' }),
+      new StaveNote({ clef: 'bass', keys: ['c/3', 'e/3', 'g/3'], duration: 'q' })
+    ]
+    trebleNotes[0].addModifier(new Accidental('#'), 0)
+    const v1 = new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).addTickables(trebleNotes)
+    const v2 = new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).addTickables(bassNotes)
+    // Make sure the staves have the same starting point for notes
+    const startX = Math.max(tclef.getNoteStartX(), bclef.getNoteStartX())
+    tclef.setNoteStartX(startX)
+    bclef.setNoteStartX(startX)
+    const formatter = new Vex.Flow.Formatter()
+    formatter.joinVoices([v1])
+    formatter.joinVoices([v2])
+    // formatter.format([v1, v2],  10 - (startX - 5));
+    formatter.format([v1, v2], 160)
     // formatter.joinVoices([voice]).formatToStave([voice], s1)
-    const formatter = new Vex.Flow.Formatter().joinVoices([voice]).formatToStave([voice], s1)
-    voice.draw(ctx, s1)
-    // console.log(notes[1].getStave())
-    // Vex.Flow.Formatter.FormatAndDraw(context, s1, notes)
-    const s2 = new Stave(0, 60, 200)
-    s2.addClef('bass')
-    s1.setContext(ctx).draw()
-    s2.setContext(ctx).draw()
+    // const formatter1 = new Vex.Flow.Formatter()
+    //   .joinVoices([v1])
+    //   .formatToStave([v1], tclef, { align_rests: true })
+    //   .joinVoices([v2])
+    //   .formatToStave([v2], bclef, { align_rests: true })
+    v1.draw(ctx, tclef)
+    v2.draw(ctx, bclef)
+    tclef.setContext(ctx).draw()
+    bclef.setContext(ctx).draw()
   }
 
-  function drawNotes(
-    notes: Note[],
-    treble: Vex.Stave,
-    bass: Vex.Stave,
-    correct?: boolean
-  ): { note: Vex.StemmableNote; clef: 'treble' | 'bass' } {
-    const clef = getOctave(notes[0].midi) >= 4 ? 'treble' : 'bass'
-    const snote = new Vex.Flow.StaveNote({
-      clef,
-      keys: notes.map(n => `${n.parts[0]}${n.parts[1]}/${n.parts[2]}`),
-      duration: 'w'
-    })
-    if (correct !== undefined) {
-      snote.setStyle({ fillStyle: correct ? 'rgb(34, 197, 94)' : 'red' })
-    }
-    const stave = clef === 'treble' ? treble : bass
-    snote.setContext(ctx).setStave(stave)
-    notes.forEach((n, idx) => {
-      if (n.parts[1]) {
-        snote.addModifier(new Accidental(n.parts[1]), idx)
+  function notesToVexflowNotes(notes: MidiNote[], scale: Scale, fillColor?: string) {
+    const bassNotes = []
+    const trebleNotes = []
+    for (let i = 0; i < notes.length; i += 1) {
+      const octave = getOctave(notes[i].midi)
+      const note = addParts(notes[i], scale)
+      if (octave < 4) {
+        bassNotes.push(note)
+      } else {
+        trebleNotes.push(note)
       }
-    })
-    tickContext.addTickable(snote)
-    return { note: snote, clef }
-  }
-
-  function drawNotesToStaves(
-    trebleStave: Vex.Stave,
-    bassStave: Vex.Stave,
-    notes: { note: Vex.StemmableNote; clef: 'treble' | 'bass' }[]
-  ) {
-    const trebleNotes = notes.filter(n => n.clef === 'treble').map(n => n.note)
-    const bassNotes = notes.filter(n => n.clef === 'bass').map(n => n.note)
-    if (trebleNotes.length > 0) {
-      Formatter.FormatAndDraw(ctx, trebleStave, trebleNotes)
     }
+    const snotes: Vex.StaveNote[] = []
     if (bassNotes.length > 0) {
-      Formatter.FormatAndDraw(ctx, bassStave, bassNotes)
+      const bassNote = new Vex.Flow.StaveNote({
+        clef: 'bass',
+        keys: bassNotes.map(n => `${n.parts[0]}${n.parts[1]}/${n.parts[2]}`),
+        duration: 'w'
+      }).setAttribute('clef', 'bass')
+      bassNotes.forEach((n, idx) => {
+        if (n.parts[1]) {
+          bassNote.addModifier(new Accidental(n.parts[1]), idx)
+        }
+      })
+      snotes.push(bassNote)
     }
+    if (trebleNotes.length > 0) {
+      const trebleNote = new Vex.Flow.StaveNote({
+        clef: 'treble',
+        keys: trebleNotes.map(n => `${n.parts[0]}${n.parts[1]}/${n.parts[2]}`),
+        duration: 'w'
+      }).setAttribute('clef', 'treble')
+      trebleNotes.forEach((n, idx) => {
+        if (n.parts[1]) {
+          trebleNote.addModifier(new Accidental(n.parts[1]), idx)
+        }
+      })
+      snotes.push(trebleNote)
+    }
+    if (fillColor !== undefined) {
+      snotes.forEach(n => n.setStyle({ fillStyle: fillColor }))
+    }
+    return snotes
   }
 
   function updateNotes({ game, guessed, scale, played, target }: Data) {
@@ -141,23 +162,46 @@
     const key = scale.majorSignature.replaceAll('♭', 'b').replaceAll('♯', '#')
     ctx.clear()
     ctx.scale(0.5, 0.5)
-    const s1 = new Stave(0, 0, 200).addClef('treble').addKeySignature(key)
-    const s2 = new Stave(0, 60, 200).addClef('bass').addKeySignature(key)
+    const bclef = new Stave(0, 60, 200).addClef('bass').addKeySignature(key)
+    const tclef = new Stave(0, 0, 200).addClef('treble').addKeySignature(key)
     const staveNotes = []
-    if (target?.length > 0) {
-      const targetNotes = target.map(t => addParts(t, scale))
-      staveNotes.push(drawNotes(targetNotes, s1, s2))
+    if (target.length > 0) {
+      staveNotes.push(...notesToVexflowNotes(target, scale))
     }
     if (played.length > 0 && (!game || game instanceof GuessNotes)) {
-      const playedNotes = played.map(p => addParts(p, scale))
-      staveNotes.push(
-        drawNotes(playedNotes, s1, s2, game?.guessed === played[0].midi && guessed === 'correct')
-      )
+      const correct = game?.guessed === played[0].midi && guessed === 'correct'
+      const fillColor = correct ? 'rgb(34, 197, 94)' : 'red'
+      staveNotes.push(...notesToVexflowNotes(played, scale, fillColor))
     }
-    drawNotesToStaves(s1, s2, staveNotes)
-    s1.setContext(ctx).draw()
-    s2.setContext(ctx).draw()
-    // console.log('draw ', notes)
+    const bassNotes = staveNotes.filter(n => n.getAttribute('clef') === 'bass')
+    const trebleNotes = staveNotes.filter(n => n.getAttribute('clef') === 'treble')
+    const voices = []
+    if (trebleNotes.length > 0) {
+      voices.push(new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).addTickables(trebleNotes))
+    }
+    if (bassNotes.length > 0) {
+      voices.push(new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).addTickables(bassNotes))
+    }
+    const startX = Math.max(tclef.getNoteStartX(), bclef.getNoteStartX())
+    tclef.setNoteStartX(startX)
+    bclef.setNoteStartX(startX)
+    const formatter = new Vex.Flow.Formatter()
+    // The treble and bass are joined independently but formatted together
+    voices.forEach(v => {
+      formatter.joinVoices([v])
+    })
+    // formatter.format([v1, v2],  10 - (startX - 5));
+    if (voices.length > 0) {
+      formatter.format(voices, 160)
+    }
+    if (trebleNotes.length > 0) {
+      voices[0].draw(ctx, tclef)
+    }
+    if (bassNotes.length > 0) {
+      voices[voices.length - 1].draw(ctx, bclef)
+    }
+    tclef.setContext(ctx).draw()
+    bclef.setContext(ctx).draw()
   }
 </script>
 
@@ -171,4 +215,10 @@
   :global(.hidden) {
     display: none;
   }
+  :global(.vf-stave path) {
+    stroke: #000;
+  }
+  // :global(.vf-stave path:nth-of-type(2)) {
+  //   stroke: #222;
+  // }
 </style>
