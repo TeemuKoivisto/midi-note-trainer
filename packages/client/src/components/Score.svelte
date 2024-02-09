@@ -74,8 +74,8 @@
     ctx.scale(2.0, 2.0)
     // console.log('ctx', ctx)
     tickContext = new Vex.Flow.TickContext()
-    const tclef = new Stave(0, 0, 200).addClef('treble') //.addTimeSignature('4/4')
-    const bclef = new Stave(0, 60, 200).addClef('bass')
+    const tclef = new Stave(0, 0, 200).addClef('treble').addKeySignature('B')
+    const bclef = new Stave(0, 60, 200).addClef('bass').addKeySignature('B')
     const trebleNotes = [
       new StaveNote({ keys: ['g#/4'], duration: 'q' }),
       new StaveNote({ keys: ['b/4'], duration: 'qr' }),
@@ -98,8 +98,7 @@
     const formatter = new Vex.Flow.Formatter()
     formatter.joinVoices([v1])
     formatter.joinVoices([v2])
-    // formatter.format([v1, v2],  10 - (startX - 5));
-    formatter.format([v1, v2], 160)
+    formatter.format([v1, v2], 190 - startX)
     // formatter.joinVoices([voice]).formatToStave([voice], s1)
     // const formatter1 = new Vex.Flow.Formatter()
     //   .joinVoices([v1])
@@ -177,10 +176,14 @@
     const trebleNotes = staveNotes.filter(n => n.getAttribute('clef') === 'treble')
     const voices = []
     if (trebleNotes.length > 0) {
-      voices.push(new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).addTickables(trebleNotes))
+      voices.push(
+        new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).setMode(2).addTickables(trebleNotes)
+      )
     }
     if (bassNotes.length > 0) {
-      voices.push(new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).addTickables(bassNotes))
+      voices.push(
+        new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).setMode(2).addTickables(bassNotes)
+      )
     }
     const startX = Math.max(tclef.getNoteStartX(), bclef.getNoteStartX())
     tclef.setNoteStartX(startX)
@@ -192,7 +195,7 @@
     })
     // formatter.format([v1, v2],  10 - (startX - 5));
     if (voices.length > 0) {
-      formatter.format(voices, 160)
+      formatter.format(voices, 190 - startX)
     }
     if (trebleNotes.length > 0) {
       voices[0].draw(ctx, tclef)
