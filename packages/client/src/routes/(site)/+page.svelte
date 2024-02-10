@@ -13,7 +13,7 @@
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
-  import { audioContext, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
+  import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
   import { played, scoreActions } from '$stores/score'
   import { getNote, getNoteAbsolute } from '$utils/getNote'
 
@@ -56,10 +56,10 @@
   }
   function noteOnListener(e: NoteMessageEvent) {
     if (timeout) return
-    console.log('noteon', e)
+    // console.log('noteon', e)
     // @ts-ignore
     const data = e.rawData as [number, number, number]
-    handlePlayedNote(data[1], 80)
+    handlePlayedNote(data[1], data[2])
   }
   function handlePlayedNote(value: number, velocity: number) {
     const game = $currentGame
@@ -93,7 +93,7 @@
       scoreActions.pushPlayed(getNote(value))
     }
     if ($piano) {
-      $piano.noteOn(value, velocity)
+      $piano.noteOn(value, $inputs.fixedVelocity ?? velocity)
     }
   }
   function gameUpdate() {
@@ -142,8 +142,7 @@
     timeout = setTimeout(gameUpdate, 2000)
   }
   function handleNote(e: CustomEvent<number>) {
-    console.log('note', e.detail)
-    handlePlayedNote(e.detail, 120)
+    handlePlayedNote(e.detail, 80)
   }
   async function handlePromptMIDI() {
     status = 'Finding device...'
@@ -159,7 +158,7 @@
 
 <h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight">
   <a class="hover:underline" href="https://github.com/TeemuKoivisto/midi-music-notation-trainer">
-    MIDI Music Notation Trainer
+    MIDI Note Trainer
   </a>
 </h1>
 
@@ -168,7 +167,6 @@
   <Scales />
   <Chords />
   <PlayForm />
-  <div id="output"></div>
 </section>
 
 <Score class="px-4 md:px-0" />

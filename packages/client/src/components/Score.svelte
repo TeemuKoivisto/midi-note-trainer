@@ -193,7 +193,6 @@
     voices.forEach(v => {
       formatter.joinVoices([v])
     })
-    // formatter.format([v1, v2],  10 - (startX - 5));
     if (voices.length > 0) {
       formatter.format(voices, 190 - startX)
     }

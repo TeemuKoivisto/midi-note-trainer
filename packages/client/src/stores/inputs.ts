@@ -10,6 +10,7 @@ import type { Input } from 'webmidi'
 import type { Note, Result } from '@/types'
 
 interface Inputs {
+  fixedVelocity: number | undefined
   useSound: boolean
   useKeyboard: boolean
   useHotkeys: boolean
@@ -32,6 +33,7 @@ export const audioContext = writable<AudioContext | undefined>(undefined)
 export const piano = writable<Piano | undefined>(undefined)
 export const inputs = persist(
   writable<Inputs>({
+    fixedVelocity: undefined,
     useSound: true,
     useKeyboard: true,
     useHotkeys: true,
@@ -63,7 +65,7 @@ export const inputsActions = {
   setMidiRange(range: [number, number]) {
     midiRange.set(range)
   },
-  setInputValue(key: keyof Inputs, val: boolean) {
+  setInputValue<K extends keyof Inputs>(key: K, val: Inputs[K]) {
     inputs.update(v => ({ ...v, [key]: val }))
     if (key === 'useSound' && !val) {
       piano.set(undefined)

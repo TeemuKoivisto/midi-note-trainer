@@ -6,10 +6,33 @@
   import { fadeTimeout, scoreActions } from '$stores/score'
 
   const hidden = persist(writable(false), { key: 'inputs-hidden' })
+  let fixedVelocity = $inputs.fixedVelocity ?? ''
   let fadeMs = $fadeTimeout
 
   function toggleVisibility() {
     hidden.update(h => !h)
+  }
+  function handleSetVelocity(
+    e: Event & {
+      currentTarget: EventTarget & HTMLInputElement
+    }
+  ) {
+    const { value } = e.currentTarget
+    let int
+    if (value) {
+      try {
+        int = parseInt(value)
+      } catch (err) {}
+    }
+    if (int !== undefined && int >= 0 && int <= 127) {
+      inputsActions.setInputValue('fixedVelocity', int)
+      fixedVelocity = int
+    } else if (!value) {
+      inputsActions.setInputValue('fixedVelocity', undefined)
+      fixedVelocity = ''
+    } else {
+      fixedVelocity = $inputs.fixedVelocity || ''
+    }
   }
   function handleSetFadeTimeout(
     e: Event & {
@@ -54,6 +77,16 @@
             type="checkbox"
             checked={$inputs.useSound}
             on:change={e => inputsActions.setInputValue('useSound', e.currentTarget.checked)}
+          />
+        </div>
+        <div class="flex justify-between">
+          <label class="font-bold" for="fade-timeout">Fixed velocity</label>
+          <input
+            class="h-[20px] w-16"
+            id="fade-timeout"
+            bind:value={fixedVelocity}
+            placeholder="0-127"
+            on:change={handleSetVelocity}
           />
         </div>
       </div>
