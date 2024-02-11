@@ -15,7 +15,7 @@
   import { currentGame, gameActions } from '$stores/game'
   import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
   import { played, scoreActions } from '$stores/score'
-  import { getNote, getNoteAbsolute } from '$utils/getNote'
+  import { getNoteAbsolute } from '$utils/getNote'
 
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessNotes } from '$utils/guess_notes'
@@ -64,10 +64,10 @@
   function handlePlayedNote(value: number, velocity: number) {
     const game = $currentGame
     if (game instanceof GuessNotes) {
-      scoreActions.setTarget([getNote(game.current)])
+      scoreActions.setTarget([scoreActions.getNote(game.current)])
       const correct = game.guess(value)
       gameActions.updateState(correct ? 'correct' : 'wrong')
-      scoreActions.pushPlayed(getNote(value), 2000)
+      scoreActions.pushPlayed(value, 2000)
       timeout = setTimeout(() => {
         if (game?.ended) {
           scoreActions.setTarget()
@@ -76,7 +76,7 @@
           gameActions.updateState('waiting')
           game.startTime()
           if (game.type === 'notes') {
-            scoreActions.setTarget([getNote(game.current)])
+            scoreActions.setTarget([scoreActions.getNote(game.current)])
             $piano?.noteOn(game.current)
           } else {
             scoreActions.setTarget()
@@ -90,7 +90,7 @@
       game.addPlayedNote(value)
       if (!chordTimeout) chordTimeout = setTimeout(flushPlayedChords, 2000)
     } else {
-      scoreActions.pushPlayed(getNote(value))
+      scoreActions.pushPlayed(value)
     }
     if ($piano) {
       $piano.noteOn(value, $inputs.fixedVelocity ?? velocity)

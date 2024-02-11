@@ -6,7 +6,6 @@
   import { inputsActions, midiRangeNotes } from '$stores/inputs'
   import { persist } from '$stores/persist'
   import { keyAndScale, scaleData, scoreActions } from '$stores/score'
-  import { keys } from '$utils/guess_keys'
   import { getNoteAbsolute, parseNote } from '$utils/getNote'
 
   import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
@@ -17,12 +16,12 @@
   const hidden = persist(writable(false), { key: 'options-hidden' })
 
   let selectedKey = $keyAndScale[0]
+  let selectedScale = $keyAndScale[1]
 
   const scaleOptions = Array.from(scales.entries()).map(([k, v]) => ({
     key: k,
     value: v.name
   }))
-  let selectedScale = $keyAndScale[1]
   $: selectedScaleNotes =
     Array.from(scales.entries()).find(([k, v]) => v.name === selectedScale)?.[1].intervals || []
 
@@ -57,20 +56,8 @@
   function handleKeyChange({
     currentTarget: { value }
   }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-    let val = value.charAt(0)
-    if (val.length > 1) {
-      val += value.charAt(1).toLowerCase() //.replaceAll('b', '♭').replaceAll('#', '♯')
-    }
-    scoreActions.setKey(val)
-  }
-  function handleKeyBlur() {
-    if (selectedKey in keys.major || selectedKey in keys.minor) {
-      selectedKey = selectedKey.replaceAll('b', '♭').replaceAll('#', '♯')
-      scoreActions.setKey(selectedKey)
-    } else {
-      selectedKey = $keyAndScale[0]
-    }
-    inputsActions.setKeyboardFocus(true)
+    selectedKey = `${value.charAt(0).toUpperCase()}${value.charAt(1).toLowerCase()}`
+    scoreActions.setKey(selectedKey)
   }
   function handleSelectScale(key: string) {
     selectedScale = scaleOptions.find(k => key === k.key)?.value as string
@@ -142,7 +129,7 @@
         bind:value={selectedKey}
         on:input={handleKeyChange}
         on:focus={() => inputsActions.setKeyboardFocus(false)}
-        on:blur={handleKeyBlur}
+        on:blur={() => inputsActions.setKeyboardFocus(true)}
       />
     </div>
     {#if !$currentGame}

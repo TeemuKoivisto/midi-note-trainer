@@ -23,7 +23,7 @@ export const gameActions = {
   playGuessNotes(type: 'notes' | 'pitches', amount = 10) {
     const game = new GuessNotes(type, get(midiRange), amount)
     if (type === 'notes') {
-      scoreActions.setTarget([getNote(game.current)])
+      scoreActions.setTarget([scoreActions.getNote(game.current)])
     } else if (type === 'pitches') {
       scoreActions.setTarget()
       inputsActions.setInputValue('useSound', true)
@@ -44,7 +44,8 @@ export const gameActions = {
     return game
   },
   playGuessChords(type: 'write' | 'play', count = 10) {
-    // const scale = createScale('B', 'enigmaticMajor')
+    // @ts-ignore
+    // const scale = createScale('Eb', 'major').data
     const scale = get(scaleData)
     const range = get(midiRangeNotes)
     if ('err' in scale) {

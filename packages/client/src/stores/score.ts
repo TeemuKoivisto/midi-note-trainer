@@ -1,5 +1,5 @@
 import { derived, get, readable, writable } from 'svelte/store'
-import { createScale, type MidiNote, type Scale } from '@/chords-and-scales'
+import { createScale, type MidiNote, type Scale, type ScaleNote } from '@/chords-and-scales'
 
 import { persist } from './persist'
 
@@ -46,13 +46,12 @@ export const scaleData = derived(keyAndScale, (val): Scale => {
     notesMap: new Map()
   } as Scale
 })
-export const hotKeyMap = derived([scaleData, defaultKeyMap], ([scl, kmap]) => {
+export const keyMap = derived([scaleData, defaultKeyMap], ([scl, kmap]) => {
   const map = { ...kmap }
-  scl.scaleNotes.forEach(note => {
-    const found = Object.entries(kmap).find(([_, vals]) => note.order === vals.order)
-    if (found) {
-      const key = found[0] as keyof typeof map
-      map[key] = { ...found[1], defaultNote: note.note }
+  Object.entries(kmap).forEach(([key, vals]) => {
+    const note = scl.notesMap.get(vals.order % 12)
+    if (note) {
+      map[key as keyof typeof map] = { defaultNote: note.note, order: vals.order }
     }
   })
   return map
@@ -100,13 +99,15 @@ export const scoreActions = {
   setKeyAndScale(k: string, s: string) {
     keyAndScale.set([k, s])
   },
-  // setScore(v: any[]) {
-  //   score.set(v)
-  // },
   setTarget(val: MidiNote[] = []) {
     target.set(val)
   },
-  pushPlayed(note: MidiNote, timeoutMs?: number) {
+  getNote(midi: number) {
+    return { ...get(scaleData).notesMap.get(midi % 12), midi } as MidiNote
+  },
+  pushPlayed(midi: number, timeoutMs?: number) {
+    const snote = get(scaleData).notesMap.get(midi % 12) as ScaleNote
+    const note = { ...snote, midi }
     const now = Date.now()
     played.update(v =>
       [...v, { ...note, started: now }].filter(n => n.midi !== note.midi || n.started === now)
