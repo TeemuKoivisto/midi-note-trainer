@@ -6,25 +6,25 @@ import { persist } from './persist'
 let timeout: ReturnType<typeof setTimeout> | undefined
 
 export const defaultKeyMap = readable({
-  A: { defaultNote: 'C', order: 0 },
-  W: { defaultNote: 'C♯', order: 1 },
-  S: { defaultNote: 'D', order: 2 },
-  E: { defaultNote: 'E♭', order: 3 },
-  D: { defaultNote: 'E', order: 4 },
-  F: { defaultNote: 'F', order: 5 },
-  T: { defaultNote: 'F♯', order: 6 },
-  G: { defaultNote: 'G', order: 7 },
-  Y: { defaultNote: 'G♯', order: 8 },
-  H: { defaultNote: 'A', order: 9 },
-  U: { defaultNote: 'B♭', order: 10 },
-  J: { defaultNote: 'B', order: 11 },
-  K: { defaultNote: 'C', order: 12 },
-  O: { defaultNote: 'C♯', order: 13 },
-  L: { defaultNote: 'D', order: 14 },
-  P: { defaultNote: 'E♭', order: 15 },
-  Ö: { defaultNote: 'E', order: 16 },
-  Ä: { defaultNote: 'F', order: 17 },
-  Å: { defaultNote: 'F♯', order: 18 }
+  A: { note: 'C', order: 0, flats: 0, sharps: 0 },
+  W: { note: 'C♯', order: 1, flats: 0, sharps: 1 },
+  S: { note: 'D', order: 2, flats: 0, sharps: 0 },
+  E: { note: 'E♭', order: 3, flats: 1, sharps: 0 },
+  D: { note: 'E', order: 4, flats: 0, sharps: 0 },
+  F: { note: 'F', order: 5, flats: 0, sharps: 0 },
+  T: { note: 'F♯', order: 6, flats: 0, sharps: 1 },
+  G: { note: 'G', order: 7, flats: 0, sharps: 0 },
+  Y: { note: 'G♯', order: 8, flats: 0, sharps: 1 },
+  H: { note: 'A', order: 9, flats: 0, sharps: 0 },
+  U: { note: 'B♭', order: 10, flats: 1, sharps: 0 },
+  J: { note: 'B', order: 11, flats: 0, sharps: 0 },
+  K: { note: 'C', order: 12, flats: 0, sharps: 0 },
+  O: { note: 'C♯', order: 13, flats: 0, sharps: 1 },
+  L: { note: 'D', order: 14, flats: 0, sharps: 0 },
+  P: { note: 'E♭', order: 15, flats: 1, sharps: 0 },
+  Ö: { note: 'E', order: 16, flats: 0, sharps: 0 },
+  Ä: { note: 'F', order: 17, flats: 0, sharps: 0 },
+  Å: { note: 'F♯', order: 18, flats: 0, sharps: 1 }
 })
 export const fadeTimeout = persist(writable(1500), {
   key: 'fade-timeout'
@@ -51,7 +51,12 @@ export const keyMap = derived([scaleData, defaultKeyMap], ([scl, kmap]) => {
   Object.entries(kmap).forEach(([key, vals]) => {
     const note = scl.notesMap.get(vals.order % 12)
     if (note) {
-      map[key as keyof typeof map] = { defaultNote: note.note, order: vals.order }
+      map[key as keyof typeof map] = {
+        note: note.note,
+        flats: note.flats,
+        sharps: note.sharps,
+        order: vals.order
+      }
     }
   })
   return map
@@ -101,6 +106,31 @@ export const scoreActions = {
   },
   setTarget(val: MidiNote[] = []) {
     target.set(val)
+  },
+  findNote(note: string): ScaleNote | undefined {
+    return Object.values(get(keyMap)).find(n => {
+      if (n.note.charAt(0) === note.charAt(0)) {
+        const shifted = note
+          .slice(1)
+          .split('')
+          .reduce(
+            (acc, c) =>
+              acc +
+              (c.toLowerCase() === 'b' || c === '♭'
+                ? -1
+                : c.toLowerCase() === 's' || c === '#' || c === '♯'
+                ? 1
+                : 0),
+            0
+          )
+        if (shifted > 0) {
+          return n.sharps === shifted
+        } else if (shifted < 0) {
+          return n.flats === shifted * -1
+        }
+        return n.flats === 0 && n.sharps === 0
+      }
+    })
   },
   getNote(midi: number) {
     return { ...get(scaleData).notesMap.get(midi % 12), midi } as MidiNote

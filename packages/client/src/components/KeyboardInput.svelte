@@ -3,7 +3,7 @@
 
   import { currentGame } from '$stores/game'
   import { inputs, keyboardFocused, midiRangeNotes } from '$stores/inputs'
-  import { keyMap } from '$stores/score'
+  import { keyMap, scoreActions } from '$stores/score'
   import { getOctave } from '$utils/getNote'
 
   import { GuessKeys } from '$utils/guess_keys'
@@ -17,21 +17,31 @@
     note: number
   }>()
 
+  const regexNote = /^[a-gA-G]$/
+  const regexAccidental = /^[♭Bb#♯sS]$/
   const regexPosInt = /^[0-9]$/
   let keyboardError = ''
   let keyboardInput = ''
-  let inputtedNote: { defaultNote: string; order: number } | undefined
+  let inputtedNote: { note: string; order: number; flats: number; sharps: number } | undefined
 
   function parseNotes(e: KeyboardEvent) {
     const pressed = e.key.toUpperCase()
     const keymap = $keyMap
     let octave
-    if (!inputtedNote && pressed in keymap) {
+    if (!inputtedNote && $inputs.useHotkeys && pressed in keymap) {
       const note = keymap[pressed as keyof typeof keymap]
       inputtedNote = note
       keyboardError = ''
       if ($inputs.useAutoOctave) {
         octave = getOctave($midiRangeNotes[0].midi)
+      }
+    } else if (!$inputs.useHotkeys && keyboardInput.length === 0 && regexNote.test(pressed)) {
+      keyboardInput += pressed
+    } else if (!$inputs.useHotkeys && keyboardInput.length > 0 && regexAccidental.test(pressed)) {
+      if (pressed === 'B') {
+        keyboardInput += '♭'
+      } else {
+        keyboardInput += '♯'
       }
     }
     if (regexPosInt.test(pressed)) {
@@ -43,10 +53,17 @@
       const midi = inputtedNote.order + (octave + 1 + (e.shiftKey ? 1 : 0)) * 12
       dispatch('note', midi)
       inputtedNote = undefined
+    } else if (keyboardInput && octave !== undefined) {
+      const note = scoreActions.findNote(keyboardInput)
+      const midi = note ? note.order + (octave + 1) * 12 : undefined
+      if (midi !== undefined) {
+        dispatch('note', midi)
+      }
+      keyboardInput = ''
     } else if (e.key === 'Backspace') {
       inputtedNote = undefined
+      keyboardInput = keyboardInput.slice(0, -1)
     }
-    keyboardInput = ''
   }
 
   function handleKeyDown(e: KeyboardEvent) {
@@ -56,7 +73,7 @@
       const pressed = e.key.toUpperCase()
       const keymap = $keyMap
       if (keyboardInput.length === 0 && pressed in keymap) {
-        const value = keymap[pressed as keyof typeof keymap].defaultNote
+        const value = keymap[pressed as keyof typeof keymap].note
         dispatch('guessed-key', value)
         keyboardInput = ''
       } else if (e.key === 'Backspace') {
@@ -102,7 +119,7 @@
   {:else if $inputs.useKeyboard && keyboardInput}
     Input: {keyboardInput}
   {:else if $inputs.useKeyboard && inputtedNote}
-    Input: {inputtedNote.defaultNote}
+    Input: {inputtedNote.note}
   {:else}
     &nbsp;
   {/if}
