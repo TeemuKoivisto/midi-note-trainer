@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte'
 
   import { currentGame } from '$stores/game'
-  import { inputs, midiRangeNotes } from '$stores/inputs'
+  import { inputs, keyboardFocused, midiRangeNotes } from '$stores/inputs'
   import { hotKeyMap } from '$stores/score'
   import { getOctave, parseNote } from '$utils/getNote'
 
@@ -48,7 +48,7 @@
   }
 
   function handleKeyDown(e: KeyboardEvent) {
-    if (debounced) return
+    if (debounced || !$keyboardFocused) return
     const game = $currentGame
     if (game instanceof GuessKeys) {
       const pressed = e.key.toUpperCase()

@@ -2,6 +2,7 @@
   import { writable } from 'svelte/store'
   import { createScale, scales, type Scale } from '@/chords-and-scales'
 
+  import { inputsActions } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
   $: scalesList = Array.from(scales.entries())
@@ -51,6 +52,8 @@
           id="scale-key"
           value={shownKey}
           on:input={handleKeyChange}
+          on:focus={() => inputsActions.setKeyboardFocus(false)}
+          on:blur={() => inputsActions.setKeyboardFocus(true)}
         />
       </div>
       <ul class="list w-full">

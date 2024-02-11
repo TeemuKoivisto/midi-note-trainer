@@ -70,6 +70,7 @@
     } else {
       selectedKey = $keyAndScale[0]
     }
+    inputsActions.setKeyboardFocus(true)
   }
   function handleSelectScale(key: string) {
     selectedScale = scaleOptions.find(k => key === k.key)?.value as string
@@ -90,6 +91,8 @@
         id="range_min"
         bind:value={rangeMin}
         on:change={e => handleRangeChanged('min', e)}
+        on:focus={() => inputsActions.setKeyboardFocus(false)}
+        on:blur={() => inputsActions.setKeyboardFocus(true)}
       />
       <span class="mx-2 mt-1">—</span>
       <input
@@ -97,6 +100,8 @@
         id="range_max"
         bind:value={rangeMax}
         on:change={e => handleRangeChanged('max', e)}
+        on:focus={() => inputsActions.setKeyboardFocus(false)}
+        on:blur={() => inputsActions.setKeyboardFocus(true)}
       />
     </div>
     <div class="flex justify-between h-[20px] my-1">
@@ -136,6 +141,7 @@
         id="key"
         bind:value={selectedKey}
         on:input={handleKeyChange}
+        on:focus={() => inputsActions.setKeyboardFocus(false)}
         on:blur={handleKeyBlur}
       />
     </div>

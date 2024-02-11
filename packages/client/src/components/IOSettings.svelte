@@ -1,7 +1,7 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
 
-  import { inputsActions, midiInput, inputs } from '$stores/inputs'
+  import { inputsActions, inputs, midiInput } from '$stores/inputs'
   import { persist } from '$stores/persist'
   import { fadeTimeout, scoreActions } from '$stores/score'
 
@@ -33,6 +33,7 @@
     } else {
       fixedVelocity = $inputs.fixedVelocity || ''
     }
+    inputsActions.setKeyboardFocus(true)
   }
   function handleSetFadeTimeout(
     e: Event & {
@@ -84,8 +85,9 @@
           <input
             class="h-[20px] w-16"
             id="fade-timeout"
-            bind:value={fixedVelocity}
             placeholder="0-127"
+            bind:value={fixedVelocity}
+            on:focus={() => inputsActions.setKeyboardFocus(false)}
             on:change={handleSetVelocity}
           />
         </div>
@@ -129,6 +131,8 @@
             class="h-[20px]"
             id="fade-timeout"
             value={fadeMs}
+            on:focus={() => inputsActions.setKeyboardFocus(false)}
+            on:blur={() => inputsActions.setKeyboardFocus(true)}
             on:input={handleSetFadeTimeout}
           />
         </div>

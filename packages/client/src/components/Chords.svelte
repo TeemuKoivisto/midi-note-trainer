@@ -9,6 +9,7 @@
     type ScaleNote
   } from '@/chords-and-scales'
 
+  import { inputsActions } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
   $: chordsList = Array.from(chords.entries())
@@ -68,6 +69,8 @@
           id="scale-key"
           value={selectedKey}
           on:input={handleKeyChange}
+          on:focus={() => inputsActions.setKeyboardFocus(false)}
+          on:blur={() => inputsActions.setKeyboardFocus(true)}
         />
         <label class="mx-4 font-bold" for="scale-key">Scale</label>
         <input class="bg-gray-100 w-16 px-1 rounded" id="scale-key" value={'Major'} disabled />
@@ -77,6 +80,8 @@
           id="scale-key"
           value={rootNote}
           on:input={handleNoteChange}
+          on:focus={() => inputsActions.setKeyboardFocus(false)}
+          on:blur={() => inputsActions.setKeyboardFocus(true)}
         />
       </div>
       <ul class="chord-list w-full">
