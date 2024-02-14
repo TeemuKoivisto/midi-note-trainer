@@ -63,7 +63,7 @@
   }
   function handlePlayedNote(value: number, velocity: number) {
     const game = $currentGame
-    if (game instanceof GuessNotes) {
+    if (game instanceof GuessNotes && !game?.ended) {
       scoreActions.setTarget([scoreActions.getNote(game.current)])
       const correct = game.guess(value)
       gameActions.updateState(correct ? 'correct' : 'wrong')
@@ -86,7 +86,7 @@
         scoreActions.clearPlayed()
         timeout = undefined
       }, 2000)
-    } else if (game instanceof PlayChordsGame) {
+    } else if (game instanceof PlayChordsGame && !game?.ended) {
       game.addPlayedNote(value)
       if (!chordTimeout) chordTimeout = setTimeout(flushPlayedChords, 2000)
     } else {
