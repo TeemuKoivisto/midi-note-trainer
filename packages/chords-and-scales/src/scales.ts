@@ -22,6 +22,7 @@ export function findScale(scaleName: string): RawScale | undefined {
 // https://en.wikipedia.org/wiki/List_of_musical_scales_and_modes
 // https://plucknplay.github.io/en/scale-list.html
 // https://www.jazz-guitar-licks.com/pages/guitar-scales-modes/
+// https://www.omnicalculator.com/other/music-scale
 export const scales = new Map<string, RawScale>([
   [
     'major',
@@ -35,6 +36,60 @@ export const scales = new Map<string, RawScale>([
         { str: '5', seq: 5, flats: 0, sharps: 0 },
         { str: '6', seq: 6, flats: 0, sharps: 0 },
         { str: '7', seq: 7, flats: 0, sharps: 0 }
+      ]
+    }
+  ],
+  [
+    'majorPentatonic',
+    {
+      name: 'Major Pentatonic',
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '2', seq: 2, flats: 0, sharps: 0 },
+        { str: '3', seq: 3, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '6', seq: 6, flats: 0, sharps: 0 }
+      ]
+    }
+  ],
+  [
+    'majorPentatonicBlues',
+    {
+      name: 'Major Pentatonic Blues',
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '2', seq: 2, flats: 0, sharps: 0 },
+        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
+        { str: '3', seq: 3, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '6', seq: 6, flats: 0, sharps: 0 }
+      ]
+    }
+  ],
+  [
+    'suspendedPentatonic',
+    {
+      name: 'Suspended Pentatonic',
+      synonyms: ['Egyptian'],
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '2', seq: 2, flats: 0, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
+      ]
+    }
+  ],
+  [
+    'scottishPentatonic',
+    {
+      name: 'Scottish Pentatonic',
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '2', seq: 2, flats: 0, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '6', seq: 6, flats: 0, sharps: 0 }
       ]
     }
   ],
@@ -84,6 +139,46 @@ export const scales = new Map<string, RawScale>([
     }
   ],
   [
+    'minorPentatonic',
+    {
+      name: 'Minor Pentatonic',
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
+      ]
+    }
+  ],
+  [
+    'minorPentatonicBlues',
+    {
+      name: 'Minor Pentatonic Blues',
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
+        { str: '♭5', seq: 5, flats: 1, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
+      ]
+    }
+  ],
+  [
+    'minor6Pentatonic',
+    {
+      name: 'Minor 6th Pentatonic',
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '6', seq: 6, flats: 0, sharps: 0 }
+      ]
+    }
+  ],
+  [
     'harmonicMinor',
     {
       name: 'Harmonic Minor',
@@ -98,34 +193,34 @@ export const scales = new Map<string, RawScale>([
       ]
     }
   ],
-
   [
-    'minor7b9',
+    'melodicMinorAscending',
     {
-      name: 'Minor7b9',
+      name: 'Melodic Minor Ascending',
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♭2', seq: 2, flats: 1, sharps: 0 },
+        { str: '2', seq: 2, flats: 0, sharps: 0 },
         { str: '♭3', seq: 3, flats: 1, sharps: 0 },
         { str: '4', seq: 4, flats: 0, sharps: 0 },
         { str: '5', seq: 5, flats: 0, sharps: 0 },
         { str: '6', seq: 6, flats: 0, sharps: 0 },
-        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
+        { str: '7', seq: 7, flats: 0, sharps: 0 }
       ]
     }
   ],
   [
-    'minor7b5',
+    'melodicMinorDescending',
     {
-      name: 'Minor7b5',
+      name: 'Melodic Minor Descending',
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♭2', seq: 2, flats: 1, sharps: 0 },
+        { str: '♭7', seq: 7, flats: 1, sharps: 0 },
+        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
         { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '3', seq: 3, flats: 0, sharps: 0 },
-        { str: '♭5', seq: 5, flats: 1, sharps: 0 },
-        { str: '6', seq: 6, flats: 0, sharps: 0 },
-        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
+        { str: '2', seq: 2, flats: 0, sharps: 0 },
+        { str: '1', seq: 1, flats: 0, sharps: 0 }
       ]
     }
   ],
@@ -141,21 +236,6 @@ export const scales = new Map<string, RawScale>([
         { str: '5', seq: 5, flats: 0, sharps: 0 },
         { str: '6', seq: 6, flats: 0, sharps: 0 },
         { str: '7', seq: 7, flats: 0, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'aeolian',
-    {
-      name: 'Aeolian',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '2', seq: 2, flats: 0, sharps: 0 },
-        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
-        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
       ]
     }
   ],
@@ -192,7 +272,7 @@ export const scales = new Map<string, RawScale>([
   [
     'phrygianDominant',
     {
-      name: 'Phrygian dominant',
+      name: 'Phrygian Dominant',
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -231,6 +311,21 @@ export const scales = new Map<string, RawScale>([
         { str: '♯4', seq: 4, flats: 0, sharps: 1 },
         { str: '5', seq: 5, flats: 0, sharps: 0 },
         { str: '6', seq: 6, flats: 0, sharps: 0 },
+        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
+      ]
+    }
+  ],
+  [
+    'aeolian',
+    {
+      name: 'Aeolian',
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '2', seq: 2, flats: 0, sharps: 0 },
+        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
+        { str: '5', seq: 5, flats: 0, sharps: 0 },
+        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
         { str: '♭7', seq: 7, flats: 1, sharps: 0 }
       ]
     }
@@ -281,9 +376,26 @@ export const scales = new Map<string, RawScale>([
     }
   ],
   [
+    'locrianNatural2',
+    {
+      name: 'Locrian ♮2',
+      synonyms: ['Half-Diminished'],
+      intervals: [
+        { str: '1', seq: 1, flats: 0, sharps: 0 },
+        { str: '2', seq: 2, flats: 0, sharps: 0 },
+        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
+        { str: '♭5', seq: 5, flats: 1, sharps: 0 },
+        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
+        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
+      ]
+    }
+  ],
+  [
     'superLocrian',
     {
       name: 'Super Locrian',
+      synonyms: ['Altered scale'],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -295,27 +407,11 @@ export const scales = new Map<string, RawScale>([
       ]
     }
   ],
-
   [
-    'halfDiminished',
+    'doubleHarmonic',
     {
-      name: 'Half Diminished',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♭2', seq: 2, flats: 1, sharps: 0 },
-        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '3', seq: 3, flats: 0, sharps: 0 },
-        { str: '♭5', seq: 5, flats: 1, sharps: 0 },
-        { str: '6', seq: 6, flats: 0, sharps: 0 },
-        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
-      ]
-    }
-  ],
-
-  [
-    'byzantine',
-    {
-      name: 'Byzantine',
+      name: 'Double Harmonic',
+      synonyms: ['Byzantine', 'Arabic'],
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '♭2', seq: 2, flats: 1, sharps: 0 },
@@ -324,131 +420,6 @@ export const scales = new Map<string, RawScale>([
         { str: '5', seq: 5, flats: 0, sharps: 0 },
         { str: '♭6', seq: 6, flats: 1, sharps: 0 },
         { str: '7', seq: 7, flats: 0, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'melodicMinorAscending',
-    {
-      name: 'Melodic Minor Ascending',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '2', seq: 2, flats: 0, sharps: 0 },
-        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '6', seq: 6, flats: 0, sharps: 0 },
-        { str: '7', seq: 7, flats: 0, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'melodicMinorDescending',
-    {
-      name: 'Melodic Minor Descending',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♭7', seq: 7, flats: 1, sharps: 0 },
-        { str: '♭6', seq: 6, flats: 1, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '2', seq: 2, flats: 0, sharps: 0 },
-        { str: '1', seq: 1, flats: 0, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'majorPentatonic',
-    {
-      name: 'Major Pentatonic',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '2', seq: 2, flats: 0, sharps: 0 },
-        { str: '3', seq: 3, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '6', seq: 6, flats: 0, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'majorPentatonicBlues',
-    {
-      name: 'Major Pentatonic Blues',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '2', seq: 2, flats: 0, sharps: 0 },
-        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '3', seq: 3, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '6', seq: 6, flats: 0, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'minorPentatonic',
-    {
-      name: 'Minor Pentatonic',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'minorPentatonicBlues',
-    {
-      name: 'Minor Pentatonic Blues',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '♭5', seq: 5, flats: 1, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'minor6Pentatonic',
-    {
-      name: 'Minor 6th Pentatonic',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '6', seq: 6, flats: 0, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'suspendedPentatonic',
-    {
-      name: 'Suspended Pentatonic',
-      synonyms: ['Egyptian'],
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '2', seq: 2, flats: 0, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '♭7', seq: 7, flats: 1, sharps: 0 }
-      ]
-    }
-  ],
-  [
-    'scottishPentatonic',
-    {
-      name: 'Scottish Pentatonic',
-      intervals: [
-        { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '2', seq: 2, flats: 0, sharps: 0 },
-        { str: '4', seq: 4, flats: 0, sharps: 0 },
-        { str: '5', seq: 5, flats: 0, sharps: 0 },
-        { str: '6', seq: 6, flats: 0, sharps: 0 }
       ]
     }
   ],
@@ -534,7 +505,7 @@ export const scales = new Map<string, RawScale>([
       name: 'Augmented',
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♯2', seq: 2, flats: 0, sharps: 1 },
+        { str: '♭3', seq: 3, flats: 1, sharps: 0 },
         { str: '3', seq: 3, flats: 0, sharps: 0 },
         { str: '5', seq: 5, flats: 0, sharps: 0 },
         { str: '♯5', seq: 5, flats: 0, sharps: 1 },
@@ -772,9 +743,9 @@ export const scales = new Map<string, RawScale>([
     }
   ],
   [
-    'hirojoshi',
+    'hirajoshi',
     {
-      name: 'Hirojoshi',
+      name: 'Hirajoshi',
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
         { str: '2', seq: 2, flats: 0, sharps: 0 },
