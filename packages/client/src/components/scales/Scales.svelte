@@ -1,6 +1,6 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { createScale, scales } from '@/chords-and-scales'
+  import { createScale, createTriadChords, scales } from '@/chords-and-scales'
 
   import Intervals from './Intervals.svelte'
   import Triads from './Triads.svelte'
@@ -8,19 +8,20 @@
   import { inputsActions } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
-  import type { RawScale, Scale, ScaleTriad } from '@/chords-and-scales'
+  import type { MidiNote, RawScale, Scale, ScaleTriad } from '@/chords-and-scales'
 
   interface ListItem {
     key: string
     raw: RawScale
     scale: Scale | undefined
     triads: ScaleTriad[]
+    triadChords: { chord: string; notes: MidiNote[] }[]
   }
 
   let scalesList: ListItem[] = Array.from(scales.entries()).map(([k, s]) => {
     const created = createScale('C', k)
     const triads = 'data' in created ? created.data.triads : []
-    return { key: k, raw: s, scale: undefined, triads }
+    return { key: k, raw: s, scale: undefined, triads, triadChords: [] }
   })
   $: leftList = scalesList.filter((_, i) => i < scalesList.length / 2)
   $: rightList = scalesList.filter((_, i) => i >= scalesList.length / 2)
@@ -39,7 +40,8 @@
     scalesList = scalesList.map(d => {
       const created = createScale(shownKey, d.key)
       const data = shownKey && 'data' in created ? created.data : undefined
-      return { ...d, scale: data }
+      const chords = data ? createTriadChords(d.triads, data) : []
+      return { ...d, scale: data, triadChords: chords }
     })
   }
 </script>
@@ -65,14 +67,14 @@
         {#each leftList as scale}
           <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
           <div class="text-xs">{scale.raw.name}</div>
-          <Triads class="triads" triads={scale.triads} />
+          <Triads class="triads" triads={scale.triads} chords={scale.triadChords} />
         {/each}
       </ul>
       <ul class="list w-full">
         {#each rightList as scale}
           <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
           <div class="text-xs">{scale.raw.name}</div>
-          <Triads class="triads" triads={scale.triads} />
+          <Triads class="triads" triads={scale.triads} chords={scale.triadChords} />
         {/each}
       </ul>
     </div>

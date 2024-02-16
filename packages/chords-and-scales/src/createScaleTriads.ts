@@ -41,7 +41,10 @@ export function createTriadChords(triads: ScaleTriad[], scale: Scale) {
         sharps
       })
     }
-    return createChord(note.order, scale, intervals)
+    return {
+      chord: `${note.note}${triad.minor ? 'm' : ''}${triad.parts[1]}`,
+      notes: createChord(note.order, scale, intervals)
+    }
   })
 }
 
