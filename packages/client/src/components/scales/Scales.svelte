@@ -63,18 +63,22 @@
           on:blur={() => inputsActions.setKeyboardFocus(true)}
         />
       </div>
-      <ul class="list w-full">
+      <ul class="list odd w-full">
         {#each leftList as scale}
-          <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
-          <div class="text-xs">{scale.raw.name}</div>
-          <Triads class="triads" triads={scale.triads} chords={scale.triadChords} />
+          <li>
+            <div class="text-xs font-bold">{scale.raw.name}</div>
+            <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
+            <Triads class="triads" triads={scale.triads} chords={scale.triadChords} />
+          </li>
         {/each}
       </ul>
-      <ul class="list w-full">
+      <ul class="list even w-full">
         {#each rightList as scale}
-          <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
-          <div class="text-xs">{scale.raw.name}</div>
-          <Triads class="triads" triads={scale.triads} chords={scale.triadChords} />
+          <li>
+            <div class="text-xs font-bold">{scale.raw.name}</div>
+            <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
+            <Triads class="triads" triads={scale.triads} chords={scale.triadChords} />
+          </li>
         {/each}
       </ul>
     </div>
@@ -103,15 +107,31 @@
     }
   }
   :global(.triads) {
-    grid-column-end: span 2;
-    @apply border-b;
+    // grid-column-end: span 2;
+    // @apply border-b;
   }
   .list {
-    display: grid;
-    gap: 0.25rem;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-    align-items: center;
+    @apply flex flex-col gap-1;
+    & > li {
+      display: grid;
+      grid-template-columns: auto;
+      grid-template-rows: auto;
+      align-items: center;
+      @apply rounded p-1;
+      & > :global(.intervals) {
+        @apply mt-0.5;
+      }
+    }
+    &.even {
+      & > li:nth-child(even) {
+        @apply bg-gray-100;
+      }
+    }
+    &.odd {
+      & > li:nth-child(odd) {
+        @apply bg-gray-100;
+      }
+    }
   }
   .error {
     @apply text-xs text-red-500;
