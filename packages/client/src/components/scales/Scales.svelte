@@ -1,17 +1,31 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { createScale, scales, type Scale } from '@/chords-and-scales'
+  import { createScale, scales } from '@/chords-and-scales'
+
+  import Intervals from './Intervals.svelte'
+  import Triads from './Triads.svelte'
 
   import { inputsActions } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
-  $: scalesList = Array.from(scales.entries())
+  import type { RawScale, Scale, ScaleTriad } from '@/chords-and-scales'
+
+  interface ListItem {
+    key: string
+    raw: RawScale
+    scale: Scale | undefined
+    triads: ScaleTriad[]
+  }
+
+  let scalesList: ListItem[] = Array.from(scales.entries()).map(([k, s]) => {
+    const created = createScale('C', k)
+    const triads = 'data' in created ? created.data.triads : []
+    return { key: k, raw: s, scale: undefined, triads }
+  })
   $: leftList = scalesList.filter((_, i) => i < scalesList.length / 2)
   $: rightList = scalesList.filter((_, i) => i >= scalesList.length / 2)
 
   let shownKey = ''
-  let leftScales: (Scale | undefined)[] = []
-  let rightScales: (Scale | undefined)[] = []
 
   const hidden = persist(writable(false), { key: 'scales-hidden' })
 
@@ -22,19 +36,10 @@
     currentTarget: { value }
   }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
     shownKey = `${value.charAt(0).toUpperCase()}${value.charAt(1).toLowerCase()}`
-    leftScales = leftList.map(s => {
-      const scale = createScale(shownKey, s[0])
-      if ('data' in scale) {
-        return scale.data
-      }
-      return undefined
-    })
-    rightScales = rightList.map(s => {
-      const scale = createScale(shownKey, s[0])
-      if ('data' in scale) {
-        return scale.data
-      }
-      return undefined
+    scalesList = scalesList.map(d => {
+      const created = createScale(shownKey, d.key)
+      const data = shownKey && 'data' in created ? created.data : undefined
+      return { ...d, scale: data }
     })
   }
 </script>
@@ -57,35 +62,17 @@
         />
       </div>
       <ul class="list w-full">
-        {#each leftList as scale, idx}
-          <div class="intervals" title={scale[1].intervals.map(i => i.str).join('-')}>
-            {#if leftScales[idx]}
-              {#each leftScales[idx]?.scaleNotes || [] as scaleNote}
-                <span>{scaleNote.note}</span>
-              {/each}
-            {:else}
-              {#each scale[1].intervals as interval}
-                <span>{interval.str}</span>
-              {/each}
-            {/if}
-          </div>
-          <div class="text-xs">{scale[1].name}</div>
+        {#each leftList as scale}
+          <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
+          <div class="text-xs">{scale.raw.name}</div>
+          <Triads class="triads" triads={scale.triads} />
         {/each}
       </ul>
       <ul class="list w-full">
-        {#each rightList as scale, idx}
-          <div class="intervals" title={scale[1].intervals.map(i => i.str).join('-')}>
-            {#if rightScales[idx]}
-              {#each rightScales[idx]?.scaleNotes || [] as scaleNote}
-                <span>{scaleNote.note}</span>
-              {/each}
-            {:else}
-              {#each scale[1].intervals as interval}
-                <span>{interval.str}</span>
-              {/each}
-            {/if}
-          </div>
-          <div class="text-xs">{scale[1].name}</div>
+        {#each rightList as scale}
+          <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
+          <div class="text-xs">{scale.raw.name}</div>
+          <Triads class="triads" triads={scale.triads} />
         {/each}
       </ul>
     </div>
@@ -113,18 +100,16 @@
       grid-column-end: span 2;
     }
   }
+  :global(.triads) {
+    grid-column-end: span 2;
+    @apply border-b;
+  }
   .list {
     display: grid;
     gap: 0.25rem;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     align-items: center;
-  }
-  .intervals {
-    & > span + span::before {
-      content: '-';
-      @apply text-xs mx-[1px];
-    }
   }
   .error {
     @apply text-xs text-red-500;

@@ -38,6 +38,16 @@ export interface ScaleNote {
   flats: number
   sharps: number
 }
+export interface ScaleTriad {
+  str: string
+  parts: [string, string]
+  degree: number
+  major: boolean
+  minor: boolean
+  dim: boolean
+  perfect: boolean
+  aug: boolean
+}
 export type MidiNote = ScaleNote & { midi: number }
 export interface Scale {
   key: string // eg C
@@ -47,5 +57,6 @@ export interface Scale {
   majorSignature: string // using standard diatonic accidentals
   intervals: Interval[]
   scaleNotes: ScaleNote[]
+  triads: ScaleTriad[]
   notesMap: Map<number, ScaleNote> // all 12 semitones of octave
 }

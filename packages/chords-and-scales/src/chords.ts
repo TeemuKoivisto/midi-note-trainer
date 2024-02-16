@@ -202,7 +202,7 @@ export const chords = new Map<string, Chord>([
       type: 'suspended',
       intervals: [
         { str: '1', seq: 1, flats: 0, sharps: 0 },
-        { str: '♭4', seq: 4, flats: 1, sharps: 0 },
+        { str: '4', seq: 4, flats: 0, sharps: 0 },
         { str: '5', seq: 5, flats: 0, sharps: 0 }
       ]
     }

@@ -9,7 +9,7 @@
   import KeyboardInput from '$components/KeyboardInput.svelte'
   import PlayChords from '$components/PlayChords.svelte'
   import PlayForm from '$components/PlayForm.svelte'
-  import Scales from '$components/Scales.svelte'
+  import Scales from '$components/scales/Scales.svelte'
   import Score from '$components/Score.svelte'
 
   import { currentGame, gameActions } from '$stores/game'
@@ -48,6 +48,9 @@
     }
   })
 
+  /**
+   * Initializes audio on user interaction as auto-play is not allowed
+   */
   function initAudio() {
     inputsActions.initAudio()
     window.removeEventListener('keydown', initAudio)

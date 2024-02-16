@@ -1,3 +1,4 @@
+import { createScaleTriads } from './createScaleTriads'
 import { getKeySignature } from './getKeySignature'
 import { findScale } from './scales'
 import { NOTES, getRootNote, intervalToSemitones } from './utils'
@@ -130,6 +131,7 @@ export function createScale(rawKey: string, scaleName: string): Result<Scale> {
       ...getKeySignature(scaleNotes),
       intervals: scale.intervals.map(int => ({ ...int })),
       scaleNotes,
+      triads: createScaleTriads(scaleNotes, scale.intervals),
       notesMap
     }
   }
