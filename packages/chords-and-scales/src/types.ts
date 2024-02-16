@@ -39,14 +39,11 @@ export interface ScaleNote {
   sharps: number
 }
 export interface ScaleTriad {
-  str: string
   parts: [string, string]
   degree: number
   major: boolean
   minor: boolean
-  dim: boolean
-  perfect: boolean
-  aug: boolean
+  semitones: Set<number>
 }
 export type MidiNote = ScaleNote & { midi: number }
 export interface Scale {
