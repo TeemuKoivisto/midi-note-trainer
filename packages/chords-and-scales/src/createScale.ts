@@ -137,3 +137,11 @@ export function createScale(rawKey: string, scaleName: string): Result<Scale> {
     }
   }
 }
+
+export function createScaleUnsafe(rawKey: string, scaleName: string): Scale {
+  const scl = createScale(rawKey, scaleName)
+  if ('err' in scl) {
+    throw Error(scl.err)
+  }
+  return scl.data
+}

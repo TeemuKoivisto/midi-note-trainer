@@ -103,17 +103,15 @@ export function getTriad(degree: number, semitones: Set<number>) {
 }
 
 export function createScaleTriads(intervals: Interval[]): ScaleTriad[] {
-  const triads = []
   const len = intervals.length
-  for (let i = 0; i < len; i += 1) {
-    const noteSemitones = intervalToSemitones(intervals[i])
+  return intervals.map((int, i) => {
+    const noteSemitones = intervalToSemitones(int)
     const foundSemitones = new Set<number>()
     for (let j = 1; j < len; j += 1) {
       const next = intervalToSemitones(intervals[(i + j) % len])
       const semiTones = next <= noteSemitones ? next + 12 - noteSemitones : next - noteSemitones
       foundSemitones.add(semiTones)
     }
-    triads.push(getTriad(intervals[i].seq, foundSemitones))
-  }
-  return triads
+    return getTriad(int.seq, foundSemitones)
+  })
 }

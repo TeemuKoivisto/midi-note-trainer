@@ -18,7 +18,7 @@ export default {
     },
     paths: {
       // 	base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
-      base: process.env.VITE_DEPLOY_TO_GH ? '/midi-music-notation-trainer' : ''
+      base: process.env.VITE_DEPLOY_TO_GH ? '/midi-note-trainer' : ''
     },
     adapter: adapter({
       // default options are shown

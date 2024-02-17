@@ -160,7 +160,7 @@
 </script>
 
 <h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight">
-  <a class="hover:underline" href="https://github.com/TeemuKoivisto/midi-music-notation-trainer">
+  <a class="hover:underline" href="https://github.com/TeemuKoivisto/midi-note-trainer">
     MIDI Note Trainer
   </a>
 </h1>

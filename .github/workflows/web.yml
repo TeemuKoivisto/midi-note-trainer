@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies with pnpm
         uses: ./.github/actions/pnpm
 
-      - name: Build the web distribution
+      - name: Build the GitHub pages distribution
         run: |
           pnpm --filter types --filter chords-and-scales --filter midi-piano build
           VITE_DEPLOY_TO_GH=true pnpm --filter client build
@@ -27,3 +27,14 @@ jobs:
         with:
           deploy_key: ${{ secrets.GH_ACTIONS_DEPLOY_KEY }}
           publish_dir: ./packages/client/build
+
+      - name: Build the Cloudflare distribution without base url
+        run: pnpm --filter client build
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: midi-note-trainer
+          directory: ./packages/client/build

@@ -1,4 +1,4 @@
-# [midi-music-notation-trainer](https://github.com/teemukoivisto/midi-music-notation-trainer)
+# [midi-note-trainer](https://github.com/teemukoivisto/midi-note-trainer)
 
 This is small web app I built for myself to easily practise music notes and such. IMO you really have to drill them down until reading them is as easy as words.
 
