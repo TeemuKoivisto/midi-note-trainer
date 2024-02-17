@@ -17,7 +17,7 @@ function toRomanNumeral(seq: number) {
 }
 
 export function createTriadChords(triads: ScaleTriad[]): Chord[] {
-  return triads.map((triad, idx) => {
+  return triads.map(triad => {
     const intervals = [{ str: '1', seq: 1, flats: 0, sharps: 0 }]
     let chord
     if (triad.major) {
@@ -57,7 +57,7 @@ export function createTriadChords(triads: ScaleTriad[]): Chord[] {
     if (intervals.length <= 2) {
       intervals.push({ str: '8', seq: 8, flats: 0, sharps: 0 })
     }
-    if (!chord && triad.minor) {
+    if (!chord) {
       chord = findChord(triad.suffix)
     }
     return {
