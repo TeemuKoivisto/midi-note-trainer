@@ -1,7 +1,14 @@
 import { derived, get, readable, writable } from 'svelte/store'
-import { createScale, type MidiNote, type Scale, type ScaleNote } from '@/chords-and-scales'
+import { createScale } from '@/chords-and-scales'
 
 import { persist } from './persist'
+
+import type { MidiNote, Scale, ScaleNote } from '@/chords-and-scales'
+
+export interface PlayedNote extends MidiNote {
+  color: 'default' | 'correct' | 'wrong'
+  started: number
+}
 
 let timeout: ReturnType<typeof setTimeout> | undefined
 
@@ -64,12 +71,9 @@ export const keyMap = derived([scaleData, defaultKeyMap], ([scl, kmap]) => {
   return map
 })
 export const target = writable<MidiNote[]>([])
-export const played = writable<(MidiNote & { started: number })[]>([])
+export const played = writable<PlayedNote[]>([])
 
-function removePlayedNotes(
-  notes: (MidiNote & { started: number })[],
-  timeoutMs: number
-): (MidiNote & { started: number })[] {
+function removePlayedNotes(notes: PlayedNote[], timeoutMs: number): PlayedNote[] {
   if (notes.length > 0) {
     const now = Date.now()
     let next = now
@@ -137,13 +141,31 @@ export const scoreActions = {
   getNote(midi: number) {
     return { ...get(scaleData).notesMap.get(midi % 12), midi } as MidiNote
   },
-  pushPlayed(midi: number, timeoutMs?: number) {
+  pushPlayed(midi: number, correct?: boolean | undefined, timeoutMs?: number) {
     const snote = get(scaleData).notesMap.get(midi % 12) as ScaleNote
     const note = { ...snote, midi }
     const now = Date.now()
+    const color = correct === undefined ? 'default' : correct ? 'correct' : 'wrong'
     played.update(v =>
-      [...v, { ...note, started: now }].filter(n => n.midi !== note.midi || n.started === now)
+      [...v, { ...note, color: color, started: now } as PlayedNote].filter(
+        n => n.midi !== note.midi || n.started === now
+      )
     )
+    if (!timeout) {
+      const ms = timeoutMs ?? get(fadeTimeout)
+      timeout = setTimeout(() => {
+        timeout = undefined
+        played.update(n => removePlayedNotes(n, ms))
+      }, ms)
+    }
+  },
+  setPlayed(notes: MidiNote[], correct?: boolean | undefined, timeoutMs?: number) {
+    const now = Date.now()
+    const color = correct === undefined ? 'default' : correct ? 'correct' : 'wrong'
+    played.update(v => [
+      ...v,
+      ...notes.map(n => ({ ...n, color: color, started: now }) as PlayedNote)
+    ])
     if (!timeout) {
       const ms = timeoutMs ?? get(fadeTimeout)
       timeout = setTimeout(() => {

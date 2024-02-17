@@ -1,8 +1,14 @@
 import { createChord, intervalToSemitones, noteIntoString } from '@/chords-and-scales'
 import { getNote } from '../utils/getNote'
 
-import type { Chord, MidiChord, MidiNote, Scale, ScaleNote } from '@/chords-and-scales'
+import type { Chord, MidiChord, Scale } from '@/chords-and-scales'
 import type { Note } from '@/types'
+
+interface LatestGuess {
+  target: string
+  guessed: string
+  notes: Note[]
+}
 
 export class PlayChordsGame {
   scale: Scale
@@ -10,7 +16,7 @@ export class PlayChordsGame {
   times: number[] = []
   correct = 0
   played = new Set<number>()
-  latestGuess: { target: string; guessed: string } = { target: '', guessed: '' }
+  latestGuess: LatestGuess = { target: '', guessed: '', notes: [] }
   idx = 0
   timing: number
 
@@ -74,7 +80,7 @@ export class PlayChordsGame {
     if (result) {
       this.correct += 1
     }
-    this.latestGuess = { target, guessed }
+    this.latestGuess = { target, guessed, notes }
     this.idx += 1
     this.times.push(performance.now() - this.timing)
     return result

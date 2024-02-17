@@ -70,7 +70,7 @@
       scoreActions.setTarget([scoreActions.getNote(game.current)])
       const correct = game.guess(value)
       gameActions.updateState(correct ? 'correct' : 'wrong')
-      scoreActions.pushPlayed(value, 2000)
+      scoreActions.pushPlayed(value, correct, 2000)
       timeout = setTimeout(() => {
         if (game?.ended) {
           scoreActions.setTarget()
@@ -117,6 +117,7 @@
     const game = $currentGame
     if (game instanceof PlayChordsGame) {
       const correct = game.guess()
+      scoreActions.setPlayed(game.latestGuess.notes, correct, 5000)
       gameActions.updateState(correct ? 'correct' : 'wrong')
       timeout = setTimeout(gameUpdate, 5000)
     }

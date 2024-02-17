@@ -7,12 +7,12 @@
   import ReplayButton from './ReplayButton.svelte'
 
   import { currentGame, guessState, type GuessState } from '$stores/game'
-  import { played, target, scaleData } from '$stores/score'
+  import { played, target, scaleData, type PlayedNote } from '$stores/score'
   import { getOctave } from '$utils/getNote'
 
   import type { MidiNote, Scale } from '@/chords-and-scales'
   import type { Note } from '@/types'
-  import { GuessNotes } from '$games/GuessNotes'
+  import type { GuessNotes } from '$games/GuessNotes'
   import type { GuessChords } from '$games/GuessChords'
   import type { GuessKeys } from '$games/GuessKeys'
   import type { PlayChordsGame } from '$games/PlayChords'
@@ -22,9 +22,7 @@
     guessed: GuessState
     scale: Scale
     target: MidiNote[]
-    played: (MidiNote & {
-      started: number
-    })[]
+    played: PlayedNote[]
   }
 
   const { Accidental, Formatter, Renderer, Stave, StaveNote } = Vex.Flow
@@ -111,12 +109,19 @@
     bclef.setContext(ctx).draw()
   }
 
-  function notesToVexflowNotes(notes: MidiNote[], scale: Scale, fillColor?: string) {
+  function notesToVexflowNotes(notes: (MidiNote | PlayedNote)[], scale: Scale) {
     const bassNotes = []
     const trebleNotes = []
     for (let i = 0; i < notes.length; i += 1) {
-      const octave = getOctave(notes[i].midi)
-      const note = addParts(notes[i], scale)
+      const n = notes[i]
+      const octave = getOctave(n.midi)
+      const color =
+        'color' in n && n.color !== 'default'
+          ? n.color === 'correct'
+            ? 'rgb(34, 197, 94)'
+            : 'red'
+          : undefined
+      const note = { ...addParts(notes[i], scale), color }
       if (octave < 4) {
         bassNotes.push(note)
       } else {
@@ -134,6 +139,10 @@
         if (n.parts[1]) {
           bassNote.addModifier(new Accidental(n.parts[1]), idx)
         }
+        // @TODO should set these individually to notes
+        if (n.color) {
+          bassNote.setStyle({ fillStyle: n.color })
+        }
       })
       snotes.push(bassNote)
     }
@@ -147,11 +156,11 @@
         if (n.parts[1]) {
           trebleNote.addModifier(new Accidental(n.parts[1]), idx)
         }
+        if (n.color) {
+          trebleNote.setStyle({ fillStyle: n.color })
+        }
       })
       snotes.push(trebleNote)
-    }
-    if (fillColor !== undefined) {
-      snotes.forEach(n => n.setStyle({ fillStyle: fillColor }))
     }
     return snotes
   }
@@ -167,10 +176,8 @@
     if (target.length > 0) {
       staveNotes.push(...notesToVexflowNotes(target, scale))
     }
-    if (played.length > 0 && (!game || game instanceof GuessNotes)) {
-      const correct = game?.guessed === played[0].midi && guessed === 'correct'
-      const fillColor = correct ? 'rgb(34, 197, 94)' : 'red'
-      staveNotes.push(...notesToVexflowNotes(played, scale, fillColor))
+    if (played.length > 0) {
+      staveNotes.push(...notesToVexflowNotes(played, scale))
     }
     const bassNotes = staveNotes.filter(n => n.getAttribute('clef') === 'bass')
     const trebleNotes = staveNotes.filter(n => n.getAttribute('clef') === 'treble')
