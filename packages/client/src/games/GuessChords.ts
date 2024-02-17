@@ -22,8 +22,8 @@ export class GuessChords {
   ) {
     this.type = type
     this.scale = scale
-    const randomChords: [string, Chord][] = []
-    const available: [string, Chord][] = chords.map(v => [v.suffix, { ...v }])
+    const randomChords: Chord[] = []
+    const available: Chord[] = chords.map(v => ({ ...v }))
     for (let i = 0; i < count; i += 1) {
       const idx = Math.floor(Math.random() * available.length)
       const val = available.splice(idx, 1)
@@ -31,8 +31,8 @@ export class GuessChords {
         randomChords.push(val[0])
       }
     }
-    this.chords = randomChords.map(c => {
-      const maxInterval = c[1].intervals[c[1].intervals.length - 1]
+    this.chords = randomChords.map(chord => {
+      const maxInterval = chord.intervals[chord.intervals.length - 1]
       const maxSemitones = intervalToSemitones(maxInterval)
       const availableRange: [number, number] = [range[0].midi, range[1].midi - maxSemitones]
       const notes = Array.from(new Array(availableRange[1] - availableRange[0])).map(
@@ -42,10 +42,10 @@ export class GuessChords {
       const startingNoteInScale = availableNotes[Math.floor(Math.random() * availableNotes.length)]
       const scaleNote = scale.notesMap.get(startingNoteInScale[1]) as ScaleNote
       return {
-        ...c[1],
-        short: c[0],
-        note: scaleNote.note,
-        notes: createChord(startingNoteInScale[0], scale, c[1].intervals)
+        ...chord,
+        rootNote: scaleNote.note,
+        chord: `${scaleNote.note}${chord.suffixes[0]}`,
+        notes: createChord(startingNoteInScale[0], scale, chord.intervals)
       }
     })
     console.log('CHORDS', this.chords)
@@ -65,13 +65,12 @@ export class GuessChords {
     return Math.round(avgMs / 10 / this.times.length) / 100
   }
   guess(value: { note: string; flats: number; sharps: number; chord: string }) {
-    const target = `${this.current.note}${this.current.short}`
     const guessed = `${noteIntoString(value)}${value.chord.toLowerCase()}`
-    const result = target === guessed
+    const result = this.current.chord === guessed
     if (result) {
       this.correct += 1
     }
-    this.latestGuess = { target, guessed }
+    this.latestGuess = { target: this.current.chord, guessed }
     this.idx += 1
     this.times.push(performance.now() - this.timing)
     return result

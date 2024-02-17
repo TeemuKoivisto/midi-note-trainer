@@ -13,13 +13,13 @@ export type ChordType =
 
 export interface Chord {
   name: string
-  suffix: string
+  suffixes: string[]
   type: ChordType
   intervals: Interval[]
 }
 export type MidiChord = Chord & {
-  note: string
-  short: string
+  rootNote: string
+  chord: string
   notes: MidiNote[]
 }
 export interface Interval {

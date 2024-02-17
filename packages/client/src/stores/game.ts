@@ -1,5 +1,5 @@
 import { derived, get, writable } from 'svelte/store'
-import { chordsFromJSON, createScale } from '@/chords-and-scales'
+import { chordsFromJSON, createScale, createTriadChords } from '@/chords-and-scales'
 
 import { inputsActions, midiRange, midiRangeNotes, piano } from './inputs'
 import { persist } from './persist'
@@ -44,24 +44,28 @@ export const gameActions = {
     currentGame.set(game)
     return game
   },
-  playGuessChords(type: 'write' | 'play', count = 10) {
+  playGuessChords(type: 'write' | 'play' | 'diatonic', count = 10) {
     // @ts-ignore
     // const scale = createScale('Eb', 'major').data
+    // if ('err' in scale) {
+    //   console.error(scale)
+    //   return scale
+    // }
     const scale = get(scaleData)
     const range = get(midiRangeNotes)
-    if ('err' in scale) {
-      return console.error(scale)
-    }
     let game
     if (type === 'write') {
       game = new GuessChords(type, scale, chords, range, count)
-    } else {
-      const basicChords = chords.filter(c => c.suffix === 'maj' || c.suffix === 'm')
+    } else if (type === 'play') {
+      const basicChords = chords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
       game = new PlayChordsGame(scale, basicChords, range, count)
+    } else {
+      const chords = createTriadChords(scale.triads)
+      game = new PlayChordsGame(scale, chords, range, count)
     }
     get(piano)?.playChord(game?.current.notes.map(n => n.midi))
     scoreActions.setKeyAndScale(scale.key, scale.scale)
-    scoreActions.setTarget(game.current.notes)
+    scoreActions.setTarget(game!.current.notes)
     scoreActions.clearPlayed()
     guessState.set('waiting')
     currentGame.set(game)

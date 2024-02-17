@@ -4,7 +4,7 @@
 
   import { getNoteAbsolute } from '$utils/getNote'
 
-  import type { PlayChordsGame } from '$utils/play_chords'
+  import type { PlayChordsGame } from '$games/PlayChords'
 
   export let game: PlayChordsGame
 

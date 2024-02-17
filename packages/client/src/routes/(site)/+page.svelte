@@ -7,7 +7,7 @@
   import GameNotes from '$components/play/GameNotes.svelte'
   import IOSettings from '$components/IOSettings.svelte'
   import KeyboardInput from '$components/KeyboardInput.svelte'
-  import PlayChords from '$components/PlayChords.svelte'
+  import PlayChords from '$components/play/PlayChords.svelte'
   import PlayForm from '$components/play/PlayForm.svelte'
   import Scales from '$components/scales/Scales.svelte'
   import Score from '$components/Score.svelte'

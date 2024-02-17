@@ -31,10 +31,9 @@
       <button class="btn primary" on:click={() => gameActions.playGuessChords('play')}
         >Play Chords</button
       >
-      <div></div>
-      <!-- <button class="btn primary" on:click={() => gameActions.playGuessChords('play')}
+      <button class="btn primary" on:click={() => gameActions.playGuessChords('diatonic')}
         >Play Diatonic Triads</button
-      > -->
+      >
       <div></div>
       <div></div>
       <div></div>

@@ -86,7 +86,7 @@
       </div>
       <ul class="chord-list w-full">
         {#each leftList as chord, idx}
-          <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffix}</li>
+          <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffixes[0]}</li>
           <li class="intervals" title={chord.intervals.map(i => i.str).join('-')}>
             {#if leftChords[idx] && leftChords[idx].length > 0}
               {#each leftChords[idx] as scaleNote}
@@ -103,7 +103,7 @@
       </ul>
       <ul class="chord-list w-full">
         {#each rightList as chord, idx}
-          <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffix}</li>
+          <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffixes[0]}</li>
           <li class="intervals" title={chord.intervals.map(i => i.str).join('-')}>
             {#if rightChords[idx] && rightChords[idx].length > 0}
               {#each rightChords[idx] as scaleNote}

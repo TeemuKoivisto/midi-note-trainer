@@ -1,7 +1,8 @@
+import { findChord } from 'chords'
 import { createChord } from './createChord'
 import { intervalToSemitones } from './intervals'
 
-import type { Interval, Scale, ScaleTriad } from './types'
+import type { Chord, MidiChord, Interval, Scale, ScaleTriad } from './types'
 
 /**
  * Generates Roman numerals between 1-13
@@ -15,10 +16,10 @@ function toRomanNumeral(seq: number) {
   return `${seq >= 5 ? 'V' : ''}${seq === 4 ? 'IV' : 'I'.repeat(seq % 5)}`
 }
 
-export function createTriadChords(triads: ScaleTriad[], scale: Scale) {
+export function createTriadChords(triads: ScaleTriad[]): Chord[] {
   return triads.map((triad, idx) => {
-    const note = scale.scaleNotes[idx]
     const intervals = [{ str: '1', seq: 1, flats: 0, sharps: 0 }]
+    let chord
     if (triad.major) {
       intervals.push({ str: '3', seq: 3, flats: 0, sharps: 0 })
       if (triad.suffix.startsWith('+')) {
@@ -29,6 +30,8 @@ export function createTriadChords(triads: ScaleTriad[], scale: Scale) {
         intervals.push({ str: '7♭', seq: 7, flats: 1, sharps: 0 })
       } else if (triad.suffix.startsWith('maj7')) {
         intervals.push({ str: '7', seq: 7, flats: 0, sharps: 0 })
+      } else {
+        chord = findChord('maj')
       }
     } else if (triad.minor) {
       intervals.push({ str: '3♭', seq: 3, flats: 1, sharps: 0 })
@@ -36,8 +39,12 @@ export function createTriadChords(triads: ScaleTriad[], scale: Scale) {
         intervals.push({ str: '5♭', seq: 5, flats: 0, sharps: 1 })
       } else if (triad.suffix.startsWith('6')) {
         intervals.push({ str: '6', seq: 6, flats: 0, sharps: 0 })
+        chord = findChord('m' + triad.suffix)
       } else if (triad.suffix.startsWith('7')) {
         intervals.push({ str: '7♭', seq: 7, flats: 1, sharps: 0 })
+        chord = findChord('m' + triad.suffix)
+      } else {
+        chord = findChord('m')
       }
     } else if (triad.suffix.startsWith('sus2')) {
       intervals.push({ str: '2', seq: 2, flats: 0, sharps: 0 })
@@ -47,9 +54,15 @@ export function createTriadChords(triads: ScaleTriad[], scale: Scale) {
     if (intervals.length <= 2) {
       intervals.push({ str: '5', seq: 5, flats: 0, sharps: 0 })
     }
+    if (intervals.length <= 2) {
+      intervals.push({ str: '8', seq: 8, flats: 0, sharps: 0 })
+    }
+    if (!chord && triad.minor) {
+      chord = findChord(triad.suffix)
+    }
     return {
-      chord: `${note.note}${!triad.suffix.includes('°') && triad.minor ? 'm' : ''}${triad.suffix}`,
-      notes: createChord(note.order, scale, intervals)
+      ...(chord as Chord),
+      intervals
     }
   })
 }
