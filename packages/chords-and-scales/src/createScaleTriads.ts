@@ -44,7 +44,7 @@ export function createTriadChords(triads: ScaleTriad[], scale: Scale) {
     } else if (triad.suffix.startsWith('sus4')) {
       intervals.push({ str: '4', seq: 4, flats: 0, sharps: 0 })
     }
-    if (intervals.length < 2) {
+    if (intervals.length <= 2) {
       intervals.push({ str: '5', seq: 5, flats: 0, sharps: 0 })
     }
     return {
