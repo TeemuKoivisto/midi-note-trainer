@@ -18,6 +18,7 @@
       "$config": ["src/config"],
       "$context": ["src/context"],
       "$elements/*": ["src/elements/*"],
+      "$games/*": ["src/games/*"],
       "$stores/*": ["src/stores/*"],
       "$utils/*": ["src/utils/*"]
     },

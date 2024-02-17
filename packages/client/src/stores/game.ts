@@ -5,10 +5,10 @@ import { inputsActions, midiRange, midiRangeNotes, piano } from './inputs'
 import { persist } from './persist'
 import { scaleData, scoreActions } from './score'
 
-import { GuessKeys } from '$utils/guess_keys'
-import { GuessChords } from '$utils/guess_chords'
-import { GuessNotes } from '$utils/guess_notes'
-import { PlayChordsGame } from '$utils/play_chords'
+import { GuessKeys } from '$games/GuessKeys'
+import { GuessChords } from '$games/GuessChords'
+import { GuessNotes } from '$games/GuessNotes'
+import { PlayChordsGame } from '$games/PlayChords'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 
@@ -67,6 +67,7 @@ export const gameActions = {
     currentGame.set(game)
     return game
   },
+  playDiatonicChords(count = 10) {},
   updateState(state: GuessState) {
     guessState.set(state)
   },

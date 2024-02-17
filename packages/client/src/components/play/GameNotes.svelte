@@ -2,7 +2,7 @@
   import { gameActions, guessState } from '$stores/game'
   import { target } from '$stores/score'
 
-  import type { GuessNotes } from '$utils/guess_notes'
+  import type { GuessNotes } from '$games/GuessNotes'
   import { getNote, getNoteAbsolute } from '$utils/getNote'
 
   export let game: GuessNotes

@@ -6,8 +6,8 @@
   import { keyMap, scoreActions } from '$stores/score'
   import { getOctave } from '$utils/getNote'
 
-  import { GuessKeys } from '$utils/guess_keys'
-  import { GuessChords } from '$utils/guess_chords'
+  import { GuessKeys } from '$games/GuessKeys'
+  import { GuessChords } from '$games/GuessChords'
 
   export let debounced: boolean
 

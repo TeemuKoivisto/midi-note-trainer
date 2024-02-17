@@ -1,12 +1,12 @@
 <script lang="ts">
   import { gameActions, guessState } from '$stores/game'
 
-  import type { GuessChords } from '$utils/guess_chords'
+  import type { GuessKeys } from '$games/GuessKeys'
 
-  export let game: GuessChords
+  export let game: GuessKeys
 
   function tryAgain() {
-    gameActions.playGuessChords(game.type)
+    gameActions.playGuessKeys(game.type)
   }
   function clearGame() {
     gameActions.clearGame()
@@ -20,7 +20,7 @@
   {:else if $guessState === 'ended'}
     <div>
       <div>
-        <span>Result: [{game.correct} / {game.chords.length}]</span>
+        <span>Result: [{game.correct} / {game.keys.length}]</span>
         <span>avg {game.avgTime}s</span>
       </div>
       <div>

@@ -1,5 +1,5 @@
 import { createChord, intervalToSemitones, noteIntoString } from '@/chords-and-scales'
-import { getNote } from './getNote'
+import { getNote } from '../utils/getNote'
 
 import type { Chord, MidiChord, Scale, ScaleNote } from '@/chords-and-scales'
 import type { Note } from '@/types'

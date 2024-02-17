@@ -12,10 +12,10 @@
 
   import type { MidiNote, Scale } from '@/chords-and-scales'
   import type { Note } from '@/types'
-  import { GuessNotes } from '$utils/guess_notes'
-  import type { GuessChords } from '$utils/guess_chords'
-  import type { GuessKeys } from '$utils/guess_keys'
-  import type { PlayChordsGame } from '$utils/play_chords'
+  import { GuessNotes } from '$games/GuessNotes'
+  import type { GuessChords } from '$games/GuessChords'
+  import type { GuessKeys } from '$games/GuessKeys'
+  import type { PlayChordsGame } from '$games/PlayChords'
 
   interface Data {
     game: GuessNotes | GuessKeys | GuessChords | PlayChordsGame | undefined

@@ -4,9 +4,9 @@
 
   import { currentGame } from '$stores/game'
   import { piano } from '$stores/inputs'
-  import { GuessChords } from '$utils/guess_chords'
-  import { GuessNotes } from '$utils/guess_notes'
-  import { PlayChordsGame } from '$utils/play_chords'
+  import { GuessChords } from '$games/GuessChords'
+  import { GuessNotes } from '$games/GuessNotes'
+  import { PlayChordsGame } from '$games/PlayChords'
 
   $: shown =
     $currentGame instanceof GuessChords ||

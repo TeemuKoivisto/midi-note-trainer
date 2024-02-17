@@ -2,13 +2,13 @@
   import { onMount } from 'svelte'
 
   import Chords from '$components/Chords.svelte'
-  import GameChords from '$components/GameChords.svelte'
-  import GameKeys from '$components/GameKeys.svelte'
-  import GameNotes from '$components/GameNotes.svelte'
+  import GameChords from '$components/play/GameChords.svelte'
+  import GameKeys from '$components/play/GameKeys.svelte'
+  import GameNotes from '$components/play/GameNotes.svelte'
   import IOSettings from '$components/IOSettings.svelte'
   import KeyboardInput from '$components/KeyboardInput.svelte'
   import PlayChords from '$components/PlayChords.svelte'
-  import PlayForm from '$components/PlayForm.svelte'
+  import PlayForm from '$components/play/PlayForm.svelte'
   import Scales from '$components/scales/Scales.svelte'
   import Score from '$components/Score.svelte'
 
@@ -18,10 +18,10 @@
   import { getNoteAbsolute } from '$utils/getNote'
 
   import type { NoteMessageEvent } from 'webmidi'
-  import { GuessNotes } from '$utils/guess_notes'
-  import { GuessKeys } from '$utils/guess_keys'
-  import { GuessChords } from '$utils/guess_chords'
-  import { PlayChordsGame } from '$utils/play_chords'
+  import { GuessNotes } from '$games/GuessNotes'
+  import { GuessKeys } from '$games/GuessKeys'
+  import { GuessChords } from '$games/GuessChords'
+  import { PlayChordsGame } from '$games/PlayChords'
 
   let status = 'Finding device...'
 

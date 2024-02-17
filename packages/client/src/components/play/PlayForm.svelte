@@ -32,6 +32,9 @@
         >Play Chords</button
       >
       <div></div>
+      <!-- <button class="btn primary" on:click={() => gameActions.playGuessChords('play')}
+        >Play Diatonic Triads</button
+      > -->
       <div></div>
       <div></div>
       <div></div>

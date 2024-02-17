@@ -13,6 +13,7 @@ export default defineConfig({
       $components: resolve('./src/components'),
       $config: resolve('./src/config'),
       $elements: resolve('./src/elements'),
+      $games: resolve('./src/games'),
       $stores: resolve('./src/stores'),
       $utils: resolve('./src/utils')
     }
