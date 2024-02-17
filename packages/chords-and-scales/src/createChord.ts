@@ -1,4 +1,4 @@
-import { intervalToSemitones } from './utils'
+import { intervalToSemitones } from './intervals'
 
 import type { Interval, MidiNote, Scale, ScaleNote } from './types'
 

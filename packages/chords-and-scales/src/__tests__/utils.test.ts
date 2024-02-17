@@ -1,4 +1,4 @@
-import { getRootNote } from '../utils'
+import { getRootNote } from '../notes'
 
 describe('getRootNote', () => {
   it('should generate correct root notes', () => {

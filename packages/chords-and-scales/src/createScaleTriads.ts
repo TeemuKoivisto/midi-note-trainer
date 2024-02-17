@@ -1,7 +1,7 @@
 import { createChord } from './createChord'
-import { intervalToSemitones } from './utils'
+import { intervalToSemitones } from './intervals'
 
-import type { Interval, Scale, ScaleNote, ScaleTriad } from './types'
+import type { Interval, Scale, ScaleTriad } from './types'
 
 function toRomanNumeral(seq: number) {
   return `${seq >= 5 ? 'V' : ''}${seq === 4 ? 'IV' : 'I'.repeat(seq % 5)}`

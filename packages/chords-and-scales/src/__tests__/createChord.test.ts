@@ -2,7 +2,7 @@ import { Scale } from 'types'
 import { chords } from '../chords'
 import { createChord } from '../createChord'
 import { createScale } from '../createScale'
-import { NOTES, getRootNote } from '../utils'
+import { NOTES, getRootNote } from '../notes'
 
 describe('createChord', () => {
   it('should generate chords from root of C major scale', () => {
