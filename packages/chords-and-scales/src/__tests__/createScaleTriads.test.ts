@@ -1,5 +1,5 @@
 import { createScaleTriads } from '../createScaleTriads'
-import { scales } from '../scales'
+import { findScale } from '../findScale'
 
 describe('createScaleTriads', () => {
   it("should generate modes' all diatonic triads correctly", () => {
@@ -14,7 +14,7 @@ describe('createScaleTriads', () => {
     }
     const obj = Object.keys(correct).reduce(
       (acc, scale) => {
-        const raw = scales.get(scale)
+        const raw = findScale(scale)
         const triads = raw && createScaleTriads(raw.intervals)
         if (triads) {
           acc[scale] = triads.map(t => t.parts.join(''))

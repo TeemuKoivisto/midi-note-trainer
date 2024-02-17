@@ -28,9 +28,9 @@ export interface Interval {
   sharps: number
 }
 export interface RawScale {
-  name: string
-  synonyms?: string[]
+  names: string[]
   intervals: Interval[]
+  triads: ScaleTriad[]
 }
 export interface ScaleNote {
   note: string
@@ -49,6 +49,7 @@ export type MidiNote = ScaleNote & { midi: number }
 export interface Scale {
   key: string // eg C
   scale: string // eg major
+  names: string[]
   flats: number
   sharps: number
   majorSignature: string // using standard diatonic accidentals

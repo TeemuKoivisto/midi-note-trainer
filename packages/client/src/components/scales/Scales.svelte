@@ -1,6 +1,6 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { createScale, createTriadChords, scales } from '@/chords-and-scales'
+  import { createScale, createTriadChords, scalesFromJSON } from '@/chords-and-scales'
 
   import Intervals from './Intervals.svelte'
   import Triads from './Triads.svelte'
@@ -18,11 +18,14 @@
     triadChords: { chord: string; notes: MidiNote[] }[]
   }
 
-  let scalesList: ListItem[] = Array.from(scales.entries()).map(([k, s]) => {
-    const created = createScale('C', k)
-    const triads = 'data' in created ? created.data.triads : []
-    return { key: k, raw: s, scale: undefined, triads, triadChords: [] }
-  })
+  const scales = scalesFromJSON()
+  let scalesList: ListItem[] = scales.map(scl => ({
+    key: scl.names[0],
+    raw: scl,
+    scale: undefined,
+    triads: scl.triads,
+    triadChords: []
+  }))
   $: leftList = scalesList.filter((_, i) => i < scalesList.length / 2)
   $: rightList = scalesList.filter((_, i) => i >= scalesList.length / 2)
 
@@ -66,7 +69,7 @@
       <ul class="list odd w-full">
         {#each leftList as scale}
           <li>
-            <div class="text-xs font-bold">{scale.raw.name}</div>
+            <div class="text-xs font-bold">{scale.raw.names[0]}</div>
             <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
             <Triads class="triads" triads={scale.triads} chords={scale.triadChords} />
           </li>
@@ -75,7 +78,7 @@
       <ul class="list even w-full">
         {#each rightList as scale}
           <li>
-            <div class="text-xs font-bold">{scale.raw.name}</div>
+            <div class="text-xs font-bold">{scale.raw.names[0]}</div>
             <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
             <Triads class="triads" triads={scale.triads} chords={scale.triadChords} />
           </li>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { scales } from '@/chords-and-scales'
+  import { scalesFromJSON } from '@/chords-and-scales'
 
   import { currentGame } from '$stores/game'
   import { inputsActions, midiRangeNotes } from '$stores/inputs'
@@ -18,12 +18,12 @@
   let selectedKey = $keyAndScale[0]
   let selectedScale = $keyAndScale[1]
 
-  const scaleOptions = Array.from(scales.entries()).map(([k, v]) => ({
-    key: k,
-    value: v.name
+  const scales = scalesFromJSON()
+  const scaleOptions = scales.map(scl => ({
+    key: scl.names[0],
+    value: scl.names[0]
   }))
-  $: selectedScaleNotes =
-    Array.from(scales.entries()).find(([k, v]) => v.name === selectedScale)?.[1].intervals || []
+  $: selectedScaleNotes = scales.find(scl => scl.names[0] === selectedScale)?.intervals || []
 
   function handleSetRange() {
     // prompt -> press the lowest note in your MIDI device

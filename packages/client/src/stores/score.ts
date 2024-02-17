@@ -38,11 +38,13 @@ export const scaleData = derived(keyAndScale, (val): Scale => {
   return {
     key: val[0],
     scale: val[1],
+    names: ['major'],
     flats: 0,
     sharps: 0,
     majorSignature: 'C',
     intervals: [],
     scaleNotes: [],
+    triads: [],
     notesMap: new Map()
   } as Scale
 })

@@ -58,7 +58,7 @@ describe('createScale', () => {
       }
     })
     Object.entries(correct).forEach(([key, values]) => {
-      const created = createScale(key, 'majorPentatonic')
+      const created = createScale(key, 'major pentatonic')
       if ('err' in created) {
         expect(created.err).toEqual(undefined)
       } else {
@@ -124,7 +124,7 @@ describe('createScale', () => {
       }
     })
     Object.entries(correct).forEach(([key, values]) => {
-      const created = createScale(key, 'minorPentatonic')
+      const created = createScale(key, 'minor pentatonic')
       if ('err' in created) {
         expect(created.err).toEqual(undefined)
       } else {
