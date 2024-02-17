@@ -24,7 +24,7 @@
   let leftChords: MidiNote[][] = []
   let rightChords: MidiNote[][] = []
 
-  const hidden = persist(writable(false), { key: 'chords-hidden' })
+  const hidden = persist(writable(true), { key: 'chords-hidden' })
 
   function toggleVisibility() {
     hidden.update(h => !h)
@@ -86,8 +86,8 @@
       </div>
       <ul class="chord-list w-full">
         {#each leftList as chord, idx}
-          <div class="flex items-center justify-center px-1 bg-gray-200">{chord.suffix}</div>
-          <div class="intervals" title={chord.intervals.map(i => i.str).join('-')}>
+          <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffix}</li>
+          <li class="intervals" title={chord.intervals.map(i => i.str).join('-')}>
             {#if leftChords[idx] && leftChords[idx].length > 0}
               {#each leftChords[idx] as scaleNote}
                 <span>{scaleNote.note}</span>
@@ -97,14 +97,14 @@
                 <span>{interval.str}</span>
               {/each}
             {/if}
-          </div>
-          <div class="text-xs">{chord.name}</div>
+          </li>
+          <li class="text-xs">{chord.name}</li>
         {/each}
       </ul>
       <ul class="chord-list w-full">
         {#each rightList as chord, idx}
-          <div class="flex items-center justify-center px-1 bg-gray-200">{chord.suffix}</div>
-          <div class="intervals" title={chord.intervals.map(i => i.str).join('-')}>
+          <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffix}</li>
+          <li class="intervals" title={chord.intervals.map(i => i.str).join('-')}>
             {#if rightChords[idx] && rightChords[idx].length > 0}
               {#each rightChords[idx] as scaleNote}
                 <span>{scaleNote.note}</span>
@@ -114,8 +114,8 @@
                 <span>{interval.str}</span>
               {/each}
             {/if}
-          </div>
-          <div class="text-xs">{chord.name}</div>
+          </li>
+          <li class="text-xs">{chord.name}</li>
         {/each}
       </ul>
     </div>

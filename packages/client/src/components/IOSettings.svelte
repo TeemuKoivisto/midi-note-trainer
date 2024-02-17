@@ -81,10 +81,10 @@
           />
         </div>
         <div class="flex justify-between">
-          <label class="font-bold" for="fade-timeout">Fixed velocity</label>
+          <label class="font-bold" for="fixed-velocity">Fixed velocity</label>
           <input
             class="h-[20px] w-16"
-            id="fade-timeout"
+            id="fixed-velocity"
             placeholder="0-127"
             bind:value={fixedVelocity}
             on:focus={() => inputsActions.setKeyboardFocus(false)}

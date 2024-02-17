@@ -31,7 +31,7 @@
 
   let shownKey = ''
 
-  const hidden = persist(writable(false), { key: 'scales-hidden' })
+  const hidden = persist(writable(true), { key: 'scales-hidden' })
 
   function toggleVisibility() {
     hidden.update(h => !h)
