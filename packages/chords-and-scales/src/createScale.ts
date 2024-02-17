@@ -131,7 +131,7 @@ export function createScale(rawKey: string, scaleName: string): Result<Scale> {
       ...getKeySignature(scaleNotes),
       intervals: scale.intervals.map(int => ({ ...int })),
       scaleNotes,
-      triads: createScaleTriads(scaleNotes, scale.intervals),
+      triads: createScaleTriads(scale.intervals),
       notesMap
     }
   }

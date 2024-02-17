@@ -183,7 +183,7 @@ describe('createScale', () => {
         // D-flat major scale with an added minor seventh
         'D♭': ['D♭', 'E♭', 'F', 'G♭', 'A♭', 'B♭', 'C♭', 'C']
       },
-      hirojoshi: {
+      hirajoshi: {
         'A♯': ['A♯', 'B♯', 'C♯', 'E♯', 'F♯']
       },
       persian: {

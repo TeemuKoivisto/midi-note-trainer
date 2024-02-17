@@ -1,4 +1,5 @@
 import { createChord } from './createChord'
+import { intervalToSemitones } from './utils'
 
 import type { Interval, Scale, ScaleNote, ScaleTriad } from './types'
 
@@ -49,45 +50,45 @@ export function createTriadChords(triads: ScaleTriad[], scale: Scale) {
 }
 
 export function getTriad(degree: number, semitones: Set<number>) {
-  const major = semitones.has(4) && semitones.has(7)
-  const minor = semitones.has(3) && semitones.has(7)
-  const sus2 = semitones.has(2)
-  const sus4 = semitones.has(5)
-  const dim = semitones.has(3) && semitones.has(6)
-  const aug = semitones.has(4) && semitones.has(8)
-  let num = toRomanNumeral(degree)
-  let str = ''
-  if (major) {
-    // skip, already in uppercase
-  } else if (minor) {
-    num = num.toLowerCase()
-  } else if (dim) {
-    str = '°'
-  } else if (aug) {
-    str = '+'
+  let major = semitones.has(4) && semitones.has(7)
+  let minor = semitones.has(3) && semitones.has(7)
+  const num = toRomanNumeral(degree)
+  let mod = ''
+  if (major || minor) {
+    // Don't add modifiers for pure major/minor chords to distinguish them
+    // from the less diatonic triads
+  } else if (semitones.has(3) && semitones.has(6)) {
+    mod = '°'
+    minor = true
+  } else if (semitones.has(4) && semitones.has(8)) {
+    mod = '+'
+    major = true
   } else if (semitones.has(3) && semitones.has(10)) {
-    num = num.toLowerCase()
-    str = '7'
+    minor = true
+    mod = '7'
   } else if (semitones.has(4) && semitones.has(10)) {
-    str = '7'
+    mod = '7'
+    major = true
   } else if (semitones.has(4) && semitones.has(11)) {
-    str = 'maj7'
+    mod = 'maj7'
+    major = true
   } else if (semitones.has(3) && semitones.has(8)) {
-    num = num.toLowerCase()
-    str = '6'
+    mod = '6'
+    minor = true
   } else if (semitones.has(4) && semitones.has(9)) {
-    str = '6'
-  } else if (sus2) {
-    str = 'sus2'
-  } else if (sus4) {
-    str = 'sus4'
+    mod = '6'
+    major = true
+  } else if (semitones.has(2)) {
+    mod = 'sus2'
+  } else if (semitones.has(5)) {
+    mod = 'sus4'
   } else if (semitones.has(7)) {
-    str = '5'
+    mod = '5'
   } else {
-    str = '?'
+    mod = '?'
   }
   return {
-    parts: [num, str] as [string, string],
+    parts: [minor ? num.toLowerCase() : num, mod] as [string, string],
     degree,
     major,
     minor,
@@ -95,26 +96,16 @@ export function getTriad(degree: number, semitones: Set<number>) {
   }
 }
 
-export function createScaleTriads(scaleNotes: ScaleNote[], intervals: Interval[]): ScaleTriad[] {
+export function createScaleTriads(intervals: Interval[]): ScaleTriad[] {
   const triads = []
   const len = intervals.length
-  // debugger
   for (let i = 0; i < len; i += 1) {
-    const note = scaleNotes[i]
+    const noteSemitones = intervalToSemitones(intervals[i])
     const foundSemitones = new Set<number>()
-    let closestToThird = 11
-    let closestToFifth = 11
     for (let j = 1; j < len; j += 1) {
-      const next = scaleNotes[(i + j) % len]
-      const curOrder =
-        next.order <= note.order ? next.order + 12 - note.order : next.order - note.order
-      if (Math.abs(closestToThird) > Math.abs(4 - curOrder)) {
-        closestToThird = 4 - curOrder
-      }
-      if (Math.abs(closestToFifth) > Math.abs(7 - curOrder)) {
-        closestToFifth = 7 - curOrder
-      }
-      foundSemitones.add(curOrder)
+      const next = intervalToSemitones(intervals[(i + j) % len])
+      const semiTones = next <= noteSemitones ? next + 12 - noteSemitones : next - noteSemitones
+      foundSemitones.add(semiTones)
     }
     triads.push(getTriad(intervals[i].seq, foundSemitones))
   }
