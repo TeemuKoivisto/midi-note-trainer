@@ -1,6 +1,6 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { createScale, createTriadChords, scalesFromJSON } from '@/chords-and-scales'
+  import { createScale, scalesFromJSON } from '@/chords-and-scales'
 
   import Intervals from './Intervals.svelte'
   import Triads from './Triads.svelte'
@@ -8,14 +8,14 @@
   import { inputsActions } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
-  import type { MidiNote, RawScale, Scale, ScaleTriad } from '@/chords-and-scales'
+  import type { RawScale, Scale, ScaleTriad } from '@/chords-and-scales'
 
   interface ListItem {
     key: string
     raw: RawScale
     scale: Scale | undefined
     triads: ScaleTriad[]
-    triadChords: { chord: string; notes: MidiNote[] }[]
+    triadChords: string[]
   }
 
   const scales = scalesFromJSON()
@@ -43,7 +43,15 @@
     scalesList = scalesList.map(d => {
       const created = createScale(shownKey, d.key)
       const data = shownKey && 'data' in created ? created.data : undefined
-      const chords = data ? createTriadChords(d.triads, data) : []
+      let chords: string[] = []
+      if (data) {
+        chords = d.triads.map(
+          (t, idx) =>
+            `${data.scaleNotes[idx].note}${!t.suffix.includes('°') && t.minor ? 'm' : ''}${
+              t.suffix
+            }`
+        )
+      }
       return { ...d, scale: data, triadChords: chords }
     })
   }

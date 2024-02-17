@@ -13,9 +13,8 @@
   import { persist } from '$stores/persist'
 
   const chords = chordsFromJSON()
-  $: chordsList = Array.from(chords.entries())
-  $: leftList = chordsList.filter((_, i) => i < chordsList.length / 2)
-  $: rightList = chordsList.filter((_, i) => i >= chordsList.length / 2)
+  $: leftList = chords.filter((_, i) => i < chords.length / 2)
+  $: rightList = chords.filter((_, i) => i >= chords.length / 2)
 
   let selectedKey = 'C'
   let selectedScale = 'Major'
@@ -37,8 +36,8 @@
       rightChords = []
     } else {
       const scl = scale.data
-      leftChords = leftList.map(s => createChord(midi, scl, s[1].intervals))
-      rightChords = rightList.map(s => createChord(midi, scl, s[1].intervals))
+      leftChords = leftList.map(s => createChord(midi, scl, s.intervals))
+      rightChords = rightList.map(s => createChord(midi, scl, s.intervals))
     }
   }
   function handleKeyChange({
@@ -87,36 +86,36 @@
       </div>
       <ul class="chord-list w-full">
         {#each leftList as chord, idx}
-          <div class="flex items-center justify-center px-1 bg-gray-200">{chord[0]}</div>
-          <div class="intervals" title={chord[1].intervals.map(i => i.str).join('-')}>
+          <div class="flex items-center justify-center px-1 bg-gray-200">{chord.suffix}</div>
+          <div class="intervals" title={chord.intervals.map(i => i.str).join('-')}>
             {#if leftChords[idx] && leftChords[idx].length > 0}
               {#each leftChords[idx] as scaleNote}
                 <span>{scaleNote.note}</span>
               {/each}
             {:else}
-              {#each chord[1].intervals as interval}
+              {#each chord.intervals as interval}
                 <span>{interval.str}</span>
               {/each}
             {/if}
           </div>
-          <div class="text-xs">{chord[1].name}</div>
+          <div class="text-xs">{chord.name}</div>
         {/each}
       </ul>
       <ul class="chord-list w-full">
         {#each rightList as chord, idx}
-          <div class="flex items-center justify-center px-1 bg-gray-200">{chord[0]}</div>
-          <div class="intervals" title={chord[1].intervals.map(i => i.str).join('-')}>
+          <div class="flex items-center justify-center px-1 bg-gray-200">{chord.suffix}</div>
+          <div class="intervals" title={chord.intervals.map(i => i.str).join('-')}>
             {#if rightChords[idx] && rightChords[idx].length > 0}
               {#each rightChords[idx] as scaleNote}
                 <span>{scaleNote.note}</span>
               {/each}
             {:else}
-              {#each chord[1].intervals as interval}
+              {#each chord.intervals as interval}
                 <span>{interval.str}</span>
               {/each}
             {/if}
           </div>
-          <div class="text-xs">{chord[1].name}</div>
+          <div class="text-xs">{chord.name}</div>
         {/each}
       </ul>
     </div>

@@ -40,8 +40,9 @@ export interface ScaleNote {
   sharps: number
 }
 export interface ScaleTriad {
-  parts: [string, string]
   degree: number
+  roman: string
+  suffix: string
   major: boolean
   minor: boolean
   semitones: Set<number>

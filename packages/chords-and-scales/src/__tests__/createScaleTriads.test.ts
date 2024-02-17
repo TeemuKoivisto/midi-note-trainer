@@ -17,7 +17,7 @@ describe('createScaleTriads', () => {
         const raw = findScale(scale)
         const triads = raw && createScaleTriads(raw.intervals)
         if (triads) {
-          acc[scale] = triads.map(t => t.parts.join(''))
+          acc[scale] = triads.map(t => t.roman + t.suffix)
         }
         return acc
       },

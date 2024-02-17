@@ -3,7 +3,15 @@ import { intervalToSemitones } from './intervals'
 
 import type { Interval, Scale, ScaleTriad } from './types'
 
+/**
+ * Generates Roman numerals between 1-13
+ * @param seq
+ * @returns
+ */
 function toRomanNumeral(seq: number) {
+  if (seq >= 9) {
+    return `${seq >= 10 ? 'X' : ''}${seq === 9 ? 'IX' : 'I'.repeat(seq % 10)}`
+  }
   return `${seq >= 5 ? 'V' : ''}${seq === 4 ? 'IV' : 'I'.repeat(seq % 5)}`
 }
 
@@ -11,39 +19,36 @@ export function createTriadChords(triads: ScaleTriad[], scale: Scale) {
   return triads.map((triad, idx) => {
     const note = scale.scaleNotes[idx]
     const intervals = [{ str: '1', seq: 1, flats: 0, sharps: 0 }]
-    if (triad.parts[1].includes('sus2')) {
-      intervals.push({ str: '2', seq: 4, flats: 0, sharps: 0 })
-    } else if (triad.parts[1].includes('sus4')) {
+    if (triad.major) {
+      intervals.push({ str: '3', seq: 3, flats: 0, sharps: 0 })
+      if (triad.suffix.startsWith('+')) {
+        intervals.push({ str: '5♯', seq: 5, flats: 0, sharps: 1 })
+      } else if (triad.suffix.startsWith('6')) {
+        intervals.push({ str: '6', seq: 6, flats: 0, sharps: 0 })
+      } else if (triad.suffix.startsWith('7')) {
+        intervals.push({ str: '7♭', seq: 7, flats: 1, sharps: 0 })
+      } else if (triad.suffix.startsWith('maj7')) {
+        intervals.push({ str: '7', seq: 7, flats: 0, sharps: 0 })
+      }
+    } else if (triad.minor) {
+      intervals.push({ str: '3♭', seq: 3, flats: 1, sharps: 0 })
+      if (triad.suffix.startsWith('°')) {
+        intervals.push({ str: '5♭', seq: 5, flats: 0, sharps: 1 })
+      } else if (triad.suffix.startsWith('6')) {
+        intervals.push({ str: '6', seq: 6, flats: 0, sharps: 0 })
+      } else if (triad.suffix.startsWith('7')) {
+        intervals.push({ str: '7♭', seq: 7, flats: 1, sharps: 0 })
+      }
+    } else if (triad.suffix.startsWith('sus2')) {
+      intervals.push({ str: '2', seq: 2, flats: 0, sharps: 0 })
+    } else if (triad.suffix.startsWith('sus4')) {
       intervals.push({ str: '4', seq: 4, flats: 0, sharps: 0 })
-    } else {
-      intervals.push({ str: '3', seq: 3, flats: triad.minor ? 1 : 0, sharps: 0 })
     }
-    const flats = Array.from(triad.parts[1].matchAll(/°/g)).length
-    const sharps = Array.from(triad.parts[1].matchAll(/\+/g)).length
-    if (flats === 2) {
-      intervals.push({
-        str: '4',
-        seq: 4,
-        flats: 0,
-        sharps: 0
-      })
-    } else if (sharps === 2) {
-      intervals.push({
-        str: '6',
-        seq: 6,
-        flats: 0,
-        sharps: 0
-      })
-    } else {
-      intervals.push({
-        str: '5',
-        seq: 5,
-        flats,
-        sharps
-      })
+    if (intervals.length < 2) {
+      intervals.push({ str: '5', seq: 5, flats: 0, sharps: 0 })
     }
     return {
-      chord: `${note.note}${triad.minor ? 'm' : ''}${triad.parts[1]}`,
+      chord: `${note.note}${!triad.suffix.includes('°') && triad.minor ? 'm' : ''}${triad.suffix}`,
       notes: createChord(note.order, scale, intervals)
     }
   })
@@ -53,43 +58,44 @@ export function getTriad(degree: number, semitones: Set<number>) {
   let major = semitones.has(4) && semitones.has(7)
   let minor = semitones.has(3) && semitones.has(7)
   const num = toRomanNumeral(degree)
-  let mod = ''
+  let suffix = ''
   if (major || minor) {
     // Don't add modifiers for pure major/minor chords to distinguish them
     // from the less diatonic triads
   } else if (semitones.has(3) && semitones.has(6)) {
-    mod = '°'
+    suffix = '°'
     minor = true
   } else if (semitones.has(4) && semitones.has(8)) {
-    mod = '+'
+    suffix = '+'
     major = true
   } else if (semitones.has(3) && semitones.has(10)) {
     minor = true
-    mod = '7'
+    suffix = '7'
   } else if (semitones.has(4) && semitones.has(10)) {
-    mod = '7'
+    suffix = '7'
     major = true
   } else if (semitones.has(4) && semitones.has(11)) {
-    mod = 'maj7'
+    suffix = 'maj7'
     major = true
   } else if (semitones.has(3) && semitones.has(8)) {
-    mod = '6'
+    suffix = '6'
     minor = true
   } else if (semitones.has(4) && semitones.has(9)) {
-    mod = '6'
+    suffix = '6'
     major = true
   } else if (semitones.has(2)) {
-    mod = 'sus2'
+    suffix = 'sus2'
   } else if (semitones.has(5)) {
-    mod = 'sus4'
+    suffix = 'sus4'
   } else if (semitones.has(7)) {
-    mod = '5'
+    suffix = '5'
   } else {
-    mod = '?'
+    suffix = '?'
   }
   return {
-    parts: [minor ? num.toLowerCase() : num, mod] as [string, string],
     degree,
+    roman: minor ? num.toLowerCase() : num,
+    suffix,
     major,
     minor,
     semitones
