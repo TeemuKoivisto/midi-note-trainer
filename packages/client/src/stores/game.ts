@@ -1,17 +1,18 @@
 import { derived, get, writable } from 'svelte/store'
-import { chords, createScale } from '@/chords-and-scales'
+import { chordsFromJSON, createScale } from '@/chords-and-scales'
 
 import { inputsActions, midiRange, midiRangeNotes, piano } from './inputs'
 import { persist } from './persist'
 import { scaleData, scoreActions } from './score'
 
-import { getNote } from '$utils/getNote'
 import { GuessKeys } from '$utils/guess_keys'
 import { GuessChords } from '$utils/guess_chords'
 import { GuessNotes } from '$utils/guess_notes'
 import { PlayChordsGame } from '$utils/play_chords'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
+
+const chords = chordsFromJSON()
 
 export const guessState = writable<GuessState>('waiting')
 export const currentGame = writable<
@@ -53,9 +54,9 @@ export const gameActions = {
     }
     let game
     if (type === 'write') {
-      game = new GuessChords(type, scale, Array.from(chords.entries()), range, count)
+      game = new GuessChords(type, scale, chords, range, count)
     } else {
-      const basicChords = Array.from(chords.entries()).filter(c => c[0] === 'maj' || c[0] === 'm')
+      const basicChords = chords.filter(c => c.suffix === 'maj' || c.suffix === 'm')
       game = new PlayChordsGame(scale, basicChords, range, count)
     }
     get(piano)?.playChord(game?.current.notes.map(n => n.midi))

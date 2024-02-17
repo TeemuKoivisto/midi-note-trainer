@@ -1,7 +1,7 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
   import {
-    chords,
+    chordsFromJSON,
     createChord,
     createScale,
     getRootNote,
@@ -12,6 +12,7 @@
   import { inputsActions } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
+  const chords = chordsFromJSON()
   $: chordsList = Array.from(chords.entries())
   $: leftList = chordsList.filter((_, i) => i < chordsList.length / 2)
   $: rightList = chordsList.filter((_, i) => i >= chordsList.length / 2)

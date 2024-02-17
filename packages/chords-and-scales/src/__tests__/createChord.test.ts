@@ -1,5 +1,5 @@
 import { Scale } from 'types'
-import { chords } from '../chords'
+import { findChord } from '../chords'
 import { createChord } from '../createChord'
 import { createScale } from '../createScale'
 import { NOTES, getRootNote } from '../notes'
@@ -42,7 +42,7 @@ describe('createChord', () => {
     const scale = created.data
     const obj = Object.keys(correct).reduce(
       (acc, name) => {
-        const chord = chords.get(name)
+        const chord = findChord(name)
         if (!chord) {
           expect(chord).toBeTruthy()
         } else {
@@ -88,7 +88,7 @@ describe('createChord', () => {
     const scale = created.data
     const obj = correct.reduce(
       (acc, val) => {
-        const chord = chords.get(val[1])
+        const chord = findChord(val[1])
         const note = NOTES.find(n => n.note === val[0])
         if (!chord || !note) {
           expect(chord).toBeTruthy()
@@ -134,7 +134,7 @@ describe('createChord', () => {
         const scale = scales[entry[0]]
         topLevel[entry[0]] = entry[1].reduce(
           (acc, val) => {
-            const chord = chords.get(val[1])
+            const chord = findChord(val[1])
             const note = getRootNote(val[0])
             if (!chord || !note) {
               expect(chord).toBeTruthy()

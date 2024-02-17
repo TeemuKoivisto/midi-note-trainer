@@ -1,8 +1,7 @@
-import { chords, createChord, intervalToSemitones, noteIntoString } from '@/chords-and-scales'
+import { createChord, intervalToSemitones, noteIntoString } from '@/chords-and-scales'
 
 import type { Chord, MidiChord, Scale, ScaleNote } from '@/chords-and-scales'
 import type { Note } from '@/types'
-import { getNote } from './getNote'
 
 export class GuessChords {
   type: 'write' | 'play'
@@ -17,14 +16,14 @@ export class GuessChords {
   constructor(
     type: 'write' | 'play',
     scale: Scale,
-    chords: [string, Chord][],
+    chords: Chord[],
     range: [Note, Note],
     count = 10
   ) {
     this.type = type
     this.scale = scale
     const randomChords: [string, Chord][] = []
-    const available: [string, Chord][] = chords.map(v => [v[0], { ...v[1] }])
+    const available: [string, Chord][] = chords.map(v => [v.suffix, { ...v }])
     for (let i = 0; i < count; i += 1) {
       const idx = Math.floor(Math.random() * available.length)
       const val = available.splice(idx, 1)

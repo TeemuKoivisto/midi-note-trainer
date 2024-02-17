@@ -1,5 +1,5 @@
 import { getKeySignature } from './getKeySignature'
-import { findScale } from './findScale'
+import { findScale } from './scales'
 import { intervalToSemitones } from './intervals'
 import { NOTES, getRootNote } from './notes'
 

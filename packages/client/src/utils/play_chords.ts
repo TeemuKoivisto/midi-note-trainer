@@ -14,10 +14,10 @@ export class PlayChordsGame {
   idx = 0
   timing: number
 
-  constructor(scale: Scale, chords: [string, Chord][], range: [Note, Note], count = 10) {
+  constructor(scale: Scale, chords: Chord[], range: [Note, Note], count = 10) {
     this.scale = scale
     const randomChords: [string, Chord][] = []
-    const available: [string, Chord][] = chords.map(v => [v[0], { ...v[1] }])
+    const available: [string, Chord][] = chords.map(v => [v.suffix, { ...v }])
     for (let i = 0; i < count; i += 1) {
       const idx = Math.floor(Math.random() * available.length)
       const val = [available[idx][0], { ...available[idx][1] }] as [string, Chord]

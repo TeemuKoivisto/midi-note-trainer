@@ -1,5 +1,5 @@
 import { createScaleTriads } from '../createScaleTriads'
-import { findScale } from '../findScale'
+import { findScale } from '../scales'
 
 describe('createScaleTriads', () => {
   it("should generate modes' all diatonic triads correctly", () => {

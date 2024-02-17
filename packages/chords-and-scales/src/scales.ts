@@ -1,5 +1,5 @@
 import { createScaleTriads } from './createScaleTriads'
-import { intervalFromJSON } from './intervals'
+import { intervalFromInteger } from './intervals'
 
 import scales from './scales.json'
 
@@ -12,10 +12,10 @@ import type { RawScale } from './types'
 // https://www.omnicalculator.com/other/music-scale
 let scalesArray: RawScale[] = []
 
-export function scalesFromJSON() {
+export function scalesFromJSON(): RawScale[] {
   return scales.map(val => {
     const names = val[0] as string[]
-    const intervals = (val[1] as number[]).map(intervalFromJSON)
+    const intervals = (val[1] as number[]).map(intervalFromInteger)
     const triads = createScaleTriads(intervals)
     return {
       names,

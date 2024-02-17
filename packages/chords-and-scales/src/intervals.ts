@@ -19,7 +19,7 @@ export function intervalToSemitones(interval: Interval) {
   )
 }
 
-export function intervalFromJSON(val: number): Interval {
+export function intervalFromInteger(val: number): Interval {
   let seq
   let flats = 0
   let sharps = 0
