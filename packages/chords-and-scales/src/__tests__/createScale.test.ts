@@ -228,7 +228,7 @@ describe('createScale', () => {
             scale,
             scaleNotes: notes.map((n, idx) => ({
               note: n,
-              order: scaleNotes[idx].order,
+              semitones: scaleNotes[idx].semitones,
               flats: Array.from(n.matchAll(/♭/g)).length,
               sharps: Array.from(n.matchAll(/♯/g)).length
             }))

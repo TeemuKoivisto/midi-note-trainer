@@ -17,13 +17,13 @@ export const NOTES = {
 } as const
 
 export const BASE_NOTES = {
-  C: { order: 0 },
-  D: { order: 2 },
-  E: { order: 4 },
-  F: { order: 5 },
-  G: { order: 7 },
-  A: { order: 9 },
-  B: { order: 11 }
+  C: { semitones: 0 },
+  D: { semitones: 2 },
+  E: { semitones: 4 },
+  F: { semitones: 5 },
+  G: { semitones: 7 },
+  A: { semitones: 9 },
+  B: { semitones: 11 }
 }
 
 export function getOctave(midi: number) {
@@ -51,11 +51,11 @@ export function getNote(value: number): Note {
   // Center the note from C0 which equals 12 in MIDI values, then get the sequence after C
   // @TODO this might not be same in different MIDI devices -> should prob use frequency instead
   // https://en.wikipedia.org/wiki/C_(musical_note)#Middle_C
-  const order = semitonesFromC0 % 12
-  const note = NOTES[order as keyof typeof NOTES]
+  const semitones = semitonesFromC0 % 12
+  const note = NOTES[semitones as keyof typeof NOTES]
   return {
     ...note,
-    order,
+    semitones,
     midi: value,
     parts: [note.note.charAt(0), `${'b'.repeat(note.flats)}${'#'.repeat(note.sharps)}`, octave]
   }
@@ -81,7 +81,7 @@ export function parseNote(val: string): Result<number> {
     } catch (err) {
       return { err: `Couldn't parse note "${val}" octave`, code: 400 }
     }
-    return { data: 12 + octave * 12 + baseNote.order + shifted }
+    return { data: 12 + octave * 12 + baseNote.semitones + shifted }
   } else {
     return { err: `Unrecognized note "${val}"`, code: 400 }
   }

@@ -1,6 +1,4 @@
-import { intervalToSemitones } from './intervals'
-
-import type { Interval, MidiNote, Scale, ScaleNote } from './types'
+import type { Pitch, MidiNote, Scale, ScaleNote } from './types'
 
 function createNote(note: ScaleNote, shiftUpOrDown: number, midi: number) {
   // Shift note down x flats, note double negation -> regular sum
@@ -12,10 +10,10 @@ function createNote(note: ScaleNote, shiftUpOrDown: number, midi: number) {
     flats -= diff
     sharps -= diff
   }
-  const order = (note.order + shiftUpOrDown) % 12
+  const semitones = (note.semitones + shiftUpOrDown) % 12
   return {
     ...note,
-    order: order < 0 ? order + 12 : order,
+    semitones: semitones < 0 ? semitones + 12 : semitones,
     note: `${note.note.charAt(0)}${'♭'.repeat(flats)}${'♯'.repeat(sharps)}`,
     flats,
     sharps,
@@ -30,21 +28,25 @@ function createNote(note: ScaleNote, shiftUpOrDown: number, midi: number) {
  * @param chordIntervals
  * @returns
  */
-export function createChord(note: number, scale: Scale, chordIntervals: Interval[]) {
+export function createChord(note: number, scale: Scale, chordIntervals: Pitch[]) {
   const chordNotes: MidiNote[] = []
   for (let i = 0; i < chordIntervals.length; i += 1) {
     const chordInt = chordIntervals[i]
-    const midi = note + intervalToSemitones(chordInt)
-    const scaleNote = scale.scaleNotes.find(n => n.order === midi % 12)
+    const midi = note + chordInt.semitones
+    const scaleNote = scale.scaleNotes.find(n => n.semitones === midi % 12)
     // If interval is flat/sharp, shift the original note UNLESS the resulting note already is in the scale
     // While it may be semantically more correct to leave the flat/sharp as it's, it's magnitudes easier to
     // read the standard notes of the scale instead of weird double flats/sharps
     const shiftUp = chordInt.flats > 0
     const shiftDown = chordInt.sharps > 0
-    const order = (shiftUp ? midi + 1 : shiftDown ? midi - 1 : midi) % 12
+    const semitones = (shiftUp ? midi + 1 : shiftDown ? midi - 1 : midi) % 12
     const shift = shiftUp ? -1 : shiftDown ? 1 : 0
     chordNotes.push(
-      createNote(scaleNote ?? (scale.notesMap.get(order) as ScaleNote), scaleNote ? 0 : shift, midi)
+      createNote(
+        scaleNote ?? (scale.notesMap.get(semitones) as ScaleNote),
+        scaleNote ? 0 : shift,
+        midi
+      )
     )
   }
   return chordNotes

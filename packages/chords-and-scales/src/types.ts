@@ -22,22 +22,22 @@ export type MidiChord = Chord & {
   chord: string
   notes: MidiNote[]
 }
-export interface Interval {
-  str: string
-  seq: number
+export interface Pitch {
+  semitones: number // Semitones from C
   flats: number
   sharps: number
+}
+export type Interval = Pitch & {
+  interval: string
+  interval_seq: number
 }
 export interface RawScale {
   names: string[]
   intervals: Interval[]
   triads: ScaleTriad[]
 }
-export interface ScaleNote {
+export type ScaleNote = Pitch & {
   note: string
-  order: number // convert to semitones from C???
-  flats: number
-  sharps: number
 }
 export interface ScaleTriad {
   degree: number

@@ -115,7 +115,7 @@
     {#if !$currentGame}
       <div class="intervals my-1">
         {#each selectedScaleNotes as interval}
-          <span>{interval.str}</span>
+          <span>{interval.interval}</span>
         {/each}
       </div>
     {/if}

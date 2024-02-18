@@ -22,7 +22,7 @@
   const regexPosInt = /^[0-9]$/
   let keyboardError = ''
   let keyboardInput = ''
-  let inputtedNote: { note: string; order: number; flats: number; sharps: number } | undefined
+  let inputtedNote: { note: string; semitones: number; flats: number; sharps: number } | undefined
 
   function parseNotes(e: KeyboardEvent) {
     const pressed = e.key.toUpperCase()
@@ -50,12 +50,12 @@
       } catch (err: any) {}
     }
     if (inputtedNote && octave !== undefined) {
-      const midi = inputtedNote.order + (octave + 1 + (e.shiftKey ? 1 : 0)) * 12
+      const midi = inputtedNote.semitones + (octave + 1 + (e.shiftKey ? 1 : 0)) * 12
       dispatch('note', midi)
       inputtedNote = undefined
     } else if (keyboardInput && octave !== undefined) {
       const note = scoreActions.findNote(keyboardInput)
-      const midi = note ? note.order + (octave + 1) * 12 : undefined
+      const midi = note ? note.semitones + (octave + 1) * 12 : undefined
       if (midi !== undefined) {
         dispatch('note', midi)
       }

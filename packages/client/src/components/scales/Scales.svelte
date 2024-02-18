@@ -1,14 +1,15 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { createScale, scalesFromJSON } from '@/chords-and-scales'
+  import { createScale, createTriadChords, scalesFromJSON } from '@/chords-and-scales'
 
   import Intervals from './Intervals.svelte'
   import Triads from './Triads.svelte'
 
-  import { inputsActions } from '$stores/inputs'
+  import { scoreActions, scaleData } from '$stores/score'
+  import { inputsActions, inputs, midiRangeNotes, piano } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
-  import type { RawScale, Scale, ScaleTriad } from '@/chords-and-scales'
+  import type { Interval, RawScale, Scale, ScaleTriad } from '@/chords-and-scales'
 
   interface ListItem {
     key: string
@@ -30,6 +31,7 @@
   $: rightList = scalesList.filter((_, i) => i >= scalesList.length / 2)
 
   let shownKey = ''
+  let playingNotesTimeout: ReturnType<typeof setTimeout> | undefined
 
   const hidden = persist(writable(true), { key: 'scales-hidden' })
 
@@ -55,6 +57,41 @@
       return { ...d, scale: data, triadChords: chords }
     })
   }
+  function playNote(index: number, notes: number[][], timeout: number) {
+    if (index < notes.length) {
+      notes[index++].forEach(midi => {
+        scoreActions.pushPlayed(midi)
+        $piano?.noteOn(midi, $inputs.fixedVelocity)
+      })
+      playingNotesTimeout = setTimeout(() => playNote(index, notes, timeout), timeout)
+    }
+  }
+  function handleIntervalsClicked(item: ListItem) {
+    clearTimeout(playingNotesTimeout)
+    const lowNote = $midiRangeNotes[0]
+    let notes: number[][]
+    if (item.scale) {
+      const startNote = item.scale.scaleNotes[0]
+      notes = item.scale.intervals.map(int => [lowNote.midi + startNote.semitones + int.semitones])
+    } else {
+      notes = item.raw.intervals.map(int => [lowNote.midi + int.semitones])
+    }
+    playNote(0, notes, 500)
+  }
+  function handleTriadsClicked(item: ListItem) {
+    console.log(item)
+    clearTimeout(playingNotesTimeout)
+    const lowNote = $midiRangeNotes[0]
+    let notes: number[][]
+    if (item.triadChords.length > 0) {
+      notes = []
+    } else {
+      // const scale = $scaleData
+      const chords = createTriadChords(item.triads)
+      notes = chords.map(c => c.intervals.map(int => lowNote.midi + int.semitones))
+    }
+    playNote(0, notes, 750)
+  }
 </script>
 
 <div class={`${$$props.class || ''}`}>
@@ -78,8 +115,16 @@
         {#each leftList as scale}
           <li>
             <div class="text-xs font-bold">{scale.raw.names[0]}</div>
-            <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
-            <Triads class="triads" triads={scale.triads} chords={scale.triadChords} />
+            <Intervals
+              scale={scale.scale}
+              intervals={scale.raw.intervals}
+              on:click={() => handleIntervalsClicked(scale)}
+            />
+            <Triads
+              triads={scale.triads}
+              chords={scale.triadChords}
+              on:click={() => handleTriadsClicked(scale)}
+            />
           </li>
         {/each}
       </ul>
@@ -87,8 +132,16 @@
         {#each rightList as scale}
           <li>
             <div class="text-xs font-bold">{scale.raw.names[0]}</div>
-            <Intervals scale={scale.scale} intervals={scale.raw.intervals} />
-            <Triads class="triads" triads={scale.triads} chords={scale.triadChords} />
+            <Intervals
+              scale={scale.scale}
+              intervals={scale.raw.intervals}
+              on:click={() => handleIntervalsClicked(scale)}
+            />
+            <Triads
+              triads={scale.triads}
+              chords={scale.triadChords}
+              on:click={() => handleTriadsClicked(scale)}
+            />
           </li>
         {/each}
       </ul>
@@ -116,10 +169,6 @@
     @media (width > 600px) {
       grid-column-end: span 2;
     }
-  }
-  :global(.triads) {
-    // grid-column-end: span 2;
-    // @apply border-b;
   }
   .list {
     @apply flex flex-col gap-1;

@@ -1,6 +1,6 @@
 export interface Note {
   note: string
-  order: number
+  semitones: number
   midi: number
   sharps: number
   flats: number

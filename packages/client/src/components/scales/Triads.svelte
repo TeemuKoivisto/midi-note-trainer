@@ -4,31 +4,30 @@
   export let triads: ScaleTriad[], chords: string[]
 </script>
 
-<div
-  class={`${$$props.class || ''} triads flex flex-wrap`}
-  title={triads.map(t => t.roman + t.suffix).join('-')}
->
-  {#if chords.length > 0}
-    {#each chords as chord}
-      <span class="inline-flex items-baseline">
-        <span>
-          {chord}
+<div class={`${$$props.class || ''} `} title={triads.map(t => t.roman + t.suffix).join('-')}>
+  <button class="triads flex flex-wrap" on:click>
+    {#if chords.length > 0}
+      {#each chords as chord}
+        <span class="inline-flex items-baseline">
+          <span>
+            {chord}
+          </span>
         </span>
-      </span>
-    {/each}
-  {:else}
-    {#each triads as triad}
-      <span class="inline-flex items-baseline">
-        <span class="block">
-          {triad.roman}
+      {/each}
+    {:else}
+      {#each triads as triad}
+        <span class="inline-flex items-baseline">
+          <span class="block">
+            {triad.roman}
+          </span>
+          <sup
+            class="block text-sm leading-none top-[-0.3rem]"
+            class:super-text={triad.suffix.length > 2}>{triad.suffix}</sup
+          >
         </span>
-        <sup
-          class="block text-sm leading-none top-[-0.3rem]"
-          class:super-text={triad.suffix.length > 2}>{triad.suffix}</sup
-        >
-      </span>
-    {/each}
-  {/if}
+      {/each}
+    {/if}
+  </button>
 </div>
 
 <style lang="scss">

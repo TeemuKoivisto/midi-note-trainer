@@ -94,7 +94,7 @@ describe('createChord', () => {
           expect(chord).toBeTruthy()
           expect(note).toBeTruthy()
         } else {
-          const notes = createChord(0 + note.order, scale, chord.intervals)
+          const notes = createChord(0 + note.semitones, scale, chord.intervals)
           acc.push([val[0], val[1], notes.map(n => n.note)])
         }
         return acc
@@ -140,13 +140,16 @@ describe('createChord', () => {
               expect(chord).toBeTruthy()
               expect(note).toBeTruthy()
             } else {
-              const notes = createChord(0 + note.order, scale, chord.intervals)
+              const notes = createChord(0 + note.semitones, scale, chord.intervals)
               notes.forEach(n => {
-                expect(n.order).toBeGreaterThanOrEqual(0)
-                expect(n.order).toBeLessThanOrEqual(11)
-                expect({ note: n.note, order: n.order, flats: n.flats, sharps: n.sharps }).toEqual(
-                  getRootNote(n.note)
-                )
+                expect(n.semitones).toBeGreaterThanOrEqual(0)
+                expect(n.semitones).toBeLessThanOrEqual(11)
+                expect({
+                  note: n.note,
+                  semitones: n.semitones,
+                  flats: n.flats,
+                  sharps: n.sharps
+                }).toEqual(getRootNote(n.note))
               })
               acc.push([val[0], val[1], notes.map(n => n.note)])
             }

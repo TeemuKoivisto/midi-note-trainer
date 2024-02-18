@@ -30,7 +30,7 @@
     hidden.update(h => !h)
   }
   function updateChords() {
-    const midi = scaleNote && 60 + scaleNote.order
+    const midi = scaleNote && 60 + scaleNote.semitones
     if ('err' in scale || !midi) {
       leftChords = []
       rightChords = []
@@ -87,14 +87,14 @@
       <ul class="chord-list w-full">
         {#each leftList as chord, idx}
           <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffixes[0]}</li>
-          <li class="intervals" title={chord.intervals.map(i => i.str).join('-')}>
+          <li class="intervals" title={chord.intervals.map(i => i.interval).join('-')}>
             {#if leftChords[idx] && leftChords[idx].length > 0}
               {#each leftChords[idx] as scaleNote}
                 <span>{scaleNote.note}</span>
               {/each}
             {:else}
               {#each chord.intervals as interval}
-                <span>{interval.str}</span>
+                <span>{interval.interval}</span>
               {/each}
             {/if}
           </li>
@@ -104,14 +104,14 @@
       <ul class="chord-list w-full">
         {#each rightList as chord, idx}
           <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffixes[0]}</li>
-          <li class="intervals" title={chord.intervals.map(i => i.str).join('-')}>
+          <li class="intervals" title={chord.intervals.map(i => i.interval).join('-')}>
             {#if rightChords[idx] && rightChords[idx].length > 0}
               {#each rightChords[idx] as scaleNote}
                 <span>{scaleNote.note}</span>
               {/each}
             {:else}
               {#each chord.intervals as interval}
-                <span>{interval.str}</span>
+                <span>{interval.interval}</span>
               {/each}
             {/if}
           </li>

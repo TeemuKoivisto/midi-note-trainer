@@ -10,12 +10,19 @@ const SEMI_TONES: Record<number, number> = {
   7: 11
 }
 
-export function intervalToSemitones(interval: Interval) {
+export function createInterval(seq: number, flats: number = 0, sharps: number = 0) {
+  return {
+    interval: `${seq}${'♭'.repeat(flats)}${'♯'.repeat(sharps)}`,
+    interval_seq: seq,
+    semitones: intervalToSemitones(seq, flats, sharps),
+    flats,
+    sharps
+  }
+}
+
+export function intervalToSemitones(seq: number, flats: number, sharps: number) {
   return (
-    (interval.seq < 8 ? SEMI_TONES[interval.seq] : SEMI_TONES[interval.seq % 7]) -
-    interval.flats +
-    interval.sharps +
-    Math.floor(interval.seq / 8) * 12
+    (seq < 8 ? SEMI_TONES[seq] : SEMI_TONES[seq % 7]) - flats + sharps + Math.floor(seq / 8) * 12
   )
 }
 
@@ -32,5 +39,12 @@ export function intervalFromInteger(val: number): Interval {
   } else {
     seq = val
   }
-  return { str: `${seq}${'♭'.repeat(flats)}${'♯'.repeat(sharps)}`, seq, flats, sharps }
+  const semitones = intervalToSemitones(seq, flats, sharps)
+  return {
+    interval: `${seq}${'♭'.repeat(flats)}${'♯'.repeat(sharps)}`,
+    interval_seq: seq,
+    semitones,
+    flats,
+    sharps
+  }
 }

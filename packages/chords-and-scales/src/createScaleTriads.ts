@@ -1,8 +1,7 @@
-import { findChord } from 'chords'
-import { createChord } from './createChord'
-import { intervalToSemitones } from './intervals'
+import { findChord } from './chords'
+import { createInterval } from './intervals'
 
-import type { Chord, MidiChord, Interval, Scale, ScaleTriad } from './types'
+import type { Chord, Interval, ScaleTriad } from './types'
 
 /**
  * Generates Roman numerals between 1-13
@@ -18,44 +17,44 @@ function toRomanNumeral(seq: number) {
 
 export function createTriadChords(triads: ScaleTriad[]): Chord[] {
   return triads.map(triad => {
-    const intervals = [{ str: '1', seq: 1, flats: 0, sharps: 0 }]
+    const intervals: Interval[] = [createInterval(1)]
     let chord
     if (triad.major) {
-      intervals.push({ str: '3', seq: 3, flats: 0, sharps: 0 })
+      intervals.push(createInterval(3))
       if (triad.suffix.startsWith('+')) {
-        intervals.push({ str: '5♯', seq: 5, flats: 0, sharps: 1 })
+        intervals.push(createInterval(5, 0, 1))
       } else if (triad.suffix.startsWith('6')) {
-        intervals.push({ str: '6', seq: 6, flats: 0, sharps: 0 })
+        intervals.push(createInterval(6))
       } else if (triad.suffix.startsWith('7')) {
-        intervals.push({ str: '7♭', seq: 7, flats: 1, sharps: 0 })
+        intervals.push(createInterval(7, 1))
       } else if (triad.suffix.startsWith('maj7')) {
-        intervals.push({ str: '7', seq: 7, flats: 0, sharps: 0 })
+        intervals.push(createInterval(7))
       } else {
         chord = findChord('maj')
       }
     } else if (triad.minor) {
-      intervals.push({ str: '3♭', seq: 3, flats: 1, sharps: 0 })
+      intervals.push(createInterval(3, 1))
       if (triad.suffix.startsWith('°')) {
-        intervals.push({ str: '5♭', seq: 5, flats: 0, sharps: 1 })
+        intervals.push(createInterval(5, 1))
       } else if (triad.suffix.startsWith('6')) {
-        intervals.push({ str: '6', seq: 6, flats: 0, sharps: 0 })
+        intervals.push(createInterval(6))
         chord = findChord('m' + triad.suffix)
       } else if (triad.suffix.startsWith('7')) {
-        intervals.push({ str: '7♭', seq: 7, flats: 1, sharps: 0 })
+        intervals.push(createInterval(7, 1))
         chord = findChord('m' + triad.suffix)
       } else {
         chord = findChord('m')
       }
     } else if (triad.suffix.startsWith('sus2')) {
-      intervals.push({ str: '2', seq: 2, flats: 0, sharps: 0 })
+      intervals.push(createInterval(2))
     } else if (triad.suffix.startsWith('sus4')) {
-      intervals.push({ str: '4', seq: 4, flats: 0, sharps: 0 })
+      intervals.push(createInterval(4))
     }
     if (intervals.length <= 2) {
-      intervals.push({ str: '5', seq: 5, flats: 0, sharps: 0 })
+      intervals.push(createInterval(5))
     }
     if (intervals.length <= 2) {
-      intervals.push({ str: '8', seq: 8, flats: 0, sharps: 0 })
+      intervals.push(createInterval(8))
     }
     if (!chord) {
       chord = findChord(triad.suffix)
@@ -118,13 +117,13 @@ export function getTriad(degree: number, semitones: Set<number>) {
 export function createScaleTriads(intervals: Interval[]): ScaleTriad[] {
   const len = intervals.length
   return intervals.map((int, i) => {
-    const noteSemitones = intervalToSemitones(int)
+    const noteSemitones = int.semitones
     const foundSemitones = new Set<number>()
     for (let j = 1; j < len; j += 1) {
-      const next = intervalToSemitones(intervals[(i + j) % len])
+      const next = intervals[(i + j) % len].semitones
       const semiTones = next <= noteSemitones ? next + 12 - noteSemitones : next - noteSemitones
       foundSemitones.add(semiTones)
     }
-    return getTriad(int.seq, foundSemitones)
+    return getTriad(int.interval_seq, foundSemitones)
   })
 }

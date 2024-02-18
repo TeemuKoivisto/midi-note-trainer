@@ -1,4 +1,4 @@
-import { createChord, intervalToSemitones, noteIntoString } from '@/chords-and-scales'
+import { createChord, noteIntoString } from '@/chords-and-scales'
 import { getNote } from '../utils/getNote'
 
 import type { Chord, MidiChord, Scale } from '@/chords-and-scales'
@@ -29,12 +29,14 @@ export class PlayChordsGame {
     }
     this.chords = randomChords.map(chord => {
       const maxInterval = chord.intervals[chord.intervals.length - 1]
-      const maxSemitones = intervalToSemitones(maxInterval)
+      const maxSemitones = maxInterval.semitones
       const availableRange: [number, number] = [range[0].midi, range[1].midi - maxSemitones]
       const notes = Array.from(new Array(availableRange[1] - availableRange[0])).map(
-        (_, i) => [range[0].midi + i, (range[0].order + i) % 12] as [number, number]
+        (_, i) => [range[0].midi + i, (range[0].semitones + i) % 12] as [number, number]
       )
-      const availableNotes = notes.filter(v => scale.scaleNotes.find(note => note.order === v[1]))
+      const availableNotes = notes.filter(v =>
+        scale.scaleNotes.find(note => note.semitones === v[1])
+      )
       const startingNoteInScale = availableNotes[Math.floor(Math.random() * availableNotes.length)]
       const chordNotes = createChord(startingNoteInScale[0], scale, chord.intervals)
       return {
@@ -44,7 +46,6 @@ export class PlayChordsGame {
         notes: chordNotes
       }
     })
-    console.log('CHORDS', this.chords)
     this.timing = performance.now()
   }
   get current() {
@@ -74,9 +75,7 @@ export class PlayChordsGame {
     const guessed = `${notes
       .map(n => `${n.note.charAt(0)}${'♭'.repeat(n.flats)}${'♯'.repeat(n.sharps)}`)
       .join(' ')}`
-    console.log(`target ${target} guessed ${guessed}`)
     const result = this.current.notes.every(n => notes.find(note => note.midi % 12 === n.midi % 12))
-    console.log('result', result)
     if (result) {
       this.correct += 1
     }

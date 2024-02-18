@@ -5,49 +5,49 @@ describe('getRootNote', () => {
     const correct = {
       C: {
         note: 'C',
-        order: 0,
+        semitones: 0,
         flats: 0,
         sharps: 0
       },
       'C♯': {
         note: 'C♯',
-        order: 1,
+        semitones: 1,
         flats: 0,
         sharps: 1
       },
       'C♯♯': {
         note: 'C♯♯',
-        order: 2,
+        semitones: 2,
         flats: 0,
         sharps: 2
       },
       Db: {
         note: 'Db',
-        order: 1,
+        semitones: 1,
         flats: 1,
         sharps: 0
       },
       'F♭': {
         note: 'F♭',
-        order: 4,
+        semitones: 4,
         flats: 1,
         sharps: 0
       },
       'F♭♭': {
         note: 'F♭♭',
-        order: 3,
+        semitones: 3,
         flats: 2,
         sharps: 0
       },
       'A#': {
         note: 'A#',
-        order: 10,
+        semitones: 10,
         flats: 0,
         sharps: 1
       },
       'B♯': {
         note: 'B♯',
-        order: 0,
+        semitones: 0,
         flats: 0,
         sharps: 1
       },
