@@ -17,6 +17,9 @@ jobs:
       - name: Install dependencies with pnpm
         uses: ./.github/actions/pnpm
 
+      - name: Run tests
+        run: pnpm --filter chords-and-scales test
+
       - name: Build the GitHub pages distribution
         run: |
           pnpm --filter types --filter chords-and-scales --filter midi-piano build
