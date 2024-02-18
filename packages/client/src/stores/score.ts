@@ -163,10 +163,7 @@ export const scoreActions = {
   setPlayed(notes: MidiNote[], correct?: boolean | undefined, timeoutMs?: number) {
     const now = Date.now()
     const color = correct === undefined ? 'default' : correct ? 'correct' : 'wrong'
-    played.update(v => [
-      ...v,
-      ...notes.map(n => ({ ...n, color: color, started: now }) as PlayedNote)
-    ])
+    played.update(v => [...notes.map(n => ({ ...n, color: color, started: now }) as PlayedNote)])
     if (!timeout) {
       const ms = timeoutMs ?? get(fadeTimeout)
       timeout = setTimeout(() => {

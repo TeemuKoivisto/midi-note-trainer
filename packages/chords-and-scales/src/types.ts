@@ -39,6 +39,7 @@ export interface RawScale {
 export type ScaleNote = Pitch & {
   note: string
 }
+export type MidiNote = ScaleNote & { midi: number }
 export interface ScaleTriad {
   degree: number
   roman: string
@@ -47,7 +48,6 @@ export interface ScaleTriad {
   minor: boolean
   semitones: Set<number>
 }
-export type MidiNote = ScaleNote & { midi: number }
 export interface Scale {
   key: string // eg C
   scale: string // eg major

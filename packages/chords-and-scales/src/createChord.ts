@@ -25,13 +25,13 @@ function createNote(note: ScaleNote, shiftUpOrDown: number, midi: number) {
  * Creates a chord using starting note, scale and chord intervals
  * @param note
  * @param scale
- * @param chordIntervals
+ * @param pitches
  * @returns
  */
-export function createChord(note: number, scale: Scale, chordIntervals: Pitch[]) {
+export function createChord(note: number, scale: Scale, pitches: Pitch[]) {
   const chordNotes: MidiNote[] = []
-  for (let i = 0; i < chordIntervals.length; i += 1) {
-    const chordInt = chordIntervals[i]
+  for (let i = 0; i < pitches.length; i += 1) {
+    const chordInt = pitches[i]
     const midi = note + chordInt.semitones
     const scaleNote = scale.scaleNotes.find(n => n.semitones === midi % 12)
     // If interval is flat/sharp, shift the original note UNLESS the resulting note already is in the scale
