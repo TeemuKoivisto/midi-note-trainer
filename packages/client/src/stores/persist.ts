@@ -32,7 +32,7 @@ function cache(val: any, key: string, storage: 'local' | 'session'): Result<unde
 export function persist<T, P = any>(w: Writable<T>, opts: Options<T, P>) {
   const { key, storage = 'local' } = opts
   const hydrated = hydrate(key, storage)
-  if ('data' in hydrated && hydrated.data) {
+  if ('data' in hydrated) {
     w.set(opts.deserialize ? opts.deserialize(hydrated.data) : hydrated.data)
   } else if ('err' in hydrated && opts?.debug) {
     console.info(hydrated.err)
