@@ -79,7 +79,7 @@
       } else if (e.key === 'Backspace') {
         keyboardInput = keyboardInput.slice(0, -1)
       }
-    } else if (game instanceof GuessChords && game.type === 'write') {
+    } else if (game instanceof GuessChords && game.type === 'chords-write') {
       if (e.key === 'Enter' && keyboardInput.length > 0) {
         let value = { note: '', flats: 0, sharps: 0, chord: '' }
         for (let i = 0; i < keyboardInput.length; i += 1) {

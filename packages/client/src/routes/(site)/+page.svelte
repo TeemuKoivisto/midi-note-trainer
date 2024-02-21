@@ -12,7 +12,7 @@
   import Scales from '$components/scales/Scales.svelte'
   import Score from '$components/Score.svelte'
 
-  import { currentGame, gameActions } from '$stores/game'
+  import { playNextTimeoutMs, currentGame, gameActions } from '$stores/game'
   import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
   import { played, scoreActions } from '$stores/score'
   import { getNoteAbsolute } from '$utils/getNote'
@@ -100,18 +100,14 @@
     }
   }
   function gameUpdate() {
-    const game = $currentGame
-    if (game?.ended) {
-      gameActions.updateState('ended')
-    } else if (game instanceof GuessChords || game instanceof PlayChordsGame) {
-      scoreActions.setTarget(game.current.notes)
-      $piano?.playChord(game?.current.notes.map(n => n.midi))
-      gameActions.updateState('waiting')
-    } else if (game instanceof GuessKeys) {
-      scoreActions.setKey(game.current)
-      gameActions.updateState('waiting')
+    if ($playNextTimeoutMs >= 0) {
+      timeout = setTimeout(() => {
+        gameActions.nextGuess()
+        timeout = undefined
+      }, $playNextTimeoutMs)
+    } else {
+      timeout = undefined
     }
-    timeout = undefined
   }
   function flushPlayedChords() {
     const game = $currentGame
@@ -119,7 +115,7 @@
       const correct = game.guess()
       scoreActions.setPlayed(game.latestGuess.notes, correct, 5000)
       gameActions.updateState(correct ? 'correct' : 'wrong')
-      timeout = setTimeout(gameUpdate, 5000)
+      gameUpdate()
     }
     chordTimeout = undefined
   }
@@ -130,7 +126,7 @@
     if (!(game instanceof GuessChords)) return
     const correct = game.guess(e.detail)
     gameActions.updateState(correct ? 'correct' : 'wrong')
-    timeout = setTimeout(gameUpdate, 2000)
+    gameUpdate()
   }
   function handleGuessedKey(e: CustomEvent<string>) {
     const game = $currentGame
@@ -143,7 +139,7 @@
       correct = game.guess(note)
     }
     gameActions.updateState(correct ? 'correct' : 'wrong')
-    timeout = setTimeout(gameUpdate, 2000)
+    gameUpdate()
   }
   function handleNote(e: CustomEvent<number>) {
     handlePlayedNote(e.detail, 80)

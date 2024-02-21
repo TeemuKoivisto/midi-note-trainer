@@ -4,7 +4,7 @@ import type { Chord, MidiChord, Scale, ScaleNote } from '@/chords-and-scales'
 import type { Note } from '@/types'
 
 export class GuessChords {
-  type: 'write' | 'play'
+  type: 'chords-write' | 'chords-play'
   scale: Scale
   chords: MidiChord[]
   times: number[] = []
@@ -14,7 +14,7 @@ export class GuessChords {
   timing: number
 
   constructor(
-    type: 'write' | 'play',
+    type: 'chords-write' | 'chords-play',
     scale: Scale,
     chords: Chord[],
     range: [Note, Note],

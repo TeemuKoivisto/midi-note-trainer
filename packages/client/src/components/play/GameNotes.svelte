@@ -8,7 +8,7 @@
   export let game: GuessNotes
 
   function tryAgain() {
-    gameActions.playGuessNotes(game.type)
+    gameActions.play(game.type)
   }
   function clearGame() {
     gameActions.clearGame()

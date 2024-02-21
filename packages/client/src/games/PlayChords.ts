@@ -5,8 +5,8 @@ import type { Chord, MidiChord, Scale } from '@/chords-and-scales'
 import type { Note } from '@/types'
 
 interface LatestGuess {
-  target: string
-  guessed: string
+  target: [string, string]
+  guessed: [string, string]
   notes: Note[]
 }
 
@@ -16,7 +16,7 @@ export class PlayChordsGame {
   times: number[] = []
   correct = 0
   played = new Set<number>()
-  latestGuess: LatestGuess = { target: '', guessed: '', notes: [] }
+  latestGuess: LatestGuess = { target: ['', ''], guessed: ['', ''], notes: [] }
   idx = 0
   timing: number
 
@@ -71,12 +71,14 @@ export class PlayChordsGame {
       .map(v => getNote(v))
       .sort((a, b) => a.midi - b.midi)
     this.played.clear()
-    const target = `${this.current.chord}: ${this.current.notes
-      .map(n => noteIntoString(n))
-      .join(' ')}`
-    const guessed = `${notes
-      .map(n => `${n.note.charAt(0)}${'♭'.repeat(n.flats)}${'♯'.repeat(n.sharps)}`)
-      .join(' ')}`
+    const target: [string, string] = [
+      this.current.chord,
+      this.current.notes.map(n => noteIntoString(n)).join(' ')
+    ]
+    const guessed: [string, string] = [
+      '',
+      notes.map(n => `${n.note.charAt(0)}${'♭'.repeat(n.flats)}${'♯'.repeat(n.sharps)}`).join(' ')
+    ]
     const result = this.current.notes.every(n => notes.find(note => note.midi % 12 === n.midi % 12))
     if (result) {
       this.correct += 1

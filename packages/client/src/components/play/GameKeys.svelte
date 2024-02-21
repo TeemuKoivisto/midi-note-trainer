@@ -6,7 +6,7 @@
   export let game: GuessKeys
 
   function tryAgain() {
-    gameActions.playGuessKeys(game.type)
+    gameActions.play(game.type === 'major' ? 'keys-major' : 'keys-minor')
   }
   function clearGame() {
     gameActions.clearGame()

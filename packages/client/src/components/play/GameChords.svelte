@@ -6,7 +6,7 @@
   export let game: GuessChords
 
   function tryAgain() {
-    gameActions.playGuessChords(game.type)
+    gameActions.play(game.type)
   }
   function clearGame() {
     gameActions.clearGame()

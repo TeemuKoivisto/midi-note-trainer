@@ -1,10 +1,16 @@
 <script lang="ts">
   import Options from '$components/Options.svelte'
 
-  import { gameActions } from '$stores/game'
+  import { gameActions, type GameType } from '$stores/game'
 
   function clearGame() {
     gameActions.clearGame()
+  }
+  function play(type: GameType) {
+    gameActions.play(type)
+    setTimeout(() => {
+      window.scrollTo(0, document.body.scrollHeight)
+    })
   }
 </script>
 
@@ -13,25 +19,13 @@
     <legend class="px-1 text-base">Play</legend>
     <Options class="border-b-2 pb-4" />
     <div class="body pt-6">
-      <button class="btn primary" on:click={() => gameActions.playGuessNotes('notes')}
-        >Guess 10 Notes</button
-      >
-      <button class="btn primary" on:click={() => gameActions.playGuessNotes('pitches')}
-        >Guess 10 Pitches</button
-      >
-      <button class="btn primary" on:click={() => gameActions.playGuessKeys('major')}
-        >Guess Major Keys</button
-      >
-      <button class="btn primary" on:click={() => gameActions.playGuessKeys('minor')}
-        >Guess Minor Keys</button
-      >
-      <button class="btn primary" on:click={() => gameActions.playGuessChords('write')}
-        >Write Chords</button
-      >
-      <button class="btn primary" on:click={() => gameActions.playGuessChords('play')}
-        >Play Chords</button
-      >
-      <button class="btn primary" on:click={() => gameActions.playGuessChords('diatonic')}
+      <button class="btn primary" on:click={() => play('notes')}>Guess 10 Notes</button>
+      <button class="btn primary" on:click={() => play('pitches')}>Guess 10 Pitches</button>
+      <button class="btn primary" on:click={() => play('keys-major')}>Guess Major Keys</button>
+      <button class="btn primary" on:click={() => play('keys-minor')}>Guess Minor Keys</button>
+      <button class="btn primary" on:click={() => play('chords-write')}>Write Chords</button>
+      <button class="btn primary" on:click={() => play('chords-play')}>Play Chords</button>
+      <button class="btn primary" on:click={() => play('chords-diatonic')}
         >Play Diatonic Triads</button
       >
       <div></div>

@@ -17,21 +17,21 @@ export const keys = {
     'C#': { acc: '#', num: 7 }
   },
   minor: {
-    Am: { num: 0 },
-    Dm: { acc: 'b', num: 1 },
-    Gm: { acc: 'b', num: 2 },
-    Cm: { acc: 'b', num: 3 },
-    Fm: { acc: 'b', num: 4 },
-    Bbm: { acc: 'b', num: 5 },
-    Ebm: { acc: 'b', num: 6 },
-    Abm: { acc: 'b', num: 7 },
-    Em: { acc: '#', num: 1 },
-    Bm: { acc: '#', num: 2 },
-    'F#m': { acc: '#', num: 3 },
-    'C#m': { acc: '#', num: 4 },
-    'G#m': { acc: '#', num: 5 },
-    'D#m': { acc: '#', num: 6 },
-    'A#m': { acc: '#', num: 7 }
+    A: { num: 0 },
+    D: { acc: 'b', num: 1 },
+    G: { acc: 'b', num: 2 },
+    C: { acc: 'b', num: 3 },
+    F: { acc: 'b', num: 4 },
+    Bb: { acc: 'b', num: 5 },
+    Eb: { acc: 'b', num: 6 },
+    Ab: { acc: 'b', num: 7 },
+    E: { acc: '#', num: 1 },
+    B: { acc: '#', num: 2 },
+    'F#': { acc: '#', num: 3 },
+    'C#': { acc: '#', num: 4 },
+    'G#': { acc: '#', num: 5 },
+    'D#': { acc: '#', num: 6 },
+    'A#': { acc: '#', num: 7 }
   }
 }
 
