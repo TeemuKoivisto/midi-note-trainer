@@ -11,7 +11,7 @@ interface LatestGuess {
 }
 interface Options {
   scale: Scale
-  chords: Chord[]
+  chords: (Chord & { allowed?: Set<number> })[]
   range: [Note, Note]
   noDuplicates?: boolean
   count?: number
@@ -36,7 +36,7 @@ export class GuessChords {
       ...options
     }
     const { scale, chords, count, range } = this.options
-    const randomChords: Chord[] = []
+    const randomChords: (Chord & { allowed?: Set<number> })[] = []
     const available: Chord[] = chords.map(v => ({ ...v }))
     for (let i = 0; i < count; i += 1) {
       const idx = Math.floor(Math.random() * available.length)
@@ -49,18 +49,19 @@ export class GuessChords {
         randomChords.push(available[idx])
       }
     }
+    const scaleSemitones = new Set(scale.scaleNotes.map(s => s.semitones))
     this.chords = randomChords.map(chord => {
-      const maxInterval = chord.intervals[chord.intervals.length - 1]
-      const availableRange: [number, number] = [
-        range[0].midi,
-        range[1].midi - maxInterval.semitones
-      ]
+      const maxInterval = chord.intervals.reduce(
+        (acc, cur) => (cur.semitones > acc ? cur.semitones : acc),
+        0
+      )
+      const availableRange: [number, number] = [range[0].midi, range[1].midi - maxInterval]
       const notes = Array.from(new Array(availableRange[1] - availableRange[0])).map(
         (_, i) => [range[0].midi + i, (range[0].semitones + i) % 12] as [number, number]
       )
       // @TODO for diatonic chords only use roots that are of same note
-      const availableNotes = notes.filter(v =>
-        scale.scaleNotes.find(note => note.semitones === v[1])
+      const availableNotes = notes.filter(
+        v => scaleSemitones.has(v[1]) && (!chord.allowed || chord.allowed.has(v[1]))
       )
       const startingNoteInScale = availableNotes[Math.floor(Math.random() * availableNotes.length)]
       // const scaleNote = scale.notesMap.get(startingNoteInScale[1]) as ScaleNote

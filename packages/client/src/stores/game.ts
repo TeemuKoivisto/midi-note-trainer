@@ -64,7 +64,10 @@ export const gameActions = {
     } else if (type === 'chords-diatonic') {
       const scale = get(scaleData)
       // scoreActions.setKeyAndScale(scale.key, scale.scale)
-      const chords = createTriadChords(scale.triads)
+      const chords = createTriadChords(scale.triads).map((c, idx) => ({
+        ...c,
+        allowed: new Set([scale.scaleNotes[idx].semitones])
+      }))
       game = new GuessChords(type, {
         scale: get(scaleData),
         chords,
