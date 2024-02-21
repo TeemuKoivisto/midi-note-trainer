@@ -105,9 +105,11 @@ export const gameActions = {
       scoreActions.clearPlayed()
       get(piano)?.playChord(game?.current.notes.map(n => n.midi))
       guessState.set('waiting')
+      game.startTime()
     } else if (game instanceof GuessKeys) {
       scoreActions.setKey(game.current)
       guessState.set('waiting')
+      game.startTime()
     }
   },
   clearGame() {
