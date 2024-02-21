@@ -102,7 +102,9 @@
   function gameUpdate() {
     if ($playNextTimeoutMs >= 0) {
       timeout = setTimeout(() => {
-        gameActions.nextGuess()
+        if ($playNextTimeoutMs >= 0) {
+          gameActions.nextGuess()
+        }
         timeout = undefined
       }, $playNextTimeoutMs)
     } else {

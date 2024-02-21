@@ -49,7 +49,7 @@ export const gameActions = {
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-play') {
       const basicChords = chords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
-      game = new GuessChords(type, get(scaleData), basicChords, get(midiRangeNotes), count)
+      game = new PlayChordsGame(get(scaleData), basicChords, get(midiRangeNotes), count)
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-write') {
       game = new GuessChords(type, get(scaleData), chords, get(midiRangeNotes), count)
