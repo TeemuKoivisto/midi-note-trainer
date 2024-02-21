@@ -84,8 +84,8 @@
       scale = $scaleData
     }
     const startingNote = $midiRangeNotes[0].midi + scale.scaleNotes[0].semitones
-    notes = scale.intervals.map((int, idx) => {
-      const note = scale.scaleNotes[idx] as ScaleNote
+    notes = item.raw.intervals.map(int => {
+      const note = scale.notesMap.get(int.semitones % 12) as ScaleNote
       return [{ ...note, midi: startingNote + int.semitones }]
     })
     // Add tonic as final note (UNLESS there is one already) since it sounds nicer

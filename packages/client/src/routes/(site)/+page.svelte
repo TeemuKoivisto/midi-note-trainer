@@ -123,7 +123,6 @@
     e: CustomEvent<{ note: string; flats: number; sharps: number; chord: string }>
   ) {
     const game = $currentGame
-    console.log('hello', e.detail)
     if (!(game instanceof GuessChords)) return
     const correct = game.guess(e.detail)
     gameActions.updateState(correct ? 'correct' : 'wrong')

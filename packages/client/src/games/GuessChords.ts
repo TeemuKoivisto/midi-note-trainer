@@ -20,7 +20,6 @@ interface Options {
 export class GuessChords {
   type: 'chords-write' | 'chords-play' | 'chords-diatonic'
   options: Required<Options>
-  scale: Scale
   chords: MidiChord[]
   times: number[] = []
   correct = 0
@@ -37,9 +36,8 @@ export class GuessChords {
       ...options
     }
     const { scale, chords, count, range } = this.options
-    this.scale = options.scale
     const randomChords: Chord[] = []
-    const available: Chord[] = options.chords.map(v => ({ ...v }))
+    const available: Chord[] = chords.map(v => ({ ...v }))
     for (let i = 0; i < count; i += 1) {
       const idx = Math.floor(Math.random() * available.length)
       if (options.noDuplicates) {
@@ -92,17 +90,6 @@ export class GuessChords {
   addPlayedNote(midi: number) {
     this.played.add(midi)
   }
-  // guess(value: { note: string; flats: number; sharps: number; chord: string }) {
-  //   const guessed = `${noteIntoString(value)}${value.chord.toLowerCase()}`
-  //   const result = this.current.chord === guessed
-  //   if (result) {
-  //     this.correct += 1
-  //   }
-  //   this.latestGuess = { target: this.current.chord, guessed }
-  //   this.idx += 1
-  //   this.times.push(performance.now() - this.timing)
-  //   return result
-  // }
   guess(value?: { note: string; flats: number; sharps: number; chord: string }) {
     let result
     let notes: Note[]
