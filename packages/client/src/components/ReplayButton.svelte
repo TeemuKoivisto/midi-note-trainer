@@ -6,16 +6,12 @@
   import { piano } from '$stores/inputs'
   import { GuessChords } from '$games/GuessChords'
   import { GuessNotes } from '$games/GuessNotes'
-  import { PlayChordsGame } from '$games/PlayChords'
 
-  $: shown =
-    $currentGame instanceof GuessChords ||
-    $currentGame instanceof GuessNotes ||
-    $currentGame instanceof PlayChordsGame
+  $: shown = $currentGame instanceof GuessChords || $currentGame instanceof GuessNotes
 
   function replay() {
     const game = $currentGame
-    if (game instanceof GuessChords || game instanceof PlayChordsGame) {
+    if (game instanceof GuessChords) {
       $piano?.playChord(game?.current.notes.map(n => n.midi))
     } else if (game instanceof GuessNotes) {
       $piano?.noteOn(game.current)

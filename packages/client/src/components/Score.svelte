@@ -6,19 +6,15 @@
 
   import ReplayButton from './ReplayButton.svelte'
 
-  import { currentGame, guessState, type GuessState } from '$stores/game'
+  import { currentGame, guessState, type GuessState, type GameInstance } from '$stores/game'
   import { played, target, scaleData, type PlayedNote } from '$stores/score'
   import { getOctave } from '$utils/getNote'
 
   import type { MidiNote, Scale } from '@/chords-and-scales'
   import type { Note } from '@/types'
-  import type { GuessNotes } from '$games/GuessNotes'
-  import type { GuessChords } from '$games/GuessChords'
-  import type { GuessKeys } from '$games/GuessKeys'
-  import type { PlayChordsGame } from '$games/PlayChords'
 
   interface Data {
-    game: GuessNotes | GuessKeys | GuessChords | PlayChordsGame | undefined
+    game: GameInstance | undefined
     guessed: GuessState
     scale: Scale
     target: MidiNote[]

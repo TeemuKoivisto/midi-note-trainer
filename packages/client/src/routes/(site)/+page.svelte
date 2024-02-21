@@ -7,7 +7,6 @@
   import GameNotes from '$components/play/GameNotes.svelte'
   import IOSettings from '$components/IOSettings.svelte'
   import KeyboardInput from '$components/KeyboardInput.svelte'
-  import PlayChords from '$components/play/PlayChords.svelte'
   import PlayForm from '$components/play/PlayForm.svelte'
   import Scales from '$components/scales/Scales.svelte'
   import Score from '$components/Score.svelte'
@@ -21,7 +20,6 @@
   import { GuessNotes } from '$games/GuessNotes'
   import { GuessKeys } from '$games/GuessKeys'
   import { GuessChords } from '$games/GuessChords'
-  import { PlayChordsGame } from '$games/PlayChords'
 
   let status = 'Finding device...'
 
@@ -89,7 +87,7 @@
         scoreActions.clearPlayed()
         timeout = undefined
       }, 2000)
-    } else if (game instanceof PlayChordsGame && !game?.ended) {
+    } else if (game instanceof GuessChords && !game?.ended) {
       game.addPlayedNote(value)
       if (!chordTimeout) chordTimeout = setTimeout(flushPlayedChords, 2000)
     } else {
@@ -113,7 +111,7 @@
   }
   function flushPlayedChords() {
     const game = $currentGame
-    if (game instanceof PlayChordsGame) {
+    if (game instanceof GuessChords) {
       const correct = game.guess()
       scoreActions.setPlayed(game.latestGuess.notes, correct, 5000)
       gameActions.updateState(correct ? 'correct' : 'wrong')
@@ -125,6 +123,7 @@
     e: CustomEvent<{ note: string; flats: number; sharps: number; chord: string }>
   ) {
     const game = $currentGame
+    console.log('hello', e.detail)
     if (!(game instanceof GuessChords)) return
     const correct = game.guess(e.detail)
     gameActions.updateState(correct ? 'correct' : 'wrong')
@@ -184,8 +183,6 @@
     <GameNotes class="min-h-32" game={$currentGame} />
   {:else if $currentGame instanceof GuessChords}
     <GameChords class="min-h-32" game={$currentGame} />
-  {:else if $currentGame instanceof PlayChordsGame}
-    <PlayChords class="min-h-32" game={$currentGame} />
   {:else if $played.length > 0}
     <div class="min-h-32">
       <span>Played: </span>

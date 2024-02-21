@@ -1,34 +1,54 @@
 import { createChord, noteIntoString } from '@/chords-and-scales'
+import { getNote } from '../utils/getNote'
 
 import type { Chord, MidiChord, Scale, ScaleNote } from '@/chords-and-scales'
 import type { Note } from '@/types'
 
+interface LatestGuess {
+  target: [string, string]
+  guessed: [string, string]
+  notes: Note[]
+}
+interface Options {
+  scale: Scale
+  chords: Chord[]
+  range: [Note, Note]
+  noDuplicates?: boolean
+  count?: number
+}
+
 export class GuessChords {
-  type: 'chords-write' | 'chords-play'
+  type: 'chords-write' | 'chords-play' | 'chords-diatonic'
+  options: Required<Options>
   scale: Scale
   chords: MidiChord[]
   times: number[] = []
   correct = 0
-  latestGuess: { target: string; guessed: string } = { target: '', guessed: '' }
+  played = new Set<number>()
+  latestGuess: LatestGuess = { target: ['', ''], guessed: ['', ''], notes: [] }
   idx = 0
   timing: number
 
-  constructor(
-    type: 'chords-write' | 'chords-play',
-    scale: Scale,
-    chords: Chord[],
-    range: [Note, Note],
-    count = 10
-  ) {
+  constructor(type: 'chords-write' | 'chords-play' | 'chords-diatonic', options: Options) {
     this.type = type
-    this.scale = scale
+    this.options = {
+      count: 10,
+      noDuplicates: false,
+      ...options
+    }
+    const { scale, chords, count, range } = this.options
+    this.scale = options.scale
     const randomChords: Chord[] = []
-    const available: Chord[] = chords.map(v => ({ ...v }))
+    const available: Chord[] = options.chords.map(v => ({ ...v }))
     for (let i = 0; i < count; i += 1) {
       const idx = Math.floor(Math.random() * available.length)
-      const val = available.splice(idx, 1)
-      if (val.length > 0) {
-        randomChords.push(val[0])
+      if (options.noDuplicates) {
+        const val = available.splice(idx, 1)
+        if (val.length > 0) {
+          randomChords.push(val[0])
+        }
+      } else {
+        randomChords.push(available[idx])
       }
     }
     this.chords = randomChords.map(chord => {
@@ -45,12 +65,13 @@ export class GuessChords {
         scale.scaleNotes.find(note => note.semitones === v[1])
       )
       const startingNoteInScale = availableNotes[Math.floor(Math.random() * availableNotes.length)]
-      const scaleNote = scale.notesMap.get(startingNoteInScale[1]) as ScaleNote
+      // const scaleNote = scale.notesMap.get(startingNoteInScale[1]) as ScaleNote
+      const chordNotes = createChord(startingNoteInScale[0], scale, chord.intervals)
       return {
         ...chord,
-        rootNote: scaleNote.note,
-        chord: `${scaleNote.note}${chord.suffixes[0]}`,
-        notes: createChord(startingNoteInScale[0], scale, chord.intervals)
+        rootNote: chordNotes[0].note,
+        chord: `${chordNotes[0].note}${chord.suffixes[0]}`,
+        notes: chordNotes
       }
     })
     this.timing = performance.now()
@@ -68,13 +89,47 @@ export class GuessChords {
     }
     return Math.round(avgMs / 10 / this.times.length) / 100
   }
-  guess(value: { note: string; flats: number; sharps: number; chord: string }) {
-    const guessed = `${noteIntoString(value)}${value.chord.toLowerCase()}`
-    const result = this.current.chord === guessed
+  addPlayedNote(midi: number) {
+    this.played.add(midi)
+  }
+  // guess(value: { note: string; flats: number; sharps: number; chord: string }) {
+  //   const guessed = `${noteIntoString(value)}${value.chord.toLowerCase()}`
+  //   const result = this.current.chord === guessed
+  //   if (result) {
+  //     this.correct += 1
+  //   }
+  //   this.latestGuess = { target: this.current.chord, guessed }
+  //   this.idx += 1
+  //   this.times.push(performance.now() - this.timing)
+  //   return result
+  // }
+  guess(value?: { note: string; flats: number; sharps: number; chord: string }) {
+    let result
+    let notes: Note[]
+    let target: [string, string]
+    let guessed: [string, string]
+    if (value) {
+      // const guessed = `${noteIntoString(value)}${value.chord.toLowerCase()}`
+      notes = []
+      target = [this.current.chord, '']
+      guessed = [`${noteIntoString(value)}${value.chord.toLowerCase()}`, '']
+      result = target.join('') === guessed.join('')
+    } else {
+      notes = Array.from(this.played.values())
+        .map(v => getNote(v))
+        .sort((a, b) => a.midi - b.midi)
+      this.played.clear()
+      target = [this.current.chord, this.current.notes.map(n => noteIntoString(n)).join(' ')]
+      guessed = [
+        '',
+        notes.map(n => `${n.note.charAt(0)}${'♭'.repeat(n.flats)}${'♯'.repeat(n.sharps)}`).join(' ')
+      ]
+      result = this.current.notes.every(n => notes.find(note => note.midi % 12 === n.midi % 12))
+    }
     if (result) {
       this.correct += 1
     }
-    this.latestGuess = { target: this.current.chord, guessed }
+    this.latestGuess = { target, guessed, notes }
     this.idx += 1
     this.times.push(performance.now() - this.timing)
     return result

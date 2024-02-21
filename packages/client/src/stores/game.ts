@@ -8,7 +8,6 @@ import { scaleData, scoreActions } from './score'
 import { GuessKeys } from '$games/GuessKeys'
 import { GuessChords } from '$games/GuessChords'
 import { GuessNotes } from '$games/GuessNotes'
-import { PlayChordsGame } from '$games/PlayChords'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 export type GameType =
@@ -19,15 +18,13 @@ export type GameType =
   | 'chords-write'
   | 'chords-play'
   | 'chords-diatonic'
-export type GameInstance = GuessNotes | GuessKeys | GuessChords | PlayChordsGame
+export type GameInstance = GuessNotes | GuessKeys | GuessChords
 
 const chords = chordsFromJSON()
 
 export const guessState = writable<GuessState>('waiting')
 export const playNextTimeoutMs = writable<number>(-1)
-export const currentGame = writable<
-  GuessNotes | GuessKeys | GuessChords | PlayChordsGame | undefined
->(undefined)
+export const currentGame = writable<GameInstance | undefined>(undefined)
 // scores?
 
 export const gameActions = {
@@ -49,16 +46,31 @@ export const gameActions = {
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-play') {
       const basicChords = chords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
-      game = new PlayChordsGame(get(scaleData), basicChords, get(midiRangeNotes), count)
+      game = new GuessChords(type, {
+        scale: get(scaleData),
+        chords: basicChords,
+        range: get(midiRangeNotes),
+        count
+      })
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-write') {
-      game = new GuessChords(type, get(scaleData), chords, get(midiRangeNotes), count)
+      game = new GuessChords(type, {
+        scale: get(scaleData),
+        chords,
+        range: get(midiRangeNotes),
+        count
+      })
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-diatonic') {
       const scale = get(scaleData)
       // scoreActions.setKeyAndScale(scale.key, scale.scale)
       const chords = createTriadChords(scale.triads)
-      game = new PlayChordsGame(scale, chords, get(midiRangeNotes), count)
+      game = new GuessChords(type, {
+        scale: get(scaleData),
+        chords,
+        range: get(midiRangeNotes),
+        count
+      })
     } else {
       throw Error('Unknown game type: ' + type)
     }
@@ -85,7 +97,7 @@ export const gameActions = {
     const game = get(currentGame)
     if (game?.ended) {
       guessState.set('ended')
-    } else if (game instanceof GuessChords || game instanceof PlayChordsGame) {
+    } else if (game instanceof GuessChords) {
       scoreActions.setTarget(game.current.notes)
       scoreActions.clearPlayed()
       get(piano)?.playChord(game?.current.notes.map(n => n.midi))
