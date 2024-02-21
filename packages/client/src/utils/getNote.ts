@@ -1,5 +1,5 @@
 import type { MidiNote } from '@/chords-and-scales'
-import type { Note, Result } from '@/types'
+import type { Note } from '@/types'
 
 export const NOTES = {
   0: { note: 'C', sharps: 0, flats: 0 },
@@ -58,31 +58,5 @@ export function getNote(value: number): Note {
     semitones,
     midi: value,
     parts: [note.note.charAt(0), `${'b'.repeat(note.flats)}${'#'.repeat(note.sharps)}`, octave]
-  }
-}
-
-export function parseNote(val: string): Result<number> {
-  if (val.length !== 0 && val.length <= 3) {
-    const baseNote = BASE_NOTES[val.charAt(0).toUpperCase() as keyof typeof BASE_NOTES]
-    if (!baseNote) {
-      return { err: `Base note ${val.charAt(0).toUpperCase()} not in notes ABCDEFG`, code: 400 }
-    }
-    const shifted = val
-      .slice(1)
-      .split('')
-      .reduce(
-        (acc, c) =>
-          acc + (c.toLowerCase() === 'b' || c === '♭' ? -1 : c === '#' || c === '♯' ? 1 : 0),
-        0
-      )
-    let octave: number | undefined
-    try {
-      octave = parseInt(val[val.length - 1])
-    } catch (err) {
-      return { err: `Couldn't parse note "${val}" octave`, code: 400 }
-    }
-    return { data: 12 + octave * 12 + baseNote.semitones + shifted }
-  } else {
-    return { err: `Unrecognized note "${val}"`, code: 400 }
   }
 }

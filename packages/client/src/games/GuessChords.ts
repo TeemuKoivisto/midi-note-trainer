@@ -59,7 +59,6 @@ export class GuessChords {
       const notes = Array.from(new Array(availableRange[1] - availableRange[0])).map(
         (_, i) => [range[0].midi + i, (range[0].semitones + i) % 12] as [number, number]
       )
-      // @TODO for diatonic chords only use roots that are of same note
       const availableNotes = notes.filter(
         v => scaleSemitones.has(v[1]) && (!chord.allowed || chord.allowed.has(v[1]))
       )

@@ -1,12 +1,12 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { scalesFromJSON } from '@/chords-and-scales'
+  import { parseNote, scalesFromJSON } from '@/chords-and-scales'
 
   import { currentGame } from '$stores/game'
   import { inputsActions, midiRangeNotes } from '$stores/inputs'
   import { persist } from '$stores/persist'
   import { keyAndScale, scaleData, scoreActions } from '$stores/score'
-  import { getNoteAbsolute, parseNote } from '$utils/getNote'
+  import { getNoteAbsolute } from '$utils/getNote'
 
   import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
 
@@ -35,13 +35,14 @@
       currentTarget: EventTarget & HTMLInputElement
     }
   ) {
-    const parsed = parseNote(e.currentTarget.value)
+    const parsed = parseNote(e.currentTarget.value, true, true)
     if ('data' in parsed) {
+      const { midi } = parsed.data
       const old = $midiRangeNotes
-      const range = [
-        rang === 'min' ? parsed.data : old[0].midi,
-        rang === 'max' ? parsed.data : old[1].midi
-      ] as [number, number]
+      const range: [number, number] = [
+        rang === 'min' ? midi : old[0].midi,
+        rang === 'max' ? midi : old[1].midi
+      ]
       inputsActions.setMidiRange(range)
       rangeError = ''
     } else {
@@ -52,6 +53,10 @@
         rangeMax = getNoteAbsolute($midiRangeNotes[1])
       }
     }
+  }
+  function rangeFocus() {
+    rangeError = ''
+    inputsActions.setKeyboardFocus(false)
   }
   function handleKeyChange({
     currentTarget: { value }
@@ -78,7 +83,7 @@
         id="range_min"
         bind:value={rangeMin}
         on:change={e => handleRangeChanged('min', e)}
-        on:focus={() => inputsActions.setKeyboardFocus(false)}
+        on:focus={rangeFocus}
         on:blur={() => inputsActions.setKeyboardFocus(true)}
       />
       <span class="mx-2 mt-1">—</span>
@@ -87,7 +92,7 @@
         id="range_max"
         bind:value={rangeMax}
         on:change={e => handleRangeChanged('max', e)}
-        on:focus={() => inputsActions.setKeyboardFocus(false)}
+        on:focus={rangeFocus}
         on:blur={() => inputsActions.setKeyboardFocus(true)}
       />
     </div>
