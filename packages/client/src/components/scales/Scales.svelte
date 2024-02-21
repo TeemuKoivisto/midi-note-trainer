@@ -1,6 +1,6 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { createScale, createTriadChords, scalesFromJSON } from '@/chords-and-scales'
+  import { createChord, createScale, createTriadChords, scalesFromJSON } from '@/chords-and-scales'
 
   import Intervals from './Intervals.svelte'
   import Triads from './Triads.svelte'
@@ -31,6 +31,7 @@
   $: rightList = scalesList.filter((_, i) => i >= scalesList.length / 2)
 
   let shownKey = ''
+  let oldKeyAndScale = [$scaleData.key, $scaleData.scale]
   let playingNotesTimeout: ReturnType<typeof setTimeout> | undefined
 
   const hidden = persist(writable(true), { key: 'scales-hidden' })
@@ -66,20 +67,27 @@
         $inputs.fixedVelocity
       )
       playingNotesTimeout = setTimeout(() => playNote(index, notes, timeout), timeout)
+    } else {
+      scoreActions.setPlayed([])
+      scoreActions.setKeyAndScale(oldKeyAndScale[0], oldKeyAndScale[1])
     }
   }
   function handleIntervalsClicked(item: ListItem) {
     clearTimeout(playingNotesTimeout)
-    const lowNote = $midiRangeNotes[0]
     let notes: MidiNote[][]
+    let scale: Scale
     if (item.scale) {
-      notes = item.scale.scaleNotes.map(n => [{ ...n, midi: lowNote.midi + n.semitones }])
+      scale = item.scale
+      oldKeyAndScale = [$scaleData.key, $scaleData.scale]
+      scoreActions.setKeyAndScale(item.scale.key, item.scale.scale)
     } else {
-      const scale = $scaleData
-      notes = item.raw.intervals.map(n => [
-        { ...(scale.notesMap.get(n.semitones % 12) as ScaleNote), midi: lowNote.midi + n.semitones }
-      ])
+      scale = $scaleData
     }
+    const startingNote = $midiRangeNotes[0].midi + scale.scaleNotes[0].semitones
+    notes = scale.intervals.map((int, idx) => {
+      const note = scale.scaleNotes[idx] as ScaleNote
+      return [{ ...note, midi: startingNote + int.semitones }]
+    })
     // Add tonic as final note (UNLESS there is one already) since it sounds nicer
     if (notes[0][0].semitones !== notes[notes.length - 1][0].semitones) {
       notes.push(notes[0].map(n => ({ ...n, midi: n.midi + 12 })))
@@ -88,28 +96,21 @@
   }
   function handleTriadsClicked(item: ListItem) {
     clearTimeout(playingNotesTimeout)
-    const lowNote = $midiRangeNotes[0]
     const { intervals } = item.raw
     let notes: MidiNote[][]
     let scale: Scale
-    let startingNote: number
     if (item.scale) {
       scale = item.scale
-      startingNote = item.scale.scaleNotes[0].semitones
+      oldKeyAndScale = [$scaleData.key, $scaleData.scale]
+      scoreActions.setKeyAndScale(item.scale.key, item.scale.scale)
     } else {
       scale = $scaleData
-      startingNote = $scaleData.scaleNotes[0].semitones
     }
+    const startingNote = $midiRangeNotes[0].midi + scale.scaleNotes[0].semitones
     const chords = createTriadChords(item.triads)
-    notes = intervals.map((int, idx) => {
-      const mapped = chords[idx].intervals.map(chordInt => ({
-        ...(scale.notesMap.get(
-          (startingNote + int.semitones + chordInt.semitones) % 12
-        ) as ScaleNote),
-        midi: lowNote.midi + startingNote + int.semitones + chordInt.semitones
-      }))
-      return mapped
-    })
+    notes = chords.map((c, idx) =>
+      createChord(startingNote + scale.intervals[idx].semitones, scale, c.intervals)
+    )
     // Add tonic as final note (UNLESS there is one already) since it sounds nicer
     if (intervals[intervals.length - 1].interval_seq !== 1) {
       notes.push(notes[0].map(n => ({ ...n, midi: n.midi + 12 })))

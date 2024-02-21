@@ -29,8 +29,10 @@ export class PlayChordsGame {
     }
     this.chords = randomChords.map(chord => {
       const maxInterval = chord.intervals[chord.intervals.length - 1]
-      const maxSemitones = maxInterval.semitones
-      const availableRange: [number, number] = [range[0].midi, range[1].midi - maxSemitones]
+      const availableRange: [number, number] = [
+        range[0].midi,
+        range[1].midi - maxInterval.semitones
+      ]
       const notes = Array.from(new Array(availableRange[1] - availableRange[0])).map(
         (_, i) => [range[0].midi + i, (range[0].semitones + i) % 12] as [number, number]
       )

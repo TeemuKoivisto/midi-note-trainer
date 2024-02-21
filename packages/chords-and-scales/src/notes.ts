@@ -30,7 +30,7 @@ export function getRootNote(note: string): ScaleNote | undefined {
     return {
       note,
       semitones: semitones < 0 ? semitones + 12 : semitones,
-      flats: shifted < 0 ? shifted * -1 : 0,
+      flats: shifted < 0 ? -shifted : 0,
       sharps: shifted > 0 ? shifted : 0
     }
   }

@@ -62,7 +62,6 @@ function createScaleNotes(startingOrder: number, letters: string[], intervals: P
         sharps: 0
       }
     } else if (n > targetNote || (n === 'A' && targetNote === 'G')) {
-      // else if (n > letter || (n === 'A' && letter === 'G')) {
       // 'G' > 'F'
       let sharps = 1
       let lowerIndex = semitones === 0 ? NOTES.length - 1 : semitones - sharps
