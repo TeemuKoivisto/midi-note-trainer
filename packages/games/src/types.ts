@@ -11,7 +11,7 @@ export type GameType =
 
 export interface BaseOptions {
   scale: Scale
-  range: [MidiNote, MidiNote]
+  range: [number, number]
   duplicates: boolean
   count: number
 }

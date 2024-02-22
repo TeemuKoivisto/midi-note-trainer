@@ -25,8 +25,8 @@ export class GuessChords extends Game<GuessableChord, Guess> {
     baseOpts: BaseOptions,
     opts: GuessChordsOptions
   ) {
-    const min = baseOpts.range[0].midi
-    const max = baseOpts.range[1].midi
+    const min = baseOpts.range[0]
+    const max = baseOpts.range[1]
     const scaleSemitones = new Set(baseOpts.scale.scaleNotes.map(s => s.semitones))
 
     const values = opts.chords.flatMap(chord => {

@@ -4,7 +4,7 @@
   import playIcon from '@iconify-icons/mdi/play-outline'
   // import playIcon from '@iconify-icons/feather/play'
 
-  import Options from '$components/Options.svelte'
+  import Options from '$components/play/Options.svelte'
 
   import { gameActions, type GameType } from '$stores/game'
   import { persist } from '$stores/persist'

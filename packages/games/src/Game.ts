@@ -16,15 +16,15 @@ export class Game<V, G> {
 
   constructor(type: GameType, data: V[], opts: BaseOptions) {
     this.type = type
+    this.data = data
     this.options = opts
     const sampled: V[] = []
     const { count } = opts
-    this.data = data
     const available = data.map(v => (typeof v === 'object' && v !== null ? { ...v } : v))
     let withReplacement = opts.duplicates
     if (!opts.duplicates && count > available.length) {
       console.warn(
-        `Trying to create game with count ${count} larger than available unique values ${sampled.length}`
+        `Trying to create game with count ${count} larger than available unique values ${data.length}`
       )
       withReplacement = true
     }
@@ -39,7 +39,6 @@ export class Game<V, G> {
         }
       }
     }
-    this.type = type
     this.sampled = sampled
     this.timing = performance.now()
   }
@@ -70,7 +69,7 @@ export class Game<V, G> {
     this.times.push(performance.now() - this.timing)
     return result
   }
-  guess(value: G): boolean {
+  guess(_value: G): boolean {
     return false
   }
   startTime() {

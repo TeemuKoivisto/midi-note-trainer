@@ -150,8 +150,8 @@
     {/if}
   </div>
   <div class="h-full flex flex-col justify-between">
-    <div></div>
     <button class="w-full btn hover:bg-gray-200">Reset</button>
+    <div></div>
   </div>
 </div>
 

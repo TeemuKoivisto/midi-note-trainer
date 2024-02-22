@@ -1,7 +1,7 @@
 import { derived, get, writable } from 'svelte/store'
 import { chordsFromJSON, createScale, createTriadChords } from '@/chords-and-scales'
 
-import { inputsActions, midiRange, midiRangeNotes, piano } from './inputs'
+import { inputsActions, midiRange, piano } from './inputs'
 import { persist } from './persist'
 import { scaleData, scoreActions } from './score'
 
@@ -20,82 +20,49 @@ export const currentGame = writable<GameInstance | undefined>(undefined)
 export const gameActions = {
   play(type: GameType, duplicates: boolean = true, count: number = 10): GameInstance {
     let game
+    const scale = get(scaleData)
+    const range = get(midiRange)
+    const baseOpts = {
+      scale,
+      range,
+      duplicates,
+      count
+    }
     if (type === 'notes') {
-      game = new GuessNotes(type, {
-        scale: get(scaleData),
-        range: get(midiRangeNotes),
-        duplicates,
-        count
-      })
+      game = new GuessNotes(type, baseOpts)
       scoreActions.setTarget([scoreActions.getNote(game.current)])
+      playNextTimeoutMs.set(3000)
       get(piano)?.noteOn(game.current)
     } else if (type === 'pitches') {
-      game = new GuessNotes(type, {
-        scale: get(scaleData),
-        range: get(midiRangeNotes),
-        duplicates,
-        count
-      })
+      game = new GuessNotes(type, baseOpts)
       scoreActions.setTarget()
       inputsActions.setInputValue('useSound', true)
+      playNextTimeoutMs.set(3000)
       get(piano)?.noteOn(game.current)
     } else if (type === 'keys-major' || type == 'keys-minor') {
-      game = new GuessKeys(type, {
-        scale: get(scaleData),
-        range: get(midiRangeNotes),
-        duplicates,
-        count
-      })
+      game = new GuessKeys(type, baseOpts)
       scoreActions.setKeyAndScale(game.current, type === 'keys-major' ? 'major' : 'minor')
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-play') {
       const basicChords = chords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
-      game = new GuessChords(
-        type,
-        {
-          scale: get(scaleData),
-          range: get(midiRangeNotes),
-          duplicates,
-          count
-        },
-        {
-          chords: basicChords
-        }
-      )
+      game = new GuessChords(type, baseOpts, {
+        chords: basicChords
+      })
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-write') {
-      game = new GuessChords(
-        type,
-        {
-          scale: get(scaleData),
-          range: get(midiRangeNotes),
-          duplicates,
-          count
-        },
-        {
-          chords
-        }
-      )
+      game = new GuessChords(type, baseOpts, {
+        chords
+      })
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-diatonic') {
-      const scale = get(scaleData)
       // scoreActions.setKeyAndScale(scale.key, scale.scale)
       const chords = createTriadChords(scale.triads).map((c, idx) => ({
         ...c,
         allowed: new Set([scale.scaleNotes[idx].semitones])
       }))
-      game = new GuessChords(
-        type,
-        {
-          scale: get(scaleData),
-          range: get(midiRangeNotes),
-          duplicates,
-          count
-        },
-        {
-          chords
-        }
-      )
+      game = new GuessChords(type, baseOpts, {
+        chords
+      })
     } else {
       throw Error('Unknown game type: ' + type)
     }
@@ -122,6 +89,16 @@ export const gameActions = {
     const game = get(currentGame)
     if (game?.ended) {
       guessState.set('ended')
+    } else if (game instanceof GuessNotes) {
+      if (game.type === 'notes') {
+        scoreActions.setTarget([scoreActions.getNote(game.current)])
+      } else {
+        scoreActions.setTarget()
+      }
+      scoreActions.clearPlayed()
+      get(piano)?.noteOn(game.current)
+      gameActions.updateState('waiting')
+      game.startTime()
     } else if (game instanceof GuessChords) {
       scoreActions.setTarget(game.current.notes)
       scoreActions.clearPlayed()

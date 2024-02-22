@@ -63,28 +63,7 @@
   function handlePlayedNote(value: number, velocity: number) {
     const game = $currentGame
     if (game instanceof GuessNotes && !game?.ended) {
-      scoreActions.setTarget([scoreActions.getNote(game.current)])
-      const correct = game.guess(value)
-      gameActions.updateState(correct ? 'correct' : 'wrong')
-      scoreActions.pushPlayed(value, correct, 2000)
-      timeout = setTimeout(() => {
-        if (game?.ended) {
-          scoreActions.setTarget()
-          gameActions.updateState('ended')
-        } else if (game) {
-          gameActions.updateState('waiting')
-          game.startTime()
-          if (game.type === 'notes') {
-            scoreActions.setTarget([scoreActions.getNote(game.current)])
-            $piano?.noteOn(game.current)
-          } else {
-            scoreActions.setTarget()
-            $piano?.noteOn(game.current)
-          }
-        }
-        scoreActions.clearPlayed()
-        timeout = undefined
-      }, 2000)
+      handleGuessedNote(value)
     } else if (game instanceof GuessChords && !game?.ended) {
       game.addPlayedNote(value)
       if (!chordTimeout) chordTimeout = setTimeout(flushPlayedChords, 2000)
@@ -117,6 +96,15 @@
     }
     chordTimeout = undefined
   }
+  function handleGuessedNote(value: number) {
+    const game = $currentGame
+    if (!(game instanceof GuessNotes)) return
+    scoreActions.setTarget([scoreActions.getNote(game.current)])
+    const correct = game.guess(value)
+    gameActions.updateState(correct ? 'correct' : 'wrong')
+    scoreActions.pushPlayed(value, correct, 4000)
+    gameUpdate()
+  }
   function handleGuessedChord(
     e: CustomEvent<{ note: string; flats: number; sharps: number; chord: string }>
   ) {
@@ -129,13 +117,8 @@
   function handleGuessedKey(e: CustomEvent<string>) {
     const game = $currentGame
     if (!(game instanceof GuessKeys)) return
-    let correct
     const note = e.detail.replaceAll('♭', 'b').replaceAll('♯', '#')
-    if (game.type === 'keys-minor') {
-      correct = game.guess(note + 'm')
-    } else {
-      correct = game.guess(note)
-    }
+    const correct = game.guess(note)
     gameActions.updateState(correct ? 'correct' : 'wrong')
     gameUpdate()
   }
