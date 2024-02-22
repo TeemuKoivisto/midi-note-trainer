@@ -6,7 +6,7 @@ import { Game } from './Game'
 
 import type { BaseOptions } from './types'
 
-type AllowedChord = MidiChord & { allowed?: Set<number> }
+type GuessableChord = MidiChord & { allowed?: Set<number> }
 interface Guess {
   chord: string
   notes: MidiNote[]
@@ -17,7 +17,7 @@ interface GuessChordsOptions {
   onlyScale?: boolean
 }
 
-export class GuessChords extends Game<AllowedChord, Guess> {
+export class GuessChords extends Game<GuessableChord, Guess> {
   played = new Set<number>()
 
   constructor(
@@ -30,7 +30,7 @@ export class GuessChords extends Game<AllowedChord, Guess> {
     const scaleSemitones = new Set(baseOpts.scale.scaleNotes.map(s => s.semitones))
 
     const values = opts.chords.flatMap(chord => {
-      const vv: AllowedChord[] = []
+      const arr: GuessableChord[] = []
       const maxInterval = chord.intervals.reduce(
         (acc, cur) => (cur.semitones > acc ? cur.semitones : acc),
         0
@@ -42,7 +42,7 @@ export class GuessChords extends Game<AllowedChord, Guess> {
           (!chord.allowed || chord.allowed.has(midi % 12))
         ) {
           const notes = createChord(midi, baseOpts.scale, chord.intervals)
-          vv.push({
+          arr.push({
             ...chord,
             rootNote: notes[0].note,
             chord: `${notes[0].note}${chord.suffixes[0]}`,
@@ -50,7 +50,7 @@ export class GuessChords extends Game<AllowedChord, Guess> {
           })
         }
       }
-      return vv
+      return arr
     })
     // console.log('values', values)
     super(type, values, baseOpts)
