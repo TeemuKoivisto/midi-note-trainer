@@ -49,11 +49,15 @@
     const sharps = SHARP_NOTES.slice(0, scale.sharps).find(n => n === note.note.slice(0, 2))
       ? note.sharps - 1
       : note.sharps
+    const accidentals = scale.flats > 0 ? scale.flats : scale.sharps
+    const notes = (scale.flats > 0 ? FLAT_NOTES : SHARP_NOTES).slice(0, accidentals)
+    const naturalized =
+      note.note.length === 1 && notes.find(n => n.charAt(0) === note.note.charAt(0))
     return {
       ...note,
       parts: [
         note.note.charAt(0),
-        `${'b'.repeat(flats)}${'#'.repeat(sharps)}`,
+        `${'b'.repeat(flats)}${'#'.repeat(sharps)}${naturalized ? 'n' : ''}`,
         getOctave(note.midi)
       ]
     }
