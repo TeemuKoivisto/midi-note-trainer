@@ -18,13 +18,13 @@ export const currentGame = writable<GameInstance | undefined>(undefined)
 // scores?
 
 export const gameActions = {
-  play(type: GameType, count = 10): GameInstance {
+  play(type: GameType, duplicates: boolean = true, count: number = 10): GameInstance {
     let game
     if (type === 'notes') {
       game = new GuessNotes(type, {
         scale: get(scaleData),
         range: get(midiRangeNotes),
-        duplicates: true,
+        duplicates,
         count
       })
       scoreActions.setTarget([scoreActions.getNote(game.current)])
@@ -33,7 +33,7 @@ export const gameActions = {
       game = new GuessNotes(type, {
         scale: get(scaleData),
         range: get(midiRangeNotes),
-        duplicates: true,
+        duplicates,
         count
       })
       scoreActions.setTarget()
@@ -43,7 +43,7 @@ export const gameActions = {
       game = new GuessKeys(type, {
         scale: get(scaleData),
         range: get(midiRangeNotes),
-        duplicates: true,
+        duplicates,
         count
       })
       scoreActions.setKeyAndScale(game.current, type === 'keys-major' ? 'major' : 'minor')
@@ -55,7 +55,7 @@ export const gameActions = {
         {
           scale: get(scaleData),
           range: get(midiRangeNotes),
-          duplicates: true,
+          duplicates,
           count
         },
         {
@@ -69,7 +69,7 @@ export const gameActions = {
         {
           scale: get(scaleData),
           range: get(midiRangeNotes),
-          duplicates: true,
+          duplicates,
           count
         },
         {
@@ -89,7 +89,7 @@ export const gameActions = {
         {
           scale: get(scaleData),
           range: get(midiRangeNotes),
-          duplicates: true,
+          duplicates,
           count
         },
         {

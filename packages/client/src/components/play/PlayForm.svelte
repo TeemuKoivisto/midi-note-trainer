@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { writable } from 'svelte/store'
   import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
   import playIcon from '@iconify-icons/mdi/play-outline'
   // import playIcon from '@iconify-icons/feather/play'
@@ -6,6 +7,7 @@
   import Options from '$components/Options.svelte'
 
   import { gameActions, type GameType } from '$stores/game'
+  import { persist } from '$stores/persist'
 
   const options: { key: GameType; value: string }[] = [
     {
@@ -51,12 +53,17 @@
   ]
   let selectedChords = chordsOptions[0].key
 
+  const count = persist(writable(10), { key: 'game-count' })
+  const duplicates = persist(writable(false), { key: 'game-duplicates' })
+
   function clearGame() {
     selectedGame = options[0].key
+    count.set(10)
+    duplicates.set(true)
     gameActions.clearGame()
   }
   function play(type: GameType) {
-    gameActions.play(type)
+    gameActions.play(type, $duplicates, $count)
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight)
     })
@@ -76,8 +83,8 @@
 <div class={`${$$props.class || ''}`}>
   <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm">
     <legend class="px-1 text-base">Play</legend>
-    <Options class="" />
-    <div class="body">
+    <Options class="pb-2" />
+    <div class="body mt-2">
       <ul class="options">
         {#each options as { key, value }}
           <li class="flex">
@@ -115,8 +122,12 @@
       <div class="flex flex-col justify-between h-full">
         <ul>
           <li class="flex items-center justify-between">
+            <label class="font-bold" for="guess-count">Count</label>
+            <input class="h-[20px] w-16" id="guess-count" type="number" bind:value={$count} />
+          </li>
+          <li class="flex items-center justify-between mr-12">
             <label class="font-bold" for="duplicates">Duplicates</label>
-            <input id="duplicates" type="checkbox" />
+            <input class="h-[20px]" id="duplicates" type="checkbox" bind:checked={$duplicates} />
           </li>
         </ul>
         <div></div>
