@@ -25,6 +25,11 @@
   }))
   $: selectedScaleNotes = scales.find(scl => scl.names[0] === selectedScale)?.intervals || []
 
+  midiRangeNotes.subscribe(rng => {
+    rangeMin = getNoteAbsolute(rng[0])
+    rangeMax = getNoteAbsolute(rng[1])
+  })
+
   function handleSetRange() {
     // prompt -> press the lowest note in your MIDI device
     // press the highest note in your MIDI device

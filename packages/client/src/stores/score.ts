@@ -1,7 +1,7 @@
 import { derived, get, readable, writable } from 'svelte/store'
 import { createScale } from '@/chords-and-scales'
 
-import { persist } from './persist'
+import { inputs } from './inputs'
 
 import type { MidiNote, Scale, ScaleNote } from '@/chords-and-scales'
 
@@ -32,9 +32,6 @@ export const defaultKeyMap = readable({
   Ö: { note: 'E', semitones: 16, flats: 0, sharps: 0 },
   Ä: { note: 'F', semitones: 17, flats: 0, sharps: 0 },
   Å: { note: 'F♯', semitones: 18, flats: 0, sharps: 1 }
-})
-export const fadeTimeout = persist(writable(1500), {
-  key: 'fade-timeout'
 })
 export const keyAndScale = writable<[string, string]>(['C', 'Major'])
 export const scaleData = derived(keyAndScale, (val): Scale => {
@@ -98,9 +95,6 @@ function removePlayedNotes(notes: PlayedNote[], timeoutMs: number): PlayedNote[]
 }
 
 export const scoreActions = {
-  setFadeTimeout(ms: number) {
-    fadeTimeout.set(ms)
-  },
   setKey(k: string) {
     keyAndScale.update(v => [k, v[1]])
   },
@@ -152,7 +146,7 @@ export const scoreActions = {
       )
     )
     if (!timeout) {
-      const ms = timeoutMs ?? get(fadeTimeout)
+      const ms = timeoutMs ?? get(inputs).keyFadeTimeout
       timeout = setTimeout(() => {
         timeout = undefined
         played.update(n => removePlayedNotes(n, ms))
@@ -165,7 +159,7 @@ export const scoreActions = {
     const color = correct === undefined ? 'default' : correct ? 'correct' : 'wrong'
     played.update(v => [...notes.map(n => ({ ...n, color: color, started: now }) as PlayedNote)])
     if (!timeout) {
-      const ms = timeoutMs ?? get(fadeTimeout)
+      const ms = timeoutMs ?? get(inputs).keyFadeTimeout
       timeout = setTimeout(() => {
         timeout = undefined
         played.update(n => removePlayedNotes(n, ms))

@@ -2,12 +2,20 @@
   import { writable } from 'svelte/store'
 
   import { inputsActions, inputs, midiInput } from '$stores/inputs'
-  import { persist } from '$stores/persist'
-  import { fadeTimeout, scoreActions } from '$stores/score'
+  import { reset, persist } from '$stores/persist'
 
   const hidden = persist(writable(false), { key: 'inputs-hidden' })
   let fixedVelocity = $inputs.fixedVelocity ?? ''
-  let fadeMs = $fadeTimeout
+  let fadeMs = $inputs.keyFadeTimeout
+
+  inputs.subscribe(inp => {
+    if (fixedVelocity !== inp.fixedVelocity) {
+      fixedVelocity = inp.fixedVelocity ?? ''
+    }
+    if (fadeMs !== inp.keyFadeTimeout) {
+      fadeMs = inp.keyFadeTimeout
+    }
+  })
 
   function toggleVisibility() {
     hidden.update(h => !h)
@@ -26,10 +34,8 @@
     }
     if (int !== undefined && int >= 0 && int <= 127) {
       inputsActions.setInputValue('fixedVelocity', int)
-      fixedVelocity = int
     } else if (!value) {
       inputsActions.setInputValue('fixedVelocity', undefined)
-      fixedVelocity = ''
     } else {
       fixedVelocity = $inputs.fixedVelocity || ''
     }
@@ -42,11 +48,13 @@
   ) {
     try {
       const int = parseInt(e.currentTarget.value)
-      scoreActions.setFadeTimeout(int)
-      fadeMs = int
+      inputsActions.setInputValue('keyFadeTimeout', int)
     } catch (err: any) {
-      fadeMs = $fadeTimeout
+      fadeMs = $inputs.keyFadeTimeout
     }
+  }
+  function handleReset() {
+    reset()
   }
 </script>
 
@@ -124,17 +132,21 @@
           />
         </div>
       </div>
-      <div class="flex flex-col h-full">
-        <label class="font-bold" for="fade-timeout">Fade timeout</label>
-        <div class="my-1 flex">
+      <div class="flex flex-col justify-between h-full">
+        <div class="flex justify-between">
+          <label class="font-bold" for="fade-timeout">Fade timeout</label>
           <input
-            class="h-[20px]"
+            class="h-[20px] w-16"
             id="fade-timeout"
             value={fadeMs}
             on:focus={() => inputsActions.setKeyboardFocus(false)}
             on:blur={() => inputsActions.setKeyboardFocus(true)}
             on:input={handleSetFadeTimeout}
           />
+        </div>
+        <div class="flex justify-between">
+          <div></div>
+          <button class="btn-sm primary" on:click={handleReset}>Reset all</button>
         </div>
       </div>
     </div>

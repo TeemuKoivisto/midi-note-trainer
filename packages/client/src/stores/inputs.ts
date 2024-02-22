@@ -11,6 +11,7 @@ import type { Note, Result } from '@/types'
 
 interface Inputs {
   fixedVelocity: number | undefined
+  keyFadeTimeout: number
   useSound: boolean
   useKeyboard: boolean
   useHotkeys: boolean
@@ -36,6 +37,7 @@ export const keyboardFocused = writable<boolean>(true)
 export const inputs = persist(
   writable<Inputs>({
     fixedVelocity: undefined,
+    keyFadeTimeout: 1500,
     useSound: true,
     useKeyboard: true,
     useHotkeys: true,
