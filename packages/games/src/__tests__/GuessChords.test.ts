@@ -85,7 +85,7 @@ describe('GuessChords', () => {
     expect(game.data.length).toEqual(245)
     expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(3.0)
   })
-  it('should generate C major chords correctly', () => {
+  it('should generate C major triads correctly', () => {
     const scale = createScaleUnsafe('C', 'major')
     const count = 10
     const game = new GuessChords(
@@ -125,6 +125,89 @@ describe('GuessChords', () => {
       'Gmaj',
       'Am',
       'Bdim'
+    ])
+    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(3.0)
+  })
+  it('should generate G Locrian Natural-2 triads correctly', () => {
+    const scale = createScaleUnsafe('C#', 'Locrian Natural-2')
+    const count = 10
+    const game = new GuessChords(
+      'chords-diatonic',
+      {
+        scale,
+        range: [getNote(60), getNote(80)],
+        duplicates: true,
+        count
+      },
+      {
+        chords: createTriadChords(scale.triads).map((c, idx) => ({
+          ...c,
+          allowed: new Set([scale.scaleNotes[idx].semitones])
+        }))
+      }
+    )
+    for (let i = 0; i < count; i += 1) {
+      game.addPlayedNote(61)
+      game.addPlayedNote(64)
+      game.addPlayedNote(67)
+      game.guess()
+    }
+    expect(game.ended).toBe(true)
+    expect(game.correct).toEqual(9)
+    expect(game.latestGuess.target?.chord).toEqual('Bmaj')
+    expect(game.latestGuess.target?.notes.length).toEqual(3)
+    expect(game.latestGuess.guessed?.chord).toEqual('')
+    expect(game.latestGuess.guessed?.notes.map(n => n.midi)).toEqual([61, 64, 67])
+    expect(game.data.map(d => d.chord)).toEqual([
+      'C♯dim',
+      'C♯dim',
+      'D♯dim',
+      'Em',
+      'F♯m',
+      'Gaug',
+      'Amaj',
+      'Bmaj'
+    ])
+    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(3.0)
+  })
+  it('should generate Db Diminished Half-Whole triads correctly', () => {
+    const scale = createScaleUnsafe('Db', 'Diminished Half-Whole')
+    const count = 10
+    const game = new GuessChords(
+      'chords-diatonic',
+      {
+        scale,
+        range: [getNote(60), getNote(80)],
+        duplicates: true,
+        count
+      },
+      {
+        chords: createTriadChords(scale.triads).map((c, idx) => ({
+          ...c,
+          allowed: new Set([scale.scaleNotes[idx].semitones])
+        }))
+      }
+    )
+    for (let i = 0; i < count; i += 1) {
+      game.guess()
+    }
+    expect(game.ended).toBe(true)
+    expect(game.correct).toEqual(0)
+    expect(game.latestGuess.target?.chord).toEqual('C♭dim')
+    expect(game.latestGuess.target?.notes.length).toEqual(3)
+    expect(game.latestGuess.guessed?.chord).toEqual('')
+    expect(game.latestGuess.guessed?.notes).toEqual([])
+    expect(game.data.map(d => d.chord)).toEqual([
+      'D♭maj',
+      'D♭maj',
+      'E♭♭dim',
+      'E♭♭dim',
+      'F♭maj',
+      'G♭♭dim',
+      'A♭♭maj',
+      'A♭dim',
+      'B♭maj',
+      'C♭dim'
     ])
     expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(3.0)
   })
