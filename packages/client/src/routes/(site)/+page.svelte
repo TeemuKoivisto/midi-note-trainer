@@ -133,7 +133,7 @@
     if (!(game instanceof GuessKeys)) return
     let correct
     const note = e.detail.replaceAll('♭', 'b').replaceAll('♯', '#')
-    if (game.type === 'minor') {
+    if (game.type === 'keys-minor') {
       correct = game.guess(note + 'm')
     } else {
       correct = game.guess(note)

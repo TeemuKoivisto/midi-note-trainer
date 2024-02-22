@@ -6,7 +6,7 @@
   export let game: GuessKeys
 
   function tryAgain() {
-    gameActions.play(game.type === 'major' ? 'keys-major' : 'keys-minor')
+    gameActions.play(game.type)
   }
   function clearGame() {
     gameActions.clearGame()
@@ -20,7 +20,7 @@
   {:else if $guessState === 'ended'}
     <div>
       <div>
-        <span>Result: [{game.correct} / {game.keys.length}]</span>
+        <span>Result: [{game.correct} / {game.sampled.length}]</span>
         <span>avg {game.avgTime}s</span>
       </div>
       <div>

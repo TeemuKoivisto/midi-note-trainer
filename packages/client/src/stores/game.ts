@@ -40,9 +40,13 @@ export const gameActions = {
       inputsActions.setInputValue('useSound', true)
       get(piano)?.noteOn(game.current)
     } else if (type === 'keys-major' || type == 'keys-minor') {
-      const t = type === 'keys-major' ? 'major' : 'minor'
-      game = new GuessKeys(t, count)
-      scoreActions.setKeyAndScale(game.current, t)
+      game = new GuessKeys(type, {
+        scale: get(scaleData),
+        range: get(midiRangeNotes),
+        duplicates: true,
+        count
+      })
+      scoreActions.setKeyAndScale(game.current, type === 'keys-major' ? 'major' : 'minor')
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-play') {
       const basicChords = chords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
@@ -100,6 +104,7 @@ export const gameActions = {
     const game = get(currentGame)
     if (game?.ended) {
       guessState.set('ended')
+      console.log('ended')
     } else if (game instanceof GuessChords) {
       scoreActions.setTarget(game.current.notes)
       scoreActions.clearPlayed()

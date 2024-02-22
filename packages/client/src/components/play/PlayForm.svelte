@@ -89,7 +89,7 @@
               {value}
             </button>
             <button
-              class="px-1 py-1 flex items-center rounded text-[#222] hover:bg-blue-500 hover:text-white"
+              class="px-1 py-1 flex items-center justify-center rounded text-[#222] hover:bg-blue-500 hover:text-white"
               on:click={() => handleQuickPlay(key)}
             >
               <Icon icon={playIcon} width={20} />
@@ -112,7 +112,15 @@
           </ul>
         {/if}
       </div>
-      <div></div>
+      <div class="flex flex-col justify-between h-full">
+        <ul>
+          <li class="flex items-center justify-between">
+            <label class="font-bold" for="duplicates">Duplicates</label>
+            <input id="duplicates" type="checkbox" />
+          </li>
+        </ul>
+        <div></div>
+      </div>
       <div class="h-full buttons">
         <div></div>
         <div></div>
