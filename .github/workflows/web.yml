@@ -22,7 +22,8 @@ jobs:
 
       - name: Build the GitHub pages distribution
         run: |
-          pnpm --filter types --filter chords-and-scales --filter games --filter midi-piano build
+          pnpm --filter types --filter chords-and-scales --filter midi-piano build
+          pnpm --filter games build
           VITE_DEPLOY_TO_GH=true pnpm --filter client build
 
       - name: Deploy to GitHub pages
