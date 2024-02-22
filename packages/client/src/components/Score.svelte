@@ -21,8 +21,7 @@
   }
 
   const { Accidental, Formatter, Renderer, Stave, StaveNote } = Vex.Flow
-  const SCORE_WIDTH = 300
-
+  let scoreWidth = 200
   let outputEl: HTMLDivElement
   let renderer: Vex.Renderer
   let ctx: Vex.RenderContext
@@ -72,8 +71,8 @@
     ctx.scale(2.0, 2.0)
     // console.log('ctx', ctx)
     tickContext = new Vex.Flow.TickContext()
-    const tclef = new Stave(0, 0, SCORE_WIDTH).addClef('treble').addKeySignature('B')
-    const bclef = new Stave(0, 60, SCORE_WIDTH).addClef('bass').addKeySignature('B')
+    const tclef = new Stave(0, 0, scoreWidth).addClef('treble').addKeySignature('B')
+    const bclef = new Stave(0, 60, scoreWidth).addClef('bass').addKeySignature('B')
     const trebleNotes = [
       new StaveNote({ keys: ['g#/4'], duration: 'q' }),
       new StaveNote({ keys: ['b/4'], duration: 'qr' }),
@@ -96,7 +95,7 @@
     const formatter = new Vex.Flow.Formatter()
     formatter.joinVoices([v1])
     formatter.joinVoices([v2])
-    formatter.format([v1, v2], SCORE_WIDTH - 10 - startX)
+    formatter.format([v1, v2], scoreWidth - 10 - startX)
     // formatter.joinVoices([voice]).formatToStave([voice], s1)
     // const formatter1 = new Vex.Flow.Formatter()
     //   .joinVoices([v1])
@@ -168,10 +167,11 @@
   function updateNotes({ game, guessed, scale, played, target }: Data) {
     // console.log('hello notes', notes)
     const key = scale.majorSignature.replaceAll('♭', 'b').replaceAll('♯', '#')
+    scoreWidth = 200 + Math.max(scale.flats, scale.sharps) * 10
     ctx.clear()
     ctx.scale(0.5, 0.5)
-    const tclef = new Stave(0, 0, SCORE_WIDTH).addClef('treble').addKeySignature(key)
-    const bclef = new Stave(0, 60, SCORE_WIDTH).addClef('bass') //.addKeySignature(key)
+    const tclef = new Stave(0, 0, scoreWidth).addClef('treble').addKeySignature(key)
+    const bclef = new Stave(0, 60, scoreWidth).addClef('bass') //.addKeySignature(key)
     const staveNotes = [
       ...notesToVexflowNotes(target, scale),
       ...notesToVexflowNotes(played, scale)
@@ -198,7 +198,7 @@
       formatter.joinVoices([v])
     })
     if (voices.length > 0) {
-      formatter.format(voices, SCORE_WIDTH - 10 - startX)
+      formatter.format(voices, scoreWidth - 10 - startX)
     }
     if (trebleNotes.length > 0) {
       voices[0].draw(ctx, tclef)

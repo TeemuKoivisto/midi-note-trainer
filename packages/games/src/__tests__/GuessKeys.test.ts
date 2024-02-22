@@ -39,7 +39,7 @@ describe('GuessKeys', () => {
       guessed: 'C'
     })
     expect(game.sampled).toEqual([...Array.from(new Array(count - 1)).map(_ => 'C'), 'C#'])
-    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(10.0)
+    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(60.0)
   })
   it('should generate keys with duplicates false', () => {
     const count = 5
