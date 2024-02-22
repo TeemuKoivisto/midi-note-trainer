@@ -19,6 +19,14 @@ export const NOTES = [
   { note: 'B', semitones: 11, sharps: 0, flats: 0 }
 ]
 
+export function getOctave(midi: number) {
+  return midi === 12 ? 1 : Math.floor((midi - 12) / 12)
+}
+
+export function getNoteAbsolute(note: MidiNote | (MidiNote & { parts: [string, string, number] })) {
+  return `${note.note}${getOctave(note.midi)}`
+}
+
 export function getNote(midi: number): MidiNote {
   const semitonesFromC0 = midi - 12
   // Center the note from C0 which equals 12 in MIDI values, then get the sequence after C

@@ -14,7 +14,7 @@
   import { playNextTimeoutMs, currentGame, gameActions } from '$stores/game'
   import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
   import { played, scoreActions } from '$stores/score'
-  import { getNoteAbsolute } from '$utils/getNote'
+  import { getNoteAbsolute } from '@/chords-and-scales'
 
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessChords, GuessKeys, GuessNotes } from '@/games'

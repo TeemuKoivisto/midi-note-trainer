@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { getNote } from '@/chords-and-scales'
+  import { getNote, getNoteAbsolute } from '@/chords-and-scales'
 
   import { gameActions, guessState } from '$stores/game'
   import { target } from '$stores/score'
 
   import type { GuessNotes } from '@/games'
-  import { getNoteAbsolute } from '$utils/getNote'
 
   export let game: GuessNotes
 

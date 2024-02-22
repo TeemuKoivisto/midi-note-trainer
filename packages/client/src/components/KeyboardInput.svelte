@@ -4,7 +4,7 @@
   import { currentGame } from '$stores/game'
   import { inputs, keyboardFocused, midiRangeNotes } from '$stores/inputs'
   import { keyMap, scoreActions } from '$stores/score'
-  import { getOctave } from '$utils/getNote'
+  import { getOctave } from '@/chords-and-scales'
 
   import { GuessChords, GuessKeys } from '@/games'
 

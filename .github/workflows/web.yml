@@ -18,7 +18,7 @@ jobs:
         uses: ./.github/actions/pnpm
 
       - name: Run tests
-        run: pnpm --filter chords-and-scales games test
+        run: pnpm -r test
 
       - name: Build the GitHub pages distribution
         run: |

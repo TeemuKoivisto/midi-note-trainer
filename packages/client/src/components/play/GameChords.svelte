@@ -2,7 +2,7 @@
   import { gameActions, guessState, playNextTimeoutMs } from '$stores/game'
   import { played } from '$stores/score'
 
-  import { getNoteAbsolute } from '$utils/getNote'
+  import { getNoteAbsolute } from '@/chords-and-scales'
 
   import type { GuessChords } from '@/games'
 

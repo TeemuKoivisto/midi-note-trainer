@@ -7,7 +7,7 @@ import { fetchSounds, Piano } from '@/midi-piano'
 import { GH_BASE_URL } from '$config'
 
 import type { Input } from 'webmidi'
-import type { Note, Result } from '@/types'
+import type { Result } from '@/types'
 
 interface Inputs {
   fixedVelocity: number | undefined

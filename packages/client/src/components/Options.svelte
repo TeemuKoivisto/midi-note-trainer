@@ -1,12 +1,11 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { parseNote, scalesFromJSON } from '@/chords-and-scales'
+  import { getNoteAbsolute, parseNote, scalesFromJSON } from '@/chords-and-scales'
 
   import { currentGame } from '$stores/game'
   import { inputsActions, midiRangeNotes } from '$stores/inputs'
   import { persist } from '$stores/persist'
   import { keyAndScale, scaleData, scoreActions } from '$stores/score'
-  import { getNoteAbsolute } from '$utils/getNote'
 
   import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
 

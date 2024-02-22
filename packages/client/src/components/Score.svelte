@@ -2,16 +2,14 @@
   import { onMount } from 'svelte'
   import { derived } from 'svelte/store'
   import Vex from 'vexflow'
-  import { FLAT_NOTES, SHARP_NOTES } from '@/chords-and-scales'
+  import { getOctave, FLAT_NOTES, SHARP_NOTES } from '@/chords-and-scales'
 
   import ReplayButton from './ReplayButton.svelte'
 
   import { currentGame, guessState, type GuessState, type GameInstance } from '$stores/game'
   import { played, target, scaleData, type PlayedNote } from '$stores/score'
-  import { getOctave } from '$utils/getNote'
 
   import type { MidiNote, Scale } from '@/chords-and-scales'
-  import type { Note } from '@/types'
 
   interface Data {
     game: GameInstance | undefined
@@ -44,7 +42,7 @@
     data.subscribe(d => updateNotes(d))
   })
 
-  function addParts(note: MidiNote, scale: Scale): Note {
+  function addParts(note: MidiNote, scale: Scale): MidiNote & { parts: [string, string, number] } {
     const flats = FLAT_NOTES.slice(0, scale.flats).find(n => n === note.note.slice(0, 2))
       ? note.flats - 1
       : note.flats
