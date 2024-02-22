@@ -170,8 +170,10 @@ export const scoreActions = {
     played.set([])
     clearTimeout(timeout)
   },
-  clearScore() {
-    // keyAndScale.set(['C', 'Major'])
+  clearScore(scaleAndKey = false) {
+    if (scaleAndKey) {
+      keyAndScale.set(['C', 'Major'])
+    }
     target.set([])
     played.set([])
   }

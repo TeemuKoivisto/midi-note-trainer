@@ -29,10 +29,12 @@ describe('GuessNotes', () => {
       count
     })
     for (let i = 0; i < count; i += 1) {
+      expect(game.ended).toBe(false)
       game.guess(60)
     }
     expect(game.ended).toBe(true)
     expect(game.correct).toEqual(9)
+    expect(game.guesses.length).toEqual(10)
     expect(game.idx).toEqual(10)
     expect(game.latestGuess).toEqual({
       target: 72,

@@ -51,7 +51,7 @@ export class Game<V, G> {
     return { target, guessed }
   }
   get ended() {
-    return this.sampled.length <= this.idx + 1
+    return this.sampled.length < this.idx + 1
   }
   get avgTime() {
     let avgMs = 0

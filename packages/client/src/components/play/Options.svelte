@@ -76,6 +76,9 @@
   function toggleVisibility() {
     hidden.update(h => !h)
   }
+  function resetKeyAndScale() {
+    scoreActions.clearScore(true)
+  }
 </script>
 
 <div class={`${$$props.class || ''} options`}>
@@ -150,7 +153,7 @@
     {/if}
   </div>
   <div class="h-full flex flex-col justify-between">
-    <button class="w-full btn hover:bg-gray-200">Reset</button>
+    <button class="w-full btn hover:bg-gray-200" on:click={resetKeyAndScale}>Reset</button>
     <div></div>
   </div>
 </div>

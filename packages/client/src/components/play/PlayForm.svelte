@@ -1,13 +1,11 @@
 <script lang="ts">
-  import { writable } from 'svelte/store'
   import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
   import playIcon from '@iconify-icons/mdi/play-outline'
   // import playIcon from '@iconify-icons/feather/play'
 
   import Options from '$components/play/Options.svelte'
 
-  import { gameActions, type GameType } from '$stores/game'
-  import { persist } from '$stores/persist'
+  import { gameActions, gameOptions, type GameType } from '$stores/game'
 
   const options: { key: GameType; value: string }[] = [
     {
@@ -52,18 +50,15 @@
     }
   ]
   let selectedChords = chordsOptions[0].key
-
-  const count = persist(writable(10), { key: 'game-count' })
-  const duplicates = persist(writable(false), { key: 'game-duplicates' })
+  let count = $gameOptions.count || ''
+  let waitSeconds = $gameOptions.waitSeconds || ''
 
   function clearGame() {
     selectedGame = options[0].key
-    count.set(10)
-    duplicates.set(true)
     gameActions.clearGame()
   }
   function play(type: GameType) {
-    gameActions.play(type, $duplicates, $count)
+    gameActions.play(type)
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight)
     })
@@ -77,6 +72,35 @@
   }
   function handleSelectChords(key: ChordsOption) {
     selectedChords = key
+  }
+  function handleCountChanged({
+    currentTarget: { value }
+  }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    let int
+    try {
+      int = parseInt(value)
+      if (int <= 0) {
+        int = 1
+      }
+      gameActions.setOptionValue('count', int)
+    } catch (err) {
+      count = $gameOptions.count
+    }
+  }
+  function handleWaitChanged({
+    currentTarget: { value }
+  }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    let int
+    try {
+      int = parseInt(value)
+      if (int >= 0) {
+        gameActions.setOptionValue('waitSeconds', int)
+      } else {
+        gameActions.setOptionValue('waitSeconds', 0)
+      }
+    } catch (err) {
+      waitSeconds = $gameOptions.waitSeconds
+    }
   }
 </script>
 
@@ -123,11 +147,41 @@
         <ul>
           <li class="flex items-center justify-between">
             <label class="font-bold" for="guess-count">Count</label>
-            <input class="h-[20px] w-16" id="guess-count" type="number" bind:value={$count} />
+            <input
+              class="h-[20px] w-16"
+              id="guess-count"
+              type="number"
+              bind:value={count}
+              on:input={handleCountChanged}
+            />
           </li>
           <li class="flex items-center justify-between mr-12">
             <label class="font-bold" for="duplicates">Duplicates</label>
-            <input class="h-[20px]" id="duplicates" type="checkbox" bind:checked={$duplicates} />
+            <input
+              class="h-[20px]"
+              id="duplicates"
+              type="checkbox"
+              bind:checked={$gameOptions.duplicates}
+            />
+          </li>
+          <li class="flex items-center justify-between mr-12">
+            <label class="font-bold" for="autoplay">Autoplay</label>
+            <input
+              class="h-[20px]"
+              id="autoplay"
+              type="checkbox"
+              bind:checked={$gameOptions.autoplay}
+            />
+          </li>
+          <li class="flex items-center justify-between">
+            <label class="font-bold" for="wait-ms">Wait seconds</label>
+            <input
+              class="h-[20px] w-16"
+              id="wait-ms"
+              type="number"
+              bind:value={waitSeconds}
+              on:input={handleWaitChanged}
+            />
           </li>
         </ul>
         <div></div>

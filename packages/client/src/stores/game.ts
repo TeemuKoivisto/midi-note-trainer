@@ -10,52 +10,65 @@ import { GuessChords, GuessKeys, GuessNotes, type GameType } from '@/games'
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 export type GameInstance = GuessNotes | GuessKeys | GuessChords
 
+interface GameOptions {
+  count: number
+  duplicates: boolean
+  autoplay: boolean
+  waitSeconds: number
+}
+
 const chords = chordsFromJSON()
 
 export const guessState = writable<GuessState>('waiting')
-export const playNextTimeoutMs = writable<number>(-1)
+export const gameOptions = persist(
+  writable<GameOptions>({
+    count: 10,
+    duplicates: true,
+    autoplay: true,
+    waitSeconds: 3
+  }),
+  {
+    key: 'game-options'
+  }
+)
 export const currentGame = writable<GameInstance | undefined>(undefined)
 // scores?
 
 export const gameActions = {
-  play(type: GameType, duplicates: boolean = true, count: number = 10): GameInstance {
+  play(type: GameType): GameInstance {
     let game
     const scale = get(scaleData)
     const range = get(midiRange)
+    const opts = get(gameOptions)
     const baseOpts = {
       scale,
       range,
-      duplicates,
-      count
+      duplicates: opts.duplicates,
+      count: opts.count
     }
+    let keyAndScale = [scale.key, scale.scale]
     if (type === 'notes') {
       game = new GuessNotes(type, baseOpts)
       scoreActions.setTarget([scoreActions.getNote(game.current)])
-      playNextTimeoutMs.set(3000)
       get(piano)?.noteOn(game.current)
     } else if (type === 'pitches') {
       game = new GuessNotes(type, baseOpts)
       scoreActions.setTarget()
       inputsActions.setInputValue('useSound', true)
-      playNextTimeoutMs.set(3000)
       get(piano)?.noteOn(game.current)
     } else if (type === 'keys-major' || type == 'keys-minor') {
       game = new GuessKeys(type, baseOpts)
-      scoreActions.setKeyAndScale(game.current, type === 'keys-major' ? 'major' : 'minor')
-      playNextTimeoutMs.set(3000)
+      keyAndScale = [game.current, type === 'keys-major' ? 'major' : 'minor']
     } else if (type === 'chords-play') {
       const basicChords = chords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
       game = new GuessChords(type, baseOpts, {
         chords: basicChords
       })
-      playNextTimeoutMs.set(3000)
     } else if (type === 'chords-write') {
       game = new GuessChords(type, baseOpts, {
         chords
       })
-      playNextTimeoutMs.set(3000)
     } else if (type === 'chords-diatonic') {
-      // scoreActions.setKeyAndScale(scale.key, scale.scale)
       const chords = createTriadChords(scale.triads).map((c, idx) => ({
         ...c,
         allowed: new Set([scale.scaleNotes[idx].semitones])
@@ -70,6 +83,7 @@ export const gameActions = {
       get(piano)?.playChord(game.current.notes.map(n => n.midi))
       scoreActions.setTarget(game.current.notes)
     }
+    scoreActions.setKeyAndScale(keyAndScale[0], keyAndScale[1])
     scoreActions.clearPlayed()
     guessState.set('waiting')
     currentGame.set(game)
@@ -78,12 +92,8 @@ export const gameActions = {
   updateState(state: GuessState) {
     guessState.set(state)
   },
-  setAutoPlayNext(val?: number) {
-    if (val === undefined) {
-      playNextTimeoutMs.set(-1)
-    } else {
-      playNextTimeoutMs.set(val)
-    }
+  setOptionValue<K extends keyof GameOptions>(key: K, val: GameOptions[K]) {
+    gameOptions.update(v => ({ ...v, [key]: val }))
   },
   nextGuess() {
     const game = get(currentGame)
@@ -112,6 +122,10 @@ export const gameActions = {
     }
   },
   clearGame() {
+    const game = get(currentGame)
+    if (game) {
+      scoreActions.setKeyAndScale(game.options.scale.key, game.options.scale.scale)
+    }
     currentGame.set(undefined)
     guessState.set('waiting')
     scoreActions.clearScore()

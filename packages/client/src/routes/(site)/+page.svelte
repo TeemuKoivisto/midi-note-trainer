@@ -11,7 +11,7 @@
   import Scales from '$components/scales/Scales.svelte'
   import Score from '$components/Score.svelte'
 
-  import { playNextTimeoutMs, currentGame, gameActions } from '$stores/game'
+  import { currentGame, gameActions, gameOptions } from '$stores/game'
   import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
   import { played, scoreActions } from '$stores/score'
   import { getNoteAbsolute } from '@/chords-and-scales'
@@ -75,13 +75,15 @@
     }
   }
   function gameUpdate() {
-    if ($playNextTimeoutMs >= 0) {
+    if ($gameOptions.autoplay && $gameOptions.waitSeconds > 0) {
       timeout = setTimeout(() => {
-        if ($playNextTimeoutMs >= 0) {
+        if ($gameOptions.autoplay) {
           gameActions.nextGuess()
         }
         timeout = undefined
-      }, $playNextTimeoutMs)
+      }, $gameOptions.waitSeconds * 1000)
+    } else if ($gameOptions.autoplay) {
+      gameActions.nextGuess()
     } else {
       timeout = undefined
     }

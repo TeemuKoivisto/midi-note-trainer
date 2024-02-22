@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { gameActions, guessState, playNextTimeoutMs } from '$stores/game'
+  import { gameActions, gameOptions, guessState } from '$stores/game'
   import { played } from '$stores/score'
 
   import { getNoteAbsolute } from '@/chords-and-scales'
@@ -12,7 +12,7 @@
     gameActions.nextGuess()
   }
   function autoplay() {
-    gameActions.setAutoPlayNext(3000)
+    gameActions.setOptionValue('autoplay', true)
     gameActions.nextGuess()
   }
   function tryAgain() {
@@ -42,13 +42,13 @@
       <span>{game.latestGuess.guessed?.notes.map(n => n.note).join(' ')}</span>
     </div>
     <div class="mt-2 h-8">
-      {#if $playNextTimeoutMs === -1}
-        <button class="btn primary" on:click={nextGuess}>Next</button>
-        <button class="btn primary" on:click={autoplay}>Autoplay</button>
-      {:else}
-        <button class="btn primary" on:click={() => gameActions.setAutoPlayNext(-1)}
+      {#if $gameOptions.autoplay}
+        <button class="btn primary" on:click={() => gameActions.setOptionValue('autoplay', false)}
           >Stop autoplay</button
         >
+      {:else}
+        <button class="btn primary" on:click={nextGuess}>Next</button>
+        <button class="btn primary" on:click={autoplay}>Autoplay</button>
       {/if}
     </div>
   {:else if $guessState === 'ended'}
