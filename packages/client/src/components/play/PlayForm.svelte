@@ -5,7 +5,9 @@
 
   import Options from '$components/play/Options.svelte'
 
-  import { gameActions, gameOptions, type GameType } from '$stores/game'
+  import { gameActions, gameOptions } from '$stores/game'
+
+  import type { GameType } from '@/games'
 
   const options: { key: GameType; value: string }[] = [
     {
@@ -53,9 +55,14 @@
   let count = $gameOptions.count || ''
   let waitSeconds = $gameOptions.waitSeconds || ''
 
+  gameOptions.subscribe(v => {
+    count = v.count || ''
+    waitSeconds = v.waitSeconds || ''
+  })
+
   function clearGame() {
     selectedGame = options[0].key
-    gameActions.clearGame()
+    gameActions.clearGame(true)
   }
   function play(type: GameType) {
     gameActions.play(type)
@@ -93,11 +100,10 @@
     let int
     try {
       int = parseInt(value)
-      if (int >= 0) {
-        gameActions.setOptionValue('waitSeconds', int)
-      } else {
-        gameActions.setOptionValue('waitSeconds', 0)
+      if (int < 0) {
+        int = 0
       }
+      gameActions.setOptionValue('waitSeconds', int)
     } catch (err) {
       waitSeconds = $gameOptions.waitSeconds
     }

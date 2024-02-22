@@ -153,7 +153,6 @@ export const scoreActions = {
       }, ms)
     }
   },
-  pushPlayedNotes() {},
   setPlayed(notes: MidiNote[], correct?: boolean | undefined, timeoutMs?: number) {
     const now = Date.now()
     const color = correct === undefined ? 'default' : correct ? 'correct' : 'wrong'

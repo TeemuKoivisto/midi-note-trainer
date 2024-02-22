@@ -17,20 +17,19 @@ interface GameOptions {
   waitSeconds: number
 }
 
+const DEFAULT_OPTIONS = {
+  count: 10,
+  duplicates: true,
+  autoplay: true,
+  waitSeconds: 3
+}
+
 const chords = chordsFromJSON()
 
 export const guessState = writable<GuessState>('waiting')
-export const gameOptions = persist(
-  writable<GameOptions>({
-    count: 10,
-    duplicates: true,
-    autoplay: true,
-    waitSeconds: 3
-  }),
-  {
-    key: 'game-options'
-  }
-)
+export const gameOptions = persist(writable<GameOptions>(DEFAULT_OPTIONS), {
+  key: 'game-options'
+})
 export const currentGame = writable<GameInstance | undefined>(undefined)
 // scores?
 
@@ -121,10 +120,13 @@ export const gameActions = {
       game.startTime()
     }
   },
-  clearGame() {
+  clearGame(clearOptions = false) {
     const game = get(currentGame)
     if (game) {
       scoreActions.setKeyAndScale(game.options.scale.key, game.options.scale.scale)
+    }
+    if (clearOptions) {
+      gameOptions.set(DEFAULT_OPTIONS)
     }
     currentGame.set(undefined)
     guessState.set('waiting')

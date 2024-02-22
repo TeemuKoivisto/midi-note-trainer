@@ -18,7 +18,7 @@
   }
 </script>
 
-<div class={`${$$props.class || ''} wrapper`} class:hidden={!shown}>
+<div class={`${$$props.class || ''}`} class:hidden={!shown}>
   <button
     class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
     on:click={replay}><Icon icon={volume} width={32} /></button
@@ -26,9 +26,4 @@
 </div>
 
 <style lang="scss">
-  .wrapper {
-    left: 0;
-    top: 18.5rem;
-    @apply absolute;
-  }
 </style>

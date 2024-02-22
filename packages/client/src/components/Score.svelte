@@ -5,6 +5,7 @@
   import { getOctave, FLAT_NOTES, SHARP_NOTES } from '@/chords-and-scales'
 
   import ReplayButton from './ReplayButton.svelte'
+  import QuitButton from './QuitButton.svelte'
 
   import { currentGame, guessState, type GuessState, type GameInstance } from '$stores/game'
   import { played, target, scaleData, type PlayedNote } from '$stores/score'
@@ -20,6 +21,7 @@
   }
 
   const { Accidental, Formatter, Renderer, Stave, StaveNote } = Vex.Flow
+  const SCORE_WIDTH = 300
 
   let outputEl: HTMLDivElement
   let renderer: Vex.Renderer
@@ -70,8 +72,8 @@
     ctx.scale(2.0, 2.0)
     // console.log('ctx', ctx)
     tickContext = new Vex.Flow.TickContext()
-    const tclef = new Stave(0, 0, 200).addClef('treble').addKeySignature('B')
-    const bclef = new Stave(0, 60, 200).addClef('bass').addKeySignature('B')
+    const tclef = new Stave(0, 0, SCORE_WIDTH).addClef('treble').addKeySignature('B')
+    const bclef = new Stave(0, 60, SCORE_WIDTH).addClef('bass').addKeySignature('B')
     const trebleNotes = [
       new StaveNote({ keys: ['g#/4'], duration: 'q' }),
       new StaveNote({ keys: ['b/4'], duration: 'qr' }),
@@ -94,7 +96,7 @@
     const formatter = new Vex.Flow.Formatter()
     formatter.joinVoices([v1])
     formatter.joinVoices([v2])
-    formatter.format([v1, v2], 190 - startX)
+    formatter.format([v1, v2], SCORE_WIDTH - 10 - startX)
     // formatter.joinVoices([voice]).formatToStave([voice], s1)
     // const formatter1 = new Vex.Flow.Formatter()
     //   .joinVoices([v1])
@@ -168,14 +170,14 @@
     const key = scale.majorSignature.replaceAll('♭', 'b').replaceAll('♯', '#')
     ctx.clear()
     ctx.scale(0.5, 0.5)
-    const bclef = new Stave(0, 60, 200).addClef('bass').addKeySignature(key)
-    const tclef = new Stave(0, 0, 200).addClef('treble').addKeySignature(key)
+    const tclef = new Stave(0, 0, SCORE_WIDTH).addClef('treble').addKeySignature(key)
+    const bclef = new Stave(0, 60, SCORE_WIDTH).addClef('bass') //.addKeySignature(key)
     const staveNotes = [
       ...notesToVexflowNotes(target, scale),
       ...notesToVexflowNotes(played, scale)
     ]
-    const bassNotes = staveNotes.filter(n => n.getAttribute('clef') === 'bass')
     const trebleNotes = staveNotes.filter(n => n.getAttribute('clef') === 'treble')
+    const bassNotes = staveNotes.filter(n => n.getAttribute('clef') === 'bass')
     const voices = []
     if (trebleNotes.length > 0) {
       voices.push(
@@ -196,7 +198,7 @@
       formatter.joinVoices([v])
     })
     if (voices.length > 0) {
-      formatter.format(voices, 190 - startX)
+      formatter.format(voices, SCORE_WIDTH - 10 - startX)
     }
     if (trebleNotes.length > 0) {
       voices[0].draw(ctx, tclef)
@@ -209,9 +211,13 @@
   }
 </script>
 
-<section class={`${$$props.class || ''}`}>
-  <div class="relative" id="output" bind:this={outputEl}>
-    <ReplayButton />
+<section class={`${$$props.class || ''} relative`}>
+  <div id="output" bind:this={outputEl}></div>
+  <div class="absolute left-0 top-[18.5rem]">
+    <div class="flex">
+      <ReplayButton class="mr-2" />
+      <QuitButton />
+    </div>
   </div>
 </section>
 
