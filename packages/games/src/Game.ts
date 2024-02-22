@@ -8,11 +8,11 @@ export class Game<T> {
   played = new Set<number>()
   guesses: T[] = []
 
-  protected times: number[] = []
+  times: number[] = []
   correct = 0
-  protected guessed = 0
-  protected idx = 0
-  protected timing: number
+  guessed = 0
+  idx = 0
+  timing: number
 
   constructor(type: GameType, data: T[], opts: BaseOptions) {
     this.type = type
@@ -45,7 +45,7 @@ export class Game<T> {
     return { target, guessed }
   }
   get ended() {
-    return this.sampled.length === this.idx + 1
+    return this.sampled.length <= this.idx + 1
   }
   get avgTime() {
     let avgMs = 0
