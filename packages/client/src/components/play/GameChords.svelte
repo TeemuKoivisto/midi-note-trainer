@@ -4,7 +4,7 @@
 
   import { getNoteAbsolute } from '$utils/getNote'
 
-  import type { GuessChords } from '$games/GuessChords'
+  import type { GuessChords } from '@/games'
 
   export let game: GuessChords
 

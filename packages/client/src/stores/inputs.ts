@@ -2,7 +2,7 @@ import { derived, get, writable } from 'svelte/store'
 import { WebMidi } from 'webmidi'
 
 import { persist } from './persist'
-import { getNote } from '$utils/getNote'
+import { getNote, type MidiNote } from '@/chords-and-scales'
 import { fetchSounds, Piano } from '@/midi-piano'
 import { GH_BASE_URL } from '$config'
 
@@ -28,7 +28,7 @@ export const midiRange = persist(writable<[number, number]>([60, 84]), {
 })
 export const midiRangeNotes = derived(
   midiRange,
-  r => [getNote(r[0]), getNote(r[1])] as [Note, Note]
+  r => [getNote(r[0]), getNote(r[1])] as [MidiNote, MidiNote]
 )
 export const audioContext = writable<AudioContext | undefined>(undefined)
 export const piano = writable<Piano | undefined>(undefined)

@@ -1,21 +1,4 @@
-import type { Scale } from '@/chords-and-scales'
-import type { Note } from '@/types'
-
-export type GameType =
-  | 'notes'
-  | 'pitches'
-  | 'keys-major'
-  | 'keys-minor'
-  | 'chords-write'
-  | 'chords-play'
-  | 'chords-diatonic'
-
-export interface BaseOptions {
-  scale: Scale
-  range: [Note, Note]
-  duplicates: boolean
-  count: number
-}
+import { GameType, BaseOptions } from './types'
 
 export class Game<T> {
   type: GameType

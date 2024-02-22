@@ -4,8 +4,7 @@
 
   import { currentGame } from '$stores/game'
   import { piano } from '$stores/inputs'
-  import { GuessChords } from '$games/GuessChords'
-  import { GuessNotes } from '$games/GuessNotes'
+  import { GuessChords, GuessNotes } from '@/games'
 
   $: shown = $currentGame instanceof GuessChords || $currentGame instanceof GuessNotes
 

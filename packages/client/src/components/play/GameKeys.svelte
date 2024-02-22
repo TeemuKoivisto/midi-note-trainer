@@ -1,7 +1,7 @@
 <script lang="ts">
   import { gameActions, guessState } from '$stores/game'
 
-  import type { GuessKeys } from '$games/GuessKeys'
+  import type { GuessKeys } from '@/games'
 
   export let game: GuessKeys
 

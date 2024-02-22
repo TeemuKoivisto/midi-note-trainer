@@ -117,6 +117,9 @@ importers:
       '@/chords-and-scales':
         specifier: workspace:*
         version: link:../chords-and-scales
+      '@/games':
+        specifier: workspace:*
+        version: link:../games
       '@/midi-piano':
         specifier: workspace:*
         version: link:../midi-piano
@@ -153,6 +156,18 @@ importers:
       svelte-preprocess:
         specifier: ^5.0.4
         version: 5.0.4(postcss-load-config@4.0.1)(postcss@8.4.30)(sass@1.68.0)(svelte@4.2.7)(typescript@5.2.2)
+
+  packages/games:
+    devDependencies:
+      '@/chords-and-scales':
+        specifier: workspace:*
+        version: link:../chords-and-scales
+      '@/types':
+        specifier: workspace:*
+        version: link:../types
+      vitest:
+        specifier: ^1.0.4
+        version: 1.0.4(@types/node@20.11.4)
 
   packages/midi-piano:
     devDependencies:

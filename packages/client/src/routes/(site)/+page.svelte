@@ -17,9 +17,7 @@
   import { getNoteAbsolute } from '$utils/getNote'
 
   import type { NoteMessageEvent } from 'webmidi'
-  import { GuessNotes } from '$games/GuessNotes'
-  import { GuessKeys } from '$games/GuessKeys'
-  import { GuessChords } from '$games/GuessChords'
+  import { GuessChords, GuessKeys, GuessNotes } from '@/games'
 
   let status = 'Finding device...'
 

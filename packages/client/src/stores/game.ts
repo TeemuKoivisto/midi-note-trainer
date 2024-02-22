@@ -5,9 +5,7 @@ import { inputsActions, midiRange, midiRangeNotes, piano } from './inputs'
 import { persist } from './persist'
 import { scaleData, scoreActions } from './score'
 
-import { GuessKeys } from '$games/GuessKeys'
-import { GuessChords } from '$games/GuessChords'
-import { GuessNotes } from '$games/GuessNotes'
+import { GuessChords, GuessKeys, GuessNotes } from '@/games'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 export type GameType =
@@ -104,7 +102,6 @@ export const gameActions = {
     const game = get(currentGame)
     if (game?.ended) {
       guessState.set('ended')
-      console.log('ended')
     } else if (game instanceof GuessChords) {
       scoreActions.setTarget(game.current.notes)
       scoreActions.clearPlayed()

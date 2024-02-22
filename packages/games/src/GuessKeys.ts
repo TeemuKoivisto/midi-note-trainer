@@ -1,4 +1,6 @@
-import { Game, type BaseOptions } from './Game'
+import { Game } from './Game'
+
+import type { BaseOptions } from './types'
 
 export const keys = {
   major: {

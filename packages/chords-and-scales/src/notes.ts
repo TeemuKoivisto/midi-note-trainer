@@ -19,6 +19,20 @@ export const NOTES = [
   { note: 'B', semitones: 11, sharps: 0, flats: 0 }
 ]
 
+export function getNote(midi: number): MidiNote {
+  const semitonesFromC0 = midi - 12
+  // Center the note from C0 which equals 12 in MIDI values, then get the sequence after C
+  // @TODO this might not be same in different MIDI devices -> should prob use frequency instead
+  // https://en.wikipedia.org/wiki/C_(musical_note)#Middle_C
+  const semitones = semitonesFromC0 % 12
+  const note = NOTES[semitones]
+  return {
+    ...note,
+    semitones,
+    midi
+  }
+}
+
 export function parseNote(raw: string, strict = true, requireOctave = false): Result<MidiNote> {
   if (strict && !regexKey.test(raw)) {
     return { err: `Unrecognized note "${raw}"`, code: 400 }

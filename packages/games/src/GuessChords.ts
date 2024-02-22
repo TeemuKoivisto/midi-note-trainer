@@ -1,18 +1,16 @@
-import { createChord, noteIntoString } from '@/chords-and-scales'
-import { getNote } from '../utils/getNote'
+import { createChord, getNote, noteIntoString } from '@/chords-and-scales'
 
-import type { Chord, MidiChord, Scale, ScaleNote } from '@/chords-and-scales'
-import type { Note } from '@/types'
+import type { Chord, MidiChord, MidiNote, Scale, ScaleNote } from '@/chords-and-scales'
 
 interface LatestGuess {
   target: [string, string]
   guessed: [string, string]
-  notes: Note[]
+  notes: MidiNote[]
 }
 interface Options {
   scale: Scale
   chords: (Chord & { allowed?: Set<number> })[]
-  range: [Note, Note]
+  range: [MidiNote, MidiNote]
   noDuplicates?: boolean
   count?: number
 }
@@ -92,7 +90,7 @@ export class GuessChords {
   }
   guess(value?: { note: string; flats: number; sharps: number; chord: string }) {
     let result
-    let notes: Note[]
+    let notes: MidiNote[]
     let target: [string, string]
     let guessed: [string, string]
     if (value) {
