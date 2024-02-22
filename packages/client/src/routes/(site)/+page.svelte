@@ -111,7 +111,7 @@
     const game = $currentGame
     if (game instanceof GuessChords) {
       const correct = game.guess()
-      scoreActions.setPlayed(game.latestGuess.notes, correct, 5000)
+      scoreActions.setPlayed(game.latestGuess.guessed?.notes || [], correct, 5000)
       gameActions.updateState(correct ? 'correct' : 'wrong')
       gameUpdate()
     }
@@ -122,7 +122,7 @@
   ) {
     const game = $currentGame
     if (!(game instanceof GuessChords)) return
-    const correct = game.guess(e.detail)
+    const correct = game.guessWrittenChord(e.detail)
     gameActions.updateState(correct ? 'correct' : 'wrong')
     gameUpdate()
   }

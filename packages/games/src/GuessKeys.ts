@@ -39,7 +39,7 @@ export const keys = {
   }
 }
 
-export class GuessKeys extends Game<string> {
+export class GuessKeys extends Game<string, string> {
   constructor(type: 'keys-major' | 'keys-minor', baseOpts: BaseOptions) {
     const k = type === 'keys-major' ? 'major' : 'minor'
     super(type, Object.keys(keys[k]), baseOpts)

@@ -1,12 +1,12 @@
 import { GameType, BaseOptions } from './types'
 
-export class Game<T> {
+export class Game<V, G> {
   type: GameType
   options: BaseOptions
 
-  sampled: T[]
-  played = new Set<number>()
-  guesses: T[] = []
+  data: V[]
+  sampled: V[]
+  guesses: G[] = []
 
   times: number[] = []
   correct = 0
@@ -14,11 +14,12 @@ export class Game<T> {
   idx = 0
   timing: number
 
-  constructor(type: GameType, data: T[], opts: BaseOptions) {
+  constructor(type: GameType, data: V[], opts: BaseOptions) {
     this.type = type
     this.options = opts
-    const sampled: T[] = []
+    const sampled: V[] = []
     const { count } = opts
+    this.data = data
     const available = data.map(v => (typeof v === 'object' && v !== null ? { ...v } : v))
     let withReplacement = opts.duplicates
     if (!opts.duplicates && count > available.length) {
@@ -38,7 +39,6 @@ export class Game<T> {
         }
       }
     }
-    console.log(sampled)
     this.type = type
     this.sampled = sampled
     this.timing = performance.now()
@@ -46,7 +46,7 @@ export class Game<T> {
   get current() {
     return this.sampled[this.idx]
   }
-  get latestGuess(): { target: T | undefined; guessed: T | undefined } {
+  get latestGuess(): { target: V | undefined; guessed: G | undefined } {
     const target = this.sampled[this.idx - 1]
     const guessed = this.guesses[this.idx - 1]
     return { target, guessed }
@@ -61,7 +61,7 @@ export class Game<T> {
     }
     return Math.round(avgMs / 10 / this.times.length) / 100
   }
-  protected addGuessed(value: T, result: boolean) {
+  protected addGuessed(value: G, result: boolean) {
     this.guesses.push(value)
     if (result) {
       this.correct += 1
@@ -70,7 +70,7 @@ export class Game<T> {
     this.times.push(performance.now() - this.timing)
     return result
   }
-  guess(value: T): boolean {
+  guess(value: G): boolean {
     return false
   }
   startTime() {

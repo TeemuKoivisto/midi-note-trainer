@@ -35,11 +35,11 @@
   {:else if $guessState === 'correct' || $guessState === 'wrong'}
     <div class="guessed min-h-[3.25rem]">
       <span>Target:</span>
-      <span>{game.latestGuess.target[0]}</span>
-      <span>{game.latestGuess.target[1]}</span>
+      <span>{game.latestGuess.target?.chord}</span>
+      <span>{game.latestGuess.target?.notes.map(n => n.note).join(' ')}</span>
       <span>Guessed:</span>
-      <span>{game.latestGuess.guessed[0]}</span>
-      <span>{game.latestGuess.guessed[1]}</span>
+      <span>{game.latestGuess.guessed?.chord}</span>
+      <span>{game.latestGuess.guessed?.notes.map(n => n.note).join(' ')}</span>
     </div>
     <div class="mt-2 h-8">
       {#if $playNextTimeoutMs === -1}
@@ -53,7 +53,7 @@
     </div>
   {:else if $guessState === 'ended'}
     <div class="min-h-[3.25rem]">
-      <span>Result: [{game.correct} / {game.chords.length}]</span>
+      <span>Result: [{game.correct} / {game.sampled.length}]</span>
       <span>avg {game.avgTime}s</span>
     </div>
     <div class="mt-2 h-8">

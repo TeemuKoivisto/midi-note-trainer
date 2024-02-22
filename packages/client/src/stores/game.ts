@@ -50,20 +50,32 @@ export const gameActions = {
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-play') {
       const basicChords = chords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
-      game = new GuessChords(type, {
-        scale: get(scaleData),
-        chords: basicChords,
-        range: get(midiRangeNotes),
-        count
-      })
+      game = new GuessChords(
+        type,
+        {
+          scale: get(scaleData),
+          range: get(midiRangeNotes),
+          duplicates: true,
+          count
+        },
+        {
+          chords: basicChords
+        }
+      )
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-write') {
-      game = new GuessChords(type, {
-        scale: get(scaleData),
-        chords,
-        range: get(midiRangeNotes),
-        count
-      })
+      game = new GuessChords(
+        type,
+        {
+          scale: get(scaleData),
+          range: get(midiRangeNotes),
+          duplicates: true,
+          count
+        },
+        {
+          chords
+        }
+      )
       playNextTimeoutMs.set(3000)
     } else if (type === 'chords-diatonic') {
       const scale = get(scaleData)
@@ -72,12 +84,18 @@ export const gameActions = {
         ...c,
         allowed: new Set([scale.scaleNotes[idx].semitones])
       }))
-      game = new GuessChords(type, {
-        scale: get(scaleData),
-        chords,
-        range: get(midiRangeNotes),
-        count
-      })
+      game = new GuessChords(
+        type,
+        {
+          scale: get(scaleData),
+          range: get(midiRangeNotes),
+          duplicates: true,
+          count
+        },
+        {
+          chords
+        }
+      )
     } else {
       throw Error('Unknown game type: ' + type)
     }
