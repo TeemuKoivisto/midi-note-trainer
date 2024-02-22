@@ -168,13 +168,10 @@
     ctx.scale(0.5, 0.5)
     const bclef = new Stave(0, 60, 200).addClef('bass').addKeySignature(key)
     const tclef = new Stave(0, 0, 200).addClef('treble').addKeySignature(key)
-    const staveNotes = []
-    if (target.length > 0) {
-      staveNotes.push(...notesToVexflowNotes(target, scale))
-    }
-    if (played.length > 0) {
-      staveNotes.push(...notesToVexflowNotes(played, scale))
-    }
+    const staveNotes = [
+      ...notesToVexflowNotes(target, scale),
+      ...notesToVexflowNotes(played, scale)
+    ]
     const bassNotes = staveNotes.filter(n => n.getAttribute('clef') === 'bass')
     const trebleNotes = staveNotes.filter(n => n.getAttribute('clef') === 'treble')
     const voices = []

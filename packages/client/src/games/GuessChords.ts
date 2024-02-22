@@ -37,7 +37,7 @@ export class GuessChords {
     }
     const { scale, chords, count, range } = this.options
     const randomChords: (Chord & { allowed?: Set<number> })[] = []
-    const available: Chord[] = chords.map(v => ({ ...v }))
+    const available = chords.map(v => ({ ...v }))
     for (let i = 0; i < count; i += 1) {
       const idx = Math.floor(Math.random() * available.length)
       if (options.noDuplicates) {

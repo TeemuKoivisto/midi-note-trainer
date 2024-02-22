@@ -151,8 +151,11 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: auto;
     align-items: center;
-    @media (width <= 475px) {
+    @media (width <= 656px) {
       grid-template-columns: 1fr 1fr;
+    }
+    @media (width <= 396px) {
+      grid-template-columns: 1fr;
     }
     &.hidden {
       display: none;
