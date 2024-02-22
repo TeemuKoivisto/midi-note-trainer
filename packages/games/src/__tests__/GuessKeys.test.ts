@@ -1,4 +1,4 @@
-import { MidiNote, createScaleUnsafe, getNote } from '@/chords-and-scales'
+import { createScaleUnsafe } from '@/chords-and-scales'
 
 import { GuessKeys } from '../GuessKeys'
 
@@ -21,13 +21,10 @@ describe('GuessKeys', () => {
     })
   })
   it('should generate keys correctly', () => {
-    const type = 'keys-major'
-    const scale = createScaleUnsafe('C', 'major')
-    const range: [MidiNote, MidiNote] = [getNote(60), getNote(72)]
     const count = 10
-    const game = new GuessKeys(type, {
-      scale,
-      range,
+    const game = new GuessKeys('keys-major', {
+      scale: createScaleUnsafe('C', 'major'),
+      range: [60, 72],
       duplicates: true,
       count
     })
@@ -45,13 +42,10 @@ describe('GuessKeys', () => {
     expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(2.0)
   })
   it('should generate keys with duplicates false', () => {
-    const type = 'keys-minor'
-    const scale = createScaleUnsafe('Db', 'Diminished Half-Whole')
-    const range: [MidiNote, MidiNote] = [getNote(0), getNote(2)]
     const count = 5
-    const game = new GuessKeys(type, {
-      scale,
-      range,
+    const game = new GuessKeys('keys-minor', {
+      scale: createScaleUnsafe('Db', 'Diminished Half-Whole'),
+      range: [0, 2],
       duplicates: false,
       count
     })

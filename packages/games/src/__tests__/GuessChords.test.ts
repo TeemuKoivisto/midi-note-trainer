@@ -1,4 +1,4 @@
-import { chordsFromJSON, createScaleUnsafe, getNote, createTriadChords } from '@/chords-and-scales'
+import { chordsFromJSON, createScaleUnsafe, createTriadChords } from '@/chords-and-scales'
 
 import { GuessChords } from '../GuessChords'
 
@@ -30,7 +30,7 @@ describe('GuessChords', () => {
       'chords-play',
       {
         scale,
-        range: [getNote(60), getNote(72)],
+        range: [60, 72],
         duplicates: true,
         count
       },
@@ -61,7 +61,7 @@ describe('GuessChords', () => {
       'chords-write',
       {
         scale,
-        range: [getNote(60), getNote(80)],
+        range: [60, 80],
         duplicates: false,
         count
       },
@@ -92,7 +92,7 @@ describe('GuessChords', () => {
       'chords-diatonic',
       {
         scale,
-        range: [getNote(60), getNote(80)],
+        range: [60, 80],
         duplicates: true,
         count
       },
@@ -135,7 +135,7 @@ describe('GuessChords', () => {
       'chords-diatonic',
       {
         scale,
-        range: [getNote(60), getNote(80)],
+        range: [60, 80],
         duplicates: true,
         count
       },
@@ -177,7 +177,7 @@ describe('GuessChords', () => {
       'chords-diatonic',
       {
         scale,
-        range: [getNote(60), getNote(80)],
+        range: [60, 80],
         duplicates: true,
         count
       },
