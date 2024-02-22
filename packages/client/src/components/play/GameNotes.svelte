@@ -20,11 +20,11 @@
 <div class={`${$$props.class || ''} flex`}>
   {#if $guessState === 'correct' || $guessState === 'wrong'}
     <div>Target: {getNoteAbsolute($target[0])}</div>
-    <div class="ml-8">Played: {getNoteAbsolute(getNote(game.guessed))}</div>
+    <div class="ml-8">Played: {getNoteAbsolute(getNote(game.latestGuess.guessed || 0))}</div>
   {:else if $guessState === 'ended'}
     <div>
       <div>
-        <span>Result: [{game.correct} / {game.notes.length}]</span>
+        <span>Result: [{game.correct} / {game.sampled.length}]</span>
         <span>avg {game.avgTime}s</span>
       </div>
       <div>

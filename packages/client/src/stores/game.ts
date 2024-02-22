@@ -5,17 +5,9 @@ import { inputsActions, midiRange, midiRangeNotes, piano } from './inputs'
 import { persist } from './persist'
 import { scaleData, scoreActions } from './score'
 
-import { GuessChords, GuessKeys, GuessNotes } from '@/games'
+import { GuessChords, GuessKeys, GuessNotes, type GameType } from '@/games'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
-export type GameType =
-  | 'notes'
-  | 'pitches'
-  | 'keys-major'
-  | 'keys-minor'
-  | 'chords-write'
-  | 'chords-play'
-  | 'chords-diatonic'
 export type GameInstance = GuessNotes | GuessKeys | GuessChords
 
 const chords = chordsFromJSON()
@@ -29,11 +21,21 @@ export const gameActions = {
   play(type: GameType, count = 10): GameInstance {
     let game
     if (type === 'notes') {
-      game = new GuessNotes(type, get(midiRange), count)
+      game = new GuessNotes(type, {
+        scale: get(scaleData),
+        range: get(midiRangeNotes),
+        duplicates: true,
+        count
+      })
       scoreActions.setTarget([scoreActions.getNote(game.current)])
-      console
+      get(piano)?.noteOn(game.current)
     } else if (type === 'pitches') {
-      game = new GuessNotes(type, get(midiRange), count)
+      game = new GuessNotes(type, {
+        scale: get(scaleData),
+        range: get(midiRangeNotes),
+        duplicates: true,
+        count
+      })
       scoreActions.setTarget()
       inputsActions.setInputValue('useSound', true)
       get(piano)?.noteOn(game.current)

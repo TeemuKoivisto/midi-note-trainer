@@ -10,7 +10,7 @@ export class Game<T> {
 
   times: number[] = []
   correct = 0
-  guessed = 0
+  protected guessed = 0
   idx = 0
   timing: number
 
@@ -20,9 +20,16 @@ export class Game<T> {
     const sampled: T[] = []
     const { count } = opts
     const available = data.map(v => (typeof v === 'object' && v !== null ? { ...v } : v))
+    let withReplacement = opts.duplicates
+    if (!opts.duplicates && count > available.length) {
+      console.warn(
+        `Trying to create game with count ${count} larger than available unique values ${sampled.length}`
+      )
+      withReplacement = true
+    }
     for (let i = 0; i < count; i += 1) {
       const idx = Math.floor(Math.random() * available.length)
-      if (opts.duplicates) {
+      if (withReplacement) {
         sampled.push(available[idx])
       } else {
         const val = available.splice(idx, 1)
