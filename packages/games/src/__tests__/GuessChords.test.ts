@@ -8,7 +8,8 @@ const chords = chordsFromJSON()
 const basicChords = chords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
 
 describe('GuessChords', () => {
-  beforeAll(() => {
+  beforeEach(() => {
+    nextRandom = 0
     vi.stubGlobal('Math', {
       floor: Math.floor,
       ceil: Math.ceil,

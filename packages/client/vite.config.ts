@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vite'
 
@@ -17,5 +19,10 @@ export default defineConfig({
       $stores: resolve('./src/stores'),
       $utils: resolve('./src/utils')
     }
+  },
+  test: {
+    globals: true,
+    include: ['src/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
+    cache: false
   }
 })

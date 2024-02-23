@@ -5,7 +5,8 @@ import { GuessNotes } from '../GuessNotes'
 let nextRandom = 0
 
 describe('GuessNotes', () => {
-  beforeAll(() => {
+  beforeEach(() => {
+    nextRandom = 0
     vi.stubGlobal('Math', {
       floor: Math.floor,
       ceil: Math.ceil,
