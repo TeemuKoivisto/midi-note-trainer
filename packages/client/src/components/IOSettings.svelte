@@ -1,12 +1,15 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
 
+  import VirtualKeyboard from '$components/VirtualKeyboard.svelte'
+
   import { inputsActions, inputs, midiInput } from '$stores/inputs'
   import { reset, persist } from '$stores/persist'
 
   const hidden = persist(writable(false), { key: 'inputs-hidden' })
   let fixedVelocity = $inputs.fixedVelocity ?? ''
   let fadeMs = $inputs.keyFadeTimeout
+  let setKeys = false
 
   inputs.subscribe(inp => {
     if (fixedVelocity !== inp.fixedVelocity) {
@@ -134,6 +137,11 @@
       </div>
       <div class="flex flex-col justify-between h-full">
         <div class="flex justify-between">
+          <button class="w-full btn-sm primary" on:click={() => (setKeys = !setKeys)}
+            >Set keys</button
+          >
+        </div>
+        <div class="flex justify-between">
           <label class="font-bold" for="fade-timeout">Fade timeout</label>
           <input
             class="h-[20px] w-16"
@@ -150,6 +158,9 @@
         </div>
       </div>
     </div>
+    {#if setKeys}
+      <VirtualKeyboard class="mt-4" />
+    {/if}
   </fieldset>
 </div>
 
