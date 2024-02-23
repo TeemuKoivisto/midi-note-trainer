@@ -64,18 +64,23 @@
     selectedGame = options[0].key
     gameActions.clearGame(true)
   }
-  function play(type: GameType) {
+  function play(e: MouseEvent, type: GameType) {
     gameActions.play(type)
+    // Blur the button so that pressing Space or Enter wont allow generating bazillion new games
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.blur()
+    }
     setTimeout(() => {
+      // Scroll to the bottom to center the Score better
       window.scrollTo(0, document.body.scrollHeight)
     })
   }
   function handleSelectGame(key: GameType) {
     selectedGame = key
   }
-  function handleQuickPlay(key: GameType) {
+  function handleQuickPlay(e: MouseEvent, key: GameType) {
     selectedGame = key
-    play(key)
+    play(e, key)
   }
   function handleSelectChords(key: ChordsOption) {
     selectedChords = key
@@ -127,28 +132,13 @@
             </button>
             <button
               class="px-1 py-1 flex items-center justify-center rounded text-[#222] hover:bg-blue-500 hover:text-white"
-              on:click={() => handleQuickPlay(key)}
+              on:click={e => handleQuickPlay(e, key)}
             >
               <Icon icon={playIcon} width={20} />
             </button>
           </li>
         {/each}
       </ul>
-      <div>
-        {#if selectedGame === 'chords-write' || selectedGame === 'chords-play'}
-          <ul>
-            {#each chordsOptions as { key, value }}
-              <li>
-                <button
-                  class="px-2 py-1 mr-1 flex items-center w-full h-full rounded hover:bg-[#eee]"
-                  class:selected={key === selectedChords}
-                  on:click={() => handleSelectChords(key)}>{value}</button
-                >
-              </li>
-            {/each}
-          </ul>
-        {/if}
-      </div>
       <div class="flex flex-col justify-between h-full">
         <ul>
           <li class="flex items-center justify-between">
@@ -190,23 +180,41 @@
             />
           </li>
         </ul>
-        <div></div>
+        <div>
+          <button class="w-full btn-sm hover:bg-gray-200" on:click={clearGame}>Reset</button>
+        </div>
       </div>
-      <div class="h-full buttons">
-        <div></div>
-        <div></div>
-        {#if selectedGame}
-          <button
-            class="flex items-center justify-center btn primary"
-            on:click={() => play(selectedGame)}
-          >
-            <Icon icon={playIcon} width={20} />
-            Play
-          </button>
+      <div>
+        {#if selectedGame === 'chords-write' || selectedGame === 'chords-play'}
+          <ul>
+            {#each chordsOptions as { key, value }}
+              <li>
+                <button
+                  class="px-2 py-1 mr-1 flex items-center w-full h-full rounded hover:bg-[#eee]"
+                  class:selected={key === selectedChords}
+                  on:click={() => handleSelectChords(key)}>{value}</button
+                >
+              </li>
+            {/each}
+          </ul>
         {/if}
-        <div></div>
-        <div></div>
-        <button class="btn hover:bg-gray-200" on:click={clearGame}>Clear</button>
+      </div>
+      <div class="h-full flex flex-col justify-between">
+        <div class="h-[1.75rem]"></div>
+        <div>
+          {#if selectedGame}
+            <button
+              class="w-full flex items-center justify-center btn primary"
+              on:click={e => play(e, selectedGame)}
+            >
+              <Icon icon={playIcon} width={20} />
+              Play
+            </button>
+          {/if}
+        </div>
+        <div>
+          <button class="w-full btn hover:bg-gray-200" on:click={clearGame}>Clear</button>
+        </div>
       </div>
     </div>
   </fieldset>

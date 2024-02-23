@@ -78,6 +78,7 @@
   }
   function resetKeyAndScale() {
     scoreActions.clearScore(true)
+    inputsActions.setMidiRange([60, 84])
   }
 </script>
 
@@ -153,7 +154,7 @@
     {/if}
   </div>
   <div class="h-full flex flex-col justify-between">
-    <button class="w-full btn hover:bg-gray-200" on:click={resetKeyAndScale}>Reset</button>
+    <button class="w-full btn hover:bg-gray-200" on:click={resetKeyAndScale}>Default</button>
     <div></div>
   </div>
 </div>

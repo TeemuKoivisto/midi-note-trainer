@@ -165,7 +165,8 @@
   }
 
   function updateNotes({ game, guessed, scale, played, target }: Data) {
-    // console.log('hello notes', notes)
+    // console.log('hello target', target)
+    // console.log('hello played', played)
     const key = scale.majorSignature.replaceAll('♭', 'b').replaceAll('♯', '#')
     scoreWidth = 200 + Math.max(scale.flats, scale.sharps) * 10
     ctx.clear()
