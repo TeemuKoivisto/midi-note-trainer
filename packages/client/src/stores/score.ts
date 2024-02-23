@@ -75,18 +75,18 @@ function removePlayedNotes(notes: PlayedNote[], timeoutMs: number): PlayedNote[]
     const now = Date.now()
     let next = now
     const updated = notes.filter(n => {
-      if (n.started + timeoutMs <= now) {
+      if (n.started + timeoutMs > now) {
         next = Math.min(next, n.started)
       }
       return n.started + timeoutMs > now
     })
-    if (!timeout) {
+    if (!timeout && updated.length > 0) {
       timeout = setTimeout(
         () => {
           timeout = undefined
           played.update(n => removePlayedNotes(n, timeoutMs))
         },
-        now - next + 100
+        timeoutMs - (now - next) + 100
       )
     }
     return updated

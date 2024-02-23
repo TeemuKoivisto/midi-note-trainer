@@ -8,7 +8,7 @@ describe('score', () => {
   beforeEach(() => {
     vi.stubGlobal('Date', {
       now: () => {
-        nowCounter += 1000
+        nowCounter += 100
         return nowCounter
       }
     })
@@ -22,10 +22,10 @@ describe('score', () => {
         note: 'C',
         semitones: 0,
         sharps: 0,
-        started: 1700000001000
+        started: 1700000000100
       }
     ]
-    scoreActions.pushPlayed(60, undefined, 500)
+    scoreActions.pushPlayed(60, undefined, 200)
     expect(get(played)).toEqual([arr[0]])
     await vi.waitFor(() => new Promise(res => setTimeout(res, 1000)), {
       timeout: 4000,
@@ -50,9 +50,12 @@ describe('score', () => {
       scoreActions.pushPlayed(62, undefined, 500)
       expect(get(played).length).toBe(5)
     }, 3)
+    setTimeout(() => {
+      scoreActions.pushPlayed(60, undefined, 500)
+    }, 750)
     const p = get(played)
     expect(p).toEqual([{ ...arr[0], started: p[0].started }])
-    await vi.waitFor(() => new Promise(res => setTimeout(res, 1000)), {
+    await vi.waitFor(() => new Promise(res => setTimeout(res, 2000)), {
       timeout: 4000,
       interval: 50
     })
