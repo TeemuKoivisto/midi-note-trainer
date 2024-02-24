@@ -1,7 +1,7 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
 
-  import VirtualKeyboard from '$components/VirtualKeyboard.svelte'
+  import VirtualKeyboard from '$components/virtual-keyboard/VirtualKeyboard.svelte'
 
   import { inputsActions, inputs, midiInput } from '$stores/inputs'
   import { reset, persist } from '$stores/persist'
