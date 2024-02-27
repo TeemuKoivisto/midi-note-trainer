@@ -1,4 +1,7 @@
 import type { Scale, MidiNote } from '@/chords-and-scales'
+import type { GuessChords } from './GuessChords'
+import type { GuessKeys } from './GuessKeys'
+import type { GuessNotes } from './GuessNotes'
 
 export type GameType =
   | 'notes'
@@ -8,6 +11,8 @@ export type GameType =
   | 'chords-write'
   | 'chords-play'
   | 'chords-diatonic'
+
+export type GameInstance = GuessNotes | GuessKeys | GuessChords
 
 export interface BaseOptions {
   scale: Scale

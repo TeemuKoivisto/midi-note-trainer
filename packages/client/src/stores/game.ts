@@ -5,10 +5,9 @@ import { inputsActions, midiRange, piano } from './inputs'
 import { persist } from './persist'
 import { scaleData, scoreActions } from './score'
 
-import { GuessChords, GuessKeys, GuessNotes, type GameType } from '@/games'
+import { GuessChords, GuessKeys, GuessNotes, type GameInstance, type GameType } from '@/games'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
-export type GameInstance = GuessNotes | GuessKeys | GuessChords
 
 interface GameOptions {
   count: number

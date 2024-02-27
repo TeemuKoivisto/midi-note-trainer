@@ -2,9 +2,7 @@
   import { onMount } from 'svelte'
 
   import Chords from '$components/Chords.svelte'
-  import GameChords from '$components/play/GameChords.svelte'
-  import GameKeys from '$components/play/GameKeys.svelte'
-  import GameNotes from '$components/play/GameNotes.svelte'
+  import GameStats from '$components/play/GameStats.svelte'
   import IOSettings from '$components/IOSettings.svelte'
   import KeyboardInput from '$components/KeyboardInput.svelte'
   import PlayForm from '$components/play/PlayForm.svelte'
@@ -13,8 +11,7 @@
 
   import { currentGame, gameActions, gameOptions } from '$stores/game'
   import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
-  import { played, scoreActions } from '$stores/score'
-  import { getNoteAbsolute } from '@/chords-and-scales'
+  import { scoreActions } from '$stores/score'
 
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessChords, GuessKeys, GuessNotes } from '@/games'
@@ -159,22 +156,7 @@
 <Score class="px-4 md:px-0" />
 
 <section class="mb-8 px-4 md:px-0">
-  {#if $currentGame instanceof GuessKeys}
-    <GameKeys game={$currentGame} />
-  {:else if $currentGame instanceof GuessNotes}
-    <GameNotes class="min-h-32" game={$currentGame} />
-  {:else if $currentGame instanceof GuessChords}
-    <GameChords class="min-h-32" game={$currentGame} />
-  {:else if $played.length > 0}
-    <div class="min-h-32">
-      <span>Played: </span>
-      {#each $played as note}
-        <span class="mx-1">{getNoteAbsolute(note)}</span>
-      {/each}
-    </div>
-  {:else}
-    <div class="min-h-32">&nbsp;</div>
-  {/if}
+  <GameStats game={$currentGame} />
   <KeyboardInput
     class="min-h-32"
     debounced={!!timeout}
