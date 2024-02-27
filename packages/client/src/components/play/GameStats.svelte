@@ -34,6 +34,16 @@
       <span>{getNoteAbsolute(getNote(game.latestGuess.guessed || 0))}</span>
       <span></span>
     </div>
+    <div class="mt-2 h-8">
+      {#if $gameOptions.autoplay}
+        <button class="btn primary" on:click={() => gameActions.setOptionValue('autoplay', false)}
+          >Stop autoplay</button
+        >
+      {:else}
+        <button class="btn primary" on:click={nextGuess}>Next</button>
+        <button class="btn primary" on:click={autoplay}>Autoplay</button>
+      {/if}
+    </div>
   {:else if game instanceof GuessKeys && ($guessState === 'correct' || $guessState === 'wrong')}
     <div class="guessed min-h-[3.25rem]">
       <span>Target:</span>
@@ -42,6 +52,16 @@
       <span>Guessed:</span>
       <span>{game.latestGuess.guessed}</span>
       <span></span>
+    </div>
+    <div class="mt-2 h-8">
+      {#if $gameOptions.autoplay}
+        <button class="btn primary" on:click={() => gameActions.setOptionValue('autoplay', false)}
+          >Stop autoplay</button
+        >
+      {:else}
+        <button class="btn primary" on:click={nextGuess}>Next</button>
+        <button class="btn primary" on:click={autoplay}>Autoplay</button>
+      {/if}
     </div>
   {:else if game instanceof GuessChords && ($guessState === 'correct' || $guessState === 'wrong')}
     <div class="guessed min-h-[3.25rem]">
@@ -78,8 +98,10 @@
         <span class="mx-1">{getNoteAbsolute(note)}</span>
       {/each}
     </div>
+    <div class="mt-2 h-8">&nbsp;</div>
   {:else}
     <div class="min-h-[3.25rem]">&nbsp;</div>
+    <div class="mt-2 h-8">&nbsp;</div>
   {/if}
 </div>
 

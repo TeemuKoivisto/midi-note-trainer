@@ -9,7 +9,7 @@
   import Scales from '$components/scales/Scales.svelte'
   import Score from '$components/Score.svelte'
 
-  import { currentGame, gameActions, gameOptions } from '$stores/game'
+  import { currentGame, gameActions, gameOptions, guessState } from '$stores/game'
   import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
   import { scoreActions } from '$stores/score'
 
@@ -59,12 +59,12 @@
   }
   function handlePlayedNote(value: number, velocity: number) {
     const game = $currentGame
-    if (game instanceof GuessNotes && !game?.ended) {
+    if (game instanceof GuessNotes && !game?.ended && $guessState === 'waiting') {
       handleGuessedNote(value)
-    } else if (game instanceof GuessChords && !game?.ended) {
+    } else if (game instanceof GuessChords && !game?.ended && $guessState === 'waiting') {
       game.addPlayedNote(value)
       if (!chordTimeout) chordTimeout = setTimeout(flushPlayedChords, 2000)
-    } else {
+    } else if (!game) {
       scoreActions.pushPlayed(value)
     }
     if ($piano) {
@@ -97,29 +97,32 @@
   }
   function handleGuessedNote(value: number) {
     const game = $currentGame
-    if (!(game instanceof GuessNotes)) return
-    scoreActions.setTarget([scoreActions.getNote(game.current)])
-    const correct = game.guess(value)
-    gameActions.updateState(correct ? 'correct' : 'wrong')
-    scoreActions.pushPlayed(value, correct, 4000)
-    gameUpdate()
+    if (game instanceof GuessNotes && $guessState === 'waiting') {
+      scoreActions.setTarget([scoreActions.getNote(game.current)])
+      const correct = game.guess(value)
+      gameActions.updateState(correct ? 'correct' : 'wrong')
+      scoreActions.pushPlayed(value, correct, 4000)
+      gameUpdate()
+    }
   }
   function handleGuessedChord(
     e: CustomEvent<{ note: string; flats: number; sharps: number; chord: string }>
   ) {
     const game = $currentGame
-    if (!(game instanceof GuessChords)) return
-    const correct = game.guessWrittenChord(e.detail)
-    gameActions.updateState(correct ? 'correct' : 'wrong')
-    gameUpdate()
+    if (game instanceof GuessChords && $guessState === 'waiting') {
+      const correct = game.guessWrittenChord(e.detail)
+      gameActions.updateState(correct ? 'correct' : 'wrong')
+      gameUpdate()
+    }
   }
   function handleGuessedKey(e: CustomEvent<string>) {
     const game = $currentGame
-    if (!(game instanceof GuessKeys)) return
-    const note = e.detail.replaceAll('♭', 'b').replaceAll('♯', '#')
-    const correct = game.guess(note)
-    gameActions.updateState(correct ? 'correct' : 'wrong')
-    gameUpdate()
+    if (game instanceof GuessKeys && $guessState === 'waiting') {
+      const note = e.detail.replaceAll('♭', 'b').replaceAll('♯', '#')
+      const correct = game.guess(note)
+      gameActions.updateState(correct ? 'correct' : 'wrong')
+      gameUpdate()
+    }
   }
   function handleNote(e: CustomEvent<number>) {
     handlePlayedNote(e.detail, 80)
