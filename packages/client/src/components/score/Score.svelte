@@ -47,7 +47,7 @@
   function addParts(note: MidiNote, scale: Scale): MidiNote & { parts: [string, string, number] } {
     const scaleAccidentals = scale.flats > 0 ? scale.flats : scale.sharps
     const noteAccidentals = note.flats > 0 ? note.flats : note.sharps
-    const accidental = scale.flats > 0 ? 'b' : '#'
+    const accidental = note.flats > 0 ? 'b' : '#'
     // Retrieve the used accidented notes in the scale
     const notes = (scale.flats > 0 ? FLAT_NOTES : SHARP_NOTES).slice(0, scaleAccidentals)
     // Decrement the accidentals by 1 if the note has been accidented
@@ -169,6 +169,40 @@
     return snotes
   }
 
+  function createNotes(targetNotes: Vex.StaveNote[], playedNotes: Vex.StaveNote[]) {
+    const trebleNotes = []
+    const bassNotes = []
+    targetNotes.forEach(n => {
+      if (n.getAttribute('clef') === 'treble') {
+        trebleNotes.push(n)
+      } else {
+        bassNotes.push(n)
+      }
+    })
+    // @TODO hack with invisible notes
+    // Aligns notes when target is on single staff and user played on both treble & bass
+    if (trebleNotes.length === 0 && bassNotes.length > 0 && playedNotes.length > 0) {
+      trebleNotes.push(
+        new Vex.Flow.StaveNote({
+          clef: 'treble',
+          keys: ['G/4'],
+          duration: 'w'
+        }).setStyle({ fillStyle: '#fff' })
+      )
+    } else if (bassNotes.length === 0 && trebleNotes.length > 0 && playedNotes.length > 0) {
+      bassNotes.push(
+        new Vex.Flow.StaveNote({
+          clef: 'bass',
+          keys: ['F/3'],
+          duration: 'w'
+        }).setStyle({ fillStyle: '#fff' })
+      )
+    }
+    trebleNotes.push(...playedNotes.filter(n => n.getAttribute('clef') === 'treble'))
+    bassNotes.push(...playedNotes.filter(n => n.getAttribute('clef') === 'bass'))
+    return [trebleNotes, bassNotes]
+  }
+
   function updateNotes({ game, guessed, scale, played, target }: Data) {
     // console.log('hello target', target)
     // console.log('hello played', played)
@@ -178,36 +212,13 @@
     ctx.scale(0.5, 0.5)
     const tclef = new Stave(0, 0, scoreWidth).addClef('treble').addKeySignature(key)
     const bclef = new Stave(0, 60, scoreWidth).addClef('bass') //.addKeySignature(key)
-    const staveNotes = [
-      ...notesToVexflowNotes(target, scale),
-      ...notesToVexflowNotes(played, scale)
-    ]
-    const trebleNotes = staveNotes.filter(n => n.getAttribute('clef') === 'treble')
-    const bassNotes = staveNotes.filter(n => n.getAttribute('clef') === 'bass')
-    const voices = []
-    if (trebleNotes.length === 1 && bassNotes.length === 2) {
-      trebleNotes.unshift(
-        new Vex.Flow.StaveNote({
-          clef: 'treble',
-          keys: ['G/4'],
-          duration: 'w'
-        }).setStyle({ fillStyle: '#fff' })
-      )
-    }
+    const targetNotes = notesToVexflowNotes(target, scale)
+    const playedNotes = notesToVexflowNotes(played, scale)
+    const [trebleNotes, bassNotes] = createNotes(targetNotes, playedNotes)
+    const voices: Vex.Voice[] = []
     if (trebleNotes.length > 0) {
       voices.push(
         new Vex.Flow.Voice({ num_beats: 4, beat_value: 4 }).setMode(2).addTickables(trebleNotes)
-      )
-    }
-    // @TODO hack with invisible notes
-    // Aligns notes when target is on single staff and user played on both treble & bass
-    if (bassNotes.length === 1 && trebleNotes.length === 2) {
-      bassNotes.unshift(
-        new Vex.Flow.StaveNote({
-          clef: 'bass',
-          keys: ['F/3'],
-          duration: 'w'
-        }).setStyle({ fillStyle: '#fff' })
       )
     }
     if (bassNotes.length > 0) {
