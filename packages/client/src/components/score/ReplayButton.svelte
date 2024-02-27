@@ -2,7 +2,7 @@
   import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
   import volume from '@iconify-icons/mdi/volume-high'
 
-  import { currentGame } from '$stores/game'
+  import { currentGame, guessState } from '$stores/game'
   import { piano } from '$stores/inputs'
   import { GuessChords, GuessNotes } from '@/games'
 
@@ -10,10 +10,14 @@
 
   function replay() {
     const game = $currentGame
-    if (game instanceof GuessChords) {
-      $piano?.playChord(game?.current.notes.map(n => n.midi))
-    } else if (game instanceof GuessNotes) {
+    if (game instanceof GuessChords && $guessState === 'waiting') {
+      $piano?.playChord(game.current.notes.map(n => n.midi))
+    } else if (game instanceof GuessChords) {
+      $piano?.playChord((game.latestGuess.target?.notes || []).map(n => n.midi))
+    } else if (game instanceof GuessNotes && $guessState === 'waiting') {
       $piano?.noteOn(game.current)
+    } else if (game instanceof GuessNotes) {
+      $piano?.noteOn(game.latestGuess.target || 0)
     }
   }
 </script>

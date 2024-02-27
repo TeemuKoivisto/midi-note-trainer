@@ -7,7 +7,7 @@
   import KeyboardInput from '$components/KeyboardInput.svelte'
   import PlayForm from '$components/play/PlayForm.svelte'
   import Scales from '$components/scales/Scales.svelte'
-  import Score from '$components/Score.svelte'
+  import Score from '$components/score/Score.svelte'
 
   import { currentGame, gameActions, gameOptions, guessState } from '$stores/game'
   import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'

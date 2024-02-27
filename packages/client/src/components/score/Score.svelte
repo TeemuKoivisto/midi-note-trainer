@@ -7,10 +7,11 @@
   import ReplayButton from './ReplayButton.svelte'
   import QuitButton from './QuitButton.svelte'
 
-  import { currentGame, guessState, type GuessState, type GameInstance } from '$stores/game'
+  import { currentGame, guessState, type GuessState } from '$stores/game'
   import { played, target, scaleData, type PlayedNote } from '$stores/score'
 
   import type { MidiNote, Scale } from '@/chords-and-scales'
+  import type { GameInstance } from '@/games'
 
   interface Data {
     game: GameInstance | undefined
