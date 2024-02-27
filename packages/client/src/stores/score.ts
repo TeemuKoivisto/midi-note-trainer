@@ -147,7 +147,7 @@ export const scoreActions = {
       }
       return [...v, { ...note, color: color, started: now }]
     })
-    if (!timeout) {
+    if (!timeout && timeoutMs !== -1) {
       const ms = timeoutMs ?? get(inputs).keyFadeTimeout
       timeout = setTimeout(() => {
         timeout = undefined
@@ -159,7 +159,7 @@ export const scoreActions = {
     const now = Date.now()
     const color = correct === undefined ? 'default' : correct ? 'correct' : 'wrong'
     played.update(v => [...notes.map(n => ({ ...n, color: color, started: now }) as PlayedNote)])
-    if (!timeout) {
+    if (!timeout && timeoutMs !== -1) {
       const ms = timeoutMs ?? get(inputs).keyFadeTimeout
       timeout = setTimeout(() => {
         timeout = undefined
