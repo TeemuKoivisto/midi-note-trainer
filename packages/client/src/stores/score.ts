@@ -140,11 +140,13 @@ export const scoreActions = {
     const note = { ...snote, midi }
     const now = Date.now()
     const color = correct === undefined ? 'default' : correct ? 'correct' : 'wrong'
-    played.update(v =>
-      [...v, { ...note, color: color, started: now } as PlayedNote].filter(
-        n => n.midi !== note.midi || n.started === now
-      )
-    )
+    played.update(v => {
+      const old = v.findIndex(n => n.midi === midi)
+      if (old >= 0) {
+        v.splice(old, 1)
+      }
+      return [...v, { ...note, color: color, started: now }]
+    })
     if (!timeout) {
       const ms = timeoutMs ?? get(inputs).keyFadeTimeout
       timeout = setTimeout(() => {
@@ -168,6 +170,7 @@ export const scoreActions = {
   clearPlayed() {
     played.set([])
     clearTimeout(timeout)
+    timeout = undefined
   },
   clearScore(scaleAndKey = false) {
     if (scaleAndKey) {
