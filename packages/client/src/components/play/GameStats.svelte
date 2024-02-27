@@ -24,9 +24,9 @@
   }
 </script>
 
-<div class={`${$$props.class || ''} flex flex-col`}>
+<div class={`${$$props.class || ''} min-h-[3.25rem]`}>
   {#if game instanceof GuessNotes && ($guessState === 'correct' || $guessState === 'wrong')}
-    <div class="guessed min-h-[3.25rem]">
+    <div class="guessed">
       <span>Target:</span>
       <span>{getNoteAbsolute(getNote(game.latestGuess.target || 0))}</span>
       <span></span>
@@ -34,18 +34,8 @@
       <span>{getNoteAbsolute(getNote(game.latestGuess.guessed || 0))}</span>
       <span></span>
     </div>
-    <div class="mt-2 h-8">
-      {#if $gameOptions.autoplay}
-        <button class="btn primary" on:click={() => gameActions.setOptionValue('autoplay', false)}
-          >Stop autoplay</button
-        >
-      {:else}
-        <button class="btn primary" on:click={nextGuess}>Next</button>
-        <button class="btn primary" on:click={autoplay}>Autoplay</button>
-      {/if}
-    </div>
   {:else if game instanceof GuessKeys && ($guessState === 'correct' || $guessState === 'wrong')}
-    <div class="guessed min-h-[3.25rem]">
+    <div class="guessed">
       <span>Target:</span>
       <span>{game.latestGuess.target}</span>
       <span></span>
@@ -53,18 +43,8 @@
       <span>{game.latestGuess.guessed}</span>
       <span></span>
     </div>
-    <div class="mt-2 h-8">
-      {#if $gameOptions.autoplay}
-        <button class="btn primary" on:click={() => gameActions.setOptionValue('autoplay', false)}
-          >Stop autoplay</button
-        >
-      {:else}
-        <button class="btn primary" on:click={nextGuess}>Next</button>
-        <button class="btn primary" on:click={autoplay}>Autoplay</button>
-      {/if}
-    </div>
   {:else if game instanceof GuessChords && ($guessState === 'correct' || $guessState === 'wrong')}
-    <div class="guessed min-h-[3.25rem]">
+    <div class="guessed">
       <span>Target:</span>
       <span>{game.latestGuess.target?.chord}</span>
       <span>{game.latestGuess.target?.notes.map(n => n.note).join(' ')}</span>
@@ -72,36 +52,36 @@
       <span>{game.latestGuess.guessed?.chord}</span>
       <span>{game.latestGuess.guessed?.notes.map(n => n.note).join(' ')}</span>
     </div>
-    <div class="mt-2 h-8">
-      {#if $gameOptions.autoplay}
-        <button class="btn primary" on:click={() => gameActions.setOptionValue('autoplay', false)}
-          >Stop autoplay</button
-        >
-      {:else}
-        <button class="btn primary" on:click={nextGuess}>Next</button>
-        <button class="btn primary" on:click={autoplay}>Autoplay</button>
-      {/if}
-    </div>
   {:else if game && $guessState === 'ended'}
-    <div class="min-h-[3.25rem]">
-      <span>Result: [{game.correct} / {game.sampled.length}]</span>
+    <div class="flex justify-between w-[11rem]">
+      <span>Result:</span>
+      <span>[{game.correct} / {game.sampled.length}]</span>
       <span>avg {game.avgTime}s</span>
     </div>
-    <div class="mt-2 h-8">
-      <button class="btn primary" on:click={tryAgain}>Try Again</button>
-      <button class="btn primary" on:click={clearGame}>Clear</button>
-    </div>
   {:else if $played.length > 0}
-    <div class="min-h-[3.25rem]">
+    <div>
       <span>Played: </span>
       {#each $played as note}
         <span class="mx-1">{getNoteAbsolute(note)}</span>
       {/each}
     </div>
-    <div class="mt-2 h-8">&nbsp;</div>
   {:else}
-    <div class="min-h-[3.25rem]">&nbsp;</div>
-    <div class="mt-2 h-8">&nbsp;</div>
+    &nbsp;
+  {/if}
+</div>
+<div class="mt-2 h-8">
+  {#if game && $guessState === 'ended'}
+    <button class="btn primary" on:click={tryAgain}>Try Again</button>
+    <button class="btn primary" on:click={clearGame}>Clear</button>
+  {:else if game && $gameOptions.autoplay}
+    <button class="btn primary" on:click={() => gameActions.setOptionValue('autoplay', false)}
+      >Stop autoplay</button
+    >
+  {:else if game}
+    <button class="btn primary" on:click={nextGuess}>Next</button>
+    <button class="btn primary" on:click={autoplay}>Autoplay</button>
+  {:else}
+    &nbsp;
   {/if}
 </div>
 
@@ -109,8 +89,8 @@
   .guessed {
     display: grid;
     gap: 0.25rem;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 2fr;
     grid-template-rows: auto;
-    @apply w-1/3;
+    @apply w-[28rem];
   }
 </style>

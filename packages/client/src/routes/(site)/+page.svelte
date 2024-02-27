@@ -158,8 +158,7 @@
 
 <Score class="px-4 md:px-0" />
 
-<section class="mb-8 px-4 md:px-0">
-  <GameStats game={$currentGame} />
+<section class="mb-8 px-4 md:px-0 flex flex-col">
   <KeyboardInput
     class="min-h-32"
     debounced={!!timeout}
@@ -167,6 +166,7 @@
     on:guessed-key={handleGuessedKey}
     on:note={handleNote}
   />
+  <GameStats game={$currentGame} />
 </section>
 
 <style lang="scss">
