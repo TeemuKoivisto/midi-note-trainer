@@ -53,9 +53,9 @@
       <span>{game.latestGuess.guessed?.notes.map(n => n.note).join(' ')}</span>
     </div>
   {:else if game && $guessState === 'ended'}
-    <div class="flex justify-between w-[11rem]">
+    <div class="flex">
       <span>Result:</span>
-      <span>[{game.correct} / {game.sampled.length}]</span>
+      <span class="mx-2">[{game.correct} / {game.sampled.length}]</span>
       <span>avg {game.avgTime}s</span>
     </div>
   {:else if $played.length > 0}

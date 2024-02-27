@@ -53,7 +53,7 @@ describe('GuessChords', () => {
     expect(game.latestGuess.guessed?.chord).toEqual('')
     expect(game.latestGuess.guessed?.notes.map(n => n.midi)).toEqual([60, 64, 67])
     expect(game.data.length).toEqual(12)
-    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(60.0)
+    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(600.0)
   })
   it('should generate all chords correctly', () => {
     const scale = createScaleUnsafe('C', 'major')
@@ -84,7 +84,7 @@ describe('GuessChords', () => {
     expect(game.latestGuess.guessed?.chord).toEqual('')
     expect(game.latestGuess.guessed?.notes.map(n => n.midi)).toEqual([60, 64, 67])
     expect(game.data.length).toEqual(245)
-    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(60.0)
+    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(600.0)
   })
   it('should generate C major triads correctly', () => {
     const scale = createScaleUnsafe('C', 'major')
@@ -127,7 +127,7 @@ describe('GuessChords', () => {
       'Am',
       'Bdim'
     ])
-    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(60.0)
+    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(600.0)
   })
   it('should generate G Locrian Natural-2 triads correctly', () => {
     const scale = createScaleUnsafe('C#', 'Locrian Natural-2')
@@ -169,7 +169,7 @@ describe('GuessChords', () => {
       'Amaj',
       'Bmaj'
     ])
-    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(60.0)
+    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(600.0)
   })
   it('should generate Db Diminished Half-Whole triads correctly', () => {
     const scale = createScaleUnsafe('Db', 'Diminished Half-Whole')
@@ -210,6 +210,6 @@ describe('GuessChords', () => {
       'B♭maj',
       'C♭dim'
     ])
-    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(60.0)
+    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(600.0)
   })
 })

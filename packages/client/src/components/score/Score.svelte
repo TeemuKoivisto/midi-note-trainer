@@ -180,7 +180,7 @@
       }
     })
     // @TODO hack with invisible notes
-    // Aligns notes when target is on single staff and user played on both treble & bass
+    // Aligns notes when target is on single staff so that played notes will be at the same x position
     if (trebleNotes.length === 0 && bassNotes.length > 0 && playedNotes.length > 0) {
       trebleNotes.push(
         new Vex.Flow.StaveNote({
