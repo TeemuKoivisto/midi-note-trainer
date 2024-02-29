@@ -33,9 +33,7 @@
 
 <div class="relative" {id} bind:this={containerEl}>
   <button
-    class={`${
-      $$props.class || ''
-    } open-btn w-full flex items-center text-sm rounded hover:bg-[#eee]`}
+    class={`${$$props.class || ''} open-btn w-full text-justify text-sm rounded hover:bg-[#eee]`}
     class:disabled
     class:open
     title={$$props.title || ''}
@@ -60,7 +58,7 @@
       {#each options as { key, value, icon }, idx}
         <li>
           <button
-            class="px-2 py-1 flex items-center w-full h-full hover:bg-[#eee]"
+            class="px-2 py-1 text-justify w-full h-full hover:bg-[#eee]"
             class:selected={key === selected}
             on:click={() => handleSelect(key)}
           >

@@ -86,34 +86,6 @@
   function handleSelectChords(key: ChordsOption) {
     selectedChords = key
   }
-  function handleCountChanged({
-    currentTarget: { value }
-  }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-    let int
-    try {
-      int = parseInt(value)
-      if (int <= 0) {
-        int = 1
-      }
-      gameActions.setOptionValue('count', int)
-    } catch (err) {
-      count = $gameOptions.count
-    }
-  }
-  function handleWaitChanged({
-    currentTarget: { value }
-  }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-    let int
-    try {
-      int = parseInt(value)
-      if (int < 0) {
-        int = 0
-      }
-      gameActions.setOptionValue('waitSeconds', int)
-    } catch (err) {
-      waitSeconds = $gameOptions.waitSeconds
-    }
-  }
 </script>
 
 <fieldset class={`${$$props.class || ''} flex flex-col rounded border-2 px-4 py-2 text-sm`}>
@@ -156,7 +128,7 @@
     <div class="h-full flex flex-col justify-between">
       <GameOptions />
       <div>
-        <button class="w-full btn hover:bg-gray-200" on:click={clearGame}>Clear</button>
+        <button class="w-full btn hover:bg-gray-200" on:click={clearGame}>Reset</button>
         <button
           class="w-full mt-2 flex items-center justify-center btn primary"
           on:click={e => play(e, selectedGame)}

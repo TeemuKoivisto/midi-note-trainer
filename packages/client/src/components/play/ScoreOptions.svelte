@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
+  import restore from '@iconify-icons/mdi/restore'
   import { writable } from 'svelte/store'
   import { getNoteAbsolute, parseNote, scalesFromJSON } from '@/chords-and-scales'
 
@@ -12,7 +14,7 @@
   let rangeMin = getNoteAbsolute($midiRangeNotes[0])
   let rangeMax = getNoteAbsolute($midiRangeNotes[1])
   let rangeError = ''
-  const hidden = persist(writable(false), { key: 'options-hidden' })
+  const hidden = persist(writable(false), { key: 'score-options-hidden' })
 
   let selectedKey = $keyAndScale[0]
   let selectedScale = $keyAndScale[1]
@@ -27,6 +29,10 @@
   midiRangeNotes.subscribe(rng => {
     rangeMin = getNoteAbsolute(rng[0])
     rangeMax = getNoteAbsolute(rng[1])
+  })
+  keyAndScale.subscribe(v => {
+    selectedKey = v[0]
+    selectedScale = v[1]
   })
 
   function handleSetRange() {
@@ -82,9 +88,23 @@
   }
 </script>
 
-<fieldset class={`${$$props.class || ''} flex flex-col rounded border-2 px-4 py-2 text-sm`}>
-  <legend class="px-1 text-base">Score</legend>
-  <div class="options">
+<fieldset
+  class={`${
+    $$props.class || ''
+  } flex flex-col rounded border-2 px-4 py-2 w-[224px] relative text-sm`}
+  class:collapsed={$hidden}
+>
+  <legend class="px-1 text-base">
+    <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>Score</button>
+  </legend>
+  <button
+    class="absolute top-[-0.25rem] right-[0.5rem] flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
+    class:hidden={$hidden}
+    on:click={resetKeyAndScale}
+  >
+    <Icon icon={restore} width={16} />
+  </button>
+  <div class="options" class:hidden={$hidden}>
     <div class="flex flex-col h-full">
       <label class="font-bold" for="range_min">Range</label>
       <div class="my-1 flex w-full">
@@ -161,7 +181,7 @@
 
 <style lang="scss">
   .collapsed {
-    @apply py-0.5;
+    @apply h-8 py-0.5;
   }
   .options {
     display: grid;
