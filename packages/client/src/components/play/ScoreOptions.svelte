@@ -82,82 +82,82 @@
   }
 </script>
 
-<div class={`${$$props.class || ''} options`}>
-  <div class="flex flex-col h-full">
-    <label class="font-bold" for="range_min">Range</label>
-    <div class="my-1 flex w-full">
-      <input
-        class="h-[28px] w-full"
-        id="range_min"
-        bind:value={rangeMin}
-        on:change={e => handleRangeChanged('min', e)}
-        on:focus={rangeFocus}
-        on:blur={() => inputsActions.setKeyboardFocus(true)}
-      />
-      <span class="mx-2 mt-1">—</span>
-      <input
-        class="h-[28px] w-full"
-        id="range_max"
-        bind:value={rangeMax}
-        on:change={e => handleRangeChanged('max', e)}
-        on:focus={rangeFocus}
-        on:blur={() => inputsActions.setKeyboardFocus(true)}
-      />
+<fieldset class={`${$$props.class || ''} flex flex-col rounded border-2 px-4 py-2 text-sm`}>
+  <legend class="px-1 text-base">Score</legend>
+  <div class="options">
+    <div class="flex flex-col h-full">
+      <label class="font-bold" for="range_min">Range</label>
+      <div class="my-1 flex w-full">
+        <input
+          class="h-[28px] w-full"
+          id="range_min"
+          bind:value={rangeMin}
+          on:change={e => handleRangeChanged('min', e)}
+          on:focus={rangeFocus}
+          on:blur={() => inputsActions.setKeyboardFocus(true)}
+        />
+        <span class="mx-2 mt-1">—</span>
+        <input
+          class="h-[28px] w-full"
+          id="range_max"
+          bind:value={rangeMax}
+          on:change={e => handleRangeChanged('max', e)}
+          on:focus={rangeFocus}
+          on:blur={() => inputsActions.setKeyboardFocus(true)}
+        />
+      </div>
+      <div class="flex justify-between my-1">
+        {#if rangeError}
+          <div class="error">{rangeError}</div>
+        {/if}
+        <!-- <button class="w-full btn hover:bg-gray-200" on:click={resetKeyAndScale}>Defaults</button> -->
+      </div>
     </div>
-    <div class="flex justify-between h-[20px] my-1">
-      {#if rangeError}
-        <div class="error">{rangeError}</div>
+    <div class="flex flex-col h-full">
+      <label class="font-bold" for="scales">Scale</label>
+      <div class="my-1 w-full">
+        <MultiSelectDropdown
+          id="scales"
+          class="p-1"
+          options={scaleOptions}
+          onSelect={handleSelectScale}
+        >
+          <div slot="value">{selectedScale}</div>
+        </MultiSelectDropdown>
+      </div>
+      {#if !$currentGame}
+        <div class="intervals my-1">
+          {#each selectedScaleNotes as interval}
+            <span>{interval.interval}</span>
+          {/each}
+        </div>
       {/if}
-      &nbsp;
-      <!-- <button class="btn-sm primary" on:click={handleSetRange}>Set left</button>
-      <button class="btn-sm primary" on:click={handleSetRange}>Set right</button> -->
     </div>
-  </div>
-  <div class="flex flex-col h-full">
-    <label class="font-bold" for="scales">Scale</label>
-    <div class="my-1 w-full">
-      <MultiSelectDropdown
-        id="scales"
-        class="p-1"
-        options={scaleOptions}
-        onSelect={handleSelectScale}
-      >
-        <div slot="value">{selectedScale}</div>
-      </MultiSelectDropdown>
-    </div>
-    {#if !$currentGame}
-      <div class="intervals my-1">
-        {#each selectedScaleNotes as interval}
-          <span>{interval.interval}</span>
-        {/each}
+    <div class="flex flex-col h-full">
+      <label class="font-bold" for="key">Key</label>
+      <div class="my-1 flex">
+        <input
+          class="h-[28px]"
+          id="key"
+          bind:value={selectedKey}
+          on:input={handleKeyChange}
+          on:focus={() => inputsActions.setKeyboardFocus(false)}
+          on:blur={() => inputsActions.setKeyboardFocus(true)}
+        />
       </div>
-    {/if}
-  </div>
-  <div class="flex flex-col h-full">
-    <label class="font-bold" for="key">Key</label>
-    <div class="my-1 flex">
-      <input
-        class="h-[28px]"
-        id="key"
-        bind:value={selectedKey}
-        on:input={handleKeyChange}
-        on:focus={() => inputsActions.setKeyboardFocus(false)}
-        on:blur={() => inputsActions.setKeyboardFocus(true)}
-      />
+      {#if !$currentGame}
+        <div class="intervals my-1">
+          {#each $scaleData.scaleNotes as note}
+            <span>{note.note}</span>
+          {/each}
+        </div>
+      {/if}
     </div>
-    {#if !$currentGame}
-      <div class="intervals my-1">
-        {#each $scaleData.scaleNotes as note}
-          <span>{note.note}</span>
-        {/each}
-      </div>
-    {/if}
+    <div class="h-full flex flex-col justify-between">
+      <!-- <BasicOptions /> -->
+    </div>
   </div>
-  <div class="h-full flex flex-col justify-between">
-    <button class="w-full btn hover:bg-gray-200" on:click={resetKeyAndScale}>Default</button>
-    <div></div>
-  </div>
-</div>
+</fieldset>
 
 <style lang="scss">
   .collapsed {
@@ -166,9 +166,8 @@
   .options {
     display: grid;
     gap: 0.5rem;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-template-rows: auto;
-    align-items: center;
     @media (width <= 475px) {
       grid-template-columns: 1fr 1fr;
     }

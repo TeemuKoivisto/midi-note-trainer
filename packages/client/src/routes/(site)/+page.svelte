@@ -8,6 +8,7 @@
   import PlayForm from '$components/play/PlayForm.svelte'
   import Scales from '$components/scales/Scales.svelte'
   import Score from '$components/score/Score.svelte'
+  import ScoreOptions from '$components/play/ScoreOptions.svelte'
 
   import { currentGame, gameActions, gameOptions, guessState } from '$stores/game'
   import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
@@ -153,7 +154,10 @@
   <IOSettings />
   <Scales />
   <Chords />
-  <PlayForm />
+  <div class="play">
+    <ScoreOptions class="mr-4" />
+    <PlayForm />
+  </div>
 </section>
 
 <Score class="px-4 md:px-0" />
@@ -170,4 +174,9 @@
 </section>
 
 <style lang="scss">
+  .play {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: auto;
+  }
 </style>
