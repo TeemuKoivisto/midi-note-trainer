@@ -4,7 +4,7 @@ import type { Chord, MidiChord, MidiNote } from '@/chords-and-scales'
 
 import { Game } from './Game'
 
-import type { BaseOptions } from './types'
+import type { BaseOptions, GuessChordsOptions } from './types'
 
 type GuessableChord = MidiChord & { allowed?: Set<number> }
 interface Guess {
@@ -12,13 +12,13 @@ interface Guess {
   notes: MidiNote[]
 }
 
-interface GuessChordsOptions {
-  chords: (Chord & { allowed?: Set<number> })[]
-  onlyScale?: boolean
-}
-
-export class GuessChords extends Game<GuessableChord, Guess> {
+export class GuessChords extends Game<
+  'chords-write' | 'chords-play' | 'chords-diatonic',
+  GuessableChord,
+  Guess
+> {
   played = new Set<number>()
+  opts: GuessChordsOptions
 
   constructor(
     type: 'chords-write' | 'chords-play' | 'chords-diatonic',
@@ -54,6 +54,7 @@ export class GuessChords extends Game<GuessableChord, Guess> {
     })
     // console.log('values', values)
     super(type, values, baseOpts)
+    this.opts = opts
   }
   addPlayedNote(midi: number) {
     this.played.add(midi)

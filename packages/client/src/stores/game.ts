@@ -5,9 +5,15 @@ import { inputsActions, midiRange, piano } from './inputs'
 import { persist } from './persist'
 import { scaleData, scoreActions } from './score'
 
-import { GuessChords, GuessKeys, GuessNotes, type GameInstance, type GameType } from '@/games'
+import { GuessChords, GuessKeys, GuessNotes } from '@/games'
+
+import type { Chord } from '@/chords-and-scales'
+import type { GameInstance, GameType, GameConstructors } from '@/games'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
+export interface SelectedChord extends Chord {
+  selected: boolean
+}
 
 interface GameOptions {
   count: number
@@ -30,10 +36,12 @@ export const gameOptions = persist(writable<GameOptions>(DEFAULT_OPTIONS), {
   key: 'game-options'
 })
 export const currentGame = writable<GameInstance | undefined>(undefined)
-// scores?
+export const selectedChords = writable<SelectedChord[]>(
+  chordsFromJSON().map(c => ({ ...c, selected: true }))
+)
 
 export const gameActions = {
-  play(type: GameType): GameInstance {
+  play<K extends GameType>(...args: GameConstructors[K]): GameInstance {
     let game
     const scale = get(scaleData)
     const range = get(midiRange)
@@ -45,37 +53,30 @@ export const gameActions = {
       count: opts.count
     }
     let keyAndScale = [scale.key, scale.scale]
-    if (type === 'notes') {
-      game = new GuessNotes(type, baseOpts)
+    if (args[0] === 'notes') {
+      game = new GuessNotes(args[0], baseOpts)
       scoreActions.setTarget([scoreActions.getNote(game.current)])
       get(piano)?.noteOn(game.current)
-    } else if (type === 'pitches') {
-      game = new GuessNotes(type, baseOpts)
+    } else if (args[0] === 'pitches') {
+      game = new GuessNotes(args[0], baseOpts)
       scoreActions.setTarget()
       inputsActions.setInputValue('useSound', true)
       get(piano)?.noteOn(game.current)
-    } else if (type === 'keys-major' || type == 'keys-minor') {
-      game = new GuessKeys(type, baseOpts)
-      keyAndScale = [game.current, type === 'keys-major' ? 'major' : 'minor']
-    } else if (type === 'chords-play') {
-      const basicChords = chords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
-      game = new GuessChords(type, baseOpts, {
-        chords: basicChords
-      })
-    } else if (type === 'chords-write') {
-      game = new GuessChords(type, baseOpts, {
-        chords
-      })
-    } else if (type === 'chords-diatonic') {
+    } else if (args[0] === 'keys-major' || args[0] == 'keys-minor') {
+      game = new GuessKeys(args[0], baseOpts)
+      keyAndScale = [game.current, args[0] === 'keys-major' ? 'major' : 'minor']
+    } else if (args[0] === 'chords-play' || args[0] === 'chords-write') {
+      game = new GuessChords(args[0], baseOpts, args[1])
+    } else if (args[0] === 'chords-diatonic') {
       const chords = createTriadChords(scale.triads).map((c, idx) => ({
         ...c,
         allowed: new Set([scale.scaleNotes[idx].semitones])
       }))
-      game = new GuessChords(type, baseOpts, {
+      game = new GuessChords(args[0], baseOpts, {
         chords
       })
     } else {
-      throw Error('Unknown game type: ' + type)
+      throw Error('Unknown game type: ' + args[0])
     }
     if (typeof game.current !== 'number' && typeof game.current !== 'string') {
       get(piano)?.playChord(game.current.notes.map(n => n.midi))
@@ -92,6 +93,14 @@ export const gameActions = {
   },
   setOptionValue<K extends keyof GameOptions>(key: K, val: GameOptions[K]) {
     gameOptions.update(v => ({ ...v, [key]: val }))
+  },
+  toggleChord(chord: SelectedChord) {
+    selectedChords.update(v =>
+      v.map(c => (c.name === chord.name ? { ...c, selected: !c.selected } : c))
+    )
+  },
+  toggleAllChords(selected: boolean) {
+    selectedChords.update(v => v.map(c => ({ ...c, selected })))
   },
   nextGuess() {
     const game = get(currentGame)
@@ -122,7 +131,7 @@ export const gameActions = {
   clearGame(clearOptions = false) {
     const game = get(currentGame)
     if (game) {
-      scoreActions.setKeyAndScale(game.options.scale.key, game.options.scale.scale)
+      scoreActions.setKeyAndScale(game.baseOptions.scale.key, game.baseOptions.scale.scale)
     }
     if (clearOptions) {
       gameOptions.set(DEFAULT_OPTIONS)

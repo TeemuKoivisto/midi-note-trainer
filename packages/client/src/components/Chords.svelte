@@ -1,4 +1,13 @@
 <script lang="ts">
+  import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
+  import circle from '@iconify-icons/mdi/circle'
+  import circleOut from '@iconify-icons/mdi/circle-outline'
+  import select from '@iconify-icons/mdi/select'
+  import selectOff from '@iconify-icons/mdi/select-off'
+  import restore from '@iconify-icons/mdi/restore'
+  import alphaB from '@iconify-icons/mdi/alpha-b'
+  import num7 from '@iconify-icons/mdi/numeric-7-circle'
+
   import { writable } from 'svelte/store'
   import {
     chordsFromJSON,
@@ -9,12 +18,14 @@
     type ScaleNote
   } from '@/chords-and-scales'
 
+  import { gameActions, selectedChords, type SelectedChord } from '$stores/game'
   import { inputsActions } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
-  const chords = chordsFromJSON()
+  $: chords = $selectedChords
   $: leftList = chords.filter((_, i) => i < chords.length / 2)
   $: rightList = chords.filter((_, i) => i >= chords.length / 2)
+  $: allSelected = chords.every(c => c.selected)
 
   let selectedKey = 'C'
   let selectedScale = 'Major'
@@ -54,13 +65,55 @@
     scaleNote = getRootNote(rootNote)
     updateChords()
   }
+  function reset() {}
+  function handleSelectChord(chord: SelectedChord) {
+    gameActions.toggleChord(chord)
+  }
+  function handleSelectBasicChords() {}
+  function handleSelect7Chords() {}
+  function handleSelectAll() {
+    gameActions.toggleAllChords(!allSelected)
+  }
 </script>
 
 <div class={`${$$props.class || ''}`}>
-  <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm" class:collapsed={$hidden}>
+  <fieldset
+    class="flex flex-col relative rounded border-2 px-4 py-2 my-4 text-sm"
+    class:collapsed={$hidden}
+  >
     <legend class="text-base">
       <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>Chords</button>
     </legend>
+    <div class="absolute top-[-0.25rem] right-[0.5rem] flex">
+      <button
+        class="flex items-center justify-center rounded px-0.5 hover:bg-gray-200"
+        class:hidden={$hidden}
+        on:click={handleSelectBasicChords}
+      >
+        <Icon icon={alphaB} width={20} />
+      </button>
+      <button
+        class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
+        class:hidden={$hidden}
+        on:click={handleSelect7Chords}
+      >
+        <Icon icon={num7} width={16} />
+      </button>
+      <button
+        class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
+        class:hidden={$hidden}
+        on:click={handleSelectAll}
+      >
+        <Icon icon={allSelected ? selectOff : select} width={16} />
+      </button>
+      <button
+        class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
+        class:hidden={$hidden}
+        on:click={reset}
+      >
+        <Icon icon={restore} width={16} />
+      </button>
+    </div>
     <div class="body" class:hidden={$hidden}>
       <div class="flex w-1/2 mb-2 input">
         <label class="mr-4 font-bold" for="scale-key">Key</label>
@@ -86,6 +139,17 @@
       </div>
       <ul class="chord-list w-full">
         {#each leftList as chord, idx}
+          <li>
+            <button
+              class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
+              class:text-green-500={chord.selected}
+              class:text-gray-400={!chord.selected}
+              class:hidden={$hidden}
+              on:click={() => handleSelectChord(chord)}
+            >
+              <Icon icon={chord.selected ? circle : circleOut} width={12} />
+            </button>
+          </li>
           <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffixes[0]}</li>
           <li class="intervals" title={chord.intervals.map(i => i.interval).join('-')}>
             {#if leftChords[idx] && leftChords[idx].length > 0}
@@ -103,6 +167,17 @@
       </ul>
       <ul class="chord-list w-full">
         {#each rightList as chord, idx}
+          <li>
+            <button
+              class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
+              class:text-green-500={chord.selected}
+              class:text-gray-400={!chord.selected}
+              class:hidden={$hidden}
+              on:click={() => handleSelectChord(chord)}
+            >
+              <Icon icon={chord.selected ? circle : circleOut} width={12} />
+            </button>
+          </li>
           <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffixes[0]}</li>
           <li class="intervals" title={chord.intervals.map(i => i.interval).join('-')}>
             {#if rightChords[idx] && rightChords[idx].length > 0}
@@ -146,7 +221,7 @@
   .chord-list {
     display: grid;
     gap: 0.25rem;
-    grid-template-columns: 1fr 4fr 5fr;
+    grid-template-columns: 1fr 1fr 4fr 5fr;
     grid-template-rows: auto;
     align-items: center;
   }

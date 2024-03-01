@@ -1,8 +1,8 @@
 import { GameType, BaseOptions } from './types'
 
-export class Game<V, G> {
-  type: GameType
-  options: BaseOptions
+export class Game<T extends GameType, V, G> {
+  type: T
+  baseOptions: BaseOptions
 
   data: V[]
   sampled: V[]
@@ -14,10 +14,10 @@ export class Game<V, G> {
   idx = 0
   timing: number
 
-  constructor(type: GameType, data: V[], opts: BaseOptions) {
+  constructor(type: T, data: V[], opts: BaseOptions) {
     this.type = type
     this.data = data
-    this.options = opts
+    this.baseOptions = opts
     const sampled: V[] = []
     const { count } = opts
     const available = data.map(v => (typeof v === 'object' && v !== null ? { ...v } : v))

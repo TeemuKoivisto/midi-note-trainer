@@ -6,14 +6,14 @@
 
   import GameOptions from '$components/play/GameOptions.svelte'
 
-  import { currentGame, gameActions, gameOptions } from '$stores/game'
+  import { currentGame, gameActions, gameOptions, selectedChords } from '$stores/game'
 
   import type { GameType } from '@/games'
 
   const options: { key: GameType; value: string }[] = [
     {
       key: 'notes',
-      value: 'Guess Notes'
+      value: 'Play Notes'
     },
     {
       key: 'pitches',
@@ -41,18 +41,24 @@
     }
   ]
   let selectedGame = options[4].key
-  type ChordsOption = 'maj-m' | 'all'
-  const chordsOptions: { key: ChordsOption; value: string }[] = [
+
+  type ChordsOption = 'maj-m' | 'selected' | 'all'
+  $: selected = $selectedChords.reduce((acc, cur) => (cur.selected ? acc + 1 : acc), 0)
+  $: chordsOptions = [
     {
       key: 'maj-m',
-      value: 'maj, m'
+      value: 'Major/Minor'
+    },
+    {
+      key: 'selected',
+      value: `Selected ${selected} chords`
     },
     {
       key: 'all',
-      value: 'all'
+      value: 'All'
     }
-  ]
-  let selectedChords = chordsOptions[0].key
+  ] as { key: ChordsOption; value: string }[]
+  let chordsSelection = 'maj-m'
   let count = $gameOptions.count || ''
   let waitSeconds = $gameOptions.waitSeconds || ''
 
@@ -66,7 +72,19 @@
     gameActions.clearGame(true)
   }
   function play(e: MouseEvent, type: GameType) {
-    gameActions.play(type)
+    if (type === 'chords-write' || type === 'chords-play' || type === 'chords-diatonic') {
+      let chords
+      if (chordsSelection === 'selected') {
+        chords = $selectedChords.filter(c => c.selected)
+      } else if (chordsSelection === 'all') {
+        chords = $selectedChords
+      } else {
+        chords = $selectedChords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
+      }
+      gameActions.play(type, { chords })
+    } else {
+      gameActions.play(type)
+    }
     // Blur the button so that pressing Space or Enter wont allow generating bazillion new games
     if (e.currentTarget instanceof HTMLElement) {
       e.currentTarget.blur()
@@ -84,7 +102,7 @@
     play(e, key)
   }
   function handleSelectChords(key: ChordsOption) {
-    selectedChords = key
+    chordsSelection = key
   }
 </script>
 
@@ -117,7 +135,7 @@
             <li>
               <button
                 class="px-2 py-1 mr-1 flex items-center w-full h-full rounded hover:bg-[#eee]"
-                class:selected={key === selectedChords}
+                class:selected={key === chordsSelection}
                 on:click={() => handleSelectChords(key)}>{value}</button
               >
             </li>

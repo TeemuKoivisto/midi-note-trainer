@@ -17,7 +17,11 @@
     gameActions.nextGuess()
   }
   function tryAgain() {
-    game && gameActions.play(game.type)
+    if (game instanceof GuessChords) {
+      gameActions.play(game.type, game.opts)
+    } else if (game) {
+      gameActions.play(game.type)
+    }
   }
   function clearGame() {
     gameActions.clearGame()
