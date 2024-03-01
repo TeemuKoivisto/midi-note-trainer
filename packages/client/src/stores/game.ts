@@ -8,7 +8,7 @@ import { scaleData, scoreActions } from './score'
 import { GuessChords, GuessKeys, GuessNotes } from '@/games'
 
 import type { Chord } from '@/chords-and-scales'
-import type { GameInstance, GameType, GameConstructors } from '@/games'
+import type { GameInstance, GameType, OptionsMap } from '@/games'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 export interface SelectedChord extends Chord {
@@ -40,8 +40,10 @@ export const selectedChords = writable<SelectedChord[]>(
   chordsFromJSON().map(c => ({ ...c, selected: true }))
 )
 
+type PlayArgs = { [K in keyof OptionsMap]: [type: K, options: OptionsMap[K]] }[keyof OptionsMap]
+
 export const gameActions = {
-  play<K extends GameType>(...args: GameConstructors[K]): GameInstance {
+  play(...[type, options]: PlayArgs): GameInstance {
     let game
     const scale = get(scaleData)
     const range = get(midiRange)
@@ -53,30 +55,30 @@ export const gameActions = {
       count: opts.count
     }
     let keyAndScale = [scale.key, scale.scale]
-    if (args[0] === 'notes') {
-      game = new GuessNotes(args[0], baseOpts)
+    if (type === 'notes') {
+      game = new GuessNotes(type, baseOpts)
       scoreActions.setTarget([scoreActions.getNote(game.current)])
       get(piano)?.noteOn(game.current)
-    } else if (args[0] === 'pitches') {
-      game = new GuessNotes(args[0], baseOpts)
+    } else if (type === 'pitches') {
+      game = new GuessNotes(type, baseOpts)
       scoreActions.setTarget()
       inputsActions.setInputValue('useSound', true)
       get(piano)?.noteOn(game.current)
-    } else if (args[0] === 'keys-major' || args[0] == 'keys-minor') {
-      game = new GuessKeys(args[0], baseOpts)
-      keyAndScale = [game.current, args[0] === 'keys-major' ? 'major' : 'minor']
-    } else if (args[0] === 'chords-play' || args[0] === 'chords-write') {
-      game = new GuessChords(args[0], baseOpts, args[1])
-    } else if (args[0] === 'chords-diatonic') {
+    } else if (type === 'keys-major' || type == 'keys-minor') {
+      game = new GuessKeys(type, baseOpts)
+      keyAndScale = [game.current, type === 'keys-major' ? 'major' : 'minor']
+    } else if (type === 'chords-play' || type === 'chords-write') {
+      game = new GuessChords(type, baseOpts, options)
+    } else if (type === 'chords-diatonic') {
       const chords = createTriadChords(scale.triads).map((c, idx) => ({
         ...c,
         allowed: new Set([scale.scaleNotes[idx].semitones])
       }))
-      game = new GuessChords(args[0], baseOpts, {
+      game = new GuessChords(type, baseOpts, {
         chords
       })
     } else {
-      throw Error('Unknown game type: ' + args[0])
+      throw Error('Unknown game type: ' + type)
     }
     if (typeof game.current !== 'number' && typeof game.current !== 'string') {
       get(piano)?.playChord(game.current.notes.map(n => n.midi))

@@ -20,7 +20,7 @@
     if (game instanceof GuessChords) {
       gameActions.play(game.type, game.opts)
     } else if (game) {
-      gameActions.play(game.type)
+      gameActions.play(game.type, undefined)
     }
   }
   function clearGame() {

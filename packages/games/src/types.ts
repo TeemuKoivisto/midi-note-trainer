@@ -26,14 +26,12 @@ export interface GuessChordsOptions {
   onlyScale?: boolean
 }
 
-type RemoveSecondParam<T extends any[]> = T extends [infer T, T[1], ...infer O] ? [T, ...O] : never
-
-export interface GameConstructors {
-  notes: RemoveSecondParam<ConstructorParameters<typeof GuessNotes>>
-  pitches: RemoveSecondParam<ConstructorParameters<typeof GuessNotes>>
-  'keys-major': RemoveSecondParam<ConstructorParameters<typeof GuessKeys>>
-  'keys-minor': RemoveSecondParam<ConstructorParameters<typeof GuessKeys>>
-  'chords-write': RemoveSecondParam<ConstructorParameters<typeof GuessChords>>
-  'chords-play': RemoveSecondParam<ConstructorParameters<typeof GuessChords>>
-  'chords-diatonic': RemoveSecondParam<ConstructorParameters<typeof GuessChords>>
+export interface OptionsMap {
+  notes: undefined
+  pitches: undefined
+  'keys-major': undefined
+  'keys-minor': undefined
+  'chords-write': GuessChordsOptions
+  'chords-play': GuessChordsOptions
+  'chords-diatonic': GuessChordsOptions
 }

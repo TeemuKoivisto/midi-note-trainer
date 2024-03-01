@@ -83,7 +83,7 @@
       }
       gameActions.play(type, { chords })
     } else {
-      gameActions.play(type)
+      gameActions.play(type, undefined)
     }
     // Blur the button so that pressing Space or Enter wont allow generating bazillion new games
     if (e.currentTarget instanceof HTMLElement) {
