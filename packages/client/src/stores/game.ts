@@ -29,15 +29,16 @@ const DEFAULT_OPTIONS = {
   waitSeconds: 3
 }
 
-const chords = chordsFromJSON()
-
 export const guessState = writable<GuessState>('waiting')
 export const gameOptions = persist(writable<GameOptions>(DEFAULT_OPTIONS), {
   key: 'game-options'
 })
 export const currentGame = writable<GameInstance | undefined>(undefined)
 export const selectedChords = writable<SelectedChord[]>(
-  chordsFromJSON().map(c => ({ ...c, selected: true }))
+  chordsFromJSON().map(c => ({
+    ...c,
+    selected: true
+  }))
 )
 
 type PlayArgs = { [K in keyof OptionsMap]: [type: K, options: OptionsMap[K]] }[keyof OptionsMap]
@@ -96,13 +97,8 @@ export const gameActions = {
   setOptionValue<K extends keyof GameOptions>(key: K, val: GameOptions[K]) {
     gameOptions.update(v => ({ ...v, [key]: val }))
   },
-  toggleChord(chord: SelectedChord) {
-    selectedChords.update(v =>
-      v.map(c => (c.name === chord.name ? { ...c, selected: !c.selected } : c))
-    )
-  },
-  toggleAllChords(selected: boolean) {
-    selectedChords.update(v => v.map(c => ({ ...c, selected })))
+  toggleChords(cb: (c: SelectedChord) => boolean) {
+    selectedChords.update(v => v.map(c => ({ ...c, selected: cb(c) })))
   },
   nextGuess() {
     const game = get(currentGame)

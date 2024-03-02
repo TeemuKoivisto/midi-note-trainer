@@ -6,7 +6,13 @@
 
   import GameOptions from '$components/play/GameOptions.svelte'
 
-  import { currentGame, gameActions, gameOptions, selectedChords } from '$stores/game'
+  import {
+    currentGame,
+    gameActions,
+    gameOptions,
+    selectedChords,
+    type SelectedChord
+  } from '$stores/game'
 
   import type { GameType } from '@/games'
 
@@ -50,6 +56,10 @@
       value: 'Major/Minor'
     },
     {
+      key: 'seventh',
+      value: 'Seventh'
+    },
+    {
       key: 'selected',
       value: `Selected ${selected} chords`
     },
@@ -73,13 +83,22 @@
   }
   function play(e: MouseEvent, type: GameType) {
     if (type === 'chords-write' || type === 'chords-play' || type === 'chords-diatonic') {
-      let chords
+      let chords: SelectedChord[] = []
       if (chordsSelection === 'selected') {
         chords = $selectedChords.filter(c => c.selected)
       } else if (chordsSelection === 'all') {
         chords = $selectedChords
-      } else {
+      } else if (chordsSelection === 'maj-m') {
         chords = $selectedChords.filter(c => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm')
+      } else if (chordsSelection === 'seventh') {
+        chords = $selectedChords.filter(
+          c =>
+            c.suffixes[0] === 'maj7' ||
+            c.suffixes[0] === 'm7' ||
+            c.suffixes[0] === '7' ||
+            c.suffixes[0] === 'dim7' ||
+            c.suffixes[0] === 'aug7'
+        )
       }
       gameActions.play(type, { chords })
     } else {

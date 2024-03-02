@@ -65,14 +65,29 @@
     scaleNote = getRootNote(rootNote)
     updateChords()
   }
-  function reset() {}
   function handleSelectChord(chord: SelectedChord) {
-    gameActions.toggleChord(chord)
+    gameActions.toggleChords(c => (c.name === chord.name ? !c.selected : c.selected))
   }
-  function handleSelectBasicChords() {}
-  function handleSelect7Chords() {}
+  function handleSelectBasicChords() {
+    const isMajMinor = (c: SelectedChord) => c.suffixes[0] === 'maj' || c.suffixes[0] === 'm'
+    const everySelected = $selectedChords.filter(isMajMinor).every(c => c.selected)
+    gameActions.toggleChords(c => (isMajMinor(c) ? (everySelected ? false : true) : c.selected))
+  }
+  function handleSelect7Chords() {
+    const is7 = (c: SelectedChord) =>
+      c.suffixes[0] === 'maj7' ||
+      c.suffixes[0] === 'm7' ||
+      c.suffixes[0] === '7' ||
+      c.suffixes[0] === 'dim7' ||
+      c.suffixes[0] === 'aug7'
+    const everySelected = $selectedChords.filter(is7).every(c => c.selected)
+    gameActions.toggleChords(c => (is7(c) ? (everySelected ? false : true) : c.selected))
+  }
   function handleSelectAll() {
-    gameActions.toggleAllChords(!allSelected)
+    gameActions.toggleChords(_ => !allSelected)
+  }
+  function reset() {
+    gameActions.toggleChords(_ => true)
   }
 </script>
 
@@ -141,16 +156,20 @@
         {#each leftList as chord, idx}
           <li>
             <button
-              class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
-              class:text-green-500={chord.selected}
-              class:text-gray-400={!chord.selected}
+              class="flex items-center justify-center w-full select-btn"
               class:hidden={$hidden}
               on:click={() => handleSelectChord(chord)}
             >
-              <Icon icon={chord.selected ? circle : circleOut} width={12} />
+              <span
+                class="px-1 py-1 rounded"
+                class:text-green-500={chord.selected}
+                class:text-gray-400={!chord.selected}
+              >
+                <Icon icon={chord.selected ? circle : circleOut} width={12} />
+              </span>
+              <div class="ml-1 px-1 w-full bg-gray-200">{chord.suffixes[0]}</div>
             </button>
           </li>
-          <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffixes[0]}</li>
           <li class="intervals" title={chord.intervals.map(i => i.interval).join('-')}>
             {#if leftChords[idx] && leftChords[idx].length > 0}
               {#each leftChords[idx] as scaleNote}
@@ -169,16 +188,20 @@
         {#each rightList as chord, idx}
           <li>
             <button
-              class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
-              class:text-green-500={chord.selected}
-              class:text-gray-400={!chord.selected}
+              class="flex items-center justify-center w-full select-btn"
               class:hidden={$hidden}
               on:click={() => handleSelectChord(chord)}
             >
-              <Icon icon={chord.selected ? circle : circleOut} width={12} />
+              <span
+                class="px-1 py-1 rounded"
+                class:text-green-500={chord.selected}
+                class:text-gray-400={!chord.selected}
+              >
+                <Icon icon={chord.selected ? circle : circleOut} width={12} />
+              </span>
+              <div class="ml-1 px-1 w-full bg-gray-200">{chord.suffixes[0]}</div>
             </button>
           </li>
-          <li class="flex items-center justify-center px-1 bg-gray-200">{chord.suffixes[0]}</li>
           <li class="intervals" title={chord.intervals.map(i => i.interval).join('-')}>
             {#if rightChords[idx] && rightChords[idx].length > 0}
               {#each rightChords[idx] as scaleNote}
@@ -218,10 +241,20 @@
       grid-column-end: span 2;
     }
   }
+  .select-btn {
+    &:hover {
+      & > span {
+        @apply bg-gray-200;
+      }
+      & > div {
+        @apply bg-gray-300;
+      }
+    }
+  }
   .chord-list {
     display: grid;
     gap: 0.25rem;
-    grid-template-columns: 1fr 1fr 4fr 5fr;
+    grid-template-columns: 2fr 4fr 5fr;
     grid-template-rows: auto;
     align-items: center;
   }
