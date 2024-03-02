@@ -12,12 +12,8 @@
   let setKeys = false
 
   inputs.subscribe(inp => {
-    if (fixedVelocity !== inp.fixedVelocity) {
-      fixedVelocity = inp.fixedVelocity ?? ''
-    }
-    if (fadeMs !== inp.keyFadeTimeout) {
-      fadeMs = inp.keyFadeTimeout
-    }
+    fixedVelocity = inp.fixedVelocity ?? ''
+    fadeMs = inp.keyFadeTimeout
   })
 
   function toggleVisibility() {

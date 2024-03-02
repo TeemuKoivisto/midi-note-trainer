@@ -56,12 +56,19 @@
       class="h-[20px]"
       id="duplicates"
       type="checkbox"
-      bind:checked={$gameOptions.duplicates}
+      checked={$gameOptions.duplicates}
+      on:input={e => gameActions.setOptionValue('duplicates', e.currentTarget.checked)}
     />
   </li>
   <li class="flex items-center justify-between mr-6">
     <label class="font-bold" for="autoplay">Autoplay</label>
-    <input class="h-[20px]" id="autoplay" type="checkbox" bind:checked={$gameOptions.autoplay} />
+    <input
+      class="h-[20px]"
+      id="autoplay"
+      type="checkbox"
+      checked={$gameOptions.autoplay}
+      on:input={e => gameActions.setOptionValue('autoplay', e.currentTarget.checked)}
+    />
   </li>
   <li class="flex items-center justify-between">
     <label class="font-bold" for="wait-ms">Wait seconds</label>

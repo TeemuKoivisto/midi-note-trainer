@@ -78,7 +78,6 @@
   })
 
   function clearGame() {
-    selectedGame = options[0].key
     gameActions.clearGame(true)
   }
   function play(e: MouseEvent, type: GameType) {
