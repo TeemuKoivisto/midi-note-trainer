@@ -19,7 +19,7 @@ jobs:
 
       - name: Build the packages
         run: |
-          pnpm --filter types --filter chords-and-scales --filter midi-piano build
+          pnpm --filter types --filter chords-and-scales --filter keyboard --filter midi-piano build
           pnpm --filter games build
 
       - name: Run tests
