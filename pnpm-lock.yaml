@@ -92,6 +92,21 @@ importers:
 
   packages/client:
     dependencies:
+      '@/chords-and-scales':
+        specifier: workspace:*
+        version: link:../chords-and-scales
+      '@/games':
+        specifier: workspace:*
+        version: link:../games
+      '@/keyboard':
+        specifier: workspace:*
+        version: link:../keyboard
+      '@/midi-piano':
+        specifier: workspace:*
+        version: link:../midi-piano
+      '@/types':
+        specifier: workspace:*
+        version: link:../types
       '@iconify-icons/fe':
         specifier: ^1.2.5
         version: 1.2.5
@@ -114,18 +129,6 @@ importers:
         specifier: ^3.1.8
         version: 3.1.8
     devDependencies:
-      '@/chords-and-scales':
-        specifier: workspace:*
-        version: link:../chords-and-scales
-      '@/games':
-        specifier: workspace:*
-        version: link:../games
-      '@/midi-piano':
-        specifier: workspace:*
-        version: link:../midi-piano
-      '@/types':
-        specifier: workspace:*
-        version: link:../types
       '@sveltejs/adapter-static':
         specifier: 2.0.3
         version: 2.0.3(@sveltejs/kit@1.28.0)
@@ -165,6 +168,19 @@ importers:
       '@/chords-and-scales':
         specifier: workspace:*
         version: link:../chords-and-scales
+      '@/types':
+        specifier: workspace:*
+        version: link:../types
+      vitest:
+        specifier: ^1.0.4
+        version: 1.0.4(@types/node@20.11.4)(sass@1.68.0)
+
+  packages/keyboard:
+    dependencies:
+      '@/chords-and-scales':
+        specifier: workspace:*
+        version: link:../chords-and-scales
+    devDependencies:
       '@/types':
         specifier: workspace:*
         version: link:../types

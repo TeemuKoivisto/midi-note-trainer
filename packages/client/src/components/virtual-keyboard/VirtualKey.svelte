@@ -1,5 +1,7 @@
 <script lang="ts">
-  export let value: { key: string; size?: number; code: number; note: string }
+  import type { KeyboardKey } from '@/keyboard'
+
+  export let value: KeyboardKey
 
   function sizeClass(size?: number) {
     if (size && Number.isInteger(size)) {
@@ -11,23 +13,25 @@
   }
 </script>
 
-{#if value.key === 'Enter'}
+{#if value.key === '{enter}'}
   <li class="m-[0.175rem] mr-0"></li>
 {/if}
 <li
   class={`${$$props.class || ''} m-[0.175rem] ${sizeClass(value.size)}`}
-  class:enter={value.key === 'Enter'}
+  class:enter={value.key === '{enter}'}
 >
   <button
     class="relative w-full h-full shadow bg-[#ececf1] rounded flex items-center justify-center"
     on:click
   >
-    {#if value.key === 'Enter'}
+    {#if value.key === '{enter}'}
       <div
         class="enter-part bg-[#ececf1] rounded-l absolute top-[-2px] left-[-12px] w-[13px] h-[2.8rem]"
       ></div>
     {/if}
-    <div class="absolute top-0 left-0">{value.note}</div>
+    {#if value.note}
+      <div class="absolute top-0 left-0">{value.note.note}</div>
+    {/if}
     <div>{value.key}</div>
   </button>
 </li>

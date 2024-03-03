@@ -13,10 +13,6 @@
   "devDependencies": {
     "@sveltejs/adapter-static": "2.0.3",
     "@sveltejs/kit": "^1.26.0",
-    "@/chords-and-scales": "workspace:*",
-    "@/games": "workspace:*",
-    "@/midi-piano": "workspace:*",
-    "@/types": "workspace:*",
     "autoprefixer": "^10.4.16",
     "cross-fetch": "^4.0.0",
     "postcss": "^8.4.30",
@@ -32,6 +28,11 @@
     "@iconify-icons/feather": "^1.2.3",
     "@iconify-icons/mdi": "^1.2.48",
     "@iconify/svelte": "^3.1.4",
+    "@/chords-and-scales": "workspace:*",
+    "@/games": "workspace:*",
+    "@/keyboard": "workspace:*",
+    "@/midi-piano": "workspace:*",
+    "@/types": "workspace:*",
     "tailwindcss": "^3.3.3",
     "vexflow": "^4.2.3",
     "webmidi": "^3.1.8"

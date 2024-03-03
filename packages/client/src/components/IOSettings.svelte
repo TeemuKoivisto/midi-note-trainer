@@ -9,7 +9,7 @@
   const hidden = persist(writable(false), { key: 'inputs-hidden' })
   let fixedVelocity = $inputs.fixedVelocity ?? ''
   let fadeMs = $inputs.keyFadeTimeout
-  let setKeys = false
+  let setKeys = true
 
   inputs.subscribe(inp => {
     fixedVelocity = inp.fixedVelocity ?? ''
