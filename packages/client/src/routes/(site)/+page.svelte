@@ -7,7 +7,6 @@
   import KeyboardInput from '$components/KeyboardInput.svelte'
   import PlayForm from '$components/play/PlayForm.svelte'
   import Scales from '$components/scales/Scales.svelte'
-  import Score from '$components/score/Score.svelte'
   import ScoreOptions from '$components/play/ScoreOptions.svelte'
 
   import { currentGame, gameActions, gameOptions, guessState } from '$stores/game'
@@ -160,7 +159,11 @@
   </div>
 </section>
 
-<Score class="px-4 md:px-0" />
+{#await import('$components/score/Score.svelte')}
+  &nbsp;
+{:then { default: comp }}
+  <svelte:component this={comp} class="px-4 md:px-0" />
+{/await}
 
 <section class="mb-8 px-4 md:px-0 flex flex-col">
   <KeyboardInput

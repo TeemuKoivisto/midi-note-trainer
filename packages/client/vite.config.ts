@@ -20,6 +20,22 @@ export default defineConfig({
       $utils: resolve('./src/utils')
     }
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('svelte')) {
+              return 'vendor_svelte'
+            } else if (id.includes('vexflow')) {
+              return 'vendor_vexflow'
+            }
+            return 'vendor'
+          }
+        }
+      }
+    },
+  },
   test: {
     globals: true,
     include: ['src/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
