@@ -127,7 +127,7 @@
 <fieldset class={`${$$props.class || ''} flex flex-col rounded border-2 px-4 py-2 text-sm`}>
   <legend class="px-1 text-base">Play</legend>
   <div class="body pb-2 h-full">
-    <ul class="options">
+    <ul class="games">
       {#each options as { key, value }}
         <li class="flex">
           <button
@@ -146,7 +146,7 @@
         </li>
       {/each}
     </ul>
-    <div>
+    <div class="options">
       {#if selectedGame === 'chords-write' || selectedGame === 'chords-play'}
         <ul>
           {#each chordsOptions as { key, value }}
@@ -161,18 +161,16 @@
         </ul>
       {/if}
     </div>
-    <div class="h-full flex flex-col justify-between">
-      <GameOptions />
-      <div>
-        <button class="w-full btn hover:bg-gray-200" on:click={clearGame}>Reset</button>
-        <button
-          class="w-full mt-2 flex items-center justify-center btn primary"
-          on:click={e => play(e, selectedGame)}
-        >
-          <Icon class="mr-1" icon={$currentGame ? stop : playIcon} width={20} />
-          {$currentGame ? 'Quit' : 'Play'}
-        </button>
-      </div>
+    <GameOptions class="game-options" />
+    <div class="h-full flex flex-col justify-end">
+      <button class="w-full btn hover:bg-gray-200" on:click={clearGame}>Reset</button>
+      <button
+        class="w-full mt-2 flex items-center justify-center btn primary"
+        on:click={e => play(e, selectedGame)}
+      >
+        <Icon class="mr-1" icon={$currentGame ? stop : playIcon} width={20} />
+        {$currentGame ? 'Quit' : 'Play'}
+      </button>
     </div>
   </div>
 </fieldset>
@@ -190,9 +188,18 @@
     display: grid;
     gap: 0.5rem;
     grid-template-columns: 5fr 4fr 4fr;
-    grid-template-rows: auto;
+    grid-template-rows: 1fr 1fr;
+    .games {
+      grid-row-end: span 2;
+    }
+    .options {
+      grid-row-end: span 2;
+    }
     @media (width <= 475px) {
       grid-template-columns: 1fr 1fr;
+      :global(.game-options) {
+        @apply px-2;
+      }
     }
   }
   .buttons {

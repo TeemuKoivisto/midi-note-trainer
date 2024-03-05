@@ -154,7 +154,7 @@
   <Scales />
   <Chords />
   <div class="play">
-    <ScoreOptions class="mr-4" />
+    <ScoreOptions class="score-options mr-4" />
     <PlayForm />
   </div>
 </section>
@@ -181,5 +181,11 @@
     display: grid;
     grid-template-columns: 1fr 3fr;
     grid-template-rows: auto;
+    @media (width <= 656px) {
+      @apply flex flex-col;
+      :global(.score-options) {
+        @apply w-full;
+      }
+    }
   }
 </style>

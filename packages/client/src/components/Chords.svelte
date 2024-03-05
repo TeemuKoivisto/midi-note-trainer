@@ -130,7 +130,7 @@
       </button>
     </div>
     <div class="body" class:hidden={$hidden}>
-      <div class="flex w-1/2 mb-2 input">
+      <div class="flex mb-2 input">
         <label class="mr-4 font-bold" for="scale-key">Key</label>
         <input
           class="bg-gray-100 w-16 px-1 rounded"
@@ -140,9 +140,9 @@
           on:focus={() => inputsActions.setKeyboardFocus(false)}
           on:blur={() => inputsActions.setKeyboardFocus(true)}
         />
-        <label class="mx-4 font-bold" for="scale-key">Scale</label>
+        <label class="font-bold" for="scale-key">Scale</label>
         <input class="bg-gray-100 w-16 px-1 rounded" id="scale-key" value={'Major'} disabled />
-        <label class="mx-4 font-bold" for="scale-key">Note</label>
+        <label class="font-bold" for="scale-key">Note</label>
         <input
           class="bg-gray-100 w-16 px-1 rounded"
           id="scale-key"
@@ -237,15 +237,24 @@
     }
   }
   .input {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    & > input {
+      @apply my-1 mr-0 w-24;
+    }
     @media (width > 600px) {
       grid-column-end: span 2;
+      @apply flex;
+      & > label {
+        @apply my-0 mr-4;
+      }
+      & > input {
+        @apply my-0 mr-4;
+      }
     }
   }
   .select-btn {
     &:hover {
-      & > span {
-        @apply bg-gray-200;
-      }
       & > div {
         @apply bg-gray-300;
       }
