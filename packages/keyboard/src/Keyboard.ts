@@ -1,6 +1,8 @@
 import en from './layouts/english'
 import sw from './layouts/swedish'
 
+import { CODES } from './codes'
+
 import type { ScaleNote } from '@/chords-and-scales'
 import { KeyboardKey, Layout } from './types'
 
@@ -29,9 +31,9 @@ export class Keyboard {
   setLayout(layout: Layout) {
     const rows: Rows = [[], [], [], []]
     layout.layout.default.forEach((v, rowIndex) => {
-      v.split(' ').forEach((key, _keyIndex) => {
+      v.split(' ').forEach((key, keyIndex) => {
         if (rowIndex < 4) {
-          rows[rowIndex].push({ key, code: 0 })
+          rows[rowIndex].push({ key, code: CODES[rowIndex][keyIndex] })
         }
       })
     })

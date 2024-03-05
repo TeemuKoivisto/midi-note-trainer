@@ -8,7 +8,7 @@ export interface Layout {
 }
 export interface KeyboardKey {
   key: string
-  code: number
+  code: string
   size?: number
   noteSeq?: number
   note?: ScaleNote

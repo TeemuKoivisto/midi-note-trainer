@@ -3,10 +3,10 @@
 
   import VirtualKey from './VirtualKey.svelte'
 
-  import { keyboard, keys } from '$stores/keyboard'
+  import { keyboard, keys, keyMap } from '$stores/keyboard'
 
   onMount(() => {
-    console.log($keys)
+    console.log($keyMap)
   })
 
   let middleRow = true

@@ -7,7 +7,6 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [sveltekit()],
-  assetsInclude: ['**/*.dict'],
   server: {},
   resolve: {
     alias: {
