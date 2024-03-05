@@ -125,7 +125,7 @@ function parseNotes(code: string, key: string, shift: boolean): ParsedNote | boo
       octave = parseInt(pressed)
     } catch (err: any) {}
   }
-  // console.log(`o ${octave} s ${shift}`, inputtedNote)
+  // console.log(`${key} ${keyboardInput} o ${octave} s ${shift}`, inputtedNote)
   if (inputtedNote && octave !== undefined) {
     // Octave either set automatically or inputted with hotkeys enabled
     const midi = inputtedNote.semitones + (octave + 1 + (shift ? 1 : 0)) * 12
@@ -139,6 +139,7 @@ function parseNotes(code: string, key: string, shift: boolean): ParsedNote | boo
     if (midi !== undefined) {
       return { e: 'note', data: midi }
     }
+    return true
   } else if (code === 'Backspace') {
     inputtedNote = undefined
     keyboardInput = keyboardInput.slice(0, -1)
@@ -221,7 +222,7 @@ export const keyboardActions = {
         return true
       }
     } else if (get(inputs).useKeyboard) {
-      return parseNotes(code, key, shift)
+      return parseNotes(code, key.toUpperCase(), shift)
     }
     return false
   }
