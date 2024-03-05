@@ -61,7 +61,6 @@ export const keys = derived(keyboard, kbd =>
     })
   )
 )
-
 export const keyMap = derived(
   keyboard,
   kbd =>
@@ -93,12 +92,13 @@ interface ParsedNote {
   data: number
 }
 
-function parseNotes(code: string, shift: boolean): ParsedNote | boolean {
+function parseNotes(code: string, key: string, shift: boolean): ParsedNote | boolean {
   const { useAutoOctave, useHotkeys } = get(inputs)
   let octave
   const kmap = get(keyMap)
   const found = kmap.get(code)
   const pressed = found?.key || ''
+  let handled = false
   if (!inputtedNote && useHotkeys && found?.note) {
     // Use the hotkey that directly maps the key to a note
     inputtedNote = found.note
@@ -106,30 +106,33 @@ function parseNotes(code: string, shift: boolean): ParsedNote | boolean {
     if (useAutoOctave) {
       octave = getOctave(get(midiRangeNotes)[0].midi)
     }
-    return true
-  } else if (!useHotkeys && keyboardInput.length === 0 && found && regexNote.test(found.key)) {
+    handled = true
+  } else if (!useHotkeys && keyboardInput.length === 0 && regexNote.test(key)) {
     // Parse the note letter directly from the input
-    keyboardInput += found.key.toUpperCase()
-    return true
-  } else if (!useHotkeys && keyboardInput.length > 0 && found && regexAccidental.test(found.key)) {
+    keyboardInput += key.toUpperCase()
+    handled = true
+  } else if (!useHotkeys && keyboardInput.length > 0 && regexAccidental.test(key)) {
     // Parse accidental from the input
-    if (found.key === 'b' || found.key === 'B') {
+    if (key === 'b' || key === 'B') {
       keyboardInput += '♭'
     } else {
       keyboardInput += '♯'
     }
-    return true
+    handled = true
   }
   if (regexPosInt.test(pressed)) {
     try {
       octave = parseInt(pressed)
     } catch (err: any) {}
   }
+  // console.log(`o ${octave} s ${shift}`, inputtedNote)
   if (inputtedNote && octave !== undefined) {
+    // Octave either set automatically or inputted with hotkeys enabled
     const midi = inputtedNote.semitones + (octave + 1 + (shift ? 1 : 0)) * 12
     inputtedNote = undefined
     return { e: 'note', data: midi }
   } else if (keyboardInput && octave !== undefined) {
+    // Same as previous but without hotkeys
     const note = keyboardActions.findNote(keyboardInput)
     const midi = note ? note.semitones + (octave + 1) * 12 : undefined
     keyboardInput = ''
@@ -141,7 +144,7 @@ function parseNotes(code: string, shift: boolean): ParsedNote | boolean {
     keyboardInput = keyboardInput.slice(0, -1)
     return true
   }
-  return false
+  return handled
 }
 
 export const keyboardActions = {
@@ -175,6 +178,7 @@ export const keyboardActions = {
   },
   handleInput(
     code: string,
+    key: string,
     shift = false
   ): ParsedKey | ParsedChord | ParsedNote | boolean | undefined {
     if (debounced || !get(keyboardFocused)) return undefined
@@ -217,7 +221,7 @@ export const keyboardActions = {
         return true
       }
     } else if (get(inputs).useKeyboard) {
-      return parseNotes(code, shift)
+      return parseNotes(code, key, shift)
     }
     return false
   }

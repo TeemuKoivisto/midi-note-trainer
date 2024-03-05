@@ -54,9 +54,11 @@ export class Keyboard {
         } else if (idx === 7) {
           this.rows[1][idx].note = notes.get(10)
         } else if (idx === 9) {
-          this.rows[1][idx].note = notes.get(1)
+          this.rows[1][idx].note = { ...(notes.get(1) as ScaleNote) }
+          this.rows[1][idx].note!.semitones += 12
         } else if (idx === 10) {
-          this.rows[1][idx].note = notes.get(3)
+          this.rows[1][idx].note = { ...(notes.get(3) as ScaleNote) }
+          this.rows[1][idx].note!.semitones += 12
         }
       })
       this.rows[2].forEach((_, idx) => {
@@ -75,15 +77,20 @@ export class Keyboard {
         } else if (idx === 7) {
           this.rows[2][idx].note = notes.get(11)
         } else if (idx === 8) {
-          this.rows[2][idx].note = notes.get(0)
+          this.rows[2][idx].note = { ...(notes.get(0) as ScaleNote) }
+          this.rows[2][idx].note!.semitones += 12
         } else if (idx === 9) {
-          this.rows[2][idx].note = notes.get(2)
+          this.rows[2][idx].note = { ...(notes.get(2) as ScaleNote) }
+          this.rows[2][idx].note!.semitones += 12
         } else if (idx === 10) {
-          this.rows[2][idx].note = notes.get(4)
+          this.rows[2][idx].note = { ...(notes.get(4) as ScaleNote) }
+          this.rows[2][idx].note!.semitones += 12
         } else if (idx === 11) {
-          this.rows[2][idx].note = notes.get(5)
+          this.rows[2][idx].note = { ...(notes.get(5) as ScaleNote) }
+          this.rows[2][idx].note!.semitones += 12
         } else if (idx === 12) {
-          this.rows[2][idx].note = notes.get(7)
+          this.rows[2][idx].note = { ...(notes.get(7) as ScaleNote) }
+          this.rows[2][idx].note!.semitones += 12
         }
       })
     }
