@@ -155,7 +155,7 @@
   <Chords />
   <div class="play">
     <ScoreOptions class="score-options mr-4" />
-    <PlayForm />
+    <PlayForm class="play-form" />
   </div>
 </section>
 
@@ -185,6 +185,9 @@
       @apply flex flex-col;
       :global(.score-options) {
         @apply w-full;
+      }
+      :global(.play-form) {
+        @apply mt-4;
       }
     }
   }

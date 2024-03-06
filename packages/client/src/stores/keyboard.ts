@@ -34,7 +34,7 @@ export const keyboardOptions = persist(
 )
 export const keyboard = derived([scaleData, keyboardOptions], ([scl, opts]) => {
   const kbd = new Keyboard(opts)
-  kbd.setNotes(scl.notesMap)
+  kbd.setNotes(Array.from(scl.notesMap.values()))
   return kbd
 })
 export const keys = derived(keyboard, kbd =>
@@ -191,8 +191,8 @@ export const keyboardActions = {
         return { e: 'guessed-key', data: found.note.note }
       } else if (code === 'Backspace') {
         keyboardInput = keyboardInput.slice(0, -1)
+        return true
       }
-      return true
     } else if (game instanceof GuessChords && game.type === 'chords-write') {
       if (code === 'Enter' && keyboardInput.length > 0) {
         const value = { note: '', flats: 0, sharps: 0, chord: '' }
