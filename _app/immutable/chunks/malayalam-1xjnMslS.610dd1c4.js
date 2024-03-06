@@ -1,0 +1,1 @@
+const t={layout:{default:["ഒ ൧ ൨ ൩ ൪ ൫ ൬ ൭ ൮ ൯ ൦ - ഋ {bksp}","{tab} ഔ ഐ ആ ഈ ഊ ഭ ങ ഘ ധ ഝ ഢ ഞ \\","{lock} ഓ ഏ അ ഇ ഉ ഫ റ ഖ ഥ ഛ ഠ {enter}","{shift} എ ഃ ണ ഴ ള ശ ഷ . യ {shift}",".com @ {space}"],shift:["ൊ ! @ # $ % ^ & * ) ( _ ൃ {bksp}","{tab} ൌ ൈ ാ ീ ൂ ബ ഹ ഗ ദ ജ ഡ ൎ \\","{lock} ോ േ ് ി ു പ ര ക ത ച ട {enter}","{shift} െ ം മ ന വ ല സ . യ {shift}",".com @ {space}"]}};export{t as default};

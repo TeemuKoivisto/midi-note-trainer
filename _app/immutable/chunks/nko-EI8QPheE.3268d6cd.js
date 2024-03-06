@@ -1,0 +1,1 @@
+const t={layout:{default:["߷ ߁ ߂ ߃ ߄ ߅ ߆ ߇ ߈ ߉ ߀ ߺ = {bksp}","{tab} ߒ ߥ ߋ ߙ ߕ ߦ ߎ ߌ ߐ ߔ [ ] \\","{lock} ߊ ߛ ߘ ߝ ߜ ߤ ߖ ߞ ߟ ߸ ߴ {enter}","{shift} ߢ ߏ ߗ ߍ ߓ ߣ ߡ ߲ ߳ ⸮ {shift}",".com @ {space}"],shift:["~ ! @ # $ % ^ & * ( ) _ + {bksp}","{tab} ߑ ߠ  ߚ  ߧ     { } |","{lock} ߽ ߲ ߳ ߸ ߹ ߺ ߾ ߿ ߶ ߹ ߵ {enter}","{shift} ߫ ߬ ߭ ߮ ߯ ߰ ߱ < > ߽ {shift}",".com @ {space}"]}};export{t as default};
