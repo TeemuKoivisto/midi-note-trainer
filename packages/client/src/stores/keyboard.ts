@@ -92,6 +92,36 @@ interface ParsedNote {
   data: number
 }
 
+function parseKey(code: string, key: string): ParsedKey | boolean {
+  const { useHotkeys } = get(inputs)
+  const found = get(keyMap).get(code)
+  // console.log(`code ${code} input: "${keyboardInput}" `)
+  if (useHotkeys && keyboardInput.length === 0 && found && found.note) {
+    keyboardInput = ''
+    return { e: 'guessed-key', data: found.note.note }
+  } else if (!useHotkeys && keyboardInput.length === 0 && regexNote.test(key)) {
+    // Parse the note letter directly from the input
+    keyboardInput += key.toUpperCase()
+    return true
+  } else if (!useHotkeys && keyboardInput.length > 0 && regexAccidental.test(key)) {
+    // Parse accidental from the input
+    if (key === 'b' || key === 'B') {
+      keyboardInput += '♭'
+    } else {
+      keyboardInput += '♯'
+    }
+    return true
+  } else if (code === 'Backspace' && keyboardInput.length > 0) {
+    keyboardInput = keyboardInput.slice(0, -1)
+    return true
+  } else if (code === 'Enter' && keyboardInput.length > 0) {
+    const data = keyboardInput
+    keyboardInput = ''
+    return { e: 'guessed-key', data }
+  }
+  return false
+}
+
 function parseNotes(code: string, key: string, shift: boolean): ParsedNote | boolean {
   const { useAutoOctave, useHotkeys } = get(inputs)
   let octave
@@ -185,14 +215,7 @@ export const keyboardActions = {
     if (debounced || !get(keyboardFocused)) return undefined
     const game = get(currentGame)
     if (game instanceof GuessKeys) {
-      const found = get(keyMap).get(code)
-      if (keyboardInput.length === 0 && found && found.note) {
-        keyboardInput = ''
-        return { e: 'guessed-key', data: found.note.note }
-      } else if (code === 'Backspace') {
-        keyboardInput = keyboardInput.slice(0, -1)
-        return true
-      }
+      return parseKey(code, key.toUpperCase())
     } else if (game instanceof GuessChords && game.type === 'chords-write') {
       if (code === 'Enter' && keyboardInput.length > 0) {
         const value = { note: '', flats: 0, sharps: 0, chord: '' }
