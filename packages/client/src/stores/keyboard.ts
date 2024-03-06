@@ -21,7 +21,6 @@ let keyboardError = ''
 let keyboardInput = ''
 let inputtedNote: ScaleNote | undefined
 // For determining whether to play notes unless text input has been already captured
-export const keyboardFocused = writable<boolean>(true)
 export const keyboardOptions = persist(
   writable<KeyboardOptions>({
     layout: 'middle-row'
@@ -238,9 +237,6 @@ function parseNotes(
 }
 
 export const keyboardActions = {
-  setKeyboardFocus(val: boolean) {
-    keyboardFocused.set(val)
-  },
   findNote(note: string): ScaleNote | undefined {
     return get(kbdNotes).find(n => {
       if (n.note.charAt(0) === note.charAt(0)) {

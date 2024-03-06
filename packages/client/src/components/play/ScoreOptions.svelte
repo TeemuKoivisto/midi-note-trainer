@@ -67,7 +67,6 @@
   }
   function rangeFocus() {
     rangeError = ''
-    keyboardActions.setKeyboardFocus(false)
   }
   function handleKeyChange({
     currentTarget: { value }
@@ -115,7 +114,6 @@
           bind:value={rangeMin}
           on:change={e => handleRangeChanged('min', e)}
           on:focus={rangeFocus}
-          on:blur={() => keyboardActions.setKeyboardFocus(true)}
         />
         <span class="mx-2 mt-1">—</span>
         <input
@@ -124,7 +122,6 @@
           bind:value={rangeMax}
           on:change={e => handleRangeChanged('max', e)}
           on:focus={rangeFocus}
-          on:blur={() => keyboardActions.setKeyboardFocus(true)}
         />
       </div>
       <div class="flex justify-between my-1">
@@ -157,14 +154,7 @@
     <div class="flex flex-col h-full">
       <label class="font-bold" for="key">Key</label>
       <div class="my-1 flex">
-        <input
-          class="h-[28px]"
-          id="key"
-          bind:value={selectedKey}
-          on:input={handleKeyChange}
-          on:focus={() => keyboardActions.setKeyboardFocus(false)}
-          on:blur={() => keyboardActions.setKeyboardFocus(true)}
-        />
+        <input class="h-[28px]" id="key" bind:value={selectedKey} on:input={handleKeyChange} />
       </div>
       {#if !$currentGame}
         <div class="intervals my-1">

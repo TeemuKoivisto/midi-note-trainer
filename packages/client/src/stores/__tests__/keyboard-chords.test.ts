@@ -9,7 +9,6 @@ describe('keyboard & GuessChords', () => {
   const chords = chordsFromJSON()
   beforeAll(() => {
     scoreActions.clearScore(true)
-    keyboardActions.setKeyboardFocus(true)
     inputsActions.setInputValue('useHotkeys', true)
     inputsActions.setInputValue('useAutoOctave', true)
   })

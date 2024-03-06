@@ -6,7 +6,6 @@ import { scoreActions } from '../score'
 describe('keyboard & GuessKeys', () => {
   beforeAll(() => {
     scoreActions.clearScore(true)
-    keyboardActions.setKeyboardFocus(true)
     inputsActions.setInputValue('useHotkeys', true)
     inputsActions.setInputValue('useAutoOctave', true)
   })

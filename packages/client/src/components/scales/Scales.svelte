@@ -133,8 +133,6 @@
           id="scale-key"
           value={shownKey}
           on:input={handleKeyChange}
-          on:focus={() => keyboardActions.setKeyboardFocus(false)}
-          on:blur={() => keyboardActions.setKeyboardFocus(true)}
         />
       </div>
       <ul class="list odd w-full">

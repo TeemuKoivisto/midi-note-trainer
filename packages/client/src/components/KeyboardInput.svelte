@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte'
 
   import { inputs } from '$stores/inputs'
-  import { keyboardFocused, keyboardActions } from '$stores/keyboard'
+  import { keyboardActions } from '$stores/keyboard'
 
   import type { ScaleNote } from '@/chords-and-scales'
 
@@ -19,7 +19,8 @@
   }>()
 
   function handleKeyDown(e: KeyboardEvent) {
-    if (debounced || !$keyboardFocused) return
+    const target = e.target
+    if (debounced || !(target instanceof HTMLElement) || target.tagName === 'INPUT') return
     const parsed = keyboardActions.handleInput(e.code, e.key, e.shiftKey)
     if (parsed && parsed.e === 'note') {
       inputtedNote = parsed.data

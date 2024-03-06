@@ -39,7 +39,6 @@
     } else {
       fixedVelocity = $inputs.fixedVelocity || ''
     }
-    keyboardActions.setKeyboardFocus(true)
   }
   function handleSetFadeTimeout(
     e: Event & {
@@ -95,7 +94,6 @@
             id="fixed-velocity"
             placeholder="0-127"
             bind:value={fixedVelocity}
-            on:focus={() => keyboardActions.setKeyboardFocus(false)}
             on:change={handleSetVelocity}
           />
         </div>
@@ -144,8 +142,6 @@
             class="h-[20px] w-16"
             id="fade-timeout"
             value={fadeMs}
-            on:focus={() => keyboardActions.setKeyboardFocus(false)}
-            on:blur={() => keyboardActions.setKeyboardFocus(true)}
             on:input={handleSetFadeTimeout}
           />
         </div>

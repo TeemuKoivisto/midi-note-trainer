@@ -19,7 +19,6 @@
   } from '@/chords-and-scales'
 
   import { gameActions, selectedChords, type SelectedChord } from '$stores/game'
-  import { keyboardActions } from '$stores/keyboard'
   import { persist } from '$stores/persist'
 
   $: chords = $selectedChords
@@ -137,8 +136,6 @@
           id="scale-key"
           value={selectedKey}
           on:input={handleKeyChange}
-          on:focus={() => keyboardActions.setKeyboardFocus(false)}
-          on:blur={() => keyboardActions.setKeyboardFocus(true)}
         />
         <label class="font-bold" for="scale-key">Scale</label>
         <input class="bg-gray-100 w-16 px-1 rounded" id="scale-key" value={'Major'} disabled />
@@ -148,8 +145,6 @@
           id="scale-key"
           value={rootNote}
           on:input={handleNoteChange}
-          on:focus={() => keyboardActions.setKeyboardFocus(false)}
-          on:blur={() => keyboardActions.setKeyboardFocus(true)}
         />
       </div>
       <ul class="chord-list w-full">
