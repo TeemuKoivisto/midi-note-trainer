@@ -10,6 +10,9 @@ describe('keyboard & GuessKeys', () => {
     inputsActions.setInputValue('useHotkeys', true)
     inputsActions.setInputValue('useAutoOctave', true)
   })
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
   it('should parse major keys from the hotkey map', () => {
     vi.stubGlobal('Math', {
       floor: Math.floor,
@@ -72,22 +75,25 @@ describe('keyboard & GuessKeys', () => {
     expect(keyboardActions.handleInput('BracketLeft', 'å')).toEqual(false)
     // The key and scale is set to A minor but it has no accidentals -> use default C#
     expect(keyboardActions.handleInput('KeyW', 'w')).toEqual(false)
-    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual(true)
-    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual(true)
+    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B' })
+    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B♭' })
     expect(keyboardActions.handleInput('KeyW', 'W', true)).toEqual(false)
-    expect(keyboardActions.handleInput('Backspace', 'Backspace')).toEqual(true)
+    expect(keyboardActions.handleInput('Backspace', 'Backspace')).toEqual({
+      e: 'string',
+      data: 'B'
+    })
     expect(keyboardActions.handleInput('KeyF', 'f')).toEqual(false)
     expect(keyboardActions.handleInput('Enter', 'Enter')).toEqual({
       data: 'B',
       e: 'guessed-key'
     })
-    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual(true)
-    expect(keyboardActions.handleInput('Backspace', 'Backspace')).toEqual(true)
+    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B' })
+    expect(keyboardActions.handleInput('Backspace', 'Backspace')).toEqual({ e: 'string', data: '' })
     expect(keyboardActions.handleInput('Backspace', 'Backspace')).toEqual(false)
     expect(keyboardActions.handleInput('Digit4', '4')).toEqual(false)
-    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual(true)
-    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual(true)
-    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual(true)
+    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B' })
+    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B♭' })
+    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B♭♭' })
     expect(keyboardActions.handleInput('Enter', 'Enter')).toEqual({
       data: 'B♭♭',
       e: 'guessed-key'

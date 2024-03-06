@@ -171,7 +171,7 @@
     debounced={!!timeout}
     on:guessed-chord={handleGuessedChord}
     on:guessed-key={handleGuessedKey}
-    on:note={handleNote}
+    on:guessed-note={handleNote}
   />
   <GameStats game={$currentGame} />
 </section>

@@ -11,7 +11,7 @@ export function setNotesForMiddleRow(rows: Rows, notes: ScaleNote[]) {
     } else if (idx === 3) {
       note = { ...notes[3] }
     } else if (idx === 5) {
-      note = { ...notes[4] }
+      note = { ...notes[6] }
     } else if (idx === 6) {
       note = { ...notes[8] }
     } else if (idx === 7) {
