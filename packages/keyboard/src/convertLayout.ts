@@ -11,8 +11,17 @@ export function convertLayout(hotkeydRows: LayoutImport): Rows {
   let cut2nd: string[] = []
   const letters: string[][] = hotkeydRows.default.map((row, rowIndex) => {
     if (rowIndex === 0) {
-      // Make sure backspace is not cut eg belarusian
-      return row.split(' ').reverse().slice(0, 14).reverse()
+      const split = row.split(' ').filter(v => v !== '{bksp}')
+      while (split.length !== 13) {
+        if (split.length < 13) {
+          // Needed for czech
+          split.push('{empty}')
+        } else {
+          // For belarusian
+          split.shift()
+        }
+      }
+      return [...split, '{bksp}']
     } else if (rowIndex === 1) {
       // Move the last letter from 2nd row since my keyboard is in double-tall Enter layout
       // to 3rd row

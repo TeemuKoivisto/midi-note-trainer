@@ -30,7 +30,6 @@ export const LAYOUTS = {
   hu: { name: 'Hungarian', import: import('simple-keyboard-layouts/build/layouts/hungarian') },
   it: { name: 'Italian', import: import('simple-keyboard-layouts/build/layouts/italian') },
   ja: { name: 'Japanese', import: import('simple-keyboard-layouts/build/layouts/japanese') },
-  ku: { name: 'Kurdish', import: import('simple-keyboard-layouts/build/layouts/kurdish') },
   mk: { name: 'Macedonian', import: import('simple-keyboard-layouts/build/layouts/macedonian') },
   yo: { name: 'Nigerian', import: import('simple-keyboard-layouts/build/layouts/nigerian') },
   nko: { name: 'Nko', import: import('simple-keyboard-layouts/build/layouts/nko') },
