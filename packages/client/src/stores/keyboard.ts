@@ -209,7 +209,7 @@ function parseNotes(code: string, key: string, shift: boolean): ParsedNote | boo
       return { e: 'note', data: midi }
     }
     return true
-  } else if (code === 'Backspace') {
+  } else if (code === 'Backspace' && (inputtedNote || keyboardInput.length > 0)) {
     inputtedNote = undefined
     keyboardInput = keyboardInput.slice(0, -1)
     return true
