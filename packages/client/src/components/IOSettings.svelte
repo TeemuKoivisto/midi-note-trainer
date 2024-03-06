@@ -4,7 +4,6 @@
   import VirtualKeyboard from '$components/virtual-keyboard/VirtualKeyboard.svelte'
 
   import { inputsActions, inputs, midiInput } from '$stores/inputs'
-  import { keyboardActions } from '$stores/keyboard'
   import { reset, persist } from '$stores/persist'
 
   const hidden = persist(writable(false), { key: 'inputs-hidden' })

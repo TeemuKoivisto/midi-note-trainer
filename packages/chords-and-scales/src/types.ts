@@ -60,3 +60,11 @@ export interface Scale {
   triads: ScaleTriad[]
   notesMap: Map<number, ScaleNote> // all 12 semitones of octave
 }
+export type Ok<T> = {
+  data: T
+}
+export type Err = {
+  err: string
+  code: number
+}
+export type Result<T> = Ok<T> | Err

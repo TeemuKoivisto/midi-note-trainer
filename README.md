@@ -12,4 +12,4 @@ You need NodeJS >=16 and pnpm >= 7.
 
 ## Contributing
 
-PRs and issues are more than welcome! I'd wish to add scales and chords and such but since I'm not that familiar with them, it would be nice if people could point out anything I got wrong. I intend to keep this app fairly simple and straighforward, just to satisfy my own needs. All code is open-source.
+PRs and issues are more than welcome! All code is open-source.

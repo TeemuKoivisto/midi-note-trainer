@@ -1,5 +1,4 @@
-import type { Result } from '@/types'
-import type { MidiNote, ScaleNote } from './types'
+import type { MidiNote, Result, ScaleNote } from './types'
 
 const regexKey = /^[a-gA-G][♭Bb#♯sS]*[0-9]?$/
 const regexPosInt = /^[0-9]$/

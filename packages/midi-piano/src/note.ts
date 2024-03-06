@@ -55,8 +55,6 @@ export class Note {
   }
 
   off(startTime: number, timeConstant: number, stop: number) {
-    // this.noteA.stop(0)
-    // this.noteB!.stop(0)
     this.gain.gain.setTargetAtTime(0.0, startTime, timeConstant)
     this.noteA.stop(stop)
     this.noteB.stop(stop)

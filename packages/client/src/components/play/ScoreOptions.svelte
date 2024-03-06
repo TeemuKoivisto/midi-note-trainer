@@ -6,7 +6,6 @@
 
   import { currentGame } from '$stores/game'
   import { inputsActions, midiRangeNotes } from '$stores/inputs'
-  import { keyboardActions } from '$stores/keyboard'
   import { persist } from '$stores/persist'
   import { keyAndScale, scaleData, scoreActions } from '$stores/score'
 

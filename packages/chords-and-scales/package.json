@@ -23,7 +23,6 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@/types": "workspace:*",
     "vitest": "^1.0.4"
   }
 }

@@ -1,15 +1,3 @@
-// import a0 from '../audio/a0.mp3?url'
-// import a1 from '../audio/a1.mp3?url'
-// import a2 from '../audio/a2.mp3?url'
-// import a3 from '../audio/a3.mp3?url'
-// import a4 from '../audio/a4.mp3?url'
-// import a5 from '../audio/a5.mp3?url'
-// import a6 from '../audio/a6.mp3?url'
-// import a7 from '../audio/a7.mp3?url'
-// import ndamper from '../audio/damper.mp3?url'
-// import nimpulse from '../audio/Piano Impulse6.mp3?url'
-
-import { load, fetchSounds } from './load'
 import { Note } from './note'
 
 // https://github.com/iBundin/Open-Web-Piano/blob/7f6ae5fae07aaeb62a1d10ee9446b20e8cc7849d/OpenWebPiano.js

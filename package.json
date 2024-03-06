@@ -4,7 +4,7 @@
     "format": "pnpm pretty && pnpm lint",
     "pretty": "prettier --write \"**/*.+(js|cjs|mjs|jsx|json|html|css|less|scss|ts|tsx|svelte|yml|yaml|md|graphql|mdx)\" .",
     "lint": "eslint --ignore-path .gitignore --fix --ext .js,.cjs,.ts,.tsx,.svelte,.css,.scss,.html .",
-    "setup": "pnpm --filter types --filter chords-and-scales --filter keyboard --filter midi-piano build && pnpm --filter games build",
+    "libs": "pnpm --filter types --filter chords-and-scales --filter keyboard --filter midi-piano build && pnpm --filter games build",
     "client": "concurrently --kill-others 'pnpm --filter client dev'"
   },
   "engines": {

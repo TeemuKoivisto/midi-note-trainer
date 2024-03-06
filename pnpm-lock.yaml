@@ -83,9 +83,6 @@ importers:
 
   packages/chords-and-scales:
     devDependencies:
-      '@/types':
-        specifier: workspace:*
-        version: link:../types
       vitest:
         specifier: ^1.0.4
         version: 1.0.4(@types/node@20.11.4)(sass@1.68.0)
@@ -181,18 +178,12 @@ importers:
         specifier: workspace:*
         version: link:../chords-and-scales
     devDependencies:
-      '@/types':
-        specifier: workspace:*
-        version: link:../types
       vitest:
         specifier: ^1.0.4
         version: 1.0.4(@types/node@20.11.4)(sass@1.68.0)
 
   packages/midi-piano:
     devDependencies:
-      '@/types':
-        specifier: workspace:*
-        version: link:../types
       vitest:
         specifier: ^1.0.4
         version: 1.0.4(@types/node@20.11.4)(sass@1.68.0)

@@ -7,7 +7,6 @@
 
   import { scoreActions, scaleData } from '$stores/score'
   import { inputs, midiRangeNotes, piano } from '$stores/inputs'
-  import { keyboardActions } from '$stores/keyboard'
   import { persist } from '$stores/persist'
 
   import type { MidiNote, RawScale, Scale, ScaleNote, ScaleTriad } from '@/chords-and-scales'

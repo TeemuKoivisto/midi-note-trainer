@@ -2,8 +2,7 @@ import { getKeySignature } from './getKeySignature'
 import { findScale } from './scales'
 import { NOTES, getRootNote } from './notes'
 
-import type { Result } from '@/types'
-import type { Interval, Pitch, Scale, ScaleNote } from './types'
+import type { Interval, Pitch, Result, Scale, ScaleNote } from './types'
 
 const regexKey = /^[a-gA-G][♭b#♯]?$/
 const alphabet = 'ABCDEFG'
