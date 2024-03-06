@@ -36,4 +36,48 @@ describe('convertLayout', () => {
     const s = layout.imported.default[3]
     expect(converted[3].map(v => v.key).join(' ')).toEqual(`${s.slice(0, 7)} < ${s.slice(10)}`)
   })
+  it('should convert belarusian layout into ISO which has more keys than normal', async () => {
+    const layout = await importLayout(['be'])
+    const converted = convertLayout(layout.imported)
+    expect(lengths(converted)).toEqual('14 14 13 13')
+    expect(converted[0].map(v => v.key).join(' ')).toEqual(`${layout.imported.default[0].slice(2)}`)
+    expect(converted[1].map(v => v.key).join(' ')).toEqual(
+      `${layout.imported.default[1].slice(0, 29)} {enter}`
+    )
+    expect(converted[2].map(v => v.key).join(' ')).toEqual(
+      `${layout.imported.default[2].slice(0, 30)}`
+    )
+    const s = layout.imported.default[3]
+    expect(converted[3].map(v => v.key).join(' ')).toEqual(`${s.slice(0, 30)}{shift}`)
+  })
+  it.skip('should convert czech layout into ISO which has no capslock', async () => {
+    const layout = await importLayout(['cs'])
+    const converted = convertLayout(layout.imported)
+    expect(lengths(converted)).toEqual('14 14 13 13')
+    expect(converted[0].map(v => v.key).join(' ')).toEqual(`${layout.imported.default[0].slice(2)}`)
+    expect(converted[1].map(v => v.key).join(' ')).toEqual(
+      `${layout.imported.default[1].slice(0, 29)} {enter}`
+    )
+    expect(converted[2].map(v => v.key).join(' ')).toEqual(
+      `${layout.imported.default[2].slice(0, 30)}`
+    )
+    const s = layout.imported.default[3]
+    expect(converted[3].map(v => v.key).join(' ')).toEqual(`${s.slice(0, 30)}{shift}`)
+  })
+  it('should convert czech layout into ISO which has no capslock', async () => {
+    const layout = await importLayout(['hi'])
+    const converted = convertLayout(layout.imported)
+    expect(lengths(converted)).toEqual('14 14 13 13')
+    expect(converted[0].map(v => v.key).join(' ')).toEqual(`${layout.imported.default[0]}`)
+    expect(converted[1].map(v => v.key).join(' ')).toEqual(
+      `${layout.imported.default[1].slice(0, 29)} {enter}`
+    )
+    expect(converted[2].map(v => v.key).join(' ')).toEqual(
+      `${layout.imported.default[2].slice(0, 28)} ॉ`
+    )
+    const s = layout.imported.default[3]
+    expect(converted[3].map(v => v.key).join(' ')).toEqual(
+      `{shift} {empty} ${s.slice(8, 25)} {empty} {shift}`
+    )
+  })
 })
