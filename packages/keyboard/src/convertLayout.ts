@@ -15,7 +15,7 @@ export function convertLayout(hotkeydRows: LayoutImport): Rows {
       while (split.length !== 13) {
         if (split.length < 13) {
           // Needed for czech
-          split.push('{empty}')
+          split.unshift('{empty}')
         } else {
           // For belarusian
           split.shift()

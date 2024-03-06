@@ -11,6 +11,23 @@
     }
     return 'size-1'
   }
+  function formatValue(key: string) {
+    if (key === '{empty}') {
+      return ''
+    } else if (key === '{bksp}') {
+      return 'Backspace'
+    } else if (key === '{tab}') {
+      return 'Tab'
+    } else if (key === '{enter}') {
+      return 'Enter'
+    } else if (key === '{lock}') {
+      return 'Capslock'
+    } else if (key === '{shift}') {
+      return 'Shift'
+    } else {
+      return key
+    }
+  }
 </script>
 
 {#if value.key === '{enter}'}
@@ -32,7 +49,9 @@
     {#if value.note}
       <div class="absolute top-0 left-0">{value.note.note}</div>
     {/if}
-    <div>{value.key}</div>
+    <div>
+      {formatValue(value.key)}
+    </div>
   </button>
 </li>
 

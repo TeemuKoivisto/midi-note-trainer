@@ -1,5 +1,7 @@
+import { LayoutItem } from 'simple-keyboard-layouts/build/interfaces'
+
 import { convertLayout } from '../convertLayout'
-import { importLayout } from '../importLayout'
+import { importLayout, LAYOUTS, parseLayout } from '../importLayout'
 
 import { Rows } from '../types'
 
@@ -55,7 +57,7 @@ describe('convertLayout', () => {
     const converted = convertLayout(layout.imported)
     expect(lengths(converted)).toEqual('14 14 13 13')
     expect(converted[0].map(v => v.key).join(' ')).toEqual(
-      `${layout.imported.default[0].slice(0, 23)} {empty} {bksp}`
+      `{empty} ${layout.imported.default[0].slice(0, 23)} {bksp}`
     )
     expect(converted[1].map(v => v.key).join(' ')).toEqual(
       `${layout.imported.default[1].slice(0, 29)} {enter}`
@@ -81,5 +83,11 @@ describe('convertLayout', () => {
     expect(converted[3].map(v => v.key).join(' ')).toEqual(
       `{shift} {empty} ${s.slice(8, 25)} {empty} {shift}`
     )
+  })
+  it('should produce 14 14 13 13 rows for all layouts', async () => {
+    const rows = await Promise.all(
+      Object.values(LAYOUTS).map(v => v.import.then(v => parseLayout(v.default as LayoutItem)))
+    )
+    expect(rows.map(v => lengths(convertLayout(v)))).toEqual(rows.map(_ => '14 14 13 13'))
   })
 })
