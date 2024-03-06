@@ -2,7 +2,6 @@
 
 exports[`Keyboard > should import english layout 1`] = `
 Keyboard {
-  "language": "en",
   "opts": {
     "hotkeydRows": "middle-row",
     "layout": {
@@ -309,8 +308,8 @@ Keyboard {
         },
       },
       {
-        "code": "mystery",
-        "key": "?",
+        "code": "Backslash",
+        "key": "\\",
         "note": {
           "flats": 0,
           "note": "G",
@@ -326,7 +325,7 @@ Keyboard {
       },
       {
         "code": "Backquote",
-        "key": ">",
+        "key": "{empty}",
       },
       {
         "code": "KeyZ",

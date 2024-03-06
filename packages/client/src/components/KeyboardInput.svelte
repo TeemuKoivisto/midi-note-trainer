@@ -27,6 +27,8 @@
     } else if (parsed && parsed.e === 'string') {
       keyboardInput = parsed.data
     } else if (parsed) {
+      keyboardInput = ''
+      inputtedNote = undefined
       dispatch(parsed.e, parsed.data)
     }
   }

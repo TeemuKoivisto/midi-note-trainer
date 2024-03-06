@@ -4,24 +4,27 @@
   import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
   import VirtualKey from './VirtualKey.svelte'
 
-  import { keyboardOptions, keys, keyMap } from '$stores/keyboard'
-  import { languageCodes, importLayout } from '@/keyboard'
+  import { keyboardOptions, keys, keyMap, keyboardActions } from '$stores/keyboard'
+  import { LAYOUTS, importLayout } from '@/keyboard'
 
   onMount(async () => {
     console.log($keyMap)
     const layout = await importLayout(['sw'])
     console.log(layout)
+    // @ts-ignore
+    window.layout = layout
   })
 
   let middleRow = true
   let twoRows = false
 
-  const langOptions = Object.entries(languageCodes).map(([k, v]) => ({
+  const langOptions = Object.entries(LAYOUTS).map(([k, v]) => ({
     key: k,
-    value: v
+    value: v.name
   }))
   function handleSelectScale(key: string) {
     console.log('key ', key)
+    keyboardActions.setLayout(key)
     return false
   }
 </script>
@@ -36,7 +39,7 @@
         options={langOptions}
         onSelect={handleSelectScale}
       >
-        <div slot="value">{$keyboardOptions.layoutName}</div>
+        <div slot="value">{$keyboardOptions.layout.name}</div>
       </MultiSelectDropdown>
     </div>
     <div class="my-1 flex items-center justify-between mr-12">

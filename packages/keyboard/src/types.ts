@@ -21,7 +21,7 @@ export interface KeyboardKey {
   noteSeq?: number
   note?: ScaleNote
 }
-
+export type Rows = [KeyboardKey[], KeyboardKey[], KeyboardKey[], KeyboardKey[]]
 export type Ok<T> = {
   data: T
 }

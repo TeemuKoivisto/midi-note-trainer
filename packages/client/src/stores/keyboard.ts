@@ -1,7 +1,7 @@
-import { derived, get, readable, writable } from 'svelte/store'
+import { derived, get, writable } from 'svelte/store'
 
 import { getOctave, type ScaleNote } from '@/chords-and-scales'
-import { Keyboard, type KeyboardKey, type KeyboardOptions } from '@/keyboard'
+import { Keyboard, importLayout } from '@/keyboard'
 
 import { currentGame } from './game'
 import { inputs, midiRangeNotes } from './inputs'
@@ -9,6 +9,7 @@ import { scaleData } from './score'
 import { persist } from './persist'
 
 import { GuessChords, GuessKeys } from '@/games'
+import type { KeyboardKey, KeyboardOptions, Layout } from '@/keyboard'
 
 const regexNote = /^[a-gA-G]$/
 const regexAccidental = /^[♭Bb#♯sS]$/
@@ -17,9 +18,30 @@ let keyboardError = ''
 let keyboardInput = ''
 let inputtedNote: ScaleNote | undefined
 
+const ENGLISH_LAYOUT: Layout = {
+  code: 'en',
+  name: 'English',
+  imported: {
+    default: [
+      '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
+      '{tab} q w e r t y u i o p [ ] \\',
+      "{lock} a s d f g h j k l ; ' {enter}",
+      '{shift} z x c v b n m , . / {shift}',
+      '.com @ {space}'
+    ],
+    shift: [
+      '~ ! @ # $ % ^ & * ( ) _ + {bksp}',
+      '{tab} Q W E R T Y U I O P { } |',
+      '{lock} A S D F G H J K L : " {enter}',
+      '{shift} Z X C V B N M < > ? {shift}',
+      '.com @ {space}'
+    ]
+  }
+}
+
 export const keyboardOptions = persist(
   writable<Required<KeyboardOptions>>({
-    layoutName: 'American',
+    layout: ENGLISH_LAYOUT,
     hotkeydRows: 'middle-row'
   }),
   {
@@ -125,11 +147,7 @@ function parseKey(code: string, key: string): ParsedKey | InputtedString | false
   return false
 }
 
-function parseChord(
-  code: string,
-  key: string,
-  shift: boolean
-): ParsedChord | InputtedString | false {
+function parseChord(code: string, key: string): ParsedChord | InputtedString | false {
   if (code === 'Enter' && keyboardInput.length > 0) {
     const value = { note: '', flats: 0, sharps: 0, chord: '' }
     for (let i = 0; i < keyboardInput.length; i += 1) {
@@ -234,7 +252,13 @@ function parseNotes(
 }
 
 export const keyboardActions = {
-  setLayout(lang: string) {},
+  async setLayout(code: string) {
+    const layout = await importLayout([code])
+    keyboardOptions.update(v => ({
+      ...v,
+      layout
+    }))
+  },
   findNote(note: string): ScaleNote | undefined {
     return get(kbdNotes).find(n => {
       if (n.note.charAt(0) === note.charAt(0)) {
@@ -266,7 +290,7 @@ export const keyboardActions = {
     if (game instanceof GuessKeys) {
       return parseKey(code, key.toUpperCase())
     } else if (game instanceof GuessChords && game.type === 'chords-write') {
-      return parseChord(code, key, shift)
+      return parseChord(code, key)
     } else if (get(inputs).useKeyboard) {
       return parseNotes(code, key.toUpperCase(), shift)
     }
