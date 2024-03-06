@@ -48,7 +48,6 @@ export const CODES = [
   ],
   [
     'ShiftLeft',
-    'Backquote',
     'KeyZ',
     'KeyX',
     'KeyC',
