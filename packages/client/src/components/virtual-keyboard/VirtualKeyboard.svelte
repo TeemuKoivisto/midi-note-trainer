@@ -1,9 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
+  import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
   import VirtualKey from './VirtualKey.svelte'
 
-  import { keyboard, keys, keyMap } from '$stores/keyboard'
+  import { keyboardOptions, keys, keyMap } from '$stores/keyboard'
+  import { languageCodes } from '@/keyboard'
 
   onMount(() => {
     console.log($keyMap)
@@ -11,10 +13,30 @@
 
   let middleRow = true
   let twoRows = false
+
+  const langOptions = Object.entries(languageCodes).map(([k, v]) => ({
+    key: k,
+    value: v
+  }))
+  function handleSelectScale(key: string) {
+    console.log('key ', key)
+    return false
+  }
 </script>
 
 <div class={`${$$props.class || ''} `}>
   <div class="flex">
+    <div class="my-1 flex items-center justify-between mr-12">
+      <label class="font-bold mr-4" for="middle-row">Layout</label>
+      <MultiSelectDropdown
+        id="keyboard-lang"
+        class="p-1"
+        options={langOptions}
+        onSelect={handleSelectScale}
+      >
+        <div slot="value">{$keyboardOptions.layoutName}</div>
+      </MultiSelectDropdown>
+    </div>
     <div class="my-1 flex items-center justify-between mr-12">
       <label class="font-bold mr-4" for="middle-row">Middle-row</label>
       <input class="h-[20px]" id="middle-row" type="checkbox" bind:checked={middleRow} />

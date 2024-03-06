@@ -133,7 +133,7 @@
       <div class="flex flex-col justify-between h-full">
         <div class="flex justify-between">
           <button class="w-full btn-sm primary" on:click={() => (setKeys = !setKeys)}
-            >Set keys</button
+            >Set hotkeys</button
           >
         </div>
         <div class="flex justify-between">

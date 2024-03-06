@@ -1,7 +1,7 @@
 import { derived, get, readable, writable } from 'svelte/store'
 
 import { getOctave, type ScaleNote } from '@/chords-and-scales'
-import { Keyboard, type KeyboardKey } from '@/keyboard'
+import { Keyboard, type KeyboardKey, type KeyboardOptions } from '@/keyboard'
 
 import { currentGame } from './game'
 import { inputs, midiRangeNotes } from './inputs'
@@ -10,20 +10,17 @@ import { persist } from './persist'
 
 import { GuessChords, GuessKeys } from '@/games'
 
-interface KeyboardOptions {
-  layout: 'middle-row' | 'two-rows'
-}
-
 const regexNote = /^[a-gA-G]$/
 const regexAccidental = /^[♭Bb#♯sS]$/
 const regexPosInt = /^[0-9]$/
 let keyboardError = ''
 let keyboardInput = ''
 let inputtedNote: ScaleNote | undefined
-// For determining whether to play notes unless text input has been already captured
+
 export const keyboardOptions = persist(
-  writable<KeyboardOptions>({
-    layout: 'middle-row'
+  writable<Required<KeyboardOptions>>({
+    layoutName: 'American',
+    hotkeydRows: 'middle-row'
   }),
   {
     key: 'keyboard-options'
@@ -237,6 +234,7 @@ function parseNotes(
 }
 
 export const keyboardActions = {
+  setLayout(lang: string) {},
   findNote(note: string): ScaleNote | undefined {
     return get(kbdNotes).find(n => {
       if (n.note.charAt(0) === note.charAt(0)) {

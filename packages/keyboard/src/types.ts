@@ -1,5 +1,10 @@
 import type { ScaleNote } from '@/chords-and-scales'
 
+export type HotkeydRows = 'middle-row' | 'two-rows'
+export interface KeyboardOptions {
+  hotkeydRows?: HotkeydRows
+  layoutName?: string
+}
 export interface Layout {
   layout: {
     default: [string, string, string, string, string]

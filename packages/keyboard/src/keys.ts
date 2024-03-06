@@ -1,7 +1,7 @@
 import en from './layouts/english'
 
 // https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
-const languageCodes = {
+export const languageCodes = {
   ar: 'arabic',
   hye: 'armenianEastern',
   hyw: 'armenianWestern',

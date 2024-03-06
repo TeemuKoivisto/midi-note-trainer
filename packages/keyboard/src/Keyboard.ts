@@ -5,33 +5,32 @@ import { CODES } from './codes'
 import { setNotesForMiddleRow } from './setNotes'
 
 import type { ScaleNote } from '@/chords-and-scales'
-import { KeyboardKey, Layout } from './types'
-
-type LayoutType = 'middle-row' | 'two-rows'
-interface Options {
-  layout: LayoutType
-}
+import { KeyboardKey, KeyboardOptions, Layout } from './types'
 
 type Rows = [KeyboardKey[], KeyboardKey[], KeyboardKey[], KeyboardKey[]]
 
 export class Keyboard {
   language = 'en'
-  opts: Options
+  opts: Required<KeyboardOptions>
 
   rows: Rows = [[], [], [], []]
 
-  constructor(opts: Options = { layout: 'middle-row' }) {
-    this.opts = opts
+  constructor(opts?: KeyboardOptions) {
+    this.opts = {
+      hotkeydRows: 'middle-row',
+      layoutName: 'en',
+      ...opts
+    }
     this.setLayout(sw)
   }
 
-  setOptions(opts: Partial<Options>) {
+  setOptions(opts: Partial<KeyboardOptions>) {
     this.opts = { ...this.opts, ...opts }
   }
 
-  setLayout(layout: Layout) {
+  setLayout(hotkeydRows: Layout) {
     const rows: Rows = [[], [], [], []]
-    layout.layout.default.forEach((v, rowIndex) => {
+    hotkeydRows.layout.default.forEach((v, rowIndex) => {
       v.split(' ').forEach((key, keyIndex) => {
         if (rowIndex < 4) {
           rows[rowIndex].push({ key, code: CODES[rowIndex][keyIndex] })
@@ -42,8 +41,10 @@ export class Keyboard {
   }
 
   setNotes(notes: ScaleNote[]) {
-    if (this.opts.layout === 'middle-row') {
+    if (this.opts.hotkeydRows === 'middle-row') {
       this.rows = setNotesForMiddleRow(this.rows, notes)
+    } else {
+      throw Error('not implemented')
     }
   }
 }
