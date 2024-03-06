@@ -7,7 +7,7 @@ This is small web app I built for myself to easily practise music notes and such
 You need NodeJS >=16 and pnpm >= 7.
 
 1. `pnpm i`
-2. `pnpm --filter types build`
+2. `pnpm setup`
 3. `pnpm client`
 
 ## Contributing
