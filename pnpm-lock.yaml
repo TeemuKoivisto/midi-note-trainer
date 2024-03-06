@@ -177,6 +177,9 @@ importers:
       '@/chords-and-scales':
         specifier: workspace:*
         version: link:../chords-and-scales
+      simple-keyboard-layouts:
+        specifier: 3.3.83
+        version: 3.3.83
     devDependencies:
       vitest:
         specifier: ^1.0.4
@@ -3914,6 +3917,10 @@ packages:
   /signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
+
+  /simple-keyboard-layouts@3.3.83:
+    resolution: {integrity: sha512-hZ6efmLJJopzj95H8WRtvE7dmtQt3I6E/A16sSEv6juXuo2lL2ZfZWAhI7yVIaaj5oey4AtzjkpHtsic1udaxw==}
+    dev: false
 
   /sirv@2.0.4:
     resolution: {integrity: sha512-94Bdh3cC2PKrbgSOUqTiGPWVZeSiXfKOVZNJniWoqrWrRkB1CJzBU3NEbiTsPcYy1lDsANA/THzS+9WBiy5nfQ==}

@@ -5,10 +5,12 @@
   import VirtualKey from './VirtualKey.svelte'
 
   import { keyboardOptions, keys, keyMap } from '$stores/keyboard'
-  import { languageCodes } from '@/keyboard'
+  import { languageCodes, importLayout } from '@/keyboard'
 
-  onMount(() => {
+  onMount(async () => {
     console.log($keyMap)
+    const layout = await importLayout(['sw'])
+    console.log(layout)
   })
 
   let middleRow = true

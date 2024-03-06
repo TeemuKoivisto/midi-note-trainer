@@ -1,10 +1,11 @@
-import { Layout } from '../types'
+import { importLayout } from '../importLayout'
 
-/**
- * Layout: English
- */
-export default <Layout>{
-  layout: {
+import type { Layout } from '../types'
+
+const english: Layout = {
+  code: 'en',
+  name: 'English',
+  imported: {
     default: [
       '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
       '{tab} q w e r t y u i o p [ ] \\',
@@ -21,3 +22,10 @@ export default <Layout>{
     ]
   }
 }
+
+describe('importLayout', () => {
+  it('should import english layout', async () => {
+    const layout = await importLayout(['en'])
+    expect(layout).toEqual(english)
+  })
+})

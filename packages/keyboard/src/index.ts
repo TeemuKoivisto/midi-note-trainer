@@ -1,3 +1,3 @@
-export * from './keys'
+export * from './importLayout'
 export * from './Keyboard'
 export * from './types'

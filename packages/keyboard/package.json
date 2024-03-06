@@ -26,6 +26,7 @@
     "vitest": "^1.0.4"
   },
   "dependencies": {
-    "@/chords-and-scales": "workspace:*"
+    "@/chords-and-scales": "workspace:*",
+    "simple-keyboard-layouts": "3.3.83"
   }
 }
