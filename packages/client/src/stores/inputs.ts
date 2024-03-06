@@ -32,8 +32,6 @@ export const midiRangeNotes = derived(
 )
 export const audioContext = writable<AudioContext | undefined>(undefined)
 export const piano = writable<Piano | undefined>(undefined)
-// For determining whether to play notes unless text input has been already captured
-export const keyboardFocused = writable<boolean>(true)
 export const inputs = persist(
   writable<Inputs>({
     fixedVelocity: undefined,
@@ -76,9 +74,6 @@ export const inputsActions = {
     } else if (key === 'useSound' && !get(piano)) {
       this.initAudio()
     }
-  },
-  setKeyboardFocus(val: boolean) {
-    keyboardFocused.set(val)
   },
   async initAudio() {
     let ctx = get(audioContext)

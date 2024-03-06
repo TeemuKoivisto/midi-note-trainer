@@ -52,21 +52,6 @@ export const scaleData = derived(keyAndScale, (val): Scale => {
     notesMap: new Map()
   } as Scale
 })
-export const keyMap = derived([scaleData, defaultKeyMap], ([scl, kmap]) => {
-  const map = { ...kmap }
-  Object.entries(kmap).forEach(([key, vals]) => {
-    const note = scl.notesMap.get(vals.semitones % 12)
-    if (note) {
-      map[key as keyof typeof map] = {
-        note: note.note,
-        flats: note.flats,
-        sharps: note.sharps,
-        semitones: vals.semitones
-      }
-    }
-  })
-  return map
-})
 export const target = writable<MidiNote[]>([])
 export const played = writable<PlayedNote[]>([])
 
@@ -106,31 +91,6 @@ export const scoreActions = {
   },
   setTarget(val: MidiNote[] = []) {
     target.set(val)
-  },
-  findNote(note: string): ScaleNote | undefined {
-    return Object.values(get(keyMap)).find(n => {
-      if (n.note.charAt(0) === note.charAt(0)) {
-        const shifted = note
-          .slice(1)
-          .split('')
-          .reduce(
-            (acc, c) =>
-              acc +
-              (c.toLowerCase() === 'b' || c === '♭'
-                ? -1
-                : c.toLowerCase() === 's' || c === '#' || c === '♯'
-                ? 1
-                : 0),
-            0
-          )
-        if (shifted > 0) {
-          return n.sharps === shifted
-        } else if (shifted < 0) {
-          return n.flats === shifted * -1
-        }
-        return n.flats === 0 && n.sharps === 0
-      }
-    })
   },
   getNote(midi: number) {
     return { ...get(scaleData).notesMap.get(midi % 12), midi } as MidiNote

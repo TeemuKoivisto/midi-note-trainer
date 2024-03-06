@@ -6,6 +6,7 @@
 
   import { currentGame } from '$stores/game'
   import { inputsActions, midiRangeNotes } from '$stores/inputs'
+  import { keyboardActions } from '$stores/keyboard'
   import { persist } from '$stores/persist'
   import { keyAndScale, scaleData, scoreActions } from '$stores/score'
 
@@ -66,7 +67,7 @@
   }
   function rangeFocus() {
     rangeError = ''
-    inputsActions.setKeyboardFocus(false)
+    keyboardActions.setKeyboardFocus(false)
   }
   function handleKeyChange({
     currentTarget: { value }
@@ -114,7 +115,7 @@
           bind:value={rangeMin}
           on:change={e => handleRangeChanged('min', e)}
           on:focus={rangeFocus}
-          on:blur={() => inputsActions.setKeyboardFocus(true)}
+          on:blur={() => keyboardActions.setKeyboardFocus(true)}
         />
         <span class="mx-2 mt-1">—</span>
         <input
@@ -123,7 +124,7 @@
           bind:value={rangeMax}
           on:change={e => handleRangeChanged('max', e)}
           on:focus={rangeFocus}
-          on:blur={() => inputsActions.setKeyboardFocus(true)}
+          on:blur={() => keyboardActions.setKeyboardFocus(true)}
         />
       </div>
       <div class="flex justify-between my-1">
@@ -161,8 +162,8 @@
           id="key"
           bind:value={selectedKey}
           on:input={handleKeyChange}
-          on:focus={() => inputsActions.setKeyboardFocus(false)}
-          on:blur={() => inputsActions.setKeyboardFocus(true)}
+          on:focus={() => keyboardActions.setKeyboardFocus(false)}
+          on:blur={() => keyboardActions.setKeyboardFocus(true)}
         />
       </div>
       {#if !$currentGame}

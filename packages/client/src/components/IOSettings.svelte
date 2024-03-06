@@ -4,6 +4,7 @@
   import VirtualKeyboard from '$components/virtual-keyboard/VirtualKeyboard.svelte'
 
   import { inputsActions, inputs, midiInput } from '$stores/inputs'
+  import { keyboardActions } from '$stores/keyboard'
   import { reset, persist } from '$stores/persist'
 
   const hidden = persist(writable(false), { key: 'inputs-hidden' })
@@ -38,7 +39,7 @@
     } else {
       fixedVelocity = $inputs.fixedVelocity || ''
     }
-    inputsActions.setKeyboardFocus(true)
+    keyboardActions.setKeyboardFocus(true)
   }
   function handleSetFadeTimeout(
     e: Event & {
@@ -94,7 +95,7 @@
             id="fixed-velocity"
             placeholder="0-127"
             bind:value={fixedVelocity}
-            on:focus={() => inputsActions.setKeyboardFocus(false)}
+            on:focus={() => keyboardActions.setKeyboardFocus(false)}
             on:change={handleSetVelocity}
           />
         </div>
@@ -143,8 +144,8 @@
             class="h-[20px] w-16"
             id="fade-timeout"
             value={fadeMs}
-            on:focus={() => inputsActions.setKeyboardFocus(false)}
-            on:blur={() => inputsActions.setKeyboardFocus(true)}
+            on:focus={() => keyboardActions.setKeyboardFocus(false)}
+            on:blur={() => keyboardActions.setKeyboardFocus(true)}
             on:input={handleSetFadeTimeout}
           />
         </div>

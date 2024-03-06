@@ -6,7 +6,8 @@
   import Triads from './Triads.svelte'
 
   import { scoreActions, scaleData } from '$stores/score'
-  import { inputsActions, inputs, midiRangeNotes, piano } from '$stores/inputs'
+  import { inputs, midiRangeNotes, piano } from '$stores/inputs'
+  import { keyboardActions } from '$stores/keyboard'
   import { persist } from '$stores/persist'
 
   import type { MidiNote, RawScale, Scale, ScaleNote, ScaleTriad } from '@/chords-and-scales'
@@ -132,8 +133,8 @@
           id="scale-key"
           value={shownKey}
           on:input={handleKeyChange}
-          on:focus={() => inputsActions.setKeyboardFocus(false)}
-          on:blur={() => inputsActions.setKeyboardFocus(true)}
+          on:focus={() => keyboardActions.setKeyboardFocus(false)}
+          on:blur={() => keyboardActions.setKeyboardFocus(true)}
         />
       </div>
       <ul class="list odd w-full">
