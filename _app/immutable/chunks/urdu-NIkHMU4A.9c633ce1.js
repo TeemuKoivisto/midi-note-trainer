@@ -1,1 +1,0 @@
-const t={layout:{default:["` ١ ٢ ٣ ٤ ٥ ٦ ٧ ٨ ٩ ٠ - = {bksp}","{tab} ق و ع ر ت ے ء ى ہ پ [ ]","{lock} ا س د ف گ ھ ج ک ل ؛ ، {enter}","{shift} ز ش چ ط ب ن م ۤ , . / {shift}",".com @ {space}"],shift:["~ ! @ # $ ٪ ^ & * ( ) _ + {bksp}","{tab} ﹰ ﹷ ﹹ ڑ ٹ ﹺ ﻻ ﺋ ة | { }","{lock} آ ص ڈ ؍ غ ح ض خ ۔ ܃ ״ {enter}","{shift} ذ ژ ث ظ ں ٫ ـ < > ؟ {shift}",".com @ {space}"]}};export{t as default};
