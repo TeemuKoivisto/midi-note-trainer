@@ -122,6 +122,45 @@ function parseKey(code: string, key: string): ParsedKey | boolean {
   return false
 }
 
+function parseChord(code: string, key: string, shift: boolean): ParsedChord | boolean {
+  if (code === 'Enter' && keyboardInput.length > 0) {
+    const value = { note: '', flats: 0, sharps: 0, chord: '' }
+    for (let i = 0; i < keyboardInput.length; i += 1) {
+      if (i === 0) {
+        value.note += keyboardInput[i]
+      } else if (value.chord.length > 0) {
+        value.chord += keyboardInput[i].toLowerCase()
+      } else if (keyboardInput[i] === '♭') {
+        value.note += keyboardInput[i]
+        value.flats += 1
+      } else if (keyboardInput[i] === '♯') {
+        value.note += keyboardInput[i]
+        value.sharps += 1
+      } else {
+        value.chord += keyboardInput[i].toLowerCase()
+      }
+    }
+    keyboardInput = ''
+    return { e: 'guessed-chord', data: value }
+  } else if (code === 'Backspace' && keyboardInput.length > 0) {
+    keyboardInput = keyboardInput.slice(0, -1)
+    return true
+  } else if (keyboardInput.length === 0 && regexNote.test(key)) {
+    keyboardInput += key.toUpperCase()
+    return true
+  } else if (keyboardInput.length > 0 && key.length === 1) {
+    if (keyboardInput.length === 1 && (key === 'b' || key === 'B')) {
+      keyboardInput += '♭'
+    } else if (keyboardInput.length === 1 && key === '#') {
+      keyboardInput += '♯'
+    } else {
+      keyboardInput += key
+    }
+    return true
+  }
+  return false
+}
+
 function parseNotes(code: string, key: string, shift: boolean): ParsedNote | boolean {
   const { useAutoOctave, useHotkeys } = get(inputs)
   let octave
@@ -217,33 +256,7 @@ export const keyboardActions = {
     if (game instanceof GuessKeys) {
       return parseKey(code, key.toUpperCase())
     } else if (game instanceof GuessChords && game.type === 'chords-write') {
-      if (code === 'Enter' && keyboardInput.length > 0) {
-        const value = { note: '', flats: 0, sharps: 0, chord: '' }
-        for (let i = 0; i < keyboardInput.length; i += 1) {
-          if (i === 0) {
-            value.note += keyboardInput[i]
-          } else if (value.chord.length > 0) {
-            value.chord += keyboardInput[i]
-          } else if (keyboardInput[i] === 'b' || keyboardInput[i] === '♭') {
-            value.flats += 1
-          } else if (keyboardInput[i] === '#' || keyboardInput[i] === '♯') {
-            value.sharps += 1
-          } else {
-            value.chord += keyboardInput[i]
-          }
-        }
-        keyboardInput = ''
-        return { e: 'guessed-chord', data: value }
-      } else if (code === 'Backspace') {
-        keyboardInput = keyboardInput.slice(0, -1)
-        return true
-      } else if (code.slice(0, 3) === 'Key') {
-        keyboardInput += code
-        if (keyboardInput.length === 1) {
-          keyboardInput = keyboardInput.toUpperCase()
-        }
-        return true
-      }
+      return parseChord(code, key, shift)
     } else if (get(inputs).useKeyboard) {
       return parseNotes(code, key.toUpperCase(), shift)
     }
