@@ -1,9 +1,9 @@
 import { chordsFromJSON } from '@/chords-and-scales'
 
-import { gameActions } from '../game'
-import { keyboardActions } from '../keyboard'
-import { inputsActions } from '../inputs'
-import { scoreActions } from '../score'
+import { gameActions } from '$stores/game'
+import { keyboardActions } from '$stores/keyboard'
+import { inputsActions } from '$stores/inputs'
+import { scoreActions } from '$stores/score'
 
 describe('keyboard & GuessChords', () => {
   const chords = chordsFromJSON()
