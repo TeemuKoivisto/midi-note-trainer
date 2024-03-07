@@ -183,7 +183,12 @@ Keyboard {
       {
         "code": "BracketRight",
         "key": "]",
-        "note": undefined,
+        "note": {
+          "flats": 0,
+          "note": "F♯",
+          "semitones": 18,
+          "sharps": 1,
+        },
       },
       {
         "code": "Enter",

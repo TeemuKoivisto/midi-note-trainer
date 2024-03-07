@@ -22,6 +22,9 @@ export function setNotesForMiddleRow(rows: Rows, notes: ScaleNote[]) {
     } else if (idx === 10) {
       note = { ...notes[3] }
       note.semitones += 12
+    } else if (idx === 12) {
+      note = { ...notes[6] }
+      note.semitones += 12
     }
     rows[1][idx].note = note
   })
