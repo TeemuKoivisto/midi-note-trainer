@@ -1,4 +1,5 @@
 export * from './importLayout'
 export * from './Keyboard'
-export * from './layoutFromRows'
+export * from './importFromRows'
+export * from './rowsFromImport'
 export * from './types'

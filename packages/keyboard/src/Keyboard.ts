@@ -5,7 +5,7 @@ import { parseLayout } from './importLayout'
 
 import type { ScaleNote } from '@/chords-and-scales'
 import { KeyboardKey, KeyboardOptions, LayoutImport, Rows } from './types'
-import { convertLayout } from 'convertLayout'
+import { rowsFromImport } from 'rowsFromImport'
 
 export class Keyboard {
   opts: Required<KeyboardOptions>
@@ -29,7 +29,7 @@ export class Keyboard {
   }
 
   loadRowsFromImport(imported: LayoutImport) {
-    this.rows = convertLayout(imported)
+    this.rows = rowsFromImport(imported)
     return this
   }
 

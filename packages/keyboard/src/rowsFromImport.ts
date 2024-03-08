@@ -7,7 +7,7 @@ import { LayoutImport, Rows } from './types'
  * https://en.wikipedia.org/wiki/Keyboard_layout#Physical,_visual,_and_functional_layouts
  * @param hotkeydRows
  */
-export function convertLayout(hotkeydRows: LayoutImport): Rows {
+export function rowsFromImport(hotkeydRows: LayoutImport): Rows {
   let cut2nd: string[] = []
   const letters: string[][] = hotkeydRows.default.map((row, rowIndex) => {
     if (rowIndex === 0) {
