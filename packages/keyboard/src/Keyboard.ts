@@ -4,7 +4,7 @@ import { setNotesForMiddleRow } from './setNotes'
 import { parseLayout } from './importLayout'
 
 import type { ScaleNote } from '@/chords-and-scales'
-import { KeyboardOptions, LayoutImport, Rows } from './types'
+import { KeyboardKey, KeyboardOptions, LayoutImport, Rows } from './types'
 import { convertLayout } from 'convertLayout'
 
 export class Keyboard {
@@ -21,16 +21,24 @@ export class Keyboard {
       },
       ...opts
     }
-    this.setLayout(this.opts.layout.imported)
+    return this.loadRowsFromImport(this.opts.layout.imported)
   }
 
   setOptions(opts: Partial<KeyboardOptions>) {
     this.opts = { ...this.opts, ...opts }
   }
 
-  setLayout(hotkeydRows: LayoutImport) {
-    this.rows = convertLayout(hotkeydRows)
+  loadRowsFromImport(imported: LayoutImport) {
+    this.rows = convertLayout(imported)
+    return this
   }
+
+  setRows(rows: Rows) {
+    this.rows = rows
+    return this
+  }
+
+  setRowHotkeys(row: number, keys: KeyboardKey[]) {}
 
   setNotes(notes: ScaleNote[]) {
     if (this.opts.hotkeydRows === 'middle-row') {
@@ -38,5 +46,9 @@ export class Keyboard {
     } else {
       throw Error('not implemented')
     }
+  }
+
+  static createWithRows(opts: KeyboardOptions, rows: Rows) {
+    return new Keyboard(opts).setRows(rows)
   }
 }

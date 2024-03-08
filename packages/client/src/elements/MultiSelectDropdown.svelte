@@ -11,6 +11,7 @@
   }
   export let options: readonly Option[],
     id: string | undefined = undefined,
+    containerClass: string | undefined = undefined,
     selected: any | undefined = undefined,
     disabled: boolean | undefined = undefined,
     onSelect: (key: any) => boolean
@@ -31,7 +32,7 @@
   }
 </script>
 
-<div class="relative" {id} bind:this={containerEl}>
+<div class={`relative ${containerClass || ''}`} {id} bind:this={containerEl}>
   <button
     class={`${$$props.class || ''} open-btn w-full text-justify text-sm rounded hover:bg-[#eee]`}
     class:disabled
@@ -50,7 +51,9 @@
     />
     <ul
       transition:slide={{ duration: DROPDOWN_DURATION }}
-      class="items-list bg-white py-1.5 py-2 w-48 h-64 overflow-y-scroll text-sm absolute left-0 z-30 rounded-b shadow-xl"
+      class={`items-list bg-white py-1.5 py-2 w-48 h-64 overflow-y-scroll text-sm absolute left-0 z-30 rounded-b shadow-xl ${
+        containerClass || ''
+      }`}
     >
       <li>
         <slot name="header" />

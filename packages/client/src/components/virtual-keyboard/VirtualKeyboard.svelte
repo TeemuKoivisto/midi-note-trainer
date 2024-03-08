@@ -1,10 +1,18 @@
 <script lang="ts">
+  import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
+  import circle from '@iconify-icons/mdi/chevron-right'
   import { onMount } from 'svelte'
 
   import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
   import VirtualKey from './VirtualKey.svelte'
 
-  import { keyboardOptions, keys, keyMap, keyboardActions } from '$stores/keyboard'
+  import {
+    capturingHotkeys,
+    keyboardSettings,
+    keys,
+    keyMap,
+    keyboardActions
+  } from '$stores/keyboard'
   import { LAYOUTS, importLayout } from '@/keyboard'
 
   onMount(async () => {
@@ -17,30 +25,49 @@
 
   let middleRow = true
   let twoRows = false
+  $: settableRows = $keys.map((_, idx) =>
+    $keyboardSettings.kbdOpts.hotkeydRows === 'middle-row' ? idx === 1 || idx === 2 : true
+  )
 
   const langOptions = Object.entries(LAYOUTS).map(([k, v]) => ({
     key: k,
     value: v.name
   }))
   function handleSelectScale(key: string) {
-    console.log('key ', key)
     keyboardActions.setLayout(key)
     return false
+  }
+  function handleUseCustomLayout(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    keyboardActions.setCustomLayout(e.currentTarget.checked)
+  }
+  function handleSetRowKeys(rowIndex: number) {
+    keyboardActions.captureHotkeyRow(rowIndex)
   }
 </script>
 
 <div class={`${$$props.class || ''} `}>
   <div class="flex">
-    <div class="my-1 flex items-center justify-between mr-12">
+    <div class="my-1 flex items-center justify-between mr-2">
       <label class="font-bold mr-4" for="middle-row">Layout</label>
       <MultiSelectDropdown
         id="keyboard-lang"
+        containerClass="w-36"
         class="p-1"
         options={langOptions}
         onSelect={handleSelectScale}
       >
-        <div slot="value">{$keyboardOptions.layout.name}</div>
+        <div slot="value">{$keyboardSettings.kbdOpts.layout.name}</div>
       </MultiSelectDropdown>
+    </div>
+    <div class="my-1 flex items-center justify-between mr-12">
+      <label class="font-bold mr-4" for="custom-layout">Custom</label>
+      <input
+        class="h-[20px]"
+        id="custom-layout"
+        type="checkbox"
+        checked={$keyboardSettings.useCustom}
+        on:change={handleUseCustomLayout}
+      />
     </div>
     <div class="my-1 flex items-center justify-between mr-12">
       <label class="font-bold mr-4" for="middle-row">Middle-row</label>
@@ -54,9 +81,24 @@
   <div class="flex flex-col gap-1.5">
     <ul class="keyboard">
       {#each $keys as row, ridx}
-        <li class="col-span-2"></li>
-        {#each row as vkey}
-          <VirtualKey value={vkey} />
+        <li class="col-span-2">
+          {#if settableRows[ridx]}
+            <button
+              class="flex items-center justify-center rounded w-full h-full hover:bg-gray-300"
+              on:click={() => handleSetRowKeys(ridx)}
+            >
+              <Icon icon={circle} width={20} />
+            </button>
+          {/if}
+        </li>
+        {#each row as vkey, idx}
+          <VirtualKey
+            value={vkey}
+            captured={($capturingHotkeys &&
+              $capturingHotkeys.rowIndex === ridx &&
+              $capturingHotkeys.nextIndex === idx) ||
+              false}
+          />
         {/each}
       {/each}
     </ul>

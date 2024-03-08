@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { KeyboardKey } from '@/keyboard'
 
-  export let value: KeyboardKey
+  export let value: KeyboardKey, captured: boolean
 
   function sizeClass(size?: number) {
     if (size && Number.isInteger(size)) {
@@ -36,6 +36,7 @@
 <li
   class={`${$$props.class || ''} m-[0.175rem] ${sizeClass(value.size)}`}
   class:enter={value.key === '{enter}'}
+  class:captured
 >
   <button
     class="relative w-full h-full shadow bg-[#ececf1] rounded flex items-center justify-center"
@@ -57,6 +58,11 @@
 
 <style lang="scss">
   li {
+    &.captured {
+      button {
+        border: 2px solid #015fcc;
+      }
+    }
     button {
       border: 2px solid transparent;
       @apply outline-none;

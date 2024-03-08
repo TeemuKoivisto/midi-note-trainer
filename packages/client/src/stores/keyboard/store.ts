@@ -9,7 +9,7 @@ import { persist } from '../persist'
 import { parseKey, type Parsed, parseChord, parseNotes } from './parseInput'
 
 import { GuessChords, GuessKeys } from '@/games'
-import type { KeyboardKey, KeyboardOptions, Layout } from '@/keyboard'
+import type { KeyboardKey, KeyboardOptions, Layout, Rows } from '@/keyboard'
 import type { ScaleNote } from '@/chords-and-scales'
 
 const ENGLISH_LAYOUT: Layout = {
@@ -33,17 +33,43 @@ const ENGLISH_LAYOUT: Layout = {
   }
 }
 
-export const keyboardOptions = persist(
-  writable<Required<KeyboardOptions>>({
-    layout: ENGLISH_LAYOUT,
-    hotkeydRows: 'middle-row'
+const captured: { key: string; code: string }[] = []
+
+interface KeyboardSettings {
+  useCustom: boolean
+  customLayout: Rows
+  kbdOpts: Required<KeyboardOptions>
+}
+interface Captured {
+  row: KeyboardKey[]
+  rowIndex: number
+  nextIndex: number
+  count: number
+}
+export const capturingHotkeys = writable<Captured | undefined>(undefined)
+export const nextCaptured = derived(capturingHotkeys, c =>
+  c ? [c.rowIndex, c.nextIndex] : [-1, -1]
+)
+export const keyboardSettings = persist(
+  writable<KeyboardSettings>({
+    useCustom: false,
+    customLayout: [[], [], [], []],
+    kbdOpts: {
+      layout: ENGLISH_LAYOUT,
+      hotkeydRows: 'middle-row'
+    }
   }),
   {
-    key: 'keyboard-options'
+    key: 'keyboard-settings'
   }
 )
-export const keyboard = derived([scaleData, keyboardOptions], ([scl, opts]) => {
-  const kbd = new Keyboard(opts)
+export const keyboard = derived([scaleData, keyboardSettings], ([scl, stg]) => {
+  let kbd
+  if (stg.useCustom && stg.customLayout) {
+    kbd = Keyboard.createWithRows(stg.kbdOpts, stg.customLayout)
+  } else {
+    kbd = new Keyboard(stg.kbdOpts)
+  }
   kbd.setNotes(Array.from(scl.notesMap.values()))
   return kbd
 })
@@ -92,10 +118,40 @@ export const kbdNotes = derived(
 export const keyboardActions = {
   async setLayout(code: string) {
     const layout = await importLayout([code])
-    keyboardOptions.update(v => ({
+    keyboardSettings.update(v => ({
       ...v,
       layout
     }))
+  },
+  setCustomLayout(val: boolean) {
+    if (val) {
+      const kbd = get(keyboard)
+      keyboardSettings.update(v => ({
+        ...v,
+        useCustom: val,
+        customLayout: v.customLayout.map((l, rowIdx) => {
+          if (l.length === 0) {
+            return kbd.rows[rowIdx].map(v => ({ ...v }))
+          }
+          return l
+        }) as Rows
+      }))
+    } else {
+      keyboardSettings.update(v => ({ ...v, useCustom: val }))
+    }
+  },
+  captureHotkeyRow(rowIndex: number) {
+    let nextIndex = -1
+    let count = 0
+    const row = get(keyboardSettings).customLayout[rowIndex].map((v, idx) => {
+      if (v.key.charAt(0) !== '{' && nextIndex === -1) {
+        nextIndex = idx
+      }
+      count += v.key.charAt(0) !== '{' ? 1 : 0
+      return v
+    })
+    console.log('count', count)
+    capturingHotkeys.set({ row, nextIndex, rowIndex, count })
   },
   findNote(note: string): ScaleNote | undefined {
     return get(kbdNotes).find(n => {
@@ -124,8 +180,31 @@ export const keyboardActions = {
   },
   handleInput(code: string, key: string, shift = false): Parsed | false {
     const game = get(currentGame)
+    const cpt = get(capturingHotkeys)
     // console.log(`${key} ${keyboardInput} s ${shift} inp ${inputtedNote}`)
-    if (game instanceof GuessKeys) {
+    if (cpt) {
+      console.log('capturing ', captured.length)
+      const { nextIndex, row } = cpt
+      if (code === 'Escape') {
+        capturingHotkeys.set(undefined)
+      } else {
+        const found = captured.find(c => c.code === code)
+        if (!found) {
+          captured.push({ code, key })
+          row[nextIndex] = { ...row[nextIndex], code, key }
+          if (nextIndex === cpt.count) {
+            keyboardSettings.update(v => ({
+              ...v,
+              customLayout: v.customLayout.map((r, idx) => (idx !== cpt.rowIndex ? r : row)) as Rows
+            }))
+            capturingHotkeys.set(undefined)
+          } else {
+            capturingHotkeys.set({ ...cpt, nextIndex: nextIndex + 1, row })
+          }
+        }
+      }
+      return false
+    } else if (game instanceof GuessKeys) {
       return parseKey(code, key.toUpperCase())
     } else if (game instanceof GuessChords && game.type === 'chords-write') {
       return parseChord(code, key)
