@@ -1,7 +1,12 @@
 <script lang="ts">
+  import { getOctave } from '@/chords-and-scales'
+  import { midiRange } from '$stores/inputs'
+
   import type { KeyboardKey } from '@/keyboard'
 
   export let value: KeyboardKey, captured: boolean
+
+  $: octave = getOctave(value.note ? value.note.semitones + $midiRange[0] : 0)
 
   function sizeClass(size?: number) {
     if (size && Number.isInteger(size)) {
@@ -39,7 +44,9 @@
   class:captured
 >
   <button
-    class="relative w-full h-full shadow bg-[#ececf1] rounded flex items-center justify-center"
+    class="relative w-full h-full shadow bg-[#ececf1] rounded flex justify-center"
+    class:items-center={!value.note}
+    class:items-end={value.note}
     on:click
   >
     {#if value.key === '{enter}'}
@@ -48,7 +55,7 @@
       ></div>
     {/if}
     {#if value.note}
-      <div class="absolute top-0 left-0">{value.note.note}</div>
+      <div class="absolute top-0 left-0">{value.note.note}{octave}</div>
     {/if}
     <div>
       {formatValue(value.key)}

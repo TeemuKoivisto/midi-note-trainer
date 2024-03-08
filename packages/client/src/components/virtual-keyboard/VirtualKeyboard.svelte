@@ -1,9 +1,12 @@
 <script lang="ts">
   import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
   import circle from '@iconify-icons/mdi/chevron-right'
+  import restore from '@iconify-icons/mdi/restore'
+
   import { onMount } from 'svelte'
 
   import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
+  import Toggle from '$elements/Toggle.svelte'
   import VirtualKey from './VirtualKey.svelte'
 
   import {
@@ -28,11 +31,14 @@
   $: settableRows = $keys.map((_, idx) =>
     $keyboardSettings.kbdOpts.hotkeydRows === 'middle-row' ? idx === 1 || idx === 2 : true
   )
+  $: useMiddleRow = $keyboardSettings.kbdOpts.hotkeydRows === 'middle-row'
 
   const langOptions = Object.entries(LAYOUTS).map(([k, v]) => ({
     key: k,
     value: v.name
   }))
+
+  function handleReset() {}
   function handleSelectScale(key: string) {
     keyboardActions.setLayout(key)
     return false
@@ -43,9 +49,20 @@
   function handleSetRowKeys(rowIndex: number) {
     keyboardActions.captureHotkeyRow(rowIndex)
   }
+  function handleToggleRows() {
+    keyboardActions.toggleRows()
+  }
 </script>
 
-<div class={`${$$props.class || ''} `}>
+<div class={`${$$props.class || ''} relative`}>
+  <div class="absolute top-[0] right-[0] flex">
+    <button
+      class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
+      on:click={handleReset}
+    >
+      <Icon icon={restore} width={16} />
+    </button>
+  </div>
   <div class="flex">
     <div class="my-1 flex items-center justify-between mr-2">
       <label class="font-bold mr-4" for="middle-row">Layout</label>
@@ -69,13 +86,15 @@
         on:change={handleUseCustomLayout}
       />
     </div>
-    <div class="my-1 flex items-center justify-between mr-12">
+    <!-- <div class="my-1 flex items-center justify-between mr-12">
       <label class="font-bold mr-4" for="middle-row">Middle-row</label>
       <input class="h-[20px]" id="middle-row" type="checkbox" bind:checked={middleRow} />
-    </div>
+    </div> -->
     <div class="my-1 flex items-center justify-between mr-12">
-      <label class="font-bold mr-4" for="two-rows">Two rows</label>
-      <input class="h-[20px]" id="two-rows" type="checkbox" bind:checked={twoRows} />
+      <label class="font-bold mr-4" for="two-rows">One row</label>
+      <!-- <input class="h-[20px]" id="two-rows" type="checkbox" bind:checked={twoRows} /> -->
+      <Toggle checked={!useMiddleRow} on:change={handleToggleRows} />
+      <label class="font-bold ml-4" for="two-rows">Two rows</label>
     </div>
   </div>
   <div class="flex flex-col gap-1.5">
@@ -114,7 +133,7 @@
   }
   .keyboard {
     display: grid;
-    grid-template-columns: 2fr repeat(62, 1fr);
+    grid-template-columns: 2fr repeat(61, 1fr);
     grid-template-rows: auto;
   }
 </style>

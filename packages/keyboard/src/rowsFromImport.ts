@@ -5,11 +5,11 @@ import { LayoutImport, Rows } from './types'
 /**
  * Converts imported layout from ANSI to ISO
  * https://en.wikipedia.org/wiki/Keyboard_layout#Physical,_visual,_and_functional_layouts
- * @param hotkeydRows
+ * @param imported
  */
-export function rowsFromImport(hotkeydRows: LayoutImport): Rows {
+export function rowsFromImport(imported: LayoutImport): Rows {
   let cut2nd: string[] = []
-  const letters: string[][] = hotkeydRows.default.map((row, rowIndex) => {
+  const letters: string[][] = imported.default.map((row, rowIndex) => {
     if (rowIndex === 0) {
       const split = row.split(' ').filter(v => v !== '{bksp}')
       while (split.length !== 13) {

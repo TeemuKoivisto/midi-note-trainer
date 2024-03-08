@@ -57,7 +57,10 @@
 </script>
 
 <div class={`${$$props.class || ''}`}>
-  <fieldset class="flex flex-col rounded border-2 px-4 py-2 my-4 text-sm" class:collapsed={$hidden}>
+  <fieldset
+    class="flex flex-col rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
+    class:collapsed={$hidden}
+  >
     <legend class="text-base">
       <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
     </legend>

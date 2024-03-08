@@ -140,6 +140,15 @@ export const keyboardActions = {
       keyboardSettings.update(v => ({ ...v, useCustom: val }))
     }
   },
+  toggleRows() {
+    keyboardSettings.update(v => ({
+      ...v,
+      kbdOpts: {
+        ...v.kbdOpts,
+        hotkeydRows: v.kbdOpts.hotkeydRows === 'middle-row' ? 'two-rows' : 'middle-row'
+      }
+    }))
+  },
   captureHotkeyRow(rowIndex: number) {
     let nextIndex = -1
     let count = 0

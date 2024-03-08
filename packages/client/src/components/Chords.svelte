@@ -92,7 +92,7 @@
 
 <div class={`${$$props.class || ''}`}>
   <fieldset
-    class="flex flex-col relative rounded border-2 px-4 py-2 my-4 text-sm"
+    class="flex flex-col relative rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
     class:collapsed={$hidden}
   >
     <legend class="text-base">
