@@ -1,66 +1,33 @@
 import type { ScaleNote } from '@/chords-and-scales'
-import { KeyboardKey } from './types'
+import type { KeyboardKey, Rows } from './types'
 
-type Rows = [KeyboardKey[], KeyboardKey[], KeyboardKey[], KeyboardKey[]]
-
-export function setNotesForMiddleRow(rows: Rows, notes: ScaleNote[]) {
-  rows[1].forEach((_, idx) => {
-    let note: ScaleNote | undefined
-    if (idx === 2) {
-      note = { ...notes[1] }
-    } else if (idx === 3) {
-      note = { ...notes[3] }
-    } else if (idx === 5) {
-      note = { ...notes[6] }
-    } else if (idx === 6) {
-      note = { ...notes[8] }
-    } else if (idx === 7) {
-      note = { ...notes[10] }
-    } else if (idx === 9) {
-      note = { ...notes[1] }
-      note.semitones += 12
-    } else if (idx === 10) {
-      note = { ...notes[3] }
-      note.semitones += 12
-    } else if (idx === 12) {
-      note = { ...notes[6] }
-      note.semitones += 12
+export function setNotes(
+  keys: KeyboardKey[],
+  notes: ScaleNote[],
+  whiteKeys: boolean,
+  startIndex = 0
+) {
+  const indeces = whiteKeys ? [0, 2, 4, 5, 7, 9, 11] : [-1, 1, 3, -1, 6, 8, 10]
+  let firstIndex = -1
+  let lastNote: ScaleNote | undefined
+  let lastIndex = 0
+  keys.forEach((k, idx) => {
+    const specialKey = k.key.charAt(0) === '{'
+    if (!specialKey && firstIndex === -1) {
+      firstIndex = idx
     }
-    rows[1][idx].note = note
-  })
-  rows[2].forEach((_, idx) => {
-    let note: ScaleNote | undefined
-    if (idx === 1) {
-      note = { ...notes[0] }
-    } else if (idx === 2) {
-      note = { ...notes[2] }
-    } else if (idx === 3) {
-      note = { ...notes[4] }
-    } else if (idx === 4) {
-      note = { ...notes[5] }
-    } else if (idx === 5) {
-      note = { ...notes[7] }
-    } else if (idx === 6) {
-      note = { ...notes[9] }
-    } else if (idx === 7) {
-      note = { ...notes[11] }
-    } else if (idx === 8) {
-      note = { ...notes[0] }
-      note.semitones += 12
-    } else if (idx === 9) {
-      note = { ...notes[2] }
-      note.semitones += 12
-    } else if (idx === 10) {
-      note = { ...notes[4] }
-      note.semitones += 12
-    } else if (idx === 11) {
-      note = { ...notes[5] }
-      note.semitones += 12
-    } else if (idx === 12) {
-      note = { ...notes[7] }
-      note.semitones += 12
+    const noteIndex = indeces[(idx - firstIndex + startIndex) % indeces.length]
+    if (firstIndex !== -1 && idx !== 0 && !specialKey && noteIndex >= 0) {
+      const note = notes[noteIndex]
+      const octaves = Math.floor((startIndex + idx - firstIndex) / indeces.length)
+      k.note = {
+        ...note,
+        semitones: note.semitones + (octaves > 0 ? octaves : 0) * 12
+      }
+      lastNote = k.note
+      lastIndex = idx - firstIndex
     }
-    rows[2][idx].note = note
   })
-  return rows
+  // console.log(notes[indeces[lastIndex % indeces.length]])
+  return lastIndex
 }

@@ -9,7 +9,7 @@ import { persist } from '../persist'
 import { parseKey, type Parsed, parseChord, parseNotes } from './parseInput'
 
 import { GuessChords, GuessKeys } from '@/games'
-import type { KeyboardKey, KeyboardOptions, Layout, Rows } from '@/keyboard'
+import type { HotkeydRows, KeyboardKey, KeyboardOptions, Layout, Rows } from '@/keyboard'
 import type { ScaleNote } from '@/chords-and-scales'
 
 const ENGLISH_LAYOUT: Layout = {
@@ -140,12 +140,12 @@ export const keyboardActions = {
       keyboardSettings.update(v => ({ ...v, useCustom: val }))
     }
   },
-  toggleRows() {
+  toggleRows(rows?: HotkeydRows) {
     keyboardSettings.update(v => ({
       ...v,
       kbdOpts: {
         ...v.kbdOpts,
-        hotkeydRows: v.kbdOpts.hotkeydRows === 'middle-row' ? 'two-rows' : 'middle-row'
+        hotkeydRows: rows ?? (v.kbdOpts.hotkeydRows === 'middle-row' ? 'two-rows' : 'middle-row')
       }
     }))
   },
@@ -190,7 +190,6 @@ export const keyboardActions = {
   handleInput(code: string, key: string, shift = false): Parsed | false {
     const game = get(currentGame)
     const cpt = get(capturingHotkeys)
-    // console.log(`${key} ${keyboardInput} s ${shift} inp ${inputtedNote}`)
     if (cpt) {
       console.log('capturing ', captured.length)
       const { nextIndex, row } = cpt

@@ -1,6 +1,6 @@
 import en from 'simple-keyboard-layouts/build/layouts/english'
 
-import { setNotesForMiddleRow } from './setNotes'
+import { setNotes } from './setNotes'
 import { parseLayout } from './importLayout'
 
 import type { ScaleNote } from '@/chords-and-scales'
@@ -42,9 +42,13 @@ export class Keyboard {
 
   setNotes(notes: ScaleNote[]) {
     if (this.opts.hotkeydRows === 'middle-row') {
-      this.rows = setNotesForMiddleRow(this.rows, notes)
+      setNotes(this.rows[1], notes, false)
+      setNotes(this.rows[2], notes, true)
     } else {
-      throw Error('not implemented')
+      setNotes(this.rows[2], notes, false)
+      const last = setNotes(this.rows[3], notes, true)
+      setNotes(this.rows[0], notes, false, last)
+      setNotes(this.rows[1], notes, true, last + 1)
     }
   }
 

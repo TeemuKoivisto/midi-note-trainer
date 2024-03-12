@@ -10,4 +10,10 @@ describe('Keyboard', () => {
     kbd.setNotes(Array.from(cmajor.notesMap.values()))
     expect(kbd).toMatchSnapshot()
   })
+
+  it('should map notes to two rows correctly with english layout', async () => {
+    const kbd = new Keyboard({ hotkeydRows: 'two-rows' })
+    kbd.setNotes(Array.from(cmajor.notesMap.values()))
+    expect(kbd).toMatchSnapshot()
+  })
 })

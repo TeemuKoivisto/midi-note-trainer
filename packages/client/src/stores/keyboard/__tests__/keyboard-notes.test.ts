@@ -1,5 +1,7 @@
+import { get } from 'svelte/store'
+
 import { gameActions } from '$stores/game'
-import { keyboardActions } from '$stores/keyboard'
+import { keyboardActions, keyboardSettings } from '$stores/keyboard'
 import { inputsActions } from '$stores/inputs'
 import { scoreActions } from '$stores/score'
 
@@ -8,10 +10,12 @@ describe('keyboard & GameNotes', () => {
     scoreActions.clearScore(true)
     inputsActions.setInputValue('useHotkeys', true)
     inputsActions.setInputValue('useAutoOctave', true)
+    keyboardActions.toggleRows('middle-row')
     vi.unstubAllGlobals()
   })
   it('should parse C# from the hotkey map', () => {
     gameActions.play('notes', undefined)
+    expect(get(keyboardSettings).kbdOpts.hotkeydRows).toEqual('middle-row')
     expect(keyboardActions.handleInput('KeyZ', 'z')).toEqual(false)
     expect(keyboardActions.handleInput('Digit4', '4')).toEqual(false)
     expect(keyboardActions.handleInput('BracketLeft', 'å')).toEqual(false)
@@ -153,6 +157,31 @@ describe('keyboard & GameNotes', () => {
     expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B♭' })
     expect(keyboardActions.handleInput('Digit3', '3')).toEqual({
       data: 58,
+      e: 'guessed-note'
+    })
+  })
+})
+
+describe('keyboard & GameNotes with two rows enabled', () => {
+  beforeAll(() => {
+    scoreActions.clearScore(true)
+    inputsActions.setInputValue('useHotkeys', true)
+    inputsActions.setInputValue('useAutoOctave', true)
+    keyboardActions.toggleRows('two-rows')
+    vi.unstubAllGlobals()
+  })
+  it('should parse Eb when mapped to Digit7 without messing up octaves', () => {
+    expect(keyboardActions.handleInput('Digit7', '7')).toEqual({
+      data: 87,
+      e: 'guessed-note'
+    })
+    expect(keyboardActions.handleInput('IntlBackslash', '§')).toEqual(false)
+    expect(keyboardActions.handleInput('Digit9', '9')).toEqual({
+      data: 90,
+      e: 'guessed-note'
+    })
+    expect(keyboardActions.handleInput('BracketLeft', 'å')).toEqual({
+      data: 95,
       e: 'guessed-note'
     })
   })

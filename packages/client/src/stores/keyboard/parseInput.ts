@@ -109,6 +109,7 @@ export function parseNotes(
   shift: boolean
 ): ParsedNote | InputtedNote | InputtedString | false {
   const { useAutoOctave, useHotkeys } = get(inputs)
+  // console.log(`code ${code} key ${key} ${keyboardInput} s ${shift} inp ${inputtedNote}`)
   let octave
   const kmap = get(keyMap)
   const found = kmap.get(code)
@@ -135,7 +136,7 @@ export function parseNotes(
     }
     returning = 'input'
   }
-  if (regexPosInt.test(pressed)) {
+  if (!returning && regexPosInt.test(pressed)) {
     try {
       octave = parseInt(pressed)
     } catch (err: any) {}
