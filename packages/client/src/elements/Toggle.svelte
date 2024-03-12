@@ -17,7 +17,7 @@
 
 <style lang="scss">
   .toggle {
-    @apply relative rounded h-[26px] w-[48px];
+    @apply relative rounded h-[22px] w-[40px];
     &:focus-within {
       @apply outline outline-2 ring-1 outline-blue-700;
     }
@@ -37,8 +37,8 @@
     &:before {
       content: '';
       border-radius: 50%;
-      height: 20px;
-      width: 20px;
+      height: 16px;
+      width: 16px;
       left: 3px;
       bottom: 3px;
       @apply absolute transition-all duration-300 bg-white;

@@ -13,6 +13,8 @@ describe('GuessChords', () => {
     vi.stubGlobal('Math', {
       floor: Math.floor,
       ceil: Math.ceil,
+      max: Math.max,
+      min: Math.min,
       random: () => {
         if (nextRandom === 9) {
           nextRandom = 0
@@ -210,6 +212,38 @@ describe('GuessChords', () => {
       'B♭maj',
       'C♭dim'
     ])
+    expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(600.0)
+  })
+  it('should accept written chords as well', () => {
+    const scale = createScaleUnsafe('D', 'major')
+    const count = 10
+    const game = new GuessChords(
+      'chords-write',
+      {
+        scale,
+        range: [60, 72],
+        duplicates: true,
+        count
+      },
+      {
+        chords: basicChords
+      }
+    )
+    for (let i = 0; i < count; i += 1) {
+      if (i === 0) {
+        game.guessWrittenChord({ note: 'C', flats: 0, sharps: 0, chord: 'maj' })
+      } else {
+        game.guessWrittenChord({ note: 'C', flats: 0, sharps: 0, chord: '' })
+      }
+    }
+    expect(game.ended).toBe(true)
+    expect(game.correct).toEqual(9)
+    expect(game.idx).toEqual(10)
+    expect(game.latestGuess.target?.chord).toEqual('Fm')
+    expect(game.latestGuess.target?.notes.length).toEqual(3)
+    expect(game.latestGuess.guessed?.chord).toEqual('C')
+    expect(game.latestGuess.guessed?.notes.map(n => n.midi)).toEqual([])
+    expect(game.data.length).toEqual(12)
     expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(600.0)
   })
 })

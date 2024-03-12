@@ -64,7 +64,11 @@ export class GuessChords extends Game<
       chord: `${noteIntoString(value)}${value.chord.toLowerCase()}`,
       notes: []
     }
-    const result = this.current.chord === guessed.chord
+    let result = this.current.chord === guessed.chord
+    // Incase the chord was major chord, also accept inputs without "maj" suffix
+    if (this.current.chord.slice(-3) === 'maj' && !result) {
+      result = this.current.chord.slice(0, -3) === guessed.chord
+    }
     return this.addGuessed(guessed, result)
   }
   guess() {
