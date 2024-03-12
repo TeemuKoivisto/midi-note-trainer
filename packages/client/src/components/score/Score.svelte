@@ -64,7 +64,7 @@
       parts: [
         note.note.charAt(0),
         `${naturalized ? 'n' : accidental.repeat(count)}`,
-        getOctave(note.midi)
+        getOctave(note)
       ]
     }
   }
@@ -118,7 +118,7 @@
     const trebleNotes = []
     for (let i = 0; i < notes.length; i += 1) {
       const n = notes[i]
-      const octave = getOctave(n.midi)
+      const octave = getOctave(n)
       const color =
         'color' in n && n.color !== 'default'
           ? n.color === 'correct'
@@ -213,6 +213,7 @@
     const tclef = new Stave(0, 0, scoreWidth).addClef('treble').addKeySignature(key)
     const bclef = new Stave(0, 60, scoreWidth).addClef('bass') //.addKeySignature(key)
     const targetNotes = notesToVexflowNotes(target, scale)
+    // console.log('notes ', targetNotes)
     const playedNotes = notesToVexflowNotes(played, scale)
     const [trebleNotes, bassNotes] = createNotes(targetNotes, playedNotes)
     const voices: Vex.Voice[] = []

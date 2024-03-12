@@ -120,7 +120,7 @@ export function parseNotes(
     inputtedNote = found.note
     keyboardError = ''
     if (useAutoOctave) {
-      octave = getOctave(get(midiRangeNotes)[0].midi)
+      octave = getOctave({ midi: get(midiRangeNotes)[0].midi, flats: 0, sharps: 0 })
     }
     returning = 'note'
   } else if (!useHotkeys && keyboardInput.length === 0 && regexNote.test(key)) {

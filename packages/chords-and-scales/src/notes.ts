@@ -18,12 +18,18 @@ export const NOTES = [
   { note: 'B', semitones: 11, sharps: 0, flats: 0 }
 ]
 
-export function getOctave(midi: number) {
-  return midi === 12 ? 1 : Math.floor((midi - 12) / 12)
+export function getOctave(note: { midi: number; flats: number; sharps: number }) {
+  const norm = note.midi + note.flats - note.sharps
+  return norm === 12 ? 1 : Math.floor((norm - 12) / 12)
 }
 
-export function getNoteAbsolute(note: { note: string; midi: number }) {
-  return `${note.note}${getOctave(note.midi)}`
+export function getNoteAbsolute(note: {
+  note: string
+  midi: number
+  flats: number
+  sharps: number
+}) {
+  return `${note.note}${getOctave(note)}`
 }
 
 export function getNote(midi: number): MidiNote {

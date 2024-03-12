@@ -1,4 +1,4 @@
-import { getRootNote } from '../notes'
+import { getOctave, getRootNote } from '../notes'
 
 describe('getRootNote', () => {
   it('should generate correct root notes', () => {
@@ -56,5 +56,20 @@ describe('getRootNote', () => {
     Object.entries(correct).forEach(([key, values]) => {
       expect(getRootNote(key)).toEqual(values)
     })
+  })
+})
+
+describe('getOctave', () => {
+  it('should return correct octaves for notes', () => {
+    // C4
+    expect(getOctave({ midi: 60, flats: 0, sharps: 0 })).toEqual(4)
+    // C#4
+    expect(getOctave({ midi: 61, flats: 0, sharps: 1 })).toEqual(4)
+    // Cb4
+    expect(getOctave({ midi: 59, flats: 1, sharps: 0 })).toEqual(4)
+
+    expect(getOctave({ midi: 71, flats: 1, sharps: 0 })).toEqual(5)
+    expect(getOctave({ midi: 12, flats: 0, sharps: 0 })).toEqual(1)
+    expect(getOctave({ midi: 11, flats: 1, sharps: 0 })).toEqual(1)
   })
 })

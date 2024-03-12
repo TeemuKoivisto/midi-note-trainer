@@ -6,7 +6,9 @@
 
   export let value: KeyboardKey, captured: boolean
 
-  $: octave = getOctave(value.note ? value.note.semitones + $midiRange[0] : 0)
+  $: octave = value.note
+    ? getOctave({ midi: value.note.semitones + $midiRange[0], flats: 0, sharps: 0 })
+    : 0
 
   function sizeClass(size?: number) {
     if (size && Number.isInteger(size)) {
