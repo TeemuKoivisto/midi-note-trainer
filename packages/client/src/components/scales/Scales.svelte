@@ -127,7 +127,7 @@
     <legend class="text-base">
       <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>Scales</button>
     </legend>
-    <div class="flex mb-2 input">
+    <div class="flex mb-2 input" class:hidden={$hidden}>
       <label class="mr-4 font-bold" for="scale-key">Key</label>
       <input
         class="bg-gray-100 w-16 px-1 rounded"
