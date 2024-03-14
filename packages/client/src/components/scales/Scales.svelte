@@ -127,16 +127,16 @@
     <legend class="text-base">
       <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>Scales</button>
     </legend>
-    <div class="body" class:hidden={$hidden}>
-      <div class="flex w-1/2 mb-2 input">
-        <label class="mr-4 font-bold" for="scale-key">Key</label>
-        <input
-          class="bg-gray-100 w-16 px-1 rounded"
-          id="scale-key"
-          value={shownKey}
-          on:input={handleKeyChange}
-        />
-      </div>
+    <div class="flex mb-2 input">
+      <label class="mr-4 font-bold" for="scale-key">Key</label>
+      <input
+        class="bg-gray-100 w-16 px-1 rounded"
+        id="scale-key"
+        value={shownKey}
+        on:input={handleKeyChange}
+      />
+    </div>
+    <div class="body max-h-[30rem] overflow-scroll" class:hidden={$hidden}>
       <ul class="list odd w-full">
         {#each leftList as scale}
           <li>

@@ -5,7 +5,7 @@
 
   import { onMount } from 'svelte'
 
-  import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
+  import Dropdown from '$elements/Dropdown.svelte'
   import Toggle from '$elements/Toggle.svelte'
   import VirtualKey from './VirtualKey.svelte'
 
@@ -55,46 +55,45 @@
 </script>
 
 <div class={`${$$props.class || ''} relative`}>
-  <div class="absolute top-[0] right-[0] flex">
-    <button
-      class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
-      on:click={handleReset}
-    >
-      <Icon icon={restore} width={16} />
-    </button>
-  </div>
-  <div class="flex">
-    <div class="my-1 flex items-center justify-between mr-2">
-      <label class="font-bold mr-4" for="middle-row">Layout</label>
-      <MultiSelectDropdown
-        id="keyboard-lang"
-        containerClass="w-36"
-        class="p-1"
-        options={langOptions}
-        onSelect={handleSelectScale}
-      >
-        <div slot="value">{$keyboardSettings.kbdOpts.layout.name}</div>
-      </MultiSelectDropdown>
-    </div>
-    <div class="my-1 flex items-center justify-between mr-12">
-      <label class="font-bold mr-4" for="custom-layout">Custom</label>
-      <input
-        class="h-[20px]"
-        id="custom-layout"
-        type="checkbox"
-        checked={$keyboardSettings.useCustom}
-        on:change={handleUseCustomLayout}
-      />
-    </div>
-    <!-- <div class="my-1 flex items-center justify-between mr-12">
+  <div class="flex justify-between">
+    <div class="flex">
+      <div class="my-1 flex items-center justify-between mr-2">
+        <label class="font-bold mr-4" for="middle-row">Layout</label>
+        <Dropdown
+          id="keyboard-lang"
+          containerClass="w-36"
+          class="p-1"
+          options={langOptions}
+          onSelect={handleSelectScale}
+        >
+          <div slot="value">{$keyboardSettings.kbdOpts.layout.name}</div>
+        </Dropdown>
+      </div>
+      <div class="my-1 flex items-center justify-between mr-12">
+        <label class="font-bold mr-4" for="custom-layout">Custom</label>
+        <input
+          class="h-[20px]"
+          id="custom-layout"
+          type="checkbox"
+          checked={$keyboardSettings.useCustom}
+          on:change={handleUseCustomLayout}
+        />
+      </div>
+      <!-- <div class="my-1 flex items-center justify-between mr-12">
       <label class="font-bold mr-4" for="middle-row">Middle-row</label>
       <input class="h-[20px]" id="middle-row" type="checkbox" bind:checked={middleRow} />
     </div> -->
-    <div class="my-1 flex items-center justify-between mr-12">
-      <label class="font-bold mr-4" for="two-rows">One row</label>
-      <!-- <input class="h-[20px]" id="two-rows" type="checkbox" bind:checked={twoRows} /> -->
-      <Toggle checked={!useMiddleRow} on:change={handleToggleRows} />
-      <label class="font-bold ml-4" for="two-rows">Two rows</label>
+      <div class="my-1 flex items-center justify-between mr-12">
+        <label class="font-bold mr-4" for="two-rows">One row</label>
+        <!-- <input class="h-[20px]" id="two-rows" type="checkbox" bind:checked={twoRows} /> -->
+        <Toggle checked={!useMiddleRow} on:change={handleToggleRows} />
+        <label class="font-bold ml-4" for="two-rows">Two rows</label>
+      </div>
+    </div>
+    <div class="flex items-center justify-center">
+      <button class="rounded px-1 py-1 hover:bg-gray-200" on:click={handleReset}>
+        <Icon icon={restore} width={16} />
+      </button>
     </div>
   </div>
   <div class="flex flex-col gap-1.5">

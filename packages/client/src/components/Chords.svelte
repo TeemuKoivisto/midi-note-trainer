@@ -153,12 +153,12 @@
         />
         <label class="font-bold" for="scale-key">Scale</label>
         <SearchDropdown
-          class="bg-gray-100 w-[12rem] mr-4"
+          class="bg-gray-100 w-[12rem]"
           selected={selectedScale}
           options={scaleOptions}
           onSelect={handleSelectScale}
         />
-        <label class="font-bold" for="scale-key">Note</label>
+        <label class="ml-4 font-bold" for="scale-key">Note</label>
         <input
           class="bg-gray-100 w-12 px-1 rounded"
           id="scale-key"
