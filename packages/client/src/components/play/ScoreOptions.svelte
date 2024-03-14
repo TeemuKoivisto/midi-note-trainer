@@ -9,7 +9,7 @@
   import { persist } from '$stores/persist'
   import { keyAndScale, scaleData, scoreActions } from '$stores/score'
 
-  import MultiSelectDropdown from '$elements/MultiSelectDropdown.svelte'
+  import SearchDropdown from '$elements/SearchDropdown.svelte'
 
   let rangeMin = getNoteAbsolute($midiRangeNotes[0])
   let rangeMax = getNoteAbsolute($midiRangeNotes[1])
@@ -73,7 +73,7 @@
     selectedKey = `${value.charAt(0).toUpperCase()}${value.charAt(1).toLowerCase()}`
     scoreActions.setKey(selectedKey)
   }
-  function handleSelectScale(key: string) {
+  function handleSelectScale(key: string | number) {
     selectedScale = scaleOptions.find(k => key === k.key)?.value as string
     scoreActions.setScale(selectedScale)
     return false
@@ -133,14 +133,12 @@
     <div class="flex flex-col h-full">
       <label class="font-bold" for="scales">Scale</label>
       <div class="my-1 w-full">
-        <MultiSelectDropdown
-          id="scales"
-          class="p-1"
+        <SearchDropdown
+          class="w-[12rem] p-1 pl-[2px]"
+          selected={selectedScale}
           options={scaleOptions}
           onSelect={handleSelectScale}
-        >
-          <div slot="value">{selectedScale}</div>
-        </MultiSelectDropdown>
+        />
       </div>
       {#if !$currentGame}
         <div class="intervals my-1">
