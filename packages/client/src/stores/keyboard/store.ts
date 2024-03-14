@@ -116,11 +116,14 @@ export const kbdNotes = derived(
 )
 
 export const keyboardActions = {
-  async setLayout(code: string) {
-    const layout = await importLayout([code])
+  async setLayout(languages: readonly string[]) {
+    const layout = await importLayout(languages)
     keyboardSettings.update(v => ({
       ...v,
-      layout
+      kbdOpts: {
+        ...v.kbdOpts,
+        layout
+      }
     }))
   },
   setCustomLayout(val: boolean) {

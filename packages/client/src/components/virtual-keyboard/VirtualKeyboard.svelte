@@ -9,21 +9,11 @@
   import Toggle from '$elements/Toggle.svelte'
   import VirtualKey from './VirtualKey.svelte'
 
-  import {
-    capturingHotkeys,
-    keyboardSettings,
-    keys,
-    keyMap,
-    keyboardActions
-  } from '$stores/keyboard'
-  import { LAYOUTS, importLayout } from '@/keyboard'
+  import { capturingHotkeys, keyboardSettings, keys, keyboardActions } from '$stores/keyboard'
+  import { LAYOUTS } from '@/keyboard'
 
-  onMount(async () => {
-    console.log($keyMap)
-    const layout = await importLayout(['sw'])
-    console.log(layout)
-    // @ts-ignore
-    window.layout = layout
+  onMount(() => {
+    keyboardActions.setLayout(navigator.languages)
   })
 
   let middleRow = true
@@ -39,8 +29,8 @@
   }))
 
   function handleReset() {}
-  function handleSelectScale(key: string) {
-    keyboardActions.setLayout(key)
+  function handleSelectLanguage(key: string) {
+    keyboardActions.setLayout([key])
     return false
   }
   function handleUseCustomLayout(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
@@ -64,7 +54,7 @@
           containerClass="w-36"
           class="p-1 w-36"
           options={langOptions}
-          onSelect={handleSelectScale}
+          onSelect={handleSelectLanguage}
         >
           <div slot="value">{$keyboardSettings.kbdOpts.layout.name}</div>
         </Dropdown>
