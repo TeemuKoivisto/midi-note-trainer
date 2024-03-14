@@ -8,12 +8,14 @@
   import alphaB from '@iconify-icons/mdi/alpha-b'
   import num7 from '@iconify-icons/mdi/numeric-7-circle'
 
+  import SearchDropdown from '$elements/SearchDropdown.svelte'
+
   import { writable } from 'svelte/store'
   import {
-    chordsFromJSON,
     createChord,
     createScale,
     getRootNote,
+    scalesFromJSON,
     type MidiNote,
     type ScaleNote
   } from '@/chords-and-scales'
@@ -33,6 +35,12 @@
   let scaleNote: ScaleNote | undefined
   let leftChords: MidiNote[][] = []
   let rightChords: MidiNote[][] = []
+
+  const scales = scalesFromJSON()
+  const scaleOptions = scales.map(scl => ({
+    key: scl.names[0],
+    value: scl.names[0]
+  }))
 
   const hidden = persist(writable(true), { key: 'chords-hidden' })
 
@@ -88,6 +96,12 @@
   function reset() {
     gameActions.toggleChords(_ => true)
   }
+  function handleSelectScale(key: string | number) {
+    selectedScale = scaleOptions.find(k => key === k.key)?.value as string
+    scale = createScale(selectedKey, selectedScale)
+    updateChords()
+    return false
+  }
 </script>
 
 <div class={`${$$props.class || ''}`}>
@@ -132,16 +146,21 @@
       <div class="flex mb-2 input">
         <label class="mr-4 font-bold" for="scale-key">Key</label>
         <input
-          class="bg-gray-100 w-16 px-1 rounded"
+          class="bg-gray-100 w-12 px-1 rounded"
           id="scale-key"
           value={selectedKey}
           on:input={handleKeyChange}
         />
         <label class="font-bold" for="scale-key">Scale</label>
-        <input class="bg-gray-100 w-16 px-1 rounded" id="scale-key" value={'Major'} disabled />
+        <SearchDropdown
+          class="bg-gray-100 w-[12rem] mr-4"
+          selected={selectedScale}
+          options={scaleOptions}
+          onSelect={handleSelectScale}
+        />
         <label class="font-bold" for="scale-key">Note</label>
         <input
-          class="bg-gray-100 w-16 px-1 rounded"
+          class="bg-gray-100 w-12 px-1 rounded"
           id="scale-key"
           value={rootNote}
           on:input={handleNoteChange}
@@ -235,7 +254,7 @@
     display: grid;
     grid-template-columns: 1fr 3fr;
     & > input {
-      @apply my-1 mr-0 w-24;
+      @apply my-1 mr-0;
     }
     @media (width > 600px) {
       grid-column-end: span 2;
