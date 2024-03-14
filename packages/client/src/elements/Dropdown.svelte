@@ -51,7 +51,7 @@
     />
     <ul
       transition:slide={{ duration: DROPDOWN_DURATION }}
-      class={`items-list bg-white py-1.5 py-2 w-48 h-64 overflow-y-scroll text-sm absolute left-0 z-30 rounded-b shadow-xl ${
+      class={`items-list bg-white py-1.5 py-2 h-64 overflow-y-scroll text-sm absolute left-0 z-30 rounded-b shadow-xl ${
         containerClass || ''
       }`}
     >

@@ -153,7 +153,7 @@
         </div>
       </div>
     </div>
-    {#if setKeys}
+    {#if setKeys && !$hidden}
       <VirtualKeyboard class="mt-4" />
     {/if}
   </fieldset>

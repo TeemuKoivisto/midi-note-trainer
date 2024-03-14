@@ -62,7 +62,7 @@
         <Dropdown
           id="keyboard-lang"
           containerClass="w-36"
-          class="p-1"
+          class="p-1 w-36"
           options={langOptions}
           onSelect={handleSelectScale}
         >
