@@ -1,1 +1,0 @@
-import{m as n,w as e}from"./vendor_svelte.9428071c.js";const a={introduction:void 0},c=e(a),t=e(null),i={open(...[o,s]){t.set(o),c.update(l=>({...l,[o]:s})),console.log("open ",o)},close(){t.set(null)},toggle(o){const s=n(t);!s||s&&s!==o?t.set(o):t.set(null)}};export{i as a,c as m,t as o};
