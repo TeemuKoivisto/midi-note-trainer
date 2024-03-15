@@ -1,4 +1,7 @@
 <script lang="ts">
+  import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
+  import restore from '@iconify-icons/mdi/restore'
+
   import { writable } from 'svelte/store'
 
   import VirtualKeyboard from '$components/virtual-keyboard/VirtualKeyboard.svelte'
@@ -52,18 +55,28 @@
     }
   }
   function handleReset() {
-    reset()
+    inputsActions.setInputValue('useSound', true)
+    inputsActions.setInputValue('fixedVelocity', undefined)
+    inputsActions.setInputValue('useKeyboard', true)
+    inputsActions.setInputValue('useHotkeys', true)
+    inputsActions.setInputValue('useAutoOctave', true)
+    inputsActions.setInputValue('keyFadeTimeout', 1500)
   }
 </script>
 
 <div class={`${$$props.class || ''}`}>
   <fieldset
-    class="flex flex-col rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
+    class="relative flex flex-col rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
     class:collapsed={$hidden}
   >
     <legend class="text-base">
       <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
     </legend>
+    <div class="absolute top-[-0.25rem] right-[0.5rem] flex items-center justify-center">
+      <button class="rounded px-1 py-1 hover:bg-gray-200" on:click={handleReset}>
+        <Icon icon={restore} width={16} />
+      </button>
+    </div>
     <div class="body" class:hidden={$hidden}>
       <div class="h-full flex flex-col">
         <label class="font-bold" for="device">Device</label>
@@ -132,13 +145,14 @@
           />
         </div>
       </div>
-      <div class="flex flex-col justify-between h-full">
-        <div class="flex justify-between">
+      <div class="flex flex-col h-full">
+        <div class="h-[28px]">&nbsp;</div>
+        <div class="my-[2px] flex justify-between">
           <button class="w-full btn-sm primary" on:click={() => (setKeys = !setKeys)}
             >Set hotkeys</button
           >
         </div>
-        <div class="flex justify-between">
+        <div class="my-1 flex justify-between">
           <label class="font-bold" for="fade-timeout">Fade timeout</label>
           <input
             class="h-[20px] w-16"
@@ -146,10 +160,6 @@
             value={fadeMs}
             on:input={handleSetFadeTimeout}
           />
-        </div>
-        <div class="flex justify-between">
-          <div></div>
-          <button class="btn-sm primary" on:click={handleReset}>Reset all</button>
         </div>
       </div>
     </div>

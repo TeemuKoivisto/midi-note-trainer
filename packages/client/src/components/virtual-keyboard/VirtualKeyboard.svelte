@@ -4,20 +4,18 @@
   import restore from '@iconify-icons/mdi/restore'
 
   import { onMount } from 'svelte'
+  import { LAYOUTS } from '@/keyboard'
 
   import Dropdown from '$elements/Dropdown.svelte'
   import Toggle from '$elements/Toggle.svelte'
   import VirtualKey from './VirtualKey.svelte'
 
   import { capturingHotkeys, keyboardSettings, keys, keyboardActions } from '$stores/keyboard'
-  import { LAYOUTS } from '@/keyboard'
 
   onMount(() => {
     keyboardActions.setLayout(navigator.languages)
   })
 
-  let middleRow = true
-  let twoRows = false
   $: settableRows = $keys.map((_, idx) =>
     $keyboardSettings.kbdOpts.hotkeydRows === 'middle-row' ? idx === 1 || idx === 2 : true
   )
@@ -28,7 +26,10 @@
     value: v.name
   }))
 
-  function handleReset() {}
+  function handleReset() {
+    keyboardActions.reset()
+    keyboardActions.setLayout(navigator.languages)
+  }
   function handleSelectLanguage(key: string) {
     keyboardActions.setLayout([key])
     return false
@@ -59,7 +60,7 @@
           <div slot="value">{$keyboardSettings.kbdOpts.layout.name}</div>
         </Dropdown>
       </div>
-      <div class="my-1 flex items-center justify-between mr-12">
+      <div class="my-1 flex items-center">
         <label class="font-bold mr-4" for="custom-layout">Custom</label>
         <input
           class="h-[20px]"
@@ -69,13 +70,8 @@
           on:change={handleUseCustomLayout}
         />
       </div>
-      <!-- <div class="my-1 flex items-center justify-between mr-12">
-      <label class="font-bold mr-4" for="middle-row">Middle-row</label>
-      <input class="h-[20px]" id="middle-row" type="checkbox" bind:checked={middleRow} />
-    </div> -->
-      <div class="my-1 flex items-center justify-between mr-12">
+      <div class="my-1 flex items-center">
         <label class="font-bold mr-4" for="two-rows">One row</label>
-        <!-- <input class="h-[20px]" id="two-rows" type="checkbox" bind:checked={twoRows} /> -->
         <Toggle checked={!useMiddleRow} on:change={handleToggleRows} />
         <label class="font-bold ml-4" for="two-rows">Two rows</label>
       </div>
@@ -122,7 +118,7 @@
   }
   .options {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 2fr;
     @media (width <= 656px) {
       grid-template-columns: 1fr;
     }

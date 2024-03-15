@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
+  import restore from '@iconify-icons/mdi/restore'
   import { onMount } from 'svelte'
 
   import Chords from '$components/Chords.svelte'
@@ -13,6 +15,7 @@
   import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
   import { modalActions } from '$stores/modal'
   import { scoreActions } from '$stores/score'
+  import { reset } from '$stores/persist'
 
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessChords, GuessKeys, GuessNotes } from '@/games'
@@ -138,16 +141,27 @@
       console.error(res.err)
     }
   }
+  function handleReset() {
+    reset()
+    window.location.reload()
+  }
 </script>
 
 <svelte:head>
   <meta name="description" content="App to practise music notation, scales and chords using MIDI" />
 </svelte:head>
 
-<h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight">
+<h1
+  class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight flex items-center justify-between"
+>
   <a class="hover:underline" href="https://github.com/TeemuKoivisto/midi-note-trainer">
     MIDI Note Trainer
   </a>
+  <div class="flex items-center justify-center">
+    <button class="rounded p-2 hover:bg-gray-200" on:click={handleReset}>
+      <Icon icon={restore} width={24} />
+    </button>
+  </div>
 </h1>
 
 <div class="px-4 md:px-0">

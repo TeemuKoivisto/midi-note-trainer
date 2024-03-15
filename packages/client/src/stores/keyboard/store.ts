@@ -223,5 +223,15 @@ export const keyboardActions = {
       return parseNotes(code, key.toUpperCase(), shift)
     }
     return false
+  },
+  reset() {
+    keyboardSettings.set({
+      useCustom: false,
+      customLayout: [[], [], [], []],
+      kbdOpts: {
+        layout: ENGLISH_LAYOUT,
+        hotkeydRows: 'middle-row'
+      }
+    })
   }
 }
