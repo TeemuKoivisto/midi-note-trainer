@@ -15,6 +15,7 @@ export default defineConfig({
       $config: resolve('./src/config'),
       $elements: resolve('./src/elements'),
       $games: resolve('./src/games'),
+      $modals: resolve('./src/modals'),
       $stores: resolve('./src/stores'),
       $utils: resolve('./src/utils')
     }

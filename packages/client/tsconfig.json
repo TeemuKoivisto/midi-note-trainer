@@ -19,6 +19,7 @@
       "$context": ["src/context"],
       "$elements/*": ["src/elements/*"],
       "$games/*": ["src/games/*"],
+      "$modals/*": ["src/modals/*"],
       "$stores/*": ["src/stores/*"],
       "$utils/*": ["src/utils/*"]
     },

@@ -8,7 +8,7 @@ import { scaleData, scoreActions } from './score'
 import { GuessChords, GuessKeys, GuessNotes } from '@/games'
 
 import type { Chord } from '@/chords-and-scales'
-import type { GameInstance, GameType, OptionsMap } from '@/games'
+import type { GameInstance, OptionsMap } from '@/games'
 
 export type GuessState = 'waiting' | 'correct' | 'wrong' | 'ended'
 export interface SelectedChord extends Chord {

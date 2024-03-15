@@ -11,6 +11,7 @@
 
   import { currentGame, gameActions, gameOptions, guessState } from '$stores/game'
   import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
+  import { modalActions } from '$stores/modal'
   import { scoreActions } from '$stores/score'
 
   import type { NoteMessageEvent } from 'webmidi'
@@ -148,6 +149,10 @@
     MIDI Note Trainer
   </a>
 </h1>
+
+<button class="btn primary" on:click={() => modalActions.open('introduction', undefined)}
+  >Introduction</button
+>
 
 <section class="px-4 md:px-0">
   <IOSettings />
