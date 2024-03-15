@@ -8,18 +8,19 @@
   export let hideModal: () => void = () => undefined
 </script>
 
-<div class="absolute top-[1rem] right-[1rem]">
-  <button
-    class="flex items-center text-sm rounded-full px-2 py-2 hover:bg-gray-200"
-    on:click={hideModal}
-  >
-    <Icon icon={x} width={24} />
-  </button>
-</div>
-
-<div class="mx-2 mt-2 mb-6 flex flex-col">
-  <h2 class="text-5xl mt-6 mb-4 font-semibold text-black">Introduction</h2>
-  <article class="w-full mt-2">
+<div class="flex flex-col">
+  <h2 class="pl-1.5 mt-4 mb-2 text-5xl font-semibold text-black relative">
+    Introduction
+    <div class="absolute top-0 right-0">
+      <button
+        class="flex items-center text-sm rounded-full px-2 py-2 hover:bg-gray-200"
+        on:click={hideModal}
+      >
+        <Icon icon={x} width={24} />
+      </button>
+    </div>
+  </h2>
+  <article class="w-full p-2 pb-4">
     <p>Greetings! 👋</p>
     <p>
       This is a tiny app that I made to help myself and hopefully others to learn music notation. In

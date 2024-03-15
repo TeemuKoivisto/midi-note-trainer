@@ -143,10 +143,10 @@
       </button>
     </div>
     <div class="body" class:hidden={$hidden}>
-      <div class="flex mb-2 input">
+      <div class="flex mb-2 options">
         <label class="mr-4 font-bold" for="scale-key">Key</label>
         <input
-          class="bg-gray-100 w-12 px-1 rounded"
+          class="input bg-gray-100 w-12 px-1 rounded"
           id="scale-key"
           value={selectedKey}
           on:input={handleKeyChange}
@@ -154,14 +154,14 @@
         <label class="font-bold" for="scale-key">Scale</label>
         <SearchDropdown
           class="bg-gray-100 w-48"
-          containerClass="w-48"
+          containerClass="input w-48"
           selected={selectedScale}
           options={scaleOptions}
           onSelect={handleSelectScale}
         />
-        <label class="ml-4 font-bold" for="scale-key">Note</label>
+        <label class="font-bold" for="scale-key">Note</label>
         <input
-          class="bg-gray-100 w-12 px-1 rounded"
+          class="input bg-gray-100 w-12 px-1 rounded"
           id="scale-key"
           value={rootNote}
           on:input={handleNoteChange}
@@ -251,11 +251,11 @@
       display: none;
     }
   }
-  .input {
+  .options {
     display: grid;
     grid-template-columns: 1fr 3fr;
-    & > input {
-      @apply my-1 mr-0;
+    & > :global(.input) {
+      @apply my-0.5 mr-0;
     }
     @media (width > 600px) {
       grid-column-end: span 2;
@@ -263,7 +263,7 @@
       & > label {
         @apply my-0 mr-4;
       }
-      & > input {
+      & > :global(.input) {
         @apply my-0 mr-4;
       }
     }

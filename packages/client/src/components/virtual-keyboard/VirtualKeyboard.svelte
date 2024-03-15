@@ -46,7 +46,7 @@
 
 <div class={`${$$props.class || ''} relative`}>
   <div class="flex justify-between">
-    <div class="flex">
+    <div class="options">
       <div class="my-1 flex items-center justify-between mr-2">
         <label class="font-bold mr-4" for="middle-row">Layout</label>
         <Dropdown
@@ -118,6 +118,13 @@
     @apply h-48;
     li {
       @apply m-[0.175rem] shadow bg-[#ececf1] rounded flex items-center justify-center;
+    }
+  }
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    @media (width <= 656px) {
+      grid-template-columns: 1fr;
     }
   }
   .keyboard {

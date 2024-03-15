@@ -17,7 +17,7 @@
 
 <style lang="scss">
   .toggle {
-    @apply relative rounded h-[22px] w-[40px];
+    @apply relative rounded h-[22px] w-[40px] min-w-[40px];
     &:focus-within {
       @apply outline outline-2 ring-1 outline-blue-700;
     }

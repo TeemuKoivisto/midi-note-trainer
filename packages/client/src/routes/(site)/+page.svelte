@@ -150,9 +150,11 @@
   </a>
 </h1>
 
-<button class="btn primary" on:click={() => modalActions.open('introduction', undefined)}
-  >Introduction</button
->
+<div class="px-4 md:px-0">
+  <button class="btn primary" on:click={() => modalActions.open('introduction', undefined)}
+    >Introduction</button
+  >
+</div>
 
 <section class="px-4 md:px-0">
   <IOSettings />
