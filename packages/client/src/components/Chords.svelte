@@ -153,7 +153,8 @@
         />
         <label class="font-bold" for="scale-key">Scale</label>
         <SearchDropdown
-          class="bg-gray-100 w-[12rem]"
+          class="bg-gray-100 w-48"
+          containerClass="w-48"
           selected={selectedScale}
           options={scaleOptions}
           onSelect={handleSelectScale}

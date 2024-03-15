@@ -78,7 +78,7 @@
 
 <div class={`relative ${containerClass || ''}`} {id} bind:this={containerEl}>
   <input
-    class={`${$$props.class || ''} open-btn w-full text-justify text-sm rounded`}
+    class={`${$$props.class || ''} open-btn text-justify text-sm rounded`}
     class:disabled
     class:open
     title={$$props.title || ''}
@@ -97,7 +97,7 @@
     />
     <ul
       transition:slide={{ duration: DROPDOWN_DURATION }}
-      class={`items-list bg-white py-1.5 py-2 w-48 max-h-64 overflow-y-scroll text-sm absolute left-0 z-30 rounded-b shadow-xl ${
+      class={`items-list bg-white py-1.5 py-2 max-h-64 overflow-y-scroll text-sm absolute left-0 z-30 rounded-b shadow-xl ${
         containerClass || ''
       }`}
     >

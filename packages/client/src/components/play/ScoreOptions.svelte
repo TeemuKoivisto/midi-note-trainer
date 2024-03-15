@@ -35,10 +35,6 @@
     selectedScale = v[1]
   })
 
-  function handleSetRange() {
-    // prompt -> press the lowest note in your MIDI device
-    // press the highest note in your MIDI device
-  }
   function handleRangeChanged(
     rang: 'min' | 'max',
     e: Event & {
@@ -127,14 +123,14 @@
         {#if rangeError}
           <div class="error">{rangeError}</div>
         {/if}
-        <!-- <button class="w-full btn hover:bg-gray-200" on:click={resetKeyAndScale}>Defaults</button> -->
       </div>
     </div>
     <div class="flex flex-col h-full">
       <label class="font-bold" for="scales">Scale</label>
       <div class="my-1 w-full">
         <SearchDropdown
-          class="w-[12rem] p-1 pl-[2px]"
+          class="p-1 pl-[2px] w-48"
+          containerClass="w-48"
           selected={selectedScale}
           options={scaleOptions}
           onSelect={handleSelectScale}
@@ -160,9 +156,6 @@
           {/each}
         </div>
       {/if}
-    </div>
-    <div class="h-full flex flex-col justify-between">
-      <!-- <BasicOptions /> -->
     </div>
   </div>
 </fieldset>
