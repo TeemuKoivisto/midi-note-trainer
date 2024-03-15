@@ -22,23 +22,25 @@
     <!-- <link rel="icon" href="/favicon.png" /> -->
 
     
-		<link href="./_app/immutable/assets/tailwind.2d4bb19c.css" rel="stylesheet">
-		<link rel="modulepreload" href="./_app/immutable/entry/start.a91a8f1b.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/vendor_svelte.fd38faa6.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/vendor.13a9dfeb.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/app.fe08109d.js">
+		<link href="./_app/immutable/assets/0.7046a09f.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/tailwind.219df930.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.6acc50b3.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/vendor_svelte.9428071c.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/vendor.d5730520.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.4814f9c1.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/preload-helper.a4192956.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/0.279fc137.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/2.7f094dda.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/4.644e95bd.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.895d0f1d.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/modal.a3dceb6f.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.e0351568.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/4.a4cbe92f.js">
   </head>
 
   <body>
-    <div id="svelte">  <div class="flex-col items-center justify-center"><main class="flex-col items-center justify-center h-full min-h-screen max-w-[764px] mx-[auto]"><h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight" data-svelte-h="svelte-5kacpm">Synth</h1> <section class="px-4 md:px-0"><button class="btn primary" data-svelte-h="svelte-12ba69d">Play</button> </section></main></div> 
+    <div id="svelte">  <div class="flex-col items-center justify-center"><main class="flex-col items-center justify-center h-full min-h-screen max-w-[764px] mx-[auto]"><h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight" data-svelte-h="svelte-5kacpm">Synth</h1> <section class="px-4 md:px-0"><button class="btn primary" data-svelte-h="svelte-12ba69d">Play</button> </section></main></div>  
 			
 			<script>
 				{
-					__sveltekit_15bhk8p = {
+					__sveltekit_pqjryv = {
 						assets: "/midi-note-trainer",
 						base: new URL(".", location).pathname.slice(0, -1),
 						env: {}
@@ -49,8 +51,8 @@
 					const data = [null,null,null];
 
 					Promise.all([
-						import("./_app/immutable/entry/start.a91a8f1b.js"),
-						import("./_app/immutable/entry/app.fe08109d.js")
+						import("./_app/immutable/entry/start.6acc50b3.js"),
+						import("./_app/immutable/entry/app.4814f9c1.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
