@@ -66,13 +66,16 @@
 
 <div class={`${$$props.class || ''}`}>
   <fieldset
-    class="relative flex flex-col rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
+    class="relative flex flex-col max-w-full rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
     class:collapsed={$hidden}
   >
     <legend class="text-base">
       <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
     </legend>
-    <div class="absolute top-[-0.25rem] right-[0.5rem] flex items-center justify-center">
+    <div
+      class="absolute top-[-0.25rem] right-[0.5rem] flex items-center justify-center"
+      class:hidden={$hidden}
+    >
       <button class="rounded px-1 py-1 hover:bg-gray-200" on:click={handleReset}>
         <Icon icon={restore} width={16} />
       </button>

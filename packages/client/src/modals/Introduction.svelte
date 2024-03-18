@@ -23,26 +23,29 @@
   <article class="w-full p-2 pb-4">
     <p>Greetings! 👋</p>
     <p>
-      This is a tiny app that I made to help myself and hopefully others to learn music notation. In
-      my opinion, you have to really drill them down until reading music becomes as easy as reading
-      a language.
+      This is a tiny app that I made to help myself and hopefully others to learn music notation. I
+      strongly think that you have to really drill them down until reading music becomes as easy as
+      reading a language.
     </p>
     <p>
       To get the full benefits of this app, I advise you to connect your MIDI keyboard to your
-      computer. For most modern keyboards, you can do this directly with USB. With older models you
-      need an audio interface to work as an adapter. You can also use your computer keyboard but it
-      might not improve your piano playing as much.
+      computer. For most modern keyboards, you can do this directly with USB but with older models
+      you need an audio interface to work as an adapter. You can also use your computer keyboard but
+      it might not improve your piano playing as much.
     </p>
     <h3>I/O</h3>
     <p>
-      Under the <b>I/O Settings</b> you find controls to connect your MIDI keyboard which prompts
-      for Web MIDI permissions. You can also fix your velocity incase your keyboard plays quietly
-      (like mine). The default velocity without MIDI keyboard is 80. Enabling <b>Hotkeys</b> maps
-      your keyboard to piano keyboard following similar format as in Ableton. With
-      <b>Auto-octave</b>
-      also enabled you can play notes with single keypresses. <b>Fade timeout</b> is how long in milliseconds
-      notes appear in score once played. It does not effect the suspend of the piano as that would require
-      coding a more sophisticated MIDI piano engine.
+      Under the <b>I/O Settings</b> you find controls to connect your MIDI keyboard which prompts for
+      Web MIDI permissions. You can also fix your velocity incase your keyboard plays quietly (like mine).
+      The default velocity without MIDI keyboard is 80.
+    </p>
+    <p>
+      Enabling <b>Hotkeys</b> maps your keyboard to piano keyboard following similar format as in
+      Ableton. <b>Auto-octave</b> automatically appends an octave as mapped in the hotkey map,
+      pressing <i>Shift</i> at the same time increments it by 1. Having both enabled allows you to
+      play notes with single keypresses.
+      <b>Fade timeout</b> is how long in milliseconds notes appear in score once played. It does not
+      effect the suspend of the piano as that would require coding a more sophisticated MIDI piano engine.
     </p>
     <p>
       With <b>Set Hotkeys</b> you can visualize and customize the mapping. I explored keyboard
@@ -59,48 +62,40 @@
     </p>
     <h3>Scales</h3>
     <p>
-      I went quite deep while coding this app to learn as much about music theory as possible 😅.
+      I went quite deep while coding this app to learn as much about music theory as possible 😵‍💫.
       This meant figuring out how to programmatically compute both the scales and chords without
       resolving to crude heuristics. Incase you find any silly mistakes, please report to the GitHub
       repository or send me email directly.
     </p>
     <p>
       The most confusing part has been perhaps how the used accidentals are decided. I suppose in
-      most cases you use either all flats or sharps but since some times a note is specified as
-      either flat or sharp interval, I ultimately resolve to use its accidental. I'm not if this is
-      always the correct way but it was the most programming-friendly.
+      most cases you use either all flats or sharps but since sometimes a note is specified as
+      either flat or sharp interval, I ultimately resolve to use its accidental. I'm not sure if
+      this is always the correct way but it was the most programming-friendly.
     </p>
     <p>
       You can input a <b>Key</b> and visualize the notes in every scale. I am also displaying the
       <i>diatonic triads</i>
-      for each scale degree and their respective chords. This is a rather curious since there isn't even
-      a Wikipedia article on this subject, and only briefly mentioned in
+      for each scale degree and their respective chords. This "diatonic triads" is rather odd subject
+      as there is not even a Wikipedia article on this subject, and it's only briefly mentioned in
       <a
         href="https://en.wikibooks.org/wiki/Music_Theory/Complete_List_of_Chord_Patterns"
         target="_blank">Wikibooks.</a
       >
       How I have come to understand it is, that for every note in the scale you pick the 2nd and 4th
       next notes of the scale going up. This is the diatonic triad for that scale-degree. However, this
-      falls apart quickly outside the standard 7 modes as you might not find any suitable chord with
-      zero thirds or fifths. Sometimes you want to pick the next note or the 3rd which leads to multiple
+      falls apart quickly outside the standard 7 modes as the triads might not contain any thirds or
+      fifths. Then you must manually check all the available options which might lead to finding multiple
       valid chords.
     </p>
     <p>
-      How I approach this is somewhat unscientific; I construct all the intervals for every note and
-      then pick the triad in major-minor-diminished-augmented-7th-6th-suspended-5th order. For some
-      weird cases, there aren't even suspended chords in which case I am adding a perfect 5th to the
-      triad even though it's not diatonic. Suggestions are welcome how to improve this.
+      How I approach this is somewhat unscientific; I iterate every scale note and then map all the
+      other notes as its intervals. Then I use
+      major-minor-diminished-augmented-7th-6th-suspended-5th order to decide how to name the triad —
+      seems this list covers all of them. <i>However,</i> in some weird cases, the best fit I find
+      is a <code>sus</code> chord with no fifth in which case I add one. Which makes the triad not diatonic
+      so uhh... I'd love to hear opinions about this.
     </p>
-    <!-- <p>
-      Diatonic triads For each scale, I am showing the notes but also the most fitting diatonic
-      triads I could find. Now the displayed triads are for some scales quite questionable and they
-      might not even be diatonic since I might had had to add a missing perfect fifth for Asus
-      triad. However, for most modes these are the ones you see used in music notation. Basically
-      what the diatonic triads are, is you pick a scale note and press the second and fourth note
-      going up the scale. Whatever chord that is, is the diatonic triad for that note in that scale.
-      However, when there's less than 7 notes in a scale things get weird as the played notes might
-      not be really chords of any kind. Suggestions to improve this are welcome!
-    </p> -->
     <p>
       Clicking the notes or the triads will play them in the chosen key (or whatever is used in
       score). I am adding the 8th interval for every scale since it'll sound awfully incomplete
@@ -116,47 +111,50 @@
     <h3>Score</h3>
     <p>
       You can here set the played range of the keyboard notes and what's used in the games. I have
-      only used C as the starting/ending note so there might be bugs lurking there. The scale and
-      key determines the notation of the notes as well as the key signature.
+      only used C as the start/end note so there might be bugs lurking there. The scale and key
+      determines the notation of the notes as well as the key signature.
     </p>
     <p>
-      Outside of major/minor scale, the added accidentals to the key-signature is somewhat
-      ambiguous. The convention seems to be to use the closest major/minor approximate of the scale
-      and then add the accidentals for the rest.
+      The topic of the key signature (the added accidentals next to the clef) is rather ambiguous
+      outside of major/minor distinction so I've tried to come up with an easy compromise. The
+      convention seems to be to use the closest major/minor approximate of the scale and then add
+      the accidentals for the rest.
     </p>
     <p>
       Programmatically speaking, it's much easier to consider key signature's function only as a
-      time and space saver to declutter the score from accidentals and is how I approach this. The
-      order of the added flats and sharps stays however the same. <b
-        >B♭, 'E♭, 'A♭, 'D♭, 'G♭, 'C♭, 'F♭</b
-      >
+      time and space saver to declutter the score from accidentals and it's how I've approached it.
+      The order of the added accidentals stays however always the same:
+      <b>B♭, 'E♭, 'A♭, 'D♭, 'G♭, 'C♭, 'F♭</b>
       for flats and
       <b>F♯, 'C♯, 'G♯, 'D♯, 'A♯, 'E♯, 'B♯</b> for sharps. So if there were Bb, Eb, Db and Gb flats in
       the scale, the key signature would only include Bb, Eb and then use accidentals for the rest. I
-      could add 5 flats to the signature and then naturalize the As but that seems a bit too much.
+      could add 5 flats to the signature and then naturalize the As but that starts to get convoluted.
     </p>
     <h3>Play</h3>
     <p>
-      Here is the meat of this app. I've added a few games to practise your skills but I could add a
-      few more. Most are quite self-explanatory. The <b>Guess Pitches</b> game is relatively useless
-      for those who have missed the boat for acquiring perfect pitch.
+      This is the meat of the app. There's a list of games you can play to practise your skills with
+      the intention of adding a few more in the years to come. I hope they are quite
+      self-explanatory as I haven't written down any instructions for any of them. <b
+        >Guess Pitches</b
+      > game is relatively useless for those who have no chance of acquiring perfect pitch but it's fun
+      to try once in a while.
     </p>
     <p>
-      In the base settings, I am by default enabling <b>Duplicates</b> as well as <b>Autoplay</b>.
-      Since the sampling is true-random, there might be same notes/chords in row which kinda sucks
-      but disabling duplicates should help.
+      In the base settings, I am by default enabling <b>Duplicates</b> as well as <b>Autoplay</b>
+      as that seemed the most optimal for me. As I am using true-random sampling, <b>Duplicates</b>
+      might produce rather awkward sequential notes/chords which I might get around fixing at some point.
     </p>
     <p>
-      One big missing feature are the different inversions of chords and/or removed notes. This is
-      how the majority of chords are played after all. It is, however, a rather big feature to build
-      which is why it doesn't exist. Also playing the given scale-degree triad would be another. As
-      well as recognizing the played scales. Oh well. Pull requests are welcome!
+      One big missing feature from the games are the inversions of chords as well missing notes.
+      This is after all how majority of chords are played. It is, however, a rather big feature to
+      implement which is why I haven't done so. Also playing the given scale-degree triad would be
+      another. As well as recognizing the played scales. Oh well. Pull requests are welcome!
     </p>
     <p>
-      All in all, I hope this app will be helpful in learning music notation! I saw multiple
-      existing apps but I thought they were a little too complicated and slow to use. I myself can
-      happily say that I've noticed a significant improvement and I can revisit my old sheets
-      without having to pull my hair deciphering them 😄.
+      As an end note, I hope this app will be helpful in learning music notation! I found multiple
+      existing apps but I thought they were a little too complicated and slow to use. I can
+      confidently say that I've noticed a significant improvement myself and revisiting my old
+      sheets doesn't require pulling my hair while deciphering them 😄.
     </p>
   </article>
 </div>
