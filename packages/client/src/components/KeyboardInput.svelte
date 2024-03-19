@@ -21,12 +21,18 @@
   function handleKeyDown(e: KeyboardEvent) {
     const target = e.target
     if (debounced || !(target instanceof HTMLElement) || target.tagName === 'INPUT') return
+    e.preventDefault()
     const parsed = keyboardActions.handleInput(e.code, e.key, e.shiftKey)
     if (parsed && parsed.e === 'note') {
       inputtedNote = parsed.data
     } else if (parsed && parsed.e === 'string') {
       keyboardInput = parsed.data
-    } else if (parsed) {
+    } else if (
+      parsed &&
+      parsed.e !== 'hotkeys-cancel' &&
+      parsed.e !== 'hotkeys-captured-key' &&
+      parsed.e !== 'hotkeys-no-key'
+    ) {
       keyboardInput = ''
       inputtedNote = undefined
       dispatch(parsed.e, parsed.data)

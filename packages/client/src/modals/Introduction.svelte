@@ -50,10 +50,10 @@
     <p>
       With <b>Set Hotkeys</b> you can visualize and customize the mapping. I explored keyboard
       layouts in different locales and noticed that my layout (ISO Finland) is quite rare so I
-      wanted to make sure the hotkeys would work for others too. There is a rather curious "code"
-      property in
-      <code>KeyboardEvent</code> that I'm utilizing to identify the pressed keys which may not work for
-      everyone.
+      wanted to make sure the hotkeys would work for others too. I have however fixed the layout to
+      14-14-13-13 key ISO which has meant cutting keys from other layouts or leaving them blank. To
+      detect the pressed keys I am using this rather curious "code" property in
+      <code>KeyboardEvent</code> which may not work for everyone.
     </p>
     <p>
       Incase it doesn't, tick the <b>Custom</b> option and map the keys manually. Press the row you want

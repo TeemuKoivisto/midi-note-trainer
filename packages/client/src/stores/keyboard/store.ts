@@ -6,6 +6,7 @@ import { currentGame } from '../game'
 import { inputs } from '../inputs'
 import { scaleData } from '../score'
 import { persist } from '../persist'
+import { captureHotkey, type ParsedHotkey } from './captureHotkey'
 import { parseKey, type Parsed, parseChord, parseNotes } from './parseInput'
 
 import { GuessChords, GuessKeys } from '@/games'
@@ -33,8 +34,6 @@ const ENGLISH_LAYOUT: Layout = {
   }
 }
 
-const captured: { key: string; code: string }[] = []
-
 interface KeyboardSettings {
   useCustom: boolean
   customLayout: Rows
@@ -46,6 +45,7 @@ interface Captured {
   nextIndex: number
   count: number
 }
+const captured = new Set<string>()
 export const capturingHotkeys = writable<Captured | undefined>(undefined)
 export const nextCaptured = derived(capturingHotkeys, c =>
   c ? [c.rowIndex, c.nextIndex] : [-1, -1]
@@ -156,10 +156,11 @@ export const keyboardActions = {
     let nextIndex = -1
     let count = 0
     const row = get(keyboardSettings).customLayout[rowIndex].map((v, idx) => {
-      if (v.key.charAt(0) !== '{' && nextIndex === -1) {
+      const isSpecial = v.key.charAt(0) === '{' && v.key !== '{empty}'
+      if (!isSpecial && nextIndex === -1) {
         nextIndex = idx
       }
-      count += v.key.charAt(0) !== '{' ? 1 : 0
+      count += isSpecial ? 0 : 1
       return v
     })
     console.log('count', count)
@@ -190,31 +191,40 @@ export const keyboardActions = {
       }
     })
   },
-  handleInput(code: string, key: string, shift = false): Parsed | false {
+  handleHotkeyInput(cpt: Captured, code: string, key: string) {
+    const evt = captureHotkey(captured, code, key)
+    // console.log(`input: ${code} ${key} ${evt.e}`)
+    if (evt.e === 'hotkeys-cancel') {
+      capturingHotkeys.set(undefined)
+      captured.clear()
+    } else if (evt.e === 'hotkeys-captured-key') {
+      const row = cpt.row.map((v, idx) => (idx === cpt.nextIndex ? evt.data : v))
+      if (cpt.nextIndex === cpt.count) {
+        // console.log(
+        //   'new rows',
+        //   get(keyboardSettings).customLayout.map((r, idx) => (idx !== cpt.rowIndex ? r : row))
+        // )
+        keyboardSettings.update(v => ({
+          ...v,
+          customLayout: v.customLayout.map((r, idx) => (idx !== cpt.rowIndex ? r : row)) as Rows
+        }))
+        capturingHotkeys.set(undefined)
+        captured.clear()
+      } else if (row) {
+        capturingHotkeys.set({
+          ...cpt,
+          nextIndex: cpt.nextIndex + 1,
+          row
+        })
+      }
+    }
+    return evt
+  },
+  handleInput(code: string, key: string, shift = false): Parsed | ParsedHotkey | false {
     const game = get(currentGame)
     const cpt = get(capturingHotkeys)
     if (cpt) {
-      console.log('capturing ', captured.length)
-      const { nextIndex, row } = cpt
-      if (code === 'Escape') {
-        capturingHotkeys.set(undefined)
-      } else {
-        const found = captured.find(c => c.code === code)
-        if (!found) {
-          captured.push({ code, key })
-          row[nextIndex] = { ...row[nextIndex], code, key }
-          if (nextIndex === cpt.count) {
-            keyboardSettings.update(v => ({
-              ...v,
-              customLayout: v.customLayout.map((r, idx) => (idx !== cpt.rowIndex ? r : row)) as Rows
-            }))
-            capturingHotkeys.set(undefined)
-          } else {
-            capturingHotkeys.set({ ...cpt, nextIndex: nextIndex + 1, row })
-          }
-        }
-      }
-      return false
+      return this.handleHotkeyInput(cpt, code, key)
     } else if (game instanceof GuessKeys) {
       return parseKey(code, key.toUpperCase())
     } else if (game instanceof GuessChords && game.type === 'chords-write') {
