@@ -1,0 +1,131 @@
+{
+  "count": 12,
+  "nextIndex": 1,
+  "rowIndex": 2,
+  "row": [
+    {
+      "code": "Capslock",
+      "key": "{lock}"
+    },
+    {
+      "code": "KeyA",
+      "key": "a",
+      "note": {
+        "flats": 0,
+        "note": "C",
+        "semitones": 0,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyS",
+      "key": "s",
+      "note": {
+        "flats": 0,
+        "note": "D",
+        "semitones": 2,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyD",
+      "key": "d",
+      "note": {
+        "flats": 0,
+        "note": "E",
+        "semitones": 4,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyF",
+      "key": "f",
+      "note": {
+        "flats": 0,
+        "note": "F",
+        "semitones": 5,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyG",
+      "key": "g",
+      "note": {
+        "flats": 0,
+        "note": "G",
+        "semitones": 7,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyH",
+      "key": "h",
+      "note": {
+        "flats": 0,
+        "note": "A",
+        "semitones": 9,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyJ",
+      "key": "j",
+      "note": {
+        "flats": 0,
+        "note": "B",
+        "semitones": 11,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyK",
+      "key": "k",
+      "note": {
+        "flats": 0,
+        "note": "C",
+        "semitones": 12,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyL",
+      "key": "l",
+      "note": {
+        "flats": 0,
+        "note": "D",
+        "semitones": 14,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "Semicolon",
+      "key": ";",
+      "note": {
+        "flats": 0,
+        "note": "E",
+        "semitones": 16,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "Quote",
+      "key": "'",
+      "note": {
+        "flats": 0,
+        "note": "F",
+        "semitones": 17,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "Backslash",
+      "key": "\\",
+      "note": {
+        "flats": 0,
+        "note": "G",
+        "semitones": 19,
+        "sharps": 0
+      }
+    }
+  ]
+}

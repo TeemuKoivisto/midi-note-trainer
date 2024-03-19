@@ -1,0 +1,334 @@
+[
+  [
+    {
+      "code": "IntlBackslash",
+      "key": "`"
+    },
+    {
+      "code": "Digit1",
+      "key": "1"
+    },
+    {
+      "code": "Digit2",
+      "key": "2"
+    },
+    {
+      "code": "Digit3",
+      "key": "3"
+    },
+    {
+      "code": "Digit4",
+      "key": "4"
+    },
+    {
+      "code": "Digit5",
+      "key": "5"
+    },
+    {
+      "code": "Digit6",
+      "key": "6"
+    },
+    {
+      "code": "Digit7",
+      "key": "7"
+    },
+    {
+      "code": "Digit8",
+      "key": "8"
+    },
+    {
+      "code": "Digit9",
+      "key": "9"
+    },
+    {
+      "code": "Digit0",
+      "key": "0"
+    },
+    {
+      "code": "Minus",
+      "key": "-"
+    },
+    {
+      "code": "Equal",
+      "key": "="
+    },
+    {
+      "code": "Backspace",
+      "key": "{bksp}"
+    }
+  ],
+  [
+    {
+      "code": "Tab",
+      "key": "{tab}"
+    },
+    {
+      "code": "KeyQ",
+      "key": "q"
+    },
+    {
+      "code": "KeyW",
+      "key": "w",
+      "note": {
+        "flats": 0,
+        "note": "C♯",
+        "semitones": 1,
+        "sharps": 1
+      }
+    },
+    {
+      "code": "KeyE",
+      "key": "e",
+      "note": {
+        "flats": 1,
+        "note": "E♭",
+        "semitones": 3,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyR",
+      "key": "r"
+    },
+    {
+      "code": "KeyT",
+      "key": "t",
+      "note": {
+        "flats": 0,
+        "note": "F♯",
+        "semitones": 6,
+        "sharps": 1
+      }
+    },
+    {
+      "code": "KeyY",
+      "key": "y",
+      "note": {
+        "flats": 0,
+        "note": "G♯",
+        "semitones": 8,
+        "sharps": 1
+      }
+    },
+    {
+      "code": "KeyU",
+      "key": "u",
+      "note": {
+        "flats": 1,
+        "note": "B♭",
+        "semitones": 10,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyI",
+      "key": "i"
+    },
+    {
+      "code": "KeyO",
+      "key": "o",
+      "note": {
+        "flats": 0,
+        "note": "C♯",
+        "semitones": 13,
+        "sharps": 1
+      }
+    },
+    {
+      "code": "KeyP",
+      "key": "p",
+      "note": {
+        "flats": 1,
+        "note": "E♭",
+        "semitones": 15,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "BracketLeft",
+      "key": "["
+    },
+    {
+      "code": "BracketRight",
+      "key": "]",
+      "note": {
+        "flats": 0,
+        "note": "F♯",
+        "semitones": 18,
+        "sharps": 1
+      }
+    },
+    {
+      "code": "Enter",
+      "key": "{enter}"
+    }
+  ],
+  [
+    {
+      "code": "Capslock",
+      "key": "{lock}"
+    },
+    {
+      "code": "KeyS",
+      "key": "S",
+      "note": {
+        "flats": 0,
+        "note": "C",
+        "semitones": 0,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "Tab",
+      "key": "Tab",
+      "note": {
+        "flats": 0,
+        "note": "D",
+        "semitones": 2,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "EMPTY",
+      "key": "{empty}"
+    },
+    {
+      "code": "EMPTY",
+      "key": "{empty}"
+    },
+    {
+      "code": "KeyF",
+      "key": "F",
+      "note": {
+        "flats": 0,
+        "note": "G",
+        "semitones": 7,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyG",
+      "key": "G",
+      "note": {
+        "flats": 0,
+        "note": "A",
+        "semitones": 9,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyH",
+      "key": "H",
+      "note": {
+        "flats": 0,
+        "note": "B",
+        "semitones": 11,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyJ",
+      "key": "J",
+      "note": {
+        "flats": 0,
+        "note": "C",
+        "semitones": 12,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyK",
+      "key": "K",
+      "note": {
+        "flats": 0,
+        "note": "D",
+        "semitones": 14,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyL",
+      "key": "L",
+      "note": {
+        "flats": 0,
+        "note": "E",
+        "semitones": 16,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyÖ",
+      "key": "Ö",
+      "note": {
+        "flats": 0,
+        "note": "F",
+        "semitones": 17,
+        "sharps": 0
+      }
+    },
+    {
+      "code": "KeyÄ",
+      "key": "Ä",
+      "note": {
+        "flats": 0,
+        "note": "G",
+        "semitones": 19,
+        "sharps": 0
+      }
+    }
+  ],
+  [
+    {
+      "code": "ShiftLeft",
+      "key": "{shift}"
+    },
+    {
+      "code": "Backquote",
+      "key": "{empty}"
+    },
+    {
+      "code": "KeyZ",
+      "key": "z"
+    },
+    {
+      "code": "KeyX",
+      "key": "x"
+    },
+    {
+      "code": "KeyC",
+      "key": "c"
+    },
+    {
+      "code": "KeyV",
+      "key": "v"
+    },
+    {
+      "code": "KeyB",
+      "key": "b"
+    },
+    {
+      "code": "KeyN",
+      "key": "n"
+    },
+    {
+      "code": "KeyM",
+      "key": "m"
+    },
+    {
+      "code": "Comma",
+      "key": ","
+    },
+    {
+      "code": "Period",
+      "key": "."
+    },
+    {
+      "code": "Slash",
+      "key": "/"
+    },
+    {
+      "code": "ShiftRight",
+      "key": "{shift}"
+    }
+  ]
+]
