@@ -165,8 +165,9 @@
 </h1>
 
 <div class="px-4 md:px-0">
-  <button class="btn primary" on:click={() => modalActions.open('introduction', undefined)}
-    >Introduction</button
+  <button
+    class="btn-pill border-2 border-gray-300 hover:bg-gray-200"
+    on:click={() => modalActions.open('introduction', undefined)}>Introduction</button
   >
 </div>
 
