@@ -2,10 +2,14 @@ import { get, type Writable } from 'svelte/store'
 import type { Result } from '@/types'
 
 interface Options<T, P> {
-  key: string // Key by which the data is persisted
-  storage?: 'local' | 'session' // LocalStorage or SessionStorage
-  namespace?: string // Namespace to easy erasure of data. Defaults to 'default'
-  debug?: boolean // To print errors and warnings
+  /** Key by which the data is persisted */
+  key: string
+  /** local or sessionStorage */
+  storage?: 'local' | 'session'
+  /** For more granular erasure of data than storage.clear(). If unspecified, 'default' is used */
+  namespace?: string
+  /** To print errors and warnings */
+  debug?: boolean
   serialize?: (val: T) => P
   deserialize?: (val: P) => T
 }

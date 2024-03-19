@@ -7,10 +7,10 @@
   import restore from '@iconify-icons/mdi/restore'
   import alphaB from '@iconify-icons/mdi/alpha-b'
   import num7 from '@iconify-icons/mdi/numeric-7-circle'
+  import { writable } from 'svelte/store'
 
   import SearchDropdown from '$elements/SearchDropdown.svelte'
 
-  import { writable } from 'svelte/store'
   import {
     createChord,
     createScale,
@@ -21,6 +21,7 @@
   } from '@/chords-and-scales'
 
   import { gameActions, selectedChords, type SelectedChord } from '$stores/game'
+  import { inputs, midiRangeNotes, piano } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
   $: chords = $selectedChords
@@ -65,6 +66,12 @@
     scale = createScale(selectedKey, selectedScale)
     updateChords()
   }
+  function handleSelectScale(key: string | number) {
+    selectedScale = scaleOptions.find(k => key === k.key)?.value as string
+    scale = createScale(selectedKey, selectedScale)
+    updateChords()
+    return false
+  }
   function handleNoteChange({
     currentTarget: { value }
   }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
@@ -96,11 +103,16 @@
   function reset() {
     gameActions.toggleChords(_ => true)
   }
-  function handleSelectScale(key: string | number) {
-    selectedScale = scaleOptions.find(k => key === k.key)?.value as string
-    scale = createScale(selectedKey, selectedScale)
-    updateChords()
-    return false
+  function handlePlayChord(chord: SelectedChord) {
+    if ('err' in scale) {
+      return
+    }
+    const startingNote = $midiRangeNotes[0].midi + (scaleNote?.semitones || 0)
+    const notes = createChord(startingNote, scale.data, chord.intervals)
+    $piano?.playChord(
+      notes.map(m => m.midi),
+      $inputs.fixedVelocity
+    )
   }
 </script>
 
@@ -196,7 +208,9 @@
               {/each}
             {/if}
           </li>
-          <li class="text-xs">{chord.name}</li>
+          <li class="text-xs">
+            <button class="text-start" on:click={() => handlePlayChord(chord)}>{chord.name}</button>
+          </li>
         {/each}
       </ul>
       <ul class="chord-list w-full">
@@ -228,7 +242,9 @@
               {/each}
             {/if}
           </li>
-          <li class="text-xs">{chord.name}</li>
+          <li class="text-xs">
+            <button class="text-start" on:click={() => handlePlayChord(chord)}>{chord.name}</button>
+          </li>
         {/each}
       </ul>
     </div>
