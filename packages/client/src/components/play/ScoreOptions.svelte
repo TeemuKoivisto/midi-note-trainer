@@ -89,7 +89,7 @@
   } flex flex-col rounded border-2 px-4 py-2 w-[224px] relative text-sm`}
   class:collapsed={$hidden}
 >
-  <legend class="px-1 text-base">
+  <legend class="text-base">
     <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>Score</button>
   </legend>
   <button

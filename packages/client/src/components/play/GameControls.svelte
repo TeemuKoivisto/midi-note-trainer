@@ -1,4 +1,8 @@
 <script lang="ts">
+  import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
+  import check from '@iconify-icons/mdi/check'
+  import close from '@iconify-icons/mdi/close'
+
   import { gameActions, gameOptions, guessState } from '$stores/game'
   import { played } from '$stores/score'
 
@@ -34,26 +38,43 @@
       <span>Target:</span>
       <span>{getNoteAbsolute(getNote(game.latestGuess.target || 0))}</span>
       <span></span>
-      <span>Guessed:</span>
+      <span class="relative">
+        <div class="absolute left-[-2rem] p-1">
+          <Icon icon={$guessState === 'correct' ? check : close} width={16} />
+        </div>
+        Guessed:
+      </span>
       <span>{getNoteAbsolute(getNote(game.latestGuess.guessed || 0))}</span>
-      <span></span>
+      <span> </span>
     </div>
   {:else if game instanceof GuessKeys && ($guessState === 'correct' || $guessState === 'wrong')}
     <div class="guessed">
       <span>Target:</span>
       <span>{game.latestGuess.target}</span>
       <span></span>
-      <span>Guessed:</span>
+      <span class="relative">
+        <div class="absolute left-[-2rem] p-1">
+          <Icon icon={$guessState === 'correct' ? check : close} width={16} />
+        </div>
+        Guessed:
+      </span>
       <span>{game.latestGuess.guessed}</span>
       <span></span>
     </div>
   {:else if game instanceof GuessChords && ($guessState === 'correct' || $guessState === 'wrong')}
     <div class="guessed">
-      <span>Target:</span>
+      <span> Target:</span>
       <span>{game.latestGuess.target?.chord}</span>
       <span>{game.latestGuess.target?.notes.map(n => n.note).join(' ')}</span>
-      <span>Guessed:</span>
-      <span>{game.latestGuess.guessed?.chord}</span>
+      <span class="relative">
+        <div class="absolute left-[-2rem] p-1">
+          <Icon icon={$guessState === 'correct' ? check : close} width={16} />
+        </div>
+        Guessed:
+      </span>
+      <span>
+        {game.latestGuess.guessed?.chord}
+      </span>
       <span>{game.latestGuess.guessed?.notes.map(n => n.note).join(' ')}</span>
     </div>
   {:else if game && $guessState === 'ended'}
