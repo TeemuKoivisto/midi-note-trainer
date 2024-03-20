@@ -10,6 +10,7 @@
     currentGame,
     gameActions,
     gameOptions,
+    guessState,
     selectedChords,
     type SelectedChord
   } from '$stores/game'
@@ -49,6 +50,7 @@
   let selectedGame = options[4].key
 
   type ChordsOption = 'maj-m' | 'selected' | 'all'
+  $: showQuit = !!$currentGame && $guessState !== 'ended'
   $: selected = $selectedChords.reduce((acc, cur) => (cur.selected ? acc + 1 : acc), 0)
   $: chordsOptions = [
     {
@@ -123,7 +125,7 @@
     gameActions.clearGame(true)
   }
   function handleClickPlay(e: MouseEvent) {
-    if ($currentGame) {
+    if (showQuit) {
       gameActions.clearGame()
     } else {
       play(e, selectedGame)
@@ -175,8 +177,8 @@
         class="w-full mt-2 flex items-center justify-center btn primary"
         on:click={handleClickPlay}
       >
-        <Icon class="mr-1" icon={$currentGame ? stop : playIcon} width={20} />
-        {$currentGame ? 'Quit' : 'Play'}
+        <Icon class="mr-1" icon={showQuit ? stop : playIcon} width={20} />
+        {showQuit ? 'Quit' : 'Play'}
       </button>
     </div>
   </div>
