@@ -176,7 +176,7 @@
   >
 </div>
 
-<section class="px-4 md:px-0">
+<section class="mx-4 md:mx-0">
   <IOSettings />
   <Scales />
   <Chords />
@@ -189,10 +189,10 @@
 {#await import('$components/score/Score.svelte')}
   &nbsp;
 {:then { default: comp }}
-  <svelte:component this={comp} class="px-4 md:px-0" />
+  <svelte:component this={comp} class="mx-4 md:mx-0" />
 {/await}
 
-<section class="mb-8 px-4 md:px-0 flex flex-col">
+<section class="mb-8 ml-16 flex flex-col">
   <KeyboardInput
     class="min-h-32"
     debounced={!!timeout}

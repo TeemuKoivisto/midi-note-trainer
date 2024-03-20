@@ -252,8 +252,8 @@
 <section class={`${$$props.class || ''} relative`}>
   <div id="output" bind:this={outputEl}></div>
   <div class="absolute left-0 top-[18.5rem]">
-    <div class="flex">
-      <ReplayButton class="mr-2" />
+    <div class="flex flex-col">
+      <ReplayButton />
       <QuitButton />
     </div>
   </div>
