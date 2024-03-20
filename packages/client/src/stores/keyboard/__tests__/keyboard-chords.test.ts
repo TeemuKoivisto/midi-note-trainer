@@ -132,7 +132,7 @@ describe('keyboard & GuessChords', () => {
       e: 'guessed-note',
       data: {
         note: 'F',
-        octave: 5
+        octave: 6
       }
     })
     scoreActions.clearScore(true)

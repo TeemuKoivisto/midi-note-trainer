@@ -149,9 +149,10 @@ export function parseNotes(
   if (returning && (inputtedNote || keyboardInput) && octave !== undefined) {
     // Octave either set automatically or inputted with hotkeys enabled
     const note = inputtedNote?.note ?? keyboardInput
-    if (!inputtedNote && shift) {
+    if (shift) {
       octave += 1
-    } else if (inputtedNote && inputtedNote?.semitones >= 12) {
+    }
+    if (inputtedNote && inputtedNote?.semitones >= 12) {
       octave += Math.floor(inputtedNote.semitones / 12)
     }
     inputtedNote = undefined

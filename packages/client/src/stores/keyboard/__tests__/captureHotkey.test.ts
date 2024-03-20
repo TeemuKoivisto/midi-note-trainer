@@ -23,14 +23,14 @@ describe('captureHotkey', () => {
       e: 'guessed-note',
       data: {
         note: 'D',
-        octave: 4
+        octave: 5
       }
     })
     expect(keyboardActions.handleInput('KeyD', 'D', true)).toEqual({
       e: 'guessed-note',
       data: {
         note: 'E',
-        octave: 4
+        octave: 5
       }
     })
     expect(keyboardActions.handleInput('Tab', 'Tab', false)).toEqual(false)
@@ -113,7 +113,7 @@ describe('captureHotkey', () => {
       e: 'guessed-note',
       data: {
         note: 'D',
-        octave: 4
+        octave: 5
       }
     })
     expect(keyboardActions.handleInput('KeyD', 'D', true)).toEqual(false)
@@ -143,7 +143,7 @@ describe('captureHotkey', () => {
       e: 'guessed-note',
       data: {
         note: 'C',
-        octave: 4
+        octave: 5
       }
     })
     expect(keyboardActions.handleInput('KeyS', 's', false)).toEqual({
@@ -158,7 +158,7 @@ describe('captureHotkey', () => {
       e: 'guessed-note',
       data: {
         note: 'E',
-        octave: 4
+        octave: 5
       }
     })
     expect(keyboardActions.handleInput('Quote', 'ä', false)).toEqual(false)

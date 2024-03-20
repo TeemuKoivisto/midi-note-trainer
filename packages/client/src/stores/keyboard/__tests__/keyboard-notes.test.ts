@@ -42,7 +42,7 @@ describe('keyboard & GameNotes', () => {
       e: 'guessed-note',
       data: {
         note: 'C',
-        octave: 5
+        octave: 6
       }
     })
   })
