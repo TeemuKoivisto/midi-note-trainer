@@ -33,6 +33,11 @@
       keyboardInput = ''
       inputtedNote = undefined
       dispatch(parsed.e, parsed.data)
+      if (e.code === 'Enter') {
+        // If "Next" button is focused and hotkeys turned off, this would auto-click the button
+        // and skip showing the guess
+        e.preventDefault()
+      }
     } else if (parsed) {
       // When inputting hotkeys, using Space scrolls the viewport downwards
       e.preventDefault()
