@@ -77,9 +77,6 @@
     waitSeconds = v.waitSeconds || ''
   })
 
-  function clearGame() {
-    gameActions.clearGame(true)
-  }
   function play(e: MouseEvent, type: GameType) {
     if (type === 'chords-write' || type === 'chords-play' || type === 'chords-diatonic') {
       let chords: SelectedChord[] = []
@@ -121,6 +118,16 @@
   }
   function handleSelectChords(key: ChordsOption) {
     chordsSelection = key
+  }
+  function clearGame() {
+    gameActions.clearGame(true)
+  }
+  function handleClickPlay(e: MouseEvent) {
+    if ($currentGame) {
+      gameActions.clearGame()
+    } else {
+      play(e, selectedGame)
+    }
   }
 </script>
 
@@ -166,7 +173,7 @@
       <button class="w-full btn hover:bg-gray-200" on:click={clearGame}>Reset</button>
       <button
         class="w-full mt-2 flex items-center justify-center btn primary"
-        on:click={e => play(e, selectedGame)}
+        on:click={handleClickPlay}
       >
         <Icon class="mr-1" icon={$currentGame ? stop : playIcon} width={20} />
         {$currentGame ? 'Quit' : 'Play'}
