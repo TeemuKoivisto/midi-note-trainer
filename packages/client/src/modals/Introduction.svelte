@@ -77,7 +77,7 @@
       You can input a <b>Key</b> and visualize the notes in every scale. I am also displaying the
       <i>diatonic triads</i>
       for each scale degree and their respective chords. This "diatonic triads" is rather odd subject
-      as there is not even a Wikipedia article on this subject, and it's only briefly mentioned in
+      as there is not even a Wikipedia article about it and it's only briefly mentioned in
       <a
         href="https://en.wikibooks.org/wiki/Music_Theory/Complete_List_of_Chord_Patterns"
         target="_blank">Wikibooks.</a
@@ -91,10 +91,12 @@
     <p>
       How I approach this is somewhat unscientific; I iterate every scale note and then map all the
       other notes as its intervals. Then I use
-      major-minor-diminished-augmented-7th-6th-suspended-5th order to decide how to name the triad —
-      seems this list covers all of them. <i>However,</i> in some weird cases, the best fit I find
-      is a <code>sus</code> chord with no fifth in which case I add one. Which makes the triad not diatonic
-      so uhh... I'd love to hear opinions about this.
+      major-minor-diminished-augmented-7th-6th-suspended-5th order to decide which triad to pick as
+      this seems to follow the convention the best and cover all scales currently listed. <i
+        >However,</i
+      >
+      in some weird cases, the best fit I find is a <code>sus</code> chord with no fifth in which case
+      I add one. Which makes the triad not diatonic so uhh... I'd love to hear opinions about this.
     </p>
     <p>
       Clicking the notes or the triads will play them in the chosen key (or whatever is used in
@@ -124,37 +126,36 @@
       Programmatically speaking, it's much easier to consider key signature's function only as a
       time and space saver to declutter the score from accidentals and it's how I've approached it.
       The order of the added accidentals stays however always the same:
-      <b>B♭, 'E♭, 'A♭, 'D♭, 'G♭, 'C♭, 'F♭</b>
+      <b>B♭, E♭, A♭, D♭, G♭, C♭, F♭</b>
       for flats and
-      <b>F♯, 'C♯, 'G♯, 'D♯, 'A♯, 'E♯, 'B♯</b> for sharps. So if there were Bb, Eb, Db and Gb flats in
-      the scale, the key signature would only include Bb, Eb and then use accidentals for the rest. I
-      could add 5 flats to the signature and then naturalize the As but that starts to get convoluted.
+      <b>F♯, C♯, G♯, D♯, A♯, E♯, B♯</b> for sharps. So if there were Bb, Eb, Db and Gb flats in the scale,
+      the key signature would only include Bb, Eb and then use accidentals for the rest. I could add
+      5 flats to the signature and then naturalize the As but that starts to get convoluted.
     </p>
     <h3>Play</h3>
     <p>
       This is the meat of the app. There's a list of games you can play to practise your skills with
       the intention of adding a few more in the years to come. I hope they are quite
-      self-explanatory as I haven't written down any instructions for any of them. <b
-        >Guess Pitches</b
-      > game is relatively useless for those who have no chance of acquiring perfect pitch but it's fun
-      to try once in a while.
+      self-explanatory as there's no instructions how to play them. <b>Guess Pitches</b> is relatively
+      useless for those who have no chance of acquiring perfect pitch but it's fun to try once in a while.
     </p>
     <p>
-      In the base settings, I am by default enabling <b>Duplicates</b> as well as <b>Autoplay</b>
-      as that seemed the most optimal for me. As I am using true-random sampling, <b>Duplicates</b>
+      In the base settings, I am by default enabling <b>Duplicates</b> and <b>Autoplay</b>
+      as that seemed the most optimal for me. I'm using true-random sampling so <b>Duplicates</b>
       might produce rather awkward sequential notes/chords which I might get around fixing at some point.
     </p>
     <p>
       One big missing feature from the games are the inversions of chords as well missing notes.
       This is after all how majority of chords are played. It is, however, a rather big feature to
-      implement which is why I haven't done so. Also playing the given scale-degree triad would be
-      another. As well as recognizing the played scales. Oh well. Pull requests are welcome!
+      implement which is why it doesn't exist. Also playing the given scale-degree diatonic triad
+      would be another. As well as recognizing the played scales. Oh well. Pull requests are
+      welcome!
     </p>
     <p>
       As an end note, I hope this app will be helpful in learning music notation! I found multiple
       existing apps but I thought they were a little too complicated and slow to use. I can
-      confidently say that I've noticed a significant improvement myself and revisiting my old
-      sheets doesn't require pulling my hair while deciphering them 😄.
+      confidently say that I've noticed a significant improvement myself playing these exercises and
+      revisiting my old sheets doesn't require pulling (as much) hair to decipher them 😄.
     </p>
   </article>
 </div>

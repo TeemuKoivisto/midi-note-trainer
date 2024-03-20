@@ -4,7 +4,7 @@
   import { onMount } from 'svelte'
 
   import Chords from '$components/Chords.svelte'
-  import GameStats from '$components/play/GameStats.svelte'
+  import GameControls from '$components/play/GameControls.svelte'
   import IOSettings from '$components/IOSettings.svelte'
   import KeyboardInput from '$components/KeyboardInput.svelte'
   import PlayForm from '$components/play/PlayForm.svelte'
@@ -19,6 +19,8 @@
 
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessChords, GuessKeys, GuessNotes } from '@/games'
+  import { getRootNote } from '@/chords-and-scales'
+  import { keyboardActions } from '$stores/keyboard'
 
   let status = 'Finding device...'
 
@@ -128,8 +130,11 @@
       gameUpdate()
     }
   }
-  function handleNote(e: CustomEvent<number>) {
-    handlePlayedNote(e.detail, 80)
+  function handleNote(e: CustomEvent<{ note: string; octave: number }>) {
+    const found = keyboardActions.findNote(e.detail.note) ?? getRootNote(e.detail.note)
+    if (found) {
+      handlePlayedNote(found.semitones + 12 + e.detail.octave * 12, 80)
+    }
   }
   async function handlePromptMIDI() {
     status = 'Finding device...'
@@ -195,7 +200,7 @@
     on:guessed-key={handleGuessedKey}
     on:guessed-note={handleNote}
   />
-  <GameStats game={$currentGame} />
+  <GameControls game={$currentGame} />
 </section>
 
 <style lang="scss">

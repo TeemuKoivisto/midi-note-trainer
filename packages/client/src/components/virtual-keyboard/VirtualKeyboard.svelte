@@ -82,7 +82,7 @@
       </button>
     </div>
   </div>
-  <div class="flex flex-col gap-1.5">
+  <div class="flex flex-col">
     <ul class="keyboard">
       {#each $keys as row, ridx}
         <li class="col-span-2">

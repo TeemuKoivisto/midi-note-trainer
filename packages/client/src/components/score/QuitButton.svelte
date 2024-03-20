@@ -11,7 +11,7 @@
 
 <div class={`${$$props.class || ''}`} class:hidden={!$currentGame}>
   <button
-    class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
+    class="flex items-center justify-center rounded p-1 hover:bg-gray-200"
     on:click={handleClick}><Icon icon={stop} width={32} /></button
   >
 </div>

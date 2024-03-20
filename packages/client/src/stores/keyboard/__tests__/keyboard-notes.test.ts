@@ -20,12 +20,18 @@ describe('keyboard & GameNotes', () => {
     expect(keyboardActions.handleInput('Digit4', '4')).toEqual(false)
     expect(keyboardActions.handleInput('BracketLeft', 'å')).toEqual(false)
     expect(keyboardActions.handleInput('KeyW', 'w')).toEqual({
-      data: 61,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'C♯',
+        octave: 4
+      }
     })
     expect(keyboardActions.handleInput('KeyT', 't')).toEqual({
-      data: 66,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'F♯',
+        octave: 4
+      }
     })
   })
   it('should parse C6 when shift is pressed', () => {
@@ -33,8 +39,11 @@ describe('keyboard & GameNotes', () => {
     expect(keyboardActions.handleInput('Digit4', '4')).toEqual(false)
     expect(keyboardActions.handleInput('BracketLeft', 'å')).toEqual(false)
     expect(keyboardActions.handleInput('KeyK', 'K', true)).toEqual({
-      data: 84,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'C',
+        octave: 5
+      }
     })
   })
   it('should parse C# from the hotkey map & octave', () => {
@@ -52,8 +61,11 @@ describe('keyboard & GameNotes', () => {
       }
     })
     expect(keyboardActions.handleInput('Digit4', '4')).toEqual({
-      data: 61,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'C♯',
+        octave: 4
+      }
     })
   })
   it('should parse C# from the hotkey map and allow backspacing', () => {
@@ -82,8 +94,11 @@ describe('keyboard & GameNotes', () => {
       }
     })
     expect(keyboardActions.handleInput('Digit4', '4')).toEqual({
-      data: 61,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'C♯',
+        octave: 4
+      }
     })
   })
   it('should parse C# when written directly', () => {
@@ -95,24 +110,30 @@ describe('keyboard & GameNotes', () => {
     expect(keyboardActions.handleInput('KeyC', 'c')).toEqual({ e: 'string', data: 'C' })
     expect(keyboardActions.handleInput('KeyS', 's')).toEqual({ e: 'string', data: 'C♯' })
     expect(keyboardActions.handleInput('Digit4', '4')).toEqual({
-      data: 61,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'C♯',
+        octave: 4
+      }
     })
   })
-  it("should not parse B# as it's not in the scale", () => {
+  it("should parse B# even though it's not in the scale", () => {
     inputsActions.setInputValue('useHotkeys', false)
     inputsActions.setInputValue('useAutoOctave', true)
     expect(keyboardActions.handleInput('KeyZ', 'z')).toEqual(false)
     expect(keyboardActions.handleInput('Digit4', '4')).toEqual(false)
     expect(keyboardActions.handleInput('BracketLeft', 'å')).toEqual(false)
     expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B' })
-    expect(keyboardActions.handleInput('KeyS', 's')).toEqual({ e: 'string', data: 'B♯' })
-    // This resets whole inputtedNote to empty
-    expect(keyboardActions.handleInput('Digit4', '4')).toEqual({ e: 'string', data: '' })
-    expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B' })
-    expect(keyboardActions.handleInput('Digit4', '4')).toEqual({
-      data: 71,
-      e: 'guessed-note'
+    expect(keyboardActions.handleInput('KeyS', 's')).toEqual({
+      e: 'string',
+      data: 'B♯'
+    })
+    expect(keyboardActions.handleInput('Enter', 'Enter')).toEqual({
+      e: 'guessed-note',
+      data: {
+        note: 'B♯',
+        octave: 4
+      }
     })
   })
   it('should parse C#8 without hotkeys & shift should not effect it', () => {
@@ -124,8 +145,11 @@ describe('keyboard & GameNotes', () => {
     expect(keyboardActions.handleInput('KeyC', 'C', true)).toEqual({ e: 'string', data: 'C' })
     expect(keyboardActions.handleInput('KeyS', 'S', true)).toEqual({ e: 'string', data: 'C♯' })
     expect(keyboardActions.handleInput('Digit8', '8', true)).toEqual({
-      data: 109,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'C♯',
+        octave: 9
+      }
     })
   })
   it("should parse Bb when written directly & autoOctave = false shouldn't change it", () => {
@@ -137,8 +161,11 @@ describe('keyboard & GameNotes', () => {
     expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B' })
     expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B♭' })
     expect(keyboardActions.handleInput('Digit3', '3')).toEqual({
-      data: 58,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'B♭',
+        octave: 3
+      }
     })
   })
   it('should parse Bb when written directly and allow backspacing', () => {
@@ -156,8 +183,11 @@ describe('keyboard & GameNotes', () => {
     })
     expect(keyboardActions.handleInput('KeyB', 'b')).toEqual({ e: 'string', data: 'B♭' })
     expect(keyboardActions.handleInput('Digit3', '3')).toEqual({
-      data: 58,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'B♭',
+        octave: 3
+      }
     })
   })
 })
@@ -172,17 +202,26 @@ describe('keyboard & GameNotes with two rows enabled', () => {
   })
   it('should parse Eb when mapped to Digit7 without messing up octaves', () => {
     expect(keyboardActions.handleInput('Digit7', '7')).toEqual({
-      data: 87,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'E♭',
+        octave: 6
+      }
     })
     expect(keyboardActions.handleInput('IntlBackslash', '§')).toEqual(false)
     expect(keyboardActions.handleInput('Digit9', '9')).toEqual({
-      data: 90,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'F♯',
+        octave: 6
+      }
     })
     expect(keyboardActions.handleInput('BracketLeft', 'å')).toEqual({
-      data: 95,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'B',
+        octave: 6
+      }
     })
   })
 })

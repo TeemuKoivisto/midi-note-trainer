@@ -73,16 +73,16 @@
     &nbsp;
   {/if}
 </div>
-<div class="mt-2 h-8">
+<div class="mt-2 h-8 flex items-center">
   {#if game && $guessState === 'ended'}
-    <button class="btn primary" on:click={tryAgain}>Try Again</button>
+    <button class="btn primary mr-1" on:click={tryAgain}>Try Again</button>
     <button class="btn primary" on:click={clearGame}>Clear</button>
   {:else if game && $gameOptions.autoplay}
     <button class="btn primary" on:click={() => gameActions.setOptionValue('autoplay', false)}
       >Stop autoplay</button
     >
   {:else if game}
-    <button class="btn primary" on:click={nextGuess}>Next</button>
+    <button class="btn primary mr-1" on:click={nextGuess}>Next</button>
     <button class="btn primary" on:click={autoplay}>Autoplay</button>
   {:else}
     &nbsp;

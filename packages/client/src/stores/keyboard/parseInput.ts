@@ -3,12 +3,11 @@ import { get } from 'svelte/store'
 import { getOctave, type ScaleNote } from '@/chords-and-scales'
 
 import { inputs, midiRangeNotes } from '../inputs'
-import { keyMap, keyboardActions } from './store'
+import { keyMap } from './store'
 
 const regexNote = /^[a-gA-G]$/
 const regexAccidental = /^[♭Bb#♯sS]$/
 const regexPosInt = /^[0-9]$/
-let keyboardError = ''
 let keyboardInput = ''
 let inputtedNote: ScaleNote | undefined
 
@@ -22,7 +21,10 @@ interface ParsedChord {
 }
 interface ParsedNote {
   e: 'guessed-note'
-  data: number
+  data: {
+    note: string
+    octave: number
+  }
 }
 interface InputtedNote {
   e: 'note'
@@ -114,11 +116,10 @@ export function parseNotes(
   const kmap = get(keyMap)
   const found = kmap.get(code)
   const pressed = found?.key || ''
-  let returning: 'note' | 'input' | false = false
+  let returning: 'note' | 'input' | 'octave' | false = false
   if (!inputtedNote && useHotkeys && found?.note) {
     // Use the hotkey that directly maps the key to a note
     inputtedNote = found.note
-    keyboardError = ''
     if (useAutoOctave) {
       octave = getOctave({ midi: get(midiRangeNotes)[0].midi, flats: 0, sharps: 0 })
     }
@@ -135,27 +136,27 @@ export function parseNotes(
       keyboardInput += '♯'
     }
     returning = 'input'
+  } else if (!useHotkeys && keyboardInput.length > 0 && code === 'Enter' && useAutoOctave) {
+    octave = getOctave({ midi: get(midiRangeNotes)[0].midi, flats: 0, sharps: 0 })
+    returning = 'octave'
   }
   if (!returning && regexPosInt.test(pressed)) {
     try {
       octave = parseInt(pressed)
+      returning = 'octave'
     } catch (err: any) {}
   }
-  if (inputtedNote && octave !== undefined) {
+  if (returning && (inputtedNote || keyboardInput) && octave !== undefined) {
     // Octave either set automatically or inputted with hotkeys enabled
-    const midi = inputtedNote.semitones + (octave + 1 + (shift ? 1 : 0)) * 12
-    inputtedNote = undefined
-    return { e: 'guessed-note', data: midi }
-  } else if (keyboardInput && octave !== undefined) {
-    // Same as previous but without hotkeys
-    const note = keyboardActions.findNote(keyboardInput)
-    const midi = note ? note.semitones + (octave + 1) * 12 : undefined
+    const note = inputtedNote?.note ?? keyboardInput
+    if (!inputtedNote && shift) {
+      octave += 1
+    } else if (inputtedNote && inputtedNote?.semitones >= 12) {
+      octave += Math.floor(inputtedNote.semitones / 12)
+    }
     inputtedNote = undefined
     keyboardInput = ''
-    if (midi !== undefined) {
-      return { e: 'guessed-note', data: midi }
-    }
-    return { e: 'string', data: keyboardInput }
+    return { e: 'guessed-note', data: { note, octave } }
   } else if (code === 'Backspace' && (inputtedNote || keyboardInput.length > 0)) {
     inputtedNote = undefined
     keyboardInput = keyboardInput.slice(0, -1)

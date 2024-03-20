@@ -121,19 +121,28 @@ describe('keyboard & GuessChords', () => {
     gameActions.play('chords-play', { chords })
     inputsActions.setInputValue('useHotkeys', true)
     expect(keyboardActions.handleInput('KeyW', 'w')).toEqual({
-      data: 61,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'C♯',
+        octave: 4
+      }
     })
     expect(keyboardActions.handleInput('Enter', 'Enter')).toEqual(false)
     expect(keyboardActions.handleInput('Quote', 'Ä', true)).toEqual({
-      data: 89,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'F',
+        octave: 5
+      }
     })
     scoreActions.clearScore(true)
     gameActions.play('chords-diatonic', { chords })
     expect(keyboardActions.handleInput('KeyW', 'w')).toEqual({
-      data: 61,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'C♯',
+        octave: 4
+      }
     })
     expect(keyboardActions.handleInput('Backspace', 'Backspace')).toEqual(false)
     expect(keyboardActions.handleInput('Enter', 'Enter')).toEqual(false)

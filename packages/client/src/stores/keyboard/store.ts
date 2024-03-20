@@ -107,12 +107,12 @@ export const keyMap = derived(
       ...kbd.rows[3].map(c => [c.code, c] as [string, KeyboardKey])
     ])
 )
-export const kbdNotes = derived(
-  keyMap,
-  kmap =>
-    Array.from(kmap.values())
-      .map(k => k.note)
-      .filter(v => v !== undefined) as ScaleNote[]
+// @TODO duplicate keys in keyMap???
+export const kbdNotes = derived(keyMap, kmap =>
+  Array.from(kmap.values())
+    .map(k => k.note)
+    .filter((v): v is ScaleNote => v !== undefined)
+    .sort((a, b) => a.semitones - b.semitones)
 )
 
 export const keyboardActions = {

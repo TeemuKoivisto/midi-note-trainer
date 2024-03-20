@@ -20,17 +20,26 @@ describe('captureHotkey', () => {
   })
   it('should parse minor keys from the hotkey map', () => {
     expect(keyboardActions.handleInput('KeyS', 'S', true)).toEqual({
-      data: 74,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'D',
+        octave: 4
+      }
     })
     expect(keyboardActions.handleInput('KeyD', 'D', true)).toEqual({
-      data: 76,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'E',
+        octave: 4
+      }
     })
     expect(keyboardActions.handleInput('Tab', 'Tab', false)).toEqual(false)
     expect(keyboardActions.handleInput('Quote', 'ä', false)).toEqual({
-      data: 77,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'F',
+        octave: 5
+      }
     })
     expect(get(capturingHotkeys)).toEqual(undefined)
 
@@ -94,12 +103,18 @@ describe('captureHotkey', () => {
     })
     expect(keyboardActions.handleInput('KeyA', 'A', true)).toEqual(false)
     expect(keyboardActions.handleInput('KeyS', 's', false)).toEqual({
-      data: 60,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'C',
+        octave: 4
+      }
     })
     expect(keyboardActions.handleInput('Tab', 'Tab', true)).toEqual({
-      data: 74,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'D',
+        octave: 4
+      }
     })
     expect(keyboardActions.handleInput('KeyD', 'D', true)).toEqual(false)
     expect(keyboardActions.handleInput('Quote', 'ä', false)).toEqual(false)
@@ -125,17 +140,26 @@ describe('captureHotkey', () => {
       }
     })
     expect(keyboardActions.handleInput('KeyA', 'A', true)).toEqual({
-      data: 72,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'C',
+        octave: 4
+      }
     })
     expect(keyboardActions.handleInput('KeyS', 's', false)).toEqual({
-      data: 62,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'D',
+        octave: 4
+      }
     })
     expect(keyboardActions.handleInput('Tab', 'Tab', true)).toEqual(false)
     expect(keyboardActions.handleInput('KeyD', 'D', true)).toEqual({
-      data: 76,
-      e: 'guessed-note'
+      e: 'guessed-note',
+      data: {
+        note: 'E',
+        octave: 4
+      }
     })
     expect(keyboardActions.handleInput('Quote', 'ä', false)).toEqual(false)
     expect(get(keyboardSettings).customLayout).toEqual(customLayout2)
