@@ -18,7 +18,6 @@ export interface KeyboardKey {
   key: string
   code: string
   size?: number
-  noteSeq?: number
   note?: ScaleNote
 }
 export type Rows = [KeyboardKey[], KeyboardKey[], KeyboardKey[], KeyboardKey[]]

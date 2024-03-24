@@ -4,9 +4,9 @@
   import close from '@iconify-icons/mdi/close'
 
   import { gameActions, gameOptions, guessState } from '$stores/game'
-  import { played } from '$stores/score'
+  import { scaleData, played } from '$stores/score'
 
-  import { getNote, getNoteAbsolute } from '@/chords-and-scales'
+  import { getNoteAbsolute, type ScaleNote } from '@/chords-and-scales'
 
   import { GuessChords, GuessKeys, GuessNotes } from '@/games'
   import type { GameInstance } from '@/games'
@@ -30,13 +30,17 @@
   function clearGame() {
     gameActions.clearGame()
   }
+  function getNoteStr(midi: number) {
+    const note = $scaleData.notesMap.get(midi % 12) as ScaleNote
+    return getNoteAbsolute({ midi, ...note })
+  }
 </script>
 
 <div class={`${$$props.class || ''} min-h-[3.25rem]`}>
   {#if game instanceof GuessNotes && ($guessState === 'correct' || $guessState === 'wrong')}
     <div class="guessed">
       <span>Target:</span>
-      <span>{getNoteAbsolute(getNote(game.latestGuess.target || 0))}</span>
+      <span>{getNoteStr(game.latestGuess.target || 0)}</span>
       <span></span>
       <span class="relative">
         <div class="absolute left-[-2rem] p-1">
@@ -44,7 +48,7 @@
         </div>
         Guessed:
       </span>
-      <span>{getNoteAbsolute(getNote(game.latestGuess.guessed || 0))}</span>
+      <span>{getNoteStr(game.latestGuess.guessed || 0)}</span>
       <span> </span>
     </div>
   {:else if game instanceof GuessKeys && ($guessState === 'correct' || $guessState === 'wrong')}
