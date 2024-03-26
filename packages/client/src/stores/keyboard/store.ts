@@ -48,7 +48,6 @@ export const capturingHotkeys = writable<Captured | undefined>(undefined)
 export const nextCaptured = derived(capturingHotkeys, c =>
   c ? [c.rowIndex, c.nextIndex] : [-1, -1]
 )
-export const languageLayout = writable(ENGLISH_LAYOUT)
 export const keyboardOptions = persist(
   writable<Required<KeyboardOptions>>({
     isCustom: false,
@@ -94,7 +93,6 @@ export const keyboardActions = {
         isCustom: false,
         layout
       }))
-      languageLayout.set(layout)
     }
   },
   setCustomLayout(val: boolean) {
@@ -105,18 +103,11 @@ export const keyboardActions = {
         layout: {
           code: 'custom',
           name: 'Custom',
-          imported: {
-            ...v.layout.imported
-          }
+          imported: v.layout.imported
         }
       }))
     } else {
-      const old = get(languageLayout)
-      keyboardOptions.update(v => ({
-        ...v,
-        isCustom: val,
-        layout: old
-      }))
+      this.setLayout(navigator.languages)
     }
   },
   toggleRows(rows?: HotkeydRows) {
