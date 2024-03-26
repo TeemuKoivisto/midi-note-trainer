@@ -3,6 +3,7 @@ import type { ScaleNote } from '@/chords-and-scales'
 export type HotkeydRows = 'middle-row' | 'two-rows'
 export interface KeyboardOptions {
   hotkeydRows?: HotkeydRows
+  isCustom?: boolean
   layout?: Layout
 }
 export interface Layout {
@@ -17,7 +18,6 @@ export interface LayoutImport {
 export interface KeyboardKey {
   key: string
   code: string
-  size?: number
   note?: ScaleNote
 }
 export type Rows = [KeyboardKey[], KeyboardKey[], KeyboardKey[], KeyboardKey[]]

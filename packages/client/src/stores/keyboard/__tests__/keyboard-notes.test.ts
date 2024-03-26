@@ -1,7 +1,7 @@
 import { get } from 'svelte/store'
 
 import { gameActions } from '$stores/game'
-import { keyboardActions, keyboardSettings } from '$stores/keyboard'
+import { keyboardActions, keyboardOptions } from '$stores/keyboard'
 import { inputsActions } from '$stores/inputs'
 import { scoreActions } from '$stores/score'
 
@@ -15,7 +15,7 @@ describe('keyboard & GameNotes', () => {
   })
   it('should parse C# from the hotkey map', () => {
     gameActions.play('notes', undefined)
-    expect(get(keyboardSettings).kbdOpts.hotkeydRows).toEqual('middle-row')
+    expect(get(keyboardOptions).hotkeydRows).toEqual('middle-row')
     expect(keyboardActions.handleInput('KeyZ', 'z')).toEqual(false)
     expect(keyboardActions.handleInput('Digit4', '4')).toEqual(false)
     expect(keyboardActions.handleInput('BracketLeft', 'å')).toEqual(false)

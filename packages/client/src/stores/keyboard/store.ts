@@ -1,6 +1,6 @@
 import { derived, get, writable } from 'svelte/store'
 
-import { Keyboard, importLayout } from '@/keyboard'
+import { Keyboard, importLayout, layoutFromRows } from '@/keyboard'
 
 import { currentGame } from '../game'
 import { inputs } from '../inputs'
@@ -12,6 +12,12 @@ import { parseKey, type Parsed, parseChord, parseNotes } from './parseInput'
 import { GuessChords, GuessKeys } from '@/games'
 import type { HotkeydRows, KeyboardKey, KeyboardOptions, Layout, Rows } from '@/keyboard'
 import type { ScaleNote } from '@/chords-and-scales'
+
+interface Captured {
+  rowIndex: number
+  nextIndex: number
+  count: number
+}
 
 const ENGLISH_LAYOUT: Layout = {
   code: 'en',
@@ -33,70 +39,32 @@ const ENGLISH_LAYOUT: Layout = {
     ]
   }
 }
-
-interface KeyboardSettings {
-  useCustom: boolean
-  customLayout: Rows
-  kbdOpts: Required<KeyboardOptions>
-}
-interface Captured {
-  row: KeyboardKey[]
-  rowIndex: number
-  nextIndex: number
-  count: number
-}
 const captured = new Set<string>()
+export const DEFAULT_KEYBOARD = new Keyboard({
+  layout: ENGLISH_LAYOUT
+})
 export const capturingHotkeys = writable<Captured | undefined>(undefined)
 export const nextCaptured = derived(capturingHotkeys, c =>
   c ? [c.rowIndex, c.nextIndex] : [-1, -1]
 )
-export const keyboardSettings = persist(
-  writable<KeyboardSettings>({
-    useCustom: false,
-    customLayout: [[], [], [], []],
-    kbdOpts: {
-      layout: ENGLISH_LAYOUT,
-      hotkeydRows: 'middle-row'
-    }
+export const languageLayout = writable(ENGLISH_LAYOUT)
+export const keyboardOptions = persist(
+  writable<Required<KeyboardOptions>>({
+    isCustom: false,
+    layout: ENGLISH_LAYOUT,
+    hotkeydRows: 'middle-row'
   }),
   {
-    key: 'keyboard-settings'
+    key: 'keyboard-options'
   }
 )
-export const keyboard = derived([scaleData, keyboardSettings], ([scl, stg]) => {
-  let kbd
-  if (stg.useCustom && stg.customLayout) {
-    kbd = Keyboard.createWithRows(stg.kbdOpts, stg.customLayout)
-  } else {
-    kbd = new Keyboard(stg.kbdOpts)
-  }
+export const rows = writable<Rows>(DEFAULT_KEYBOARD.rows)
+export const keyboard = derived([scaleData, keyboardOptions], ([scl, opts]) => {
+  const kbd = new Keyboard(opts)
   kbd.setNotes(Array.from(scl.notesMap.values()))
+  rows.set(kbd.rows)
   return kbd
 })
-export const keys = derived(keyboard, kbd =>
-  kbd.rows.map(r =>
-    r.map((c, idx) => {
-      let size
-      if (c.key === '{bksp}') {
-        size = 2
-      } else if (c.key === '{tab}') {
-        size = 1.5
-      } else if (c.key === '{enter}') {
-        size = 2
-      } else if (c.key === '{lock}') {
-        size = 1.75
-      } else if (c.key === '{shift}' && idx === 0) {
-        size = 1.5
-      } else if (c.key === '{shift}') {
-        size = 2.5
-      }
-      if (size) {
-        return { ...c, size }
-      }
-      return c
-    })
-  )
-)
 export const keyMap = derived(
   keyboard,
   kbd =>
@@ -118,53 +86,48 @@ export const kbdNotes = derived(keyMap, kmap =>
 export const keyboardActions = {
   async setLayout(languages: readonly string[]) {
     const layout = await importLayout(languages)
-    keyboardSettings.update(v => ({
+    keyboardOptions.update(v => ({
       ...v,
-      kbdOpts: {
-        ...v.kbdOpts,
-        layout
-      }
+      layout
     }))
+    languageLayout.set(layout)
   },
   setCustomLayout(val: boolean) {
     if (val) {
-      const kbd = get(keyboard)
-      keyboardSettings.update(v => ({
+      keyboardOptions.update(v => ({
         ...v,
-        useCustom: val,
-        customLayout: v.customLayout.map((l, rowIdx) => {
-          if (l.length === 0) {
-            return kbd.rows[rowIdx].map(v => ({ ...v }))
+        isCustom: val,
+        layout: {
+          code: 'custom',
+          name: 'Custom',
+          imported: {
+            ...v.layout.imported
           }
-          return l
-        }) as Rows
+        }
       }))
     } else {
-      keyboardSettings.update(v => ({ ...v, useCustom: val }))
+      const old = get(languageLayout)
+      keyboardOptions.update(v => ({
+        ...v,
+        isCustom: val,
+        layout: old
+      }))
     }
   },
   toggleRows(rows?: HotkeydRows) {
-    keyboardSettings.update(v => ({
+    keyboardOptions.update(v => ({
       ...v,
-      kbdOpts: {
-        ...v.kbdOpts,
-        hotkeydRows: rows ?? (v.kbdOpts.hotkeydRows === 'middle-row' ? 'two-rows' : 'middle-row')
-      }
+      hotkeydRows: rows ?? (v.hotkeydRows === 'middle-row' ? 'two-rows' : 'middle-row')
     }))
   },
   captureHotkeyRow(rowIndex: number) {
-    let nextIndex = -1
-    let count = 0
-    const row = get(keyboardSettings).customLayout[rowIndex].map((v, idx) => {
-      const isSpecial = v.key.charAt(0) === '{' && v.key !== '{empty}'
-      if (!isSpecial && nextIndex === -1) {
-        nextIndex = idx
-      }
-      count += isSpecial ? 0 : 1
-      return v
+    const kbd = get(keyboard)
+    const { first, count } = kbd.startSetCustomRow(rowIndex)
+    capturingHotkeys.set({
+      nextIndex: first,
+      rowIndex,
+      count: count
     })
-    console.log('count', count)
-    capturingHotkeys.set({ row, nextIndex, rowIndex, count })
   },
   findNote(note: string): ScaleNote | undefined {
     return get(kbdNotes).find(n => {
@@ -193,30 +156,43 @@ export const keyboardActions = {
   },
   handleHotkeyInput(cpt: Captured, code: string, key: string) {
     const evt = captureHotkey(captured, code, key)
+    const kbd = get(keyboard)
     // console.log(`input: ${code} ${key} ${evt.e}`)
+    let next: { key: KeyboardKey; done: boolean; index: number } | undefined
     if (evt.e === 'hotkeys-cancel') {
       capturingHotkeys.set(undefined)
       captured.clear()
+    } else if (evt.e === 'hotkeys-skip-key') {
+      next = kbd.skipNextCustomNote()
     } else if (evt.e === 'hotkeys-captured-key') {
-      const row = cpt.row.map((v, idx) => (idx === cpt.nextIndex ? evt.data : v))
-      if (cpt.nextIndex === cpt.count) {
-        // console.log(
-        //   'new rows',
-        //   get(keyboardSettings).customLayout.map((r, idx) => (idx !== cpt.rowIndex ? r : row))
-        // )
-        keyboardSettings.update(v => ({
-          ...v,
-          customLayout: v.customLayout.map((r, idx) => (idx !== cpt.rowIndex ? r : row)) as Rows
-        }))
-        capturingHotkeys.set(undefined)
-        captured.clear()
-      } else if (row) {
-        capturingHotkeys.set({
-          ...cpt,
-          nextIndex: cpt.nextIndex + 1,
-          row
-        })
-      }
+      const scale = get(scaleData)
+      const notes = Array.from(scale.notesMap.values())
+      next = kbd.setNextCustomNote(evt.data.key, evt.data.code, notes)
+    }
+    const newRows = get(rows)
+    if (next) {
+      newRows[cpt.rowIndex][next.index - 1] = next.key
+      rows.set(newRows)
+      capturingHotkeys.update(v =>
+        v
+          ? {
+              ...v,
+              nextIndex: next!.index
+            }
+          : undefined
+      )
+    }
+    if (next?.done) {
+      const layout = layoutFromRows(newRows)
+      keyboardOptions.update(v => ({
+        ...v,
+        layout: {
+          ...v.layout,
+          imported: layout
+        }
+      }))
+      capturingHotkeys.set(undefined)
+      captured.clear()
     }
     return evt
   },
@@ -235,13 +211,11 @@ export const keyboardActions = {
     return false
   },
   reset() {
-    keyboardSettings.set({
-      useCustom: false,
-      customLayout: [[], [], [], []],
-      kbdOpts: {
-        layout: ENGLISH_LAYOUT,
-        hotkeydRows: 'middle-row'
-      }
+    keyboardOptions.set({
+      isCustom: false,
+      layout: ENGLISH_LAYOUT,
+      hotkeydRows: 'middle-row'
     })
+    rows.set(DEFAULT_KEYBOARD.rows)
   }
 }

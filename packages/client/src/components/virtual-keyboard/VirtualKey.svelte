@@ -1,14 +1,38 @@
 <script lang="ts">
   import { getOctave } from '@/chords-and-scales'
+
   import { midiRange } from '$stores/inputs'
+  import { capturingHotkeys, rows } from '$stores/keyboard'
 
-  import type { KeyboardKey } from '@/keyboard'
+  export let rowIndex: number, keyIndex: number
 
-  export let value: KeyboardKey, captured: boolean
-
+  $: value = $rows[rowIndex][keyIndex]
   $: octave = value.note
     ? getOctave({ midi: value.note.semitones + $midiRange[0], flats: 0, sharps: 0 })
     : 0
+  $: captured =
+    $capturingHotkeys &&
+    $capturingHotkeys.rowIndex === rowIndex &&
+    $capturingHotkeys.nextIndex === keyIndex
+
+  let size: number
+  $: {
+    if (value.key === '{bksp}') {
+      size = 2
+    } else if (value.key === '{tab}') {
+      size = 1.5
+    } else if (value.key === '{enter}') {
+      size = 2
+    } else if (value.key === '{lock}') {
+      size = 1.75
+    } else if (value.key === '{shift}' && keyIndex === 0) {
+      size = 1.5
+    } else if (value.key === '{shift}') {
+      size = 2.5
+    } else {
+      size = 1
+    }
+  }
 
   function sizeClass(size?: number) {
     if (size && Number.isInteger(size)) {
@@ -41,7 +65,7 @@
   <li class="m-[0.175rem] mr-0"></li>
 {/if}
 <li
-  class={`${$$props.class || ''} m-[0.175rem] ${sizeClass(value.size)}`}
+  class={`${$$props.class || ''} m-[0.175rem] ${sizeClass(size)} min-w-[32px]`}
   class:enter={value.key === '{enter}'}
   class:captured
 >

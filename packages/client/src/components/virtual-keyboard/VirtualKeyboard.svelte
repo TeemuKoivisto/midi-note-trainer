@@ -10,16 +10,16 @@
   import Toggle from '$elements/Toggle.svelte'
   import VirtualKey from './VirtualKey.svelte'
 
-  import { capturingHotkeys, keyboardSettings, keys, keyboardActions } from '$stores/keyboard'
+  import { keyboard, keyboardOptions, rows, keyboardActions } from '$stores/keyboard'
 
   onMount(() => {
     keyboardActions.setLayout(navigator.languages)
   })
 
-  $: settableRows = $keys.map((_, idx) =>
-    $keyboardSettings.kbdOpts.hotkeydRows === 'middle-row' ? idx === 1 || idx === 2 : true
+  $: settableRows = $rows.map((_, idx) =>
+    $keyboardOptions.hotkeydRows === 'middle-row' ? idx === 1 || idx === 2 : true
   )
-  $: useMiddleRow = $keyboardSettings.kbdOpts.hotkeydRows === 'middle-row'
+  $: useMiddleRow = $keyboardOptions.hotkeydRows === 'middle-row'
 
   const langOptions = Object.entries(LAYOUTS).map(([k, v]) => ({
     key: k,
@@ -57,7 +57,7 @@
           options={langOptions}
           onSelect={handleSelectLanguage}
         >
-          <div slot="value">{$keyboardSettings.kbdOpts.layout.name}</div>
+          <div slot="value">{$keyboardOptions.layout.name}</div>
         </Dropdown>
       </div>
       <div class="my-1 flex items-center">
@@ -66,7 +66,7 @@
           class="h-[20px]"
           id="custom-layout"
           type="checkbox"
-          checked={$keyboardSettings.useCustom}
+          checked={$keyboardOptions.isCustom}
           on:change={handleUseCustomLayout}
         />
       </div>
@@ -84,7 +84,7 @@
   </div>
   <div class="flex flex-col">
     <ul class="keyboard">
-      {#each $keys as row, ridx}
+      {#each $keyboard.rows as row, ridx}
         <li class="col-span-2">
           {#if settableRows[ridx]}
             <button
@@ -95,14 +95,8 @@
             </button>
           {/if}
         </li>
-        {#each row as vkey, idx}
-          <VirtualKey
-            value={vkey}
-            captured={($capturingHotkeys &&
-              $capturingHotkeys.rowIndex === ridx &&
-              $capturingHotkeys.nextIndex === idx) ||
-              false}
-          />
+        {#each row as _, idx}
+          <VirtualKey rowIndex={ridx} keyIndex={idx} />
         {/each}
       {/each}
     </ul>

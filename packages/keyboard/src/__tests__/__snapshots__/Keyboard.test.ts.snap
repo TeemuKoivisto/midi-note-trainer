@@ -4,6 +4,7 @@ exports[`Keyboard > should import english layout 1`] = `
 Keyboard {
   "opts": {
     "hotkeydRows": "middle-row",
+    "isCustom": false,
     "layout": {
       "code": "en",
       "imported": {
@@ -371,6 +372,14 @@ Keyboard {
       },
     ],
   ],
+  "setCustomRow": {
+    "nextKeyIdx": -1,
+    "nextNoteOffset": 0,
+    "row": [],
+    "rowIndex": 0,
+    "startKeyIndex": 0,
+    "whiteKeys": false,
+  },
 }
 `;
 
@@ -378,6 +387,7 @@ exports[`Keyboard > should map notes to two rows correctly with english layout 1
 Keyboard {
   "opts": {
     "hotkeydRows": "two-rows",
+    "isCustom": false,
     "layout": {
       "code": "en",
       "imported": {
@@ -853,5 +863,13 @@ Keyboard {
       },
     ],
   ],
+  "setCustomRow": {
+    "nextKeyIdx": -1,
+    "nextNoteOffset": 0,
+    "row": [],
+    "rowIndex": 0,
+    "startKeyIndex": 0,
+    "whiteKeys": false,
+  },
 }
 `;
