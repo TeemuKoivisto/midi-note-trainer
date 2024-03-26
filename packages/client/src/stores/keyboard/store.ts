@@ -17,6 +17,7 @@ interface Captured {
   rowIndex: number
   nextIndex: number
   count: number
+  scaleNotes: ScaleNote[]
 }
 
 const ENGLISH_LAYOUT: Layout = {
@@ -86,11 +87,15 @@ export const kbdNotes = derived(keyMap, kmap =>
 export const keyboardActions = {
   async setLayout(languages: readonly string[]) {
     const layout = await importLayout(languages)
-    keyboardOptions.update(v => ({
-      ...v,
-      layout
-    }))
-    languageLayout.set(layout)
+    const opts = get(keyboardOptions)
+    if (layout.code !== opts.layout.code) {
+      keyboardOptions.update(v => ({
+        ...v,
+        isCustom: false,
+        layout
+      }))
+      languageLayout.set(layout)
+    }
   },
   setCustomLayout(val: boolean) {
     if (val) {
@@ -122,11 +127,13 @@ export const keyboardActions = {
   },
   captureHotkeyRow(rowIndex: number) {
     const kbd = get(keyboard)
+    const scale = get(scaleData)
     const { first, count } = kbd.startSetCustomRow(rowIndex)
     capturingHotkeys.set({
       nextIndex: first,
       rowIndex,
-      count: count
+      count,
+      scaleNotes: Array.from(scale.notesMap.values())
     })
   },
   findNote(note: string): ScaleNote | undefined {
@@ -158,20 +165,19 @@ export const keyboardActions = {
     const evt = captureHotkey(captured, code, key)
     const kbd = get(keyboard)
     // console.log(`input: ${code} ${key} ${evt.e}`)
-    let next: { key: KeyboardKey; done: boolean; index: number } | undefined
+    let next: { key: KeyboardKey; index: number } | undefined
+    const index = kbd.setCustomRow.nextKeyIdx
     if (evt.e === 'hotkeys-cancel') {
       capturingHotkeys.set(undefined)
       captured.clear()
     } else if (evt.e === 'hotkeys-skip-key') {
       next = kbd.skipNextCustomNote()
     } else if (evt.e === 'hotkeys-captured-key') {
-      const scale = get(scaleData)
-      const notes = Array.from(scale.notesMap.values())
-      next = kbd.setNextCustomNote(evt.data.key, evt.data.code, notes)
+      next = kbd.setNextCustomNote(evt.data.key, evt.data.code, cpt.scaleNotes)
     }
     const newRows = get(rows)
     if (next) {
-      newRows[cpt.rowIndex][next.index - 1] = next.key
+      newRows[cpt.rowIndex][index] = next.key
       rows.set(newRows)
       capturingHotkeys.update(v =>
         v
@@ -182,7 +188,7 @@ export const keyboardActions = {
           : undefined
       )
     }
-    if (next?.done) {
+    if (cpt.count === index) {
       const layout = layoutFromRows(newRows)
       keyboardOptions.update(v => ({
         ...v,

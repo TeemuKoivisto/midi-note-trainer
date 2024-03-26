@@ -13,7 +13,9 @@
   import { keyboard, keyboardOptions, rows, keyboardActions } from '$stores/keyboard'
 
   onMount(() => {
-    keyboardActions.setLayout(navigator.languages)
+    if (!$keyboard.opts.isCustom) {
+      keyboardActions.setLayout(navigator.languages)
+    }
   })
 
   $: settableRows = $rows.map((_, idx) =>

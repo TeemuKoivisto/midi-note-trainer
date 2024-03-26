@@ -112,8 +112,7 @@ export class Keyboard {
     this.setCustomRow.nextKeyIdx += 1
     return {
       index: this.setCustomRow.nextKeyIdx,
-      key: rowKey,
-      done: this.setCustomRow.nextKeyIdx >= this.setCustomRow.row.length
+      key: rowKey
     }
   }
 
@@ -122,8 +121,7 @@ export class Keyboard {
     this.setCustomRow.nextNoteOffset += 1
     return {
       index: this.setCustomRow.nextKeyIdx,
-      key: { code: 'EMPTY', key: '{empty}' },
-      done: this.setCustomRow.nextKeyIdx >= this.setCustomRow.row.length
+      key: { code: 'EMPTY', key: '{empty}' }
     }
   }
 
