@@ -58,13 +58,17 @@ export class Keyboard {
 
   setNotes(notes: ScaleNote[]) {
     if (this.opts.hotkeydRows === 'middle-row') {
-      setNotes(this.rows[1], notes, false)
-      setNotes(this.rows[2], notes, true)
+      const { firstIndex } = setNotes(this.rows[2], notes, true)
+      // In ISO keyboard, the Q key is to the left of A -> start black keys from W instead
+      setNotes(this.rows[1], notes, false, 1 + firstIndex)
     } else {
-      setNotes(this.rows[2], notes, false)
-      const last = setNotes(this.rows[3], notes, true)
-      setNotes(this.rows[0], notes, false, last - 1)
-      setNotes(this.rows[1], notes, true, last)
+      const { firstIndex: bottomFirstWhite, lastIndex } = setNotes(this.rows[3], notes, true)
+      // In ISO, the middle row is to the right of bottom row -> no offset needed EXCEPT
+      // of course the shift from the first white key (incase it's empty)
+      setNotes(this.rows[2], notes, false, bottomFirstWhite)
+      const { firstIndex: topFirstWhite } = setNotes(this.rows[1], notes, true, 0, lastIndex + 1)
+      // For the top row, there's 2 keys (§ and 1) that are to the left of Q -> offset by 2
+      setNotes(this.rows[0], notes, false, 1 + topFirstWhite, lastIndex + 1)
     }
   }
 
@@ -83,13 +87,15 @@ export class Keyboard {
       console.error(row)
       throw Error('No valid keyboard key found!')
     }
+    const { hotkeydRows } = this.opts
+    const whiteKeys = hotkeydRows === 'two-rows' ? rowIndex === 1 || rowIndex === 3 : rowIndex === 2
     this.setCustomRow = {
       row,
       rowIndex,
       startKeyIndex: first,
       nextKeyIdx: first,
       nextNoteOffset: 0,
-      whiteKeys: true
+      whiteKeys
     }
     return { first, count }
   }

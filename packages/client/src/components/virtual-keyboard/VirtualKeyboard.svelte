@@ -86,7 +86,7 @@
     <ul class="keyboard">
       {#each $keyboard.rows as row, ridx}
         <li class="col-span-2">
-          {#if settableRows[ridx]}
+          {#if settableRows[ridx] && $keyboardOptions.isCustom}
             <button
               class="flex items-center justify-center rounded w-full h-full hover:bg-gray-300"
               on:click={() => handleSetRowKeys(ridx)}

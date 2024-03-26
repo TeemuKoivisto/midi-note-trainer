@@ -873,3 +873,506 @@ Keyboard {
   },
 }
 `;
+
+exports[`Keyboard > should map notes to two rows correctly with swedish layout 1`] = `
+Keyboard {
+  "opts": {
+    "hotkeydRows": "two-rows",
+    "isCustom": false,
+    "layout": {
+      "code": "sv",
+      "imported": {
+        "default": [
+          "§ 1 2 3 4 5 6 7 8 9 0 + ´ {bksp}",
+          "{tab} q w e r t y u i o p å ¨",
+          "{lock} a s d f g h j k l ö ä ' {enter}",
+          "{shift} < z x c v b n m , . - {shift}",
+          ".com @ {space}",
+        ],
+        "shift": [
+          "° ! " # $ % & / ( ) = ? \` {bksp}",
+          "{tab} Q W E R T Y U I O P Å ^",
+          "{lock} A S D F G H J K L Ö Ä * {enter}",
+          "{shift} > Z X C V B N M ; : _ {shift}",
+          ".com @ {space}",
+        ],
+      },
+      "name": "Swedish",
+    },
+  },
+  "rows": [
+    [
+      {
+        "code": "IntlBackslash",
+        "key": "§",
+      },
+      {
+        "code": "Digit1",
+        "key": "1",
+      },
+      {
+        "code": "Digit2",
+        "key": "2",
+        "note": {
+          "flats": 0,
+          "note": "G♯",
+          "semitones": 20,
+          "sharps": 1,
+        },
+      },
+      {
+        "code": "Digit3",
+        "key": "3",
+        "note": {
+          "flats": 1,
+          "note": "B♭",
+          "semitones": 22,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "Digit4",
+        "key": "4",
+      },
+      {
+        "code": "Digit5",
+        "key": "5",
+        "note": {
+          "flats": 0,
+          "note": "C♯",
+          "semitones": 25,
+          "sharps": 1,
+        },
+      },
+      {
+        "code": "Digit6",
+        "key": "6",
+        "note": {
+          "flats": 1,
+          "note": "E♭",
+          "semitones": 27,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "Digit7",
+        "key": "7",
+      },
+      {
+        "code": "Digit8",
+        "key": "8",
+        "note": {
+          "flats": 0,
+          "note": "F♯",
+          "semitones": 30,
+          "sharps": 1,
+        },
+      },
+      {
+        "code": "Digit9",
+        "key": "9",
+        "note": {
+          "flats": 0,
+          "note": "G♯",
+          "semitones": 32,
+          "sharps": 1,
+        },
+      },
+      {
+        "code": "Digit0",
+        "key": "0",
+        "note": {
+          "flats": 1,
+          "note": "B♭",
+          "semitones": 34,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "Minus",
+        "key": "+",
+      },
+      {
+        "code": "Equal",
+        "key": "´",
+        "note": {
+          "flats": 0,
+          "note": "C♯",
+          "semitones": 37,
+          "sharps": 1,
+        },
+      },
+      {
+        "code": "Backspace",
+        "key": "{bksp}",
+      },
+    ],
+    [
+      {
+        "code": "Tab",
+        "key": "{tab}",
+      },
+      {
+        "code": "KeyQ",
+        "key": "q",
+        "note": {
+          "flats": 0,
+          "note": "G",
+          "semitones": 19,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyW",
+        "key": "w",
+        "note": {
+          "flats": 0,
+          "note": "A",
+          "semitones": 21,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyE",
+        "key": "e",
+        "note": {
+          "flats": 0,
+          "note": "B",
+          "semitones": 23,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyR",
+        "key": "r",
+        "note": {
+          "flats": 0,
+          "note": "C",
+          "semitones": 24,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyT",
+        "key": "t",
+        "note": {
+          "flats": 0,
+          "note": "D",
+          "semitones": 26,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyY",
+        "key": "y",
+        "note": {
+          "flats": 0,
+          "note": "E",
+          "semitones": 28,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyU",
+        "key": "u",
+        "note": {
+          "flats": 0,
+          "note": "F",
+          "semitones": 29,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyI",
+        "key": "i",
+        "note": {
+          "flats": 0,
+          "note": "G",
+          "semitones": 31,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyO",
+        "key": "o",
+        "note": {
+          "flats": 0,
+          "note": "A",
+          "semitones": 33,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyP",
+        "key": "p",
+        "note": {
+          "flats": 0,
+          "note": "B",
+          "semitones": 35,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "BracketLeft",
+        "key": "å",
+        "note": {
+          "flats": 0,
+          "note": "C",
+          "semitones": 36,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "BracketRight",
+        "key": "¨",
+        "note": {
+          "flats": 0,
+          "note": "D",
+          "semitones": 38,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "Enter",
+        "key": "{enter}",
+      },
+    ],
+    [
+      {
+        "code": "Capslock",
+        "key": "{lock}",
+      },
+      {
+        "code": "KeyA",
+        "key": "a",
+        "note": {
+          "flats": 0,
+          "note": "C♯",
+          "semitones": 1,
+          "sharps": 1,
+        },
+      },
+      {
+        "code": "KeyS",
+        "key": "s",
+        "note": {
+          "flats": 1,
+          "note": "E♭",
+          "semitones": 3,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyD",
+        "key": "d",
+      },
+      {
+        "code": "KeyF",
+        "key": "f",
+        "note": {
+          "flats": 0,
+          "note": "F♯",
+          "semitones": 6,
+          "sharps": 1,
+        },
+      },
+      {
+        "code": "KeyG",
+        "key": "g",
+        "note": {
+          "flats": 0,
+          "note": "G♯",
+          "semitones": 8,
+          "sharps": 1,
+        },
+      },
+      {
+        "code": "KeyH",
+        "key": "h",
+        "note": {
+          "flats": 1,
+          "note": "B♭",
+          "semitones": 10,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyJ",
+        "key": "j",
+      },
+      {
+        "code": "KeyK",
+        "key": "k",
+        "note": {
+          "flats": 0,
+          "note": "C♯",
+          "semitones": 13,
+          "sharps": 1,
+        },
+      },
+      {
+        "code": "KeyL",
+        "key": "l",
+        "note": {
+          "flats": 1,
+          "note": "E♭",
+          "semitones": 15,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "Semicolon",
+        "key": "ö",
+      },
+      {
+        "code": "Quote",
+        "key": "ä",
+        "note": {
+          "flats": 0,
+          "note": "F♯",
+          "semitones": 18,
+          "sharps": 1,
+        },
+      },
+      {
+        "code": "Backslash",
+        "key": "'",
+        "note": {
+          "flats": 0,
+          "note": "G♯",
+          "semitones": 20,
+          "sharps": 1,
+        },
+      },
+    ],
+    [
+      {
+        "code": "ShiftLeft",
+        "key": "{shift}",
+      },
+      {
+        "code": "Backquote",
+        "key": "<",
+        "note": {
+          "flats": 0,
+          "note": "C",
+          "semitones": 0,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyZ",
+        "key": "z",
+        "note": {
+          "flats": 0,
+          "note": "D",
+          "semitones": 2,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyX",
+        "key": "x",
+        "note": {
+          "flats": 0,
+          "note": "E",
+          "semitones": 4,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyC",
+        "key": "c",
+        "note": {
+          "flats": 0,
+          "note": "F",
+          "semitones": 5,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyV",
+        "key": "v",
+        "note": {
+          "flats": 0,
+          "note": "G",
+          "semitones": 7,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyB",
+        "key": "b",
+        "note": {
+          "flats": 0,
+          "note": "A",
+          "semitones": 9,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyN",
+        "key": "n",
+        "note": {
+          "flats": 0,
+          "note": "B",
+          "semitones": 11,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "KeyM",
+        "key": "m",
+        "note": {
+          "flats": 0,
+          "note": "C",
+          "semitones": 12,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "Comma",
+        "key": ",",
+        "note": {
+          "flats": 0,
+          "note": "D",
+          "semitones": 14,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "Period",
+        "key": ".",
+        "note": {
+          "flats": 0,
+          "note": "E",
+          "semitones": 16,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "Slash",
+        "key": "-",
+        "note": {
+          "flats": 0,
+          "note": "F",
+          "semitones": 17,
+          "sharps": 0,
+        },
+      },
+      {
+        "code": "ShiftRight",
+        "key": "{shift}",
+      },
+    ],
+  ],
+  "setCustomRow": {
+    "nextKeyIdx": -1,
+    "nextNoteOffset": 0,
+    "row": [],
+    "rowIndex": 0,
+    "startKeyIndex": 0,
+    "whiteKeys": false,
+  },
+}
+`;
