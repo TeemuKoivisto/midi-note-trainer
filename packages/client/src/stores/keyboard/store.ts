@@ -207,6 +207,10 @@ export const keyboardActions = {
     }
     return false
   },
+  cancelCapture() {
+    capturingHotkeys.set(undefined)
+    captured.clear()
+  },
   reset() {
     keyboardOptions.set({
       isCustom: false,

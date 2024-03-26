@@ -8,6 +8,7 @@
 
   import { inputsActions, inputs, midiInput } from '$stores/inputs'
   import { reset, persist } from '$stores/persist'
+  import { keyboardActions } from '$stores/keyboard'
 
   const hidden = persist(writable(false), { key: 'inputs-hidden' })
   let fixedVelocity = $inputs.fixedVelocity ?? ''
@@ -40,6 +41,17 @@
       inputsActions.setInputValue('fixedVelocity', undefined)
     } else {
       fixedVelocity = $inputs.fixedVelocity || ''
+    }
+  }
+  function handleSetUseHotkeys(
+    e: Event & {
+      currentTarget: EventTarget & HTMLInputElement
+    }
+  ) {
+    inputsActions.setInputValue('useHotkeys', e.currentTarget.checked)
+    if (!e.currentTarget.checked) {
+      setKeys = false
+      keyboardActions.cancelCapture()
     }
   }
   function handleSetFadeTimeout(
@@ -134,7 +146,7 @@
             id="hotkeys"
             type="checkbox"
             checked={$inputs.useHotkeys}
-            on:change={e => inputsActions.setInputValue('useHotkeys', e.currentTarget.checked)}
+            on:change={handleSetUseHotkeys}
           />
         </div>
         <div class="my-1 flex justify-between mr-12">
@@ -151,8 +163,10 @@
       <div class="flex flex-col h-full">
         <div class="h-[28px]">&nbsp;</div>
         <div class="my-[2px] flex justify-between">
-          <button class="w-full btn-sm primary" on:click={() => (setKeys = !setKeys)}
-            >Set hotkeys</button
+          <button
+            class="w-full btn-sm primary"
+            disabled={!$inputs.useHotkeys}
+            on:click={() => (setKeys = !setKeys)}>Set hotkeys</button
           >
         </div>
         <div class="my-1 flex justify-between">
