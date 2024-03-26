@@ -217,6 +217,5 @@ export const keyboardActions = {
       layout: ENGLISH_LAYOUT,
       hotkeydRows: 'middle-row'
     })
-    rows.set(DEFAULT_KEYBOARD.rows)
   }
 }
