@@ -17,7 +17,6 @@ export const modalActions = {
   open(...[name, params]: ModalArgs) {
     openModal.set(name)
     modals.update(m => ({ ...m, [name]: params }))
-    console.log('open ', name)
   },
   close() {
     openModal.set(null)

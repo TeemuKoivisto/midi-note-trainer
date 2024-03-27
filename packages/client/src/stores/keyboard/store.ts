@@ -57,26 +57,24 @@ scaleData.subscribe(scale => {
   kbd.setNotes(Array.from(scale.notesMap.values()))
   rows.set(kbd.rows)
   keyboard.set(kbd)
-  console.log('SCALES CHANGED', kbd)
 })
 keyboardOptions.subscribe(opts => {
-  console.log('OLD', get(keyboard))
   const kbd = new Keyboard(opts)
   const scale = get(scaleData)
   kbd.setNotes(Array.from(scale.notesMap.values()))
   rows.set(kbd.rows)
   keyboard.set(kbd)
-  console.log('OPTIONS CHANGED', kbd)
 })
-export const keyMap = derived(keyboard, kbd => {
-  console.log('HELLO ', kbd.rows[2])
-  return new Map<string, KeyboardKey>([
-    ...kbd.rows[0].keys.map(c => [c.code, c] as [string, KeyboardKey]),
-    ...kbd.rows[1].keys.map(c => [c.code, c] as [string, KeyboardKey]),
-    ...kbd.rows[2].keys.map(c => [c.code, c] as [string, KeyboardKey]),
-    ...kbd.rows[3].keys.map(c => [c.code, c] as [string, KeyboardKey])
-  ])
-})
+export const keyMap = derived(
+  keyboard,
+  kbd =>
+    new Map<string, KeyboardKey>([
+      ...kbd.rows[0].keys.map(c => [c.code, c] as [string, KeyboardKey]),
+      ...kbd.rows[1].keys.map(c => [c.code, c] as [string, KeyboardKey]),
+      ...kbd.rows[2].keys.map(c => [c.code, c] as [string, KeyboardKey]),
+      ...kbd.rows[3].keys.map(c => [c.code, c] as [string, KeyboardKey])
+    ])
+)
 // @TODO duplicate keys in keyMap???
 export const kbdNotes = derived(keyMap, kmap =>
   Array.from(kmap.values())
@@ -122,8 +120,6 @@ export const keyboardActions = {
     const kbd = get(keyboard)
     const scale = get(scaleData)
     const { first, count } = kbd.startSetCustomRow(rowIndex)
-    console.log(`first ${first} count ${count}`)
-    console.log('kbd', kbd.setCustomRow)
     capturingHotkeys.set({
       nextIndex: first,
       rowIndex,
@@ -159,9 +155,8 @@ export const keyboardActions = {
   handleHotkeyInput(cpt: Captured, code: string, key: string) {
     const evt = captureHotkey(captured, code, key)
     const kbd = get(keyboard)
-    console.log(`input: ${code} ${key} ${evt.e}`)
+    // console.log(`input: ${code} ${key} ${evt.e}`)
     let next: { key: KeyboardKey; index: number } | undefined
-    console.log('kbd ', kbd.setCustomRow)
     const index = kbd.setCustomRow.nextKeyIdx
     if (evt.e === 'hotkeys-cancel') {
       capturingHotkeys.set(undefined)
@@ -175,7 +170,6 @@ export const keyboardActions = {
     if (next) {
       newRows[cpt.rowIndex].keys[index] = next.key
       rows.set(newRows)
-      console.log(`index ${index} NEXT `, next)
       capturingHotkeys.update(v =>
         v
           ? {
@@ -187,7 +181,6 @@ export const keyboardActions = {
     }
     if (cpt.count === index) {
       const layout = layoutFromRows(newRows)
-      console.log('layout ', layout)
       keyboardOptions.update(v => ({
         ...v,
         layout: {
