@@ -17,14 +17,13 @@ export default {
       lib: './src/lib'
     },
     paths: {
-      // 	base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
       base: process.env.VITE_DEPLOY_TO_GH ? '/midi-note-trainer' : ''
     },
     adapter: adapter({
       // default options are shown
       pages: 'build',
       assets: 'build',
-      fallback: 'index.html'
+      fallback: '200.html'
     })
   }
 }
