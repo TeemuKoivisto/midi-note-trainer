@@ -12,8 +12,8 @@ export interface Layout {
   imported: LayoutImport
 }
 export interface LayoutImport {
-  default: [string, string, string, string, string]
-  shift: [string, string, string, string, string]
+  default: [string, string, string, string]
+  codes?: [string, string, string, string]
 }
 export interface KeyboardKey {
   key: string
@@ -21,7 +21,7 @@ export interface KeyboardKey {
   note?: ScaleNote
 }
 export interface Row {
-  keyType: 'white' | 'black' | undefined
+  keyType: 'white' | 'black' | null
   startNoteOffset: number
   availableNotes: number
   keys: KeyboardKey[]

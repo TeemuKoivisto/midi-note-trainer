@@ -55,12 +55,19 @@ export function rowsFromImport(imported: LayoutImport, hotkeydRows: HotkeydRows)
       return row.split(' ')
     }
   })
+  let codes: string[][]
+  // Incase import used custom codes, parse the from the strings
+  if (imported.codes) {
+    codes = imported.codes.map(c => c.split(' '))
+  } else {
+    codes = CODES
+  }
   const keys = [0, 1, 2, 3].map(idx =>
-    letters[idx].map((key, keyIndex) => ({ key, code: CODES[idx][keyIndex] }))
+    letters[idx].map((key, keyIndex) => ({ key, code: codes[idx][keyIndex] }))
   )
   return [
     {
-      keyType: hotkeydRows === 'two-rows' ? 'black' : undefined,
+      keyType: hotkeydRows === 'two-rows' ? 'black' : null,
       // In ISO layout top row, there's 2 keys (§ and 1) that are to the left of Q -> offset by 2
       startNoteOffset: 2,
       availableNotes: 11,
@@ -82,7 +89,7 @@ export function rowsFromImport(imported: LayoutImport, hotkeydRows: HotkeydRows)
       keys: keys[2]
     },
     {
-      keyType: hotkeydRows === 'two-rows' ? 'white' : undefined,
+      keyType: hotkeydRows === 'two-rows' ? 'white' : null,
       // Start from < or whatever it's in different locales
       startNoteOffset: 1,
       availableNotes: 11,

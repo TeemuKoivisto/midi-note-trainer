@@ -52,8 +52,7 @@ export function parseLayout(value: LayoutItem): LayoutImport {
     throw Error('Invalid layout import')
   }
   return {
-    default: value.layout.default as [string, string, string, string, string],
-    shift: value.layout.shift as [string, string, string, string, string]
+    default: value.layout.default.slice(0, 4) as [string, string, string, string]
   }
 }
 

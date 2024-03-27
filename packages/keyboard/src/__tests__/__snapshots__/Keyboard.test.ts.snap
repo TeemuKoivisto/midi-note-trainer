@@ -13,14 +13,6 @@ Keyboard {
           "{tab} q w e r t y u i o p [ ] \\",
           "{lock} a s d f g h j k l ; ' {enter}",
           "{shift} z x c v b n m , . / {shift}",
-          ".com @ {space}",
-        ],
-        "shift": [
-          "~ ! @ # $ % ^ & * ( ) _ + {bksp}",
-          "{tab} Q W E R T Y U I O P { } |",
-          "{lock} A S D F G H J K L : " {enter}",
-          "{shift} Z X C V B N M < > ? {shift}",
-          ".com @ {space}",
         ],
       },
       "name": "English",
@@ -29,7 +21,7 @@ Keyboard {
   "rows": [
     {
       "availableNotes": 11,
-      "keyType": undefined,
+      "keyType": null,
       "keys": [
         {
           "code": "IntlBackslash",
@@ -334,7 +326,7 @@ Keyboard {
     },
     {
       "availableNotes": 11,
-      "keyType": undefined,
+      "keyType": null,
       "keys": [
         {
           "code": "ShiftLeft",
@@ -397,7 +389,7 @@ Keyboard {
     "nextNoteOffset": 0,
     "row": {
       "availableNotes": 0,
-      "keyType": undefined,
+      "keyType": null,
       "keys": [],
       "startNoteOffset": 0,
     },
@@ -419,14 +411,6 @@ Keyboard {
           "{tab} q w e r t y u i o p [ ] \\",
           "{lock} a s d f g h j k l ; ' {enter}",
           "{shift} z x c v b n m , . / {shift}",
-          ".com @ {space}",
-        ],
-        "shift": [
-          "~ ! @ # $ % ^ & * ( ) _ + {bksp}",
-          "{tab} Q W E R T Y U I O P { } |",
-          "{lock} A S D F G H J K L : " {enter}",
-          "{shift} Z X C V B N M < > ? {shift}",
-          ".com @ {space}",
         ],
       },
       "name": "English",
@@ -911,7 +895,7 @@ Keyboard {
     "nextNoteOffset": 0,
     "row": {
       "availableNotes": 0,
-      "keyType": undefined,
+      "keyType": null,
       "keys": [],
       "startNoteOffset": 0,
     },
@@ -933,14 +917,6 @@ Keyboard {
           "{tab} q w e r t y u i o p å ¨",
           "{lock} a s d f g h j k l ö ä ' {enter}",
           "{shift} < z x c v b n m , . - {shift}",
-          ".com @ {space}",
-        ],
-        "shift": [
-          "° ! " # $ % & / ( ) = ? \` {bksp}",
-          "{tab} Q W E R T Y U I O P Å ^",
-          "{lock} A S D F G H J K L Ö Ä * {enter}",
-          "{shift} > Z X C V B N M ; : _ {shift}",
-          ".com @ {space}",
         ],
       },
       "name": "Swedish",
@@ -1437,7 +1413,7 @@ Keyboard {
     "nextNoteOffset": 0,
     "row": {
       "availableNotes": 0,
-      "keyType": undefined,
+      "keyType": null,
       "keys": [],
       "startNoteOffset": 0,
     },

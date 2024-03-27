@@ -1,6 +1,6 @@
 import { get } from 'svelte/store'
 
-import { capturingHotkeys, keyboardOptions, keyboardActions } from '$stores/keyboard'
+import { capturingHotkeys, keyboardOptions, keyboardActions, keyboard } from '$stores/keyboard'
 import { inputsActions } from '$stores/inputs'
 import { scoreActions } from '$stores/score'
 
@@ -8,7 +8,7 @@ import capturingHotkeys0 from './__snapshots__/capturing-hotkeys-0.json'
 import customLayout1 from './__snapshots__/custom-layout-1.json'
 import customLayout2 from './__snapshots__/custom-layout-2.json'
 
-describe.skip('captureHotkey', () => {
+describe('captureHotkey', () => {
   beforeAll(() => {
     scoreActions.clearScore(true)
     inputsActions.setInputValue('useHotkeys', true)
@@ -18,7 +18,7 @@ describe.skip('captureHotkey', () => {
   afterEach(() => {
     vi.unstubAllGlobals()
   })
-  it('should parse minor keys from the hotkey map', () => {
+  it('should capture hotkeys for the middle row', async () => {
     expect(keyboardActions.handleInput('KeyS', 'S', true)).toEqual({
       e: 'guessed-note',
       data: {
@@ -44,10 +44,11 @@ describe.skip('captureHotkey', () => {
     expect(get(capturingHotkeys)).toEqual(undefined)
 
     // Start capturing
-    keyboardActions.setCustomLayout(true)
+    await keyboardActions.setCustomLayout(true)
     keyboardActions.captureHotkeyRow(2)
     expect(get(capturingHotkeys)).toEqual(capturingHotkeys0)
     expect(get(capturingHotkeys)?.count).toEqual(12)
+    expect(get(capturingHotkeys)?.nextIndex).toEqual(1)
     expect(keyboardActions.handleInput('KeyS', 'S', true)).toEqual({
       data: {
         code: 'KeyS',
@@ -71,19 +72,11 @@ describe.skip('captureHotkey', () => {
     })
     expect(get(capturingHotkeys)?.nextIndex).toEqual(3)
     expect(keyboardActions.handleInput('Space', 'Space', false)).toEqual({
-      data: {
-        code: 'EMPTY',
-        key: '{empty}'
-      },
-      e: 'hotkeys-captured-key'
+      e: 'hotkeys-skip-key'
     })
     expect(get(capturingHotkeys)?.nextIndex).toEqual(4)
     expect(keyboardActions.handleInput('Space', 'Space', false)).toEqual({
-      data: {
-        code: 'EMPTY',
-        key: '{empty}'
-      },
-      e: 'hotkeys-captured-key'
+      e: 'hotkeys-skip-key'
     })
     expect(get(capturingHotkeys)?.nextIndex).toEqual(5)
     let letters = 'FGHJKLÖÄ'.split('')
@@ -118,7 +111,7 @@ describe.skip('captureHotkey', () => {
     })
     expect(keyboardActions.handleInput('KeyD', 'D', true)).toEqual(false)
     expect(keyboardActions.handleInput('Quote', 'ä', false)).toEqual(false)
-    // expect(get(keyboardOptions).customLayout).toEqual(customLayout1)
+    expect(get(keyboard).rows).toEqual(customLayout1)
     expect(get(capturingHotkeys)).toEqual(undefined)
 
     // See that reinputting the same row works
@@ -162,6 +155,6 @@ describe.skip('captureHotkey', () => {
       }
     })
     expect(keyboardActions.handleInput('Quote', 'ä', false)).toEqual(false)
-    // expect(get(keyboardOptions).customLayout).toEqual(customLayout2)
+    expect(get(keyboard).rows).toEqual(customLayout2)
   })
 })

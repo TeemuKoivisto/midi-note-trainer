@@ -15,10 +15,10 @@ interface SetCustomRow {
 }
 
 const EMPTY_ROWS: Rows = [
-  { keyType: undefined, startNoteOffset: 0, availableNotes: 0, keys: [] },
-  { keyType: undefined, startNoteOffset: 0, availableNotes: 0, keys: [] },
-  { keyType: undefined, startNoteOffset: 0, availableNotes: 0, keys: [] },
-  { keyType: undefined, startNoteOffset: 0, availableNotes: 0, keys: [] }
+  { keyType: null, startNoteOffset: 0, availableNotes: 0, keys: [] },
+  { keyType: null, startNoteOffset: 0, availableNotes: 0, keys: [] },
+  { keyType: null, startNoteOffset: 0, availableNotes: 0, keys: [] },
+  { keyType: null, startNoteOffset: 0, availableNotes: 0, keys: [] }
 ]
 
 export class Keyboard {

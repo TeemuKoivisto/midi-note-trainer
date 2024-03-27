@@ -12,27 +12,6 @@ export interface PlayedNote extends MidiNote {
 
 let timeout: ReturnType<typeof setTimeout> | undefined
 
-export const defaultKeyMap = readable({
-  A: { note: 'C', semitones: 0, flats: 0, sharps: 0 },
-  W: { note: 'C♯', semitones: 1, flats: 0, sharps: 1 },
-  S: { note: 'D', semitones: 2, flats: 0, sharps: 0 },
-  E: { note: 'E♭', semitones: 3, flats: 1, sharps: 0 },
-  D: { note: 'E', semitones: 4, flats: 0, sharps: 0 },
-  F: { note: 'F', semitones: 5, flats: 0, sharps: 0 },
-  T: { note: 'F♯', semitones: 6, flats: 0, sharps: 1 },
-  G: { note: 'G', semitones: 7, flats: 0, sharps: 0 },
-  Y: { note: 'G♯', semitones: 8, flats: 0, sharps: 1 },
-  H: { note: 'A', semitones: 9, flats: 0, sharps: 0 },
-  U: { note: 'B♭', semitones: 10, flats: 1, sharps: 0 },
-  J: { note: 'B', semitones: 11, flats: 0, sharps: 0 },
-  K: { note: 'C', semitones: 12, flats: 0, sharps: 0 },
-  O: { note: 'C♯', semitones: 13, flats: 0, sharps: 1 },
-  L: { note: 'D', semitones: 14, flats: 0, sharps: 0 },
-  P: { note: 'E♭', semitones: 15, flats: 1, sharps: 0 },
-  Ö: { note: 'E', semitones: 16, flats: 0, sharps: 0 },
-  Ä: { note: 'F', semitones: 17, flats: 0, sharps: 0 },
-  Å: { note: 'F♯', semitones: 18, flats: 0, sharps: 1 }
-})
 export const keyAndScale = writable<[string, string]>(['C', 'Major'])
 export const scaleData = derived(keyAndScale, (val): Scale => {
   const res = createScale(val[0], val[1])
