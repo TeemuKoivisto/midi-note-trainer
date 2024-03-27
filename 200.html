@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MIDI Note Trainer</title>
+
+    <script>
+      try {
+        if (!('theme' in localStorage)) {
+          localStorage.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
+        }
+
+        document.querySelector('html').classList.add(localStorage.theme)
+      } catch (e) {
+        console.error(e)
+      }
+    </script>
+
+    <!-- <link rel="icon" href="/favicon.png" /> -->
+
+    
+		<link rel="modulepreload" href="/midi-note-trainer/_app/immutable/entry/start.9374a32f.js">
+		<link rel="modulepreload" href="/midi-note-trainer/_app/immutable/chunks/vendor_svelte.66c9e08b.js">
+		<link rel="modulepreload" href="/midi-note-trainer/_app/immutable/chunks/vendor.e9b0235c.js">
+		<link rel="modulepreload" href="/midi-note-trainer/_app/immutable/entry/app.7402e8f3.js">
+		<link rel="modulepreload" href="/midi-note-trainer/_app/immutable/chunks/preload-helper.a4192956.js">
+  </head>
+
+  <body>
+    <div id="svelte">
+			<script>
+				{
+					__sveltekit_1rogqvy = {
+						assets: "/midi-note-trainer",
+						base: "/midi-note-trainer",
+						env: {}
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("/midi-note-trainer/_app/immutable/entry/start.9374a32f.js"),
+						import("/midi-note-trainer/_app/immutable/entry/app.7402e8f3.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>
