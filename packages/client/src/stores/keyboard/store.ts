@@ -33,9 +33,10 @@ const ENGLISH_LAYOUT: Layout = {
   }
 }
 const captured = new Set<string>()
-export const DEFAULT_KEYBOARD = new Keyboard({
+const DEFAULT_KEYBOARD = new Keyboard({
   layout: ENGLISH_LAYOUT
 })
+
 export const capturingHotkeys = writable<Captured | undefined>(undefined)
 export const nextCaptured = derived(capturingHotkeys, c =>
   c ? [c.rowIndex, c.nextIndex] : [-1, -1]
@@ -68,16 +69,14 @@ keyboardOptions.subscribe(opts => {
 export const keyMap = derived(
   keyboard,
   kbd =>
-    new Map<string, KeyboardKey>([
-      ...kbd.rows[0].keys.map(c => [c.code, c] as [string, KeyboardKey]),
-      ...kbd.rows[1].keys.map(c => [c.code, c] as [string, KeyboardKey]),
-      ...kbd.rows[2].keys.map(c => [c.code, c] as [string, KeyboardKey]),
-      ...kbd.rows[3].keys.map(c => [c.code, c] as [string, KeyboardKey])
-    ])
+    new Map<string, KeyboardKey>(
+      kbd.rows.flatMap(row => row.keys.map(c => [c.code, c] as [string, KeyboardKey]))
+    )
 )
 // @TODO duplicate keys in keyMap???
-export const kbdNotes = derived(keyMap, kmap =>
-  Array.from(kmap.values())
+export const kbdNotes = derived(keyboard, kbd =>
+  kbd.rows
+    .flatMap(row => row.keys)
     .map(k => k.note)
     .filter((v): v is ScaleNote => v !== undefined)
     .sort((a, b) => a.semitones - b.semitones)
