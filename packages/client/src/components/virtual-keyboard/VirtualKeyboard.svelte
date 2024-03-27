@@ -97,7 +97,7 @@
             </button>
           {/if}
         </li>
-        {#each row as _, idx}
+        {#each row.keys as _, idx}
           <VirtualKey rowIndex={ridx} keyIndex={idx} />
         {/each}
       {/each}

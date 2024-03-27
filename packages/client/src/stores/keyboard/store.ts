@@ -69,10 +69,10 @@ export const keyMap = derived(
   keyboard,
   kbd =>
     new Map<string, KeyboardKey>([
-      ...kbd.rows[0].map(c => [c.code, c] as [string, KeyboardKey]),
-      ...kbd.rows[1].map(c => [c.code, c] as [string, KeyboardKey]),
-      ...kbd.rows[2].map(c => [c.code, c] as [string, KeyboardKey]),
-      ...kbd.rows[3].map(c => [c.code, c] as [string, KeyboardKey])
+      ...kbd.rows[0].keys.map(c => [c.code, c] as [string, KeyboardKey]),
+      ...kbd.rows[1].keys.map(c => [c.code, c] as [string, KeyboardKey]),
+      ...kbd.rows[2].keys.map(c => [c.code, c] as [string, KeyboardKey]),
+      ...kbd.rows[3].keys.map(c => [c.code, c] as [string, KeyboardKey])
     ])
 )
 // @TODO duplicate keys in keyMap???
@@ -168,7 +168,7 @@ export const keyboardActions = {
     }
     const newRows = get(rows)
     if (next) {
-      newRows[cpt.rowIndex][index] = next.key
+      newRows[cpt.rowIndex].keys[index] = next.key
       rows.set(newRows)
       capturingHotkeys.update(v =>
         v

@@ -1,13 +1,13 @@
 import { CODES } from './codes'
 
-import { LayoutImport, Rows } from './types'
+import { HotkeydRows, LayoutImport, Rows } from './types'
 
 /**
  * Converts imported layout from ANSI to ISO
  * https://en.wikipedia.org/wiki/Keyboard_layout#Physical,_visual,_and_functional_layouts
  * @param imported
  */
-export function rowsFromImport(imported: LayoutImport): Rows {
+export function rowsFromImport(imported: LayoutImport, hotkeydRows: HotkeydRows): Rows {
   let cut2nd: string[] = []
   const letters: string[][] = imported.default.map((row, rowIndex) => {
     if (rowIndex === 0) {
@@ -55,10 +55,38 @@ export function rowsFromImport(imported: LayoutImport): Rows {
       return row.split(' ')
     }
   })
+  const keys = [0, 1, 2, 3].map(idx =>
+    letters[idx].map((key, keyIndex) => ({ key, code: CODES[idx][keyIndex] }))
+  )
   return [
-    letters[0].map((key, keyIndex) => ({ key, code: CODES[0][keyIndex] })),
-    letters[1].map((key, keyIndex) => ({ key, code: CODES[1][keyIndex] })),
-    letters[2].map((key, keyIndex) => ({ key, code: CODES[2][keyIndex] })),
-    letters[3].map((key, keyIndex) => ({ key, code: CODES[3][keyIndex] }))
+    {
+      keyType: hotkeydRows === 'two-rows' ? 'black' : undefined,
+      // In ISO layout top row, there's 2 keys (§ and 1) that are to the left of Q -> offset by 2
+      startNoteOffset: 2,
+      availableNotes: 11,
+      keys: keys[0]
+    },
+    {
+      keyType: hotkeydRows === 'two-rows' ? 'white' : 'black',
+      // In ISO keyboard, the Q key is to the left of A -> start black keys from W instead
+      // If two rows is used however, start the white keys from Q
+      startNoteOffset: hotkeydRows === 'two-rows' ? 1 : 2,
+      availableNotes: 12,
+      keys: keys[1]
+    },
+    {
+      keyType: hotkeydRows === 'two-rows' ? 'black' : 'white',
+      // Start from A
+      startNoteOffset: 1,
+      availableNotes: 12,
+      keys: keys[2]
+    },
+    {
+      keyType: hotkeydRows === 'two-rows' ? 'white' : undefined,
+      // Start from < or whatever it's in different locales
+      startNoteOffset: 1,
+      availableNotes: 11,
+      keys: keys[3]
+    }
   ]
 }

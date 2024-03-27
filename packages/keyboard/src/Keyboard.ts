@@ -4,28 +4,31 @@ import { getNote, setNotes } from './setNotes'
 import { parseLayout } from './importLayout'
 
 import type { ScaleNote } from '@/chords-and-scales'
-import { KeyboardKey, KeyboardOptions, LayoutImport, Rows } from './types'
+import { KeyboardKey, KeyboardOptions, LayoutImport, Row, Rows } from './types'
 import { rowsFromImport } from 'rowsFromImport'
 
 interface SetCustomRow {
-  row: KeyboardKey[]
+  row: Row
   rowIndex: number
-  startKeyIndex: number
   nextKeyIdx: number
   nextNoteOffset: number
-  whiteKeys: boolean
 }
+
+const EMPTY_ROWS: Rows = [
+  { keyType: undefined, startNoteOffset: 0, availableNotes: 0, keys: [] },
+  { keyType: undefined, startNoteOffset: 0, availableNotes: 0, keys: [] },
+  { keyType: undefined, startNoteOffset: 0, availableNotes: 0, keys: [] },
+  { keyType: undefined, startNoteOffset: 0, availableNotes: 0, keys: [] }
+]
 
 export class Keyboard {
   opts: Required<KeyboardOptions>
-  rows: Rows = [[], [], [], []]
+  rows: Rows = EMPTY_ROWS
   setCustomRow: SetCustomRow = {
-    row: [],
+    row: EMPTY_ROWS[0],
     rowIndex: 0,
-    startKeyIndex: 0,
     nextKeyIdx: -1,
-    nextNoteOffset: 0,
-    whiteKeys: false
+    nextNoteOffset: 0
   }
 
   constructor(opts?: KeyboardOptions) {
@@ -47,7 +50,7 @@ export class Keyboard {
   }
 
   loadRowsFromImport(imported: LayoutImport) {
-    this.rows = rowsFromImport(imported)
+    this.rows = rowsFromImport(imported, this.opts.hotkeydRows)
     return this
   }
 
@@ -58,52 +61,37 @@ export class Keyboard {
 
   setNotes(notes: ScaleNote[]) {
     if (this.opts.hotkeydRows === 'middle-row') {
-      const { firstIndex } = setNotes(this.rows[2], notes, true)
-      // In ISO keyboard, the Q key is to the left of A -> start black keys from W instead
-      setNotes(this.rows[1], notes, false, 1 + firstIndex)
+      const { firstIndex } = setNotes(this.rows[2], notes)
+      setNotes(this.rows[1], notes, 1 + firstIndex)
     } else {
-      const { firstIndex: bottomFirstWhite, lastIndex } = setNotes(this.rows[3], notes, true)
-      // In ISO, the middle row is to the right of bottom row -> no offset needed EXCEPT
-      // of course the shift from the first white key (incase it's empty)
-      setNotes(this.rows[2], notes, false, bottomFirstWhite)
-      const { firstIndex: topFirstWhite } = setNotes(this.rows[1], notes, true, 0, lastIndex + 1)
-      // For the top row, there's 2 keys (§ and 1) that are to the left of Q -> offset by 2
-      setNotes(this.rows[0], notes, false, 1 + topFirstWhite, lastIndex + 1)
+      const { firstIndex: bottomFirstWhite, lastIndex } = setNotes(this.rows[3], notes)
+      setNotes(this.rows[2], notes, bottomFirstWhite)
+      const { firstIndex: topFirstWhite } = setNotes(this.rows[1], notes, 0, lastIndex + 1)
+      setNotes(this.rows[0], notes, 1 + topFirstWhite, lastIndex + 1)
     }
   }
 
   startSetCustomRow(rowIndex: number) {
-    let first = -1
-    let count = 0
-    const row = this.rows[rowIndex].map(r => ({ ...r }))
-    for (let i = 0; i < row.length; i += 1) {
-      const isSpecial = row[i].key.charAt(0) === '{' && row[i].key !== '{empty}'
-      if (!isSpecial && first === -1) {
-        first = i
-      }
-      count += isSpecial ? 0 : 1
+    const row = {
+      ...this.rows[rowIndex],
+      keys: this.rows[rowIndex].keys.map(r => ({ ...r }))
     }
-    if (first === -1) {
-      console.error(row)
-      throw Error('No valid keyboard key found!')
-    }
-    const { hotkeydRows } = this.opts
-    const whiteKeys = hotkeydRows === 'two-rows' ? rowIndex === 1 || rowIndex === 3 : rowIndex === 2
+    const { availableNotes: count, startNoteOffset: first } = row
     this.setCustomRow = {
       row,
       rowIndex,
-      startKeyIndex: first,
       nextKeyIdx: first,
-      nextNoteOffset: 0,
-      whiteKeys
+      nextNoteOffset: 0
     }
+    console.log('this.setCustomRow', this.setCustomRow)
     return { first, count }
   }
 
   setNextCustomNote(key: string, code: string, notes: ScaleNote[]) {
     let rowKey
-    const { startKeyIndex, nextKeyIdx, nextNoteOffset, whiteKeys } = this.setCustomRow
-    const note = getNote(nextKeyIdx - nextNoteOffset - startKeyIndex, notes, whiteKeys)
+    const { nextKeyIdx, nextNoteOffset, row } = this.setCustomRow
+    const index = nextKeyIdx - nextNoteOffset - row.startNoteOffset
+    const note = getNote(row, notes, index)
     if (note) {
       rowKey = { key, code, note }
     } else {
@@ -123,9 +111,5 @@ export class Keyboard {
       index: this.setCustomRow.nextKeyIdx,
       key: { code: 'EMPTY', key: '{empty}' }
     }
-  }
-
-  static createWithRows(opts: KeyboardOptions, rows: Rows) {
-    return new Keyboard(opts).setRows(rows)
   }
 }

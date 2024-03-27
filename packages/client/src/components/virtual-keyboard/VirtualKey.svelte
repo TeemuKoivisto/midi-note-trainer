@@ -6,7 +6,7 @@
 
   export let rowIndex: number, keyIndex: number
 
-  $: value = $rows[rowIndex][keyIndex]
+  $: value = $rows[rowIndex].keys[keyIndex]
   $: octave = value.note
     ? getOctave({ midi: value.note.semitones + $midiRange[0], flats: 0, sharps: 0 })
     : 0

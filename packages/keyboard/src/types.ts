@@ -20,7 +20,13 @@ export interface KeyboardKey {
   code: string
   note?: ScaleNote
 }
-export type Rows = [KeyboardKey[], KeyboardKey[], KeyboardKey[], KeyboardKey[]]
+export interface Row {
+  keyType: 'white' | 'black' | undefined
+  startNoteOffset: number
+  availableNotes: number
+  keys: KeyboardKey[]
+}
+export type Rows = [Row, Row, Row, Row]
 export type Ok<T> = {
   data: T
 }
