@@ -77,20 +77,34 @@ export class Keyboard {
       keys: this.rows[rowIndex].keys.map(r => ({ ...r }))
     }
     const { availableNotes: count, startNoteOffset: first } = row
+    // If two-rows is used, start setting notes for the top 2 rows from where the bottom notes ended
+    const continueFromRow =
+      this.opts.hotkeydRows === 'two-rows' && (rowIndex === 0 || rowIndex === 1) ? 3 : -1
+    // This ugly one-liner counts the note index of the bottom row
+    const prevNoteIndex =
+      continueFromRow !== -1
+        ? this.rows[continueFromRow].keys.reduce((acc, cur) => {
+            if (acc === -1 && cur.note) {
+              acc = 0
+            } else if (acc !== -1 && (cur.key[0] !== '{' || cur.key === '{empty}')) {
+              acc += 1
+            }
+            return acc
+          }, -1) + 1
+        : 0
     this.setCustomRow = {
       row,
       rowIndex,
       nextKeyIdx: first,
-      nextNoteOffset: 0
+      nextNoteOffset: prevNoteIndex
     }
-    console.log('this.setCustomRow', this.setCustomRow)
     return { first, count }
   }
 
   setNextCustomNote(key: string, code: string, notes: ScaleNote[]) {
     let rowKey
     const { nextKeyIdx, nextNoteOffset, row } = this.setCustomRow
-    const index = nextKeyIdx - nextNoteOffset - row.startNoteOffset
+    const index = nextKeyIdx + nextNoteOffset - row.startNoteOffset
     const note = getNote(row, notes, index)
     if (note) {
       rowKey = { key, code, note }
@@ -106,7 +120,7 @@ export class Keyboard {
 
   skipNextCustomNote() {
     this.setCustomRow.nextKeyIdx += 1
-    this.setCustomRow.nextNoteOffset += 1
+    this.setCustomRow.nextNoteOffset -= 1
     return {
       index: this.setCustomRow.nextKeyIdx,
       key: { code: 'EMPTY', key: '{empty}' }
