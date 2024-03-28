@@ -56,9 +56,10 @@
       <code>KeyboardEvent</code> which may not work for everyone.
     </p>
     <p>
-      Incase it doesn't, tick the <b>Custom</b> option and map the keys manually. Press the row you want
-      to set and then every key in that row. If you want to skip a key, press space. You can also enable
-      the use of two rows for piano keys. You can reset your settings from the reload icon.
+      Incase it doesn't, tick the <b>Custom</b> option and map the keys manually. Press the row you
+      want to set and then press the keys from your keyboard. If you want to skip a key, press
+      <code>Space</code>. You can also use two rows for the keys which enables quite impressive 4
+      octave range. Clicking a reload button resets the settings to the default values.
     </p>
     <h3>Scales</h3>
     <p>
@@ -92,7 +93,7 @@
       How I approach this is somewhat unscientific; I iterate every scale note and then map all the
       other notes as its intervals. Then I use
       major-minor-diminished-augmented-7th-6th-suspended-5th order to decide which triad to pick as
-      this seems to follow the convention the best and cover all scales currently listed. <i
+      this seems to follow the convention the best covering all scales currently listed. <i
         >However,</i
       >
       in some weird cases, the best fit I find is a <code>sus</code> chord with no fifth in which case
@@ -125,7 +126,7 @@
     <p>
       Programmatically speaking, it's much easier to consider key signature's function only as a
       time and space saver to declutter the score from accidentals and it's how I've approached it.
-      The order of the added accidentals stays however always the same:
+      Although the order of the added accidentals stays always the same:
       <b>B♭, E♭, A♭, D♭, G♭, C♭, F♭</b>
       for flats and
       <b>F♯, C♯, G♯, D♯, A♯, E♯, B♯</b> for sharps. So if there were Bb, Eb, Db and Gb flats in the scale,
@@ -146,16 +147,15 @@
     </p>
     <p>
       One big missing feature from the games are the inversions of chords as well missing notes.
-      This is after all how majority of chords are played. It is, however, a rather big feature to
-      implement which is why it doesn't exist. Also playing the given scale-degree diatonic triad
-      would be another. As well as recognizing the played scales. Oh well. Pull requests are
-      welcome!
+      This is after all how majority of chords are played. But since it's rather big haven't had
+      time to implement it. Also playing the given scale-degree diatonic triad would be another. As
+      well as recognizing the played scales. Oh well. Pull requests are welcome!
     </p>
     <p>
       As an end note, I hope this app will be helpful in learning music notation! I found multiple
       existing apps but I thought they were a little too complicated and slow to use. I can
       confidently say that I've noticed a significant improvement myself playing these exercises and
-      revisiting my old sheets doesn't require pulling (as much) hair to decipher them 😄.
+      now as I revisit my old sheets it doesn't require pulling (as much) hair to decipher them 😄.
     </p>
   </article>
 </div>

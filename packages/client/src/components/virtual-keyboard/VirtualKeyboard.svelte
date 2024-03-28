@@ -6,6 +6,7 @@
   import { onMount } from 'svelte'
   import { LAYOUTS } from '@/keyboard'
 
+  import Checkbox from '$elements/Checkbox.svelte'
   import Dropdown from '$elements/Dropdown.svelte'
   import Toggle from '$elements/Toggle.svelte'
   import VirtualKey from './VirtualKey.svelte'
@@ -64,10 +65,8 @@
       </div>
       <div class="my-1 flex items-center">
         <label class="font-bold mr-4" for="custom-layout">Custom</label>
-        <input
-          class="h-[20px]"
+        <Checkbox
           id="custom-layout"
-          type="checkbox"
           checked={$keyboardOptions.isCustom}
           on:change={handleUseCustomLayout}
         />

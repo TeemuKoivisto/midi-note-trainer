@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Checkbox from '$elements/Checkbox.svelte'
+
   import { gameActions, gameOptions } from '$stores/game'
 
   let count = $gameOptions.count || ''
@@ -50,22 +52,18 @@
       on:input={handleCountChanged}
     />
   </li>
-  <li class="flex items-center justify-between mr-6">
+  <li class="flex items-center justify-between items-center mr-6">
     <label class="font-bold" for="duplicates">Duplicates</label>
-    <input
-      class="h-[20px]"
+    <Checkbox
       id="duplicates"
-      type="checkbox"
       checked={$gameOptions.duplicates}
       on:input={e => gameActions.setOptionValue('duplicates', e.currentTarget.checked)}
     />
   </li>
-  <li class="flex items-center justify-between mr-6">
+  <li class="flex items-center justify-between items-center mr-6">
     <label class="font-bold" for="autoplay">Autoplay</label>
-    <input
-      class="h-[20px]"
+    <Checkbox
       id="autoplay"
-      type="checkbox"
       checked={$gameOptions.autoplay}
       on:input={e => gameActions.setOptionValue('autoplay', e.currentTarget.checked)}
     />

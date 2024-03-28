@@ -4,6 +4,7 @@
 
   import { writable } from 'svelte/store'
 
+  import Checkbox from '$elements/Checkbox.svelte'
   import VirtualKeyboard from '$components/virtual-keyboard/VirtualKeyboard.svelte'
 
   import { inputsActions, inputs, midiInput } from '$stores/inputs'
@@ -107,12 +108,10 @@
         </div>
       </div>
       <div class="flex flex-col h-full">
-        <div class="my-1 flex justify-between mr-12">
+        <div class="my-1 flex justify-between items-center mr-12">
           <label class="font-bold" for="sound">Sound</label>
-          <input
-            class="h-[20px]"
+          <Checkbox
             id="sound"
-            type="checkbox"
             checked={$inputs.useSound}
             on:change={e => inputsActions.setInputValue('useSound', e.currentTarget.checked)}
           />
@@ -129,32 +128,22 @@
         </div>
       </div>
       <div class="flex flex-col h-full">
-        <div class="my-1 flex justify-between mr-12">
+        <div class="my-1 flex justify-between items-center mr-12">
           <label class="font-bold" for="keyboard">Keyboard</label>
-          <input
-            class="h-[20px]"
+          <Checkbox
             id="keyboard"
-            type="checkbox"
             checked={$inputs.useKeyboard}
             on:change={e => inputsActions.setInputValue('useKeyboard', e.currentTarget.checked)}
           />
         </div>
-        <div class="my-1 flex justify-between mr-12">
+        <div class="my-1 flex justify-between items-center mr-12">
           <label class="font-bold" for="hotkeys">Hotkeys</label>
-          <input
-            class="h-[20px]"
-            id="hotkeys"
-            type="checkbox"
-            checked={$inputs.useHotkeys}
-            on:change={handleSetUseHotkeys}
-          />
+          <Checkbox id="hotkeys" checked={$inputs.useHotkeys} on:change={handleSetUseHotkeys} />
         </div>
-        <div class="my-1 flex justify-between mr-12">
+        <div class="my-1 flex justify-between items-center mr-12">
           <label class="font-bold" for="auto-octave">Auto-octave</label>
-          <input
-            class="h-[20px]"
+          <Checkbox
             id="auto-octave"
-            type="checkbox"
             checked={$inputs.useAutoOctave}
             on:change={e => inputsActions.setInputValue('useAutoOctave', e.currentTarget.checked)}
           />
@@ -181,7 +170,8 @@
       </div>
     </div>
     {#if setKeys && !$hidden}
-      <VirtualKeyboard class="mt-4" />
+      <h4 class="mt-4 text-lg">Hotkey Map</h4>
+      <VirtualKeyboard />
     {/if}
   </fieldset>
 </div>

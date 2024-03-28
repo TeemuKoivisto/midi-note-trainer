@@ -156,25 +156,26 @@
     </div>
     <div class="body" class:hidden={$hidden}>
       <div class="flex mb-2 options">
-        <label class="mr-4 font-bold" for="scale-key">Key</label>
+        <label class="mr-4 font-bold" for="chords-key">Key</label>
         <input
           class="input bg-gray-100 w-12 px-1 rounded"
-          id="scale-key"
+          id="chords-key"
           value={selectedKey}
           on:input={handleKeyChange}
         />
-        <label class="font-bold" for="scale-key">Scale</label>
+        <label class="font-bold" for="chords-scale">Scale</label>
         <SearchDropdown
+          id="chords-scale"
           class="bg-gray-100 w-48"
           containerClass="input w-48"
           selected={selectedScale}
           options={scaleOptions}
           onSelect={handleSelectScale}
         />
-        <label class="font-bold" for="scale-key">Note</label>
+        <label class="font-bold" for="chords-note">Note</label>
         <input
           class="input bg-gray-100 w-12 px-1 rounded"
-          id="scale-key"
+          id="chords-note"
           value={rootNote}
           on:input={handleNoteChange}
         />
