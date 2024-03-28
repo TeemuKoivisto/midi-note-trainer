@@ -1,5 +1,11 @@
 <script lang="ts">
-  export let checked: boolean
+  import type { HTMLInputAttributes } from 'svelte/elements'
+
+  interface $$Props extends HTMLInputAttributes {}
+  interface $$Events {
+    change: Event & { currentTarget: EventTarget & HTMLInputElement }
+    input: Event & { currentTarget: EventTarget & HTMLInputElement }
+  }
 
   let inputEl: HTMLInputElement
 
@@ -11,7 +17,7 @@
 </script>
 
 <label class={`${$$props.class || ''} toggle`}>
-  <input bind:this={inputEl} {checked} type="checkbox" on:change on:keydown={handleKeyDown} />
+  <input bind:this={inputEl} {...$$props} type="checkbox" on:change on:keydown={handleKeyDown} />
   <div class="slider"></div>
 </label>
 
