@@ -126,9 +126,10 @@
       </div>
     </div>
     <div class="flex flex-col h-full">
-      <label class="font-bold" for="scales">Scale</label>
+      <label class="font-bold" for="score-scale">Scale</label>
       <div class="my-1 w-full">
         <SearchDropdown
+          id="score-scale"
           class="p-1 pl-[2px] w-48"
           containerClass="w-48"
           selected={selectedScale}

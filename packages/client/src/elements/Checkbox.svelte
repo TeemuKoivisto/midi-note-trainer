@@ -18,7 +18,6 @@
 
 <input
   bind:this={inputEl}
-  class={`${$$props.class || ''}`}
   type="checkbox"
   on:change
   on:input

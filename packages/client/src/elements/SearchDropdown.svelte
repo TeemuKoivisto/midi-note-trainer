@@ -3,6 +3,14 @@
   import { slide, fade } from 'svelte/transition'
 
   import type { IconifyIcon } from '@iconify/svelte/dist/OfflineIcon.svelte'
+  import type { HTMLInputAttributes } from 'svelte/elements'
+
+  interface $$Props extends HTMLInputAttributes {
+    containerClass?: string
+    options: readonly Option[]
+    selected: string
+    onSelect: (key: Key) => boolean
+  }
 
   type Key = string | number
   interface Option {
@@ -10,12 +18,7 @@
     value: string
     icon?: IconifyIcon
   }
-  export let options: readonly Option[],
-    id: string | undefined = undefined,
-    containerClass: string | undefined = undefined,
-    selected: string,
-    disabled: boolean | undefined = undefined,
-    onSelect: (key: Key) => boolean
+  export let options: readonly Option[], selected: string, onSelect: (key: Key) => boolean
 
   const DROPDOWN_DURATION = 400
 
@@ -31,10 +34,8 @@
     filtered = options.map(_ => false)
   }
 
-  function handleOpen() {
-    if (!disabled) {
-      open = !open
-    }
+  function handleBlur(e: FocusEvent) {
+    open = containerEl.contains(e.relatedTarget as Node | null)
   }
   function handleInput(
     e: Event & {
@@ -76,15 +77,14 @@
   }
 </script>
 
-<div class={`relative ${containerClass || ''}`} {id} bind:this={containerEl}>
+<div class={`relative ${$$props.containerClass || ''}`} bind:this={containerEl}>
   <input
     class={`${$$props.class || ''} open-btn text-justify text-sm rounded`}
-    class:disabled
     class:open
-    title={$$props.title || ''}
+    {...$$props}
     bind:value={input}
-    on:click={handleOpen}
     on:focus={() => (open = true)}
+    on:blur={handleBlur}
     on:input={handleInput}
     on:keydown={handleKeyDown}
   />
@@ -98,7 +98,7 @@
     <ul
       transition:slide={{ duration: DROPDOWN_DURATION }}
       class={`items-list bg-white py-1.5 py-2 max-h-64 overflow-y-scroll text-sm absolute left-0 z-30 rounded-b shadow-xl ${
-        containerClass || ''
+        $$props.containerClass || ''
       }`}
     >
       <li>
@@ -111,6 +111,7 @@
               class="px-2 py-1 text-justify w-full h-full hover:bg-[#eee]"
               class:selected={key === selected}
               on:click={() => handleSelect(key)}
+              on:blur={handleBlur}
             >
               {#if icon}
                 <Icon class="mr-2" {icon} width={16} />
@@ -133,7 +134,7 @@
     box-shadow: 0 2px 6px 2px rgba(60, 64, 67, 0.15);
   }
   .open-btn {
-    &.disabled {
+    &:disabled {
       cursor: initial;
       opacity: 0.5;
       &:hover {
