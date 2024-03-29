@@ -71,7 +71,7 @@
 
   function init() {
     renderer = new Renderer(outputEl, Renderer.Backends.SVG)
-    renderer.resize(732, 360)
+    renderer.resize(Math.min(window.innerWidth - 16, 732), 360)
     ctx = renderer.getContext()
     ctx.scale(2.0, 2.0)
     // console.log('ctx', ctx)

@@ -100,7 +100,7 @@
     <Icon icon={restore} width={16} />
   </button>
   <div class="options" class:hidden={$hidden}>
-    <div class="flex flex-col h-full">
+    <div class="range flex flex-col h-full">
       <label class="font-bold" for="range_min">Range</label>
       <div class="my-1 flex w-full">
         <input
@@ -170,9 +170,6 @@
     gap: 0.5rem;
     grid-template-columns: 1fr;
     grid-template-rows: auto;
-    @media (width <= 475px) {
-      grid-template-columns: 1fr 1fr;
-    }
     &.hidden {
       display: none;
     }
