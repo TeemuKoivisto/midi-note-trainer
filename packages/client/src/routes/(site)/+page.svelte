@@ -29,7 +29,7 @@
 
   onMount(() => {
     if ($midiGranted) {
-      handlePromptMIDI()
+      inputsActions.openMidi()
     }
     window.addEventListener('keydown', initAudio)
     window.addEventListener('mousedown', initAudio)
@@ -42,8 +42,8 @@
   })
 
   midiInput.subscribe(input => {
-    if (input) {
-      input.channels[1].addListener('noteon', noteOnListener)
+    if ('data' in input) {
+      input.data.channels[1].addListener('noteon', noteOnListener)
     }
   })
 
@@ -134,16 +134,6 @@
     const found = keyboardActions.findNote(e.detail.note) ?? getRootNote(e.detail.note)
     if (found) {
       handlePlayedNote(found.semitones + 12 + e.detail.octave * 12, 80)
-    }
-  }
-  async function handlePromptMIDI() {
-    status = 'Finding device...'
-    const res = await inputsActions.openMidi()
-    if ('data' in res) {
-      status = res.data.name
-    } else {
-      status = res.err
-      console.error(res.err)
     }
   }
   function handleReset() {

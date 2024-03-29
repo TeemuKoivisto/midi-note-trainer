@@ -21,7 +21,7 @@ interface Inputs {
 export const midiGranted = persist(writable<boolean>(false), {
   key: 'midi-access'
 })
-export const midiInput = writable<Input | undefined>(undefined)
+export const midiInput = writable<Result<Input>>({ err: 'Uninitialized', code: 400 })
 export const midiRange = persist(writable<[number, number]>([60, 84]), {
   key: 'midi-range',
   storage: 'session'
@@ -48,21 +48,25 @@ export const inputs = persist(
 
 export const inputsActions = {
   async openMidi(): Promise<Result<Input>> {
-    return WebMidi.enable()
+    const res = await WebMidi.enable()
       .then(() => {
         midiGranted.set(true)
         if (WebMidi.inputs.length > 0) {
-          midiInput.set(WebMidi.inputs[0])
           return { data: WebMidi.inputs[0] }
         } else {
-          return { err: 'No MIDI device found.', code: 400 }
+          return { err: 'No MIDI device found', code: 404 }
         }
       })
       .catch(err => ({ err: err.toString(), code: 403 }))
+    if ('err' in res) {
+      console.error(res.err)
+    }
+    midiInput.set(res)
+    return res
   },
   disableMidi() {
     midiGranted.set(false)
-    midiInput.set(undefined)
+    midiInput.set({ err: 'Uninitialized', code: 400 })
   },
   setMidiRange(range: [number, number]) {
     midiRange.set(range)

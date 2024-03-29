@@ -100,7 +100,7 @@
           class="px-1 my-1 rounded w-50"
           id="device"
           disabled
-          value={$midiInput?.name ?? 'No device'}
+          value={'data' in $midiInput ? $midiInput.data.name : $midiInput.err}
         />
         <div class="flex my-[auto]">
           <button class="btn-sm primary mr-2" on:click={inputsActions.openMidi}>Prompt</button>
@@ -170,7 +170,7 @@
       </div>
     </div>
     {#if setKeys && !$hidden}
-      <h4 class="mt-4 text-lg">Hotkey Map</h4>
+      <h4 class="mt-4 font-bold text-lg">Hotkeys</h4>
       <VirtualKeyboard />
     {/if}
   </fieldset>
