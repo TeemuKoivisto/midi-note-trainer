@@ -18,7 +18,14 @@
     value: string
     icon?: IconifyIcon
   }
-  export let options: readonly Option[], selected: string, onSelect: (key: Key) => boolean
+  const {
+    options,
+    selected,
+    containerClass,
+    onSelect,
+    class: htmlClass,
+    ...props
+  } = $$props as $$Props
 
   const DROPDOWN_DURATION = 400
 
@@ -77,14 +84,13 @@
   }
 </script>
 
-<div class={`relative ${$$props.containerClass || ''}`} bind:this={containerEl}>
+<div class={`search-dropdown relative width ${containerClass || ''}`} bind:this={containerEl}>
   <input
-    class={`${$$props.class || ''} open-btn text-justify text-sm rounded`}
+    class={`${htmlClass || ''} open-btn text-justify text-sm rounded`}
     class:open
-    {...$$props}
+    {...props}
     bind:value={input}
     on:focus={() => (open = true)}
-    on:blur={handleBlur}
     on:input={handleInput}
     on:keydown={handleKeyDown}
   />
@@ -97,9 +103,7 @@
     />
     <ul
       transition:slide={{ duration: DROPDOWN_DURATION }}
-      class={`items-list bg-white py-1.5 py-2 max-h-64 overflow-y-scroll text-sm absolute left-0 z-30 rounded-b shadow-xl ${
-        $$props.containerClass || ''
-      }`}
+      class={`items-list bg-white py-1.5 py-2 max-h-64 overflow-y-scroll text-sm absolute left-0 z-30 rounded-b shadow-xl width`}
     >
       <li>
         <slot name="header" />
@@ -130,10 +134,17 @@
 </div>
 
 <style lang="scss">
+  :root {
+    --search-dropdown-width: 13rem;
+  }
+  .width {
+    width: var(--search-dropdown-width);
+  }
   .items-list {
     box-shadow: 0 2px 6px 2px rgba(60, 64, 67, 0.15);
   }
   .open-btn {
+    width: var(--search-dropdown-width);
     &:disabled {
       cursor: initial;
       opacity: 0.5;

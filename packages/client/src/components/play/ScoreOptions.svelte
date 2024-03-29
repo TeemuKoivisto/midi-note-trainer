@@ -127,11 +127,10 @@
     </div>
     <div class="flex flex-col h-full">
       <label class="font-bold" for="score-scale">Scale</label>
-      <div class="my-1 w-full">
+      <div class="scale-dropdown my-1 w-full">
         <SearchDropdown
           id="score-scale"
-          class="p-1 pl-[2px] w-48"
-          containerClass="w-48"
+          class="p-1 pl-[2px]"
           selected={selectedScale}
           options={scaleOptions}
           onSelect={handleSelectScale}
@@ -170,6 +169,22 @@
     gap: 0.5rem;
     grid-template-columns: 1fr;
     grid-template-rows: auto;
+    .scale-dropdown {
+      --search-dropdown-width: 13rem;
+    }
+    @media (width <= 475px) {
+      grid-template-columns: 1fr 1fr;
+      .range {
+        grid-column-end: span 2;
+      }
+      .scale-dropdown {
+        --search-dropdown-width: 9rem;
+      }
+      #key {
+        @apply w-36;
+      }
+    }
+
     &.hidden {
       display: none;
     }
