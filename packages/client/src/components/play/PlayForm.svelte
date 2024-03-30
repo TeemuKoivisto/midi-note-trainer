@@ -140,7 +140,7 @@
       {#each options as { key, value }}
         <li class="flex">
           <button
-            class="px-2 py-1 mr-1 flex items-center w-full h-full rounded hover:bg-[#eee]"
+            class="px-2 py-1 mr-1 flex items-center w-full h-full rounded text-left hover:bg-[#eee]"
             class:selected={key === selectedGame}
             on:click={() => handleSelectGame(key)}
           >
@@ -161,7 +161,7 @@
           {#each chordsOptions as { key, value }}
             <li>
               <button
-                class="px-2 py-1 mr-1 flex items-center w-full h-full rounded hover:bg-[#eee]"
+                class="px-2 py-1 mr-1 flex items-center w-full h-full rounded text-left hover:bg-[#eee]"
                 class:selected={key === chordsSelection}
                 on:click={() => handleSelectChords(key)}>{value}</button
               >

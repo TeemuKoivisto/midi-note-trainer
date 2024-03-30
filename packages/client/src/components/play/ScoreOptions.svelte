@@ -170,7 +170,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     .scale-dropdown {
-      --search-dropdown-width: 13rem;
+      --search-dropdown-width: 100%;
     }
     @media (width <= 475px) {
       grid-template-columns: 1fr 1fr;
@@ -178,10 +178,10 @@
         grid-column-end: span 2;
       }
       .scale-dropdown {
-        --search-dropdown-width: 9rem;
+        --search-dropdown-width: 100%;
       }
       #key {
-        @apply w-36;
+        width: 100%;
       }
     }
 

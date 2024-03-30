@@ -166,8 +166,8 @@
         <label class="font-bold" for="chords-scale">Scale</label>
         <SearchDropdown
           id="chords-scale"
-          class="bg-gray-100 w-48"
-          containerClass="input w-48"
+          class="bg-gray-100 pl-1"
+          containerClass="input"
           selected={selectedScale}
           options={scaleOptions}
           onSelect={handleSelectScale}
@@ -269,6 +269,7 @@
     }
   }
   .options {
+    --search-dropdown-width: 13rem;
     display: grid;
     grid-template-columns: 1fr 3fr;
     & > :global(.input) {

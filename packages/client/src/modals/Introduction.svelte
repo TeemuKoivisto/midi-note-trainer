@@ -8,18 +8,16 @@
   export let hideModal: () => void = () => undefined
 </script>
 
-<div class="flex flex-col">
-  <h2 class="pl-1.5 mt-4 mb-2 text-5xl font-semibold text-black relative">
-    Introduction
-    <div class="absolute top-0 right-0">
-      <button
-        class="flex items-center text-sm rounded-full px-2 py-2 hover:bg-gray-200"
-        on:click={hideModal}
-      >
-        <Icon icon={x} width={24} />
-      </button>
-    </div>
-  </h2>
+<div class="flex flex-col relative">
+  <div class="absolute op-0 right-0">
+    <button
+      class="flex items-center text-sm rounded-full px-2 py-2 hover:bg-gray-200"
+      on:click={hideModal}
+    >
+      <Icon icon={x} width={24} />
+    </button>
+  </div>
+  <h2 class="pl-1.5 mt-4 mb-2 text-5xl font-semibold text-black">Introduction</h2>
   <article class="w-full p-2 pb-4">
     <p>Greetings! 👋</p>
     <p>
