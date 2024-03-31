@@ -252,7 +252,7 @@
 
 <section class={`${$$props.class || ''} relative overflow-hidden`}>
   <div id="output" bind:this={outputEl}></div>
-  <div class="absolute left-0 top-[18.5rem]">
+  <div class="absolute left-0 top-[23rem]">
     <div class="flex flex-col">
       <ReplayButton />
       <QuitButton />

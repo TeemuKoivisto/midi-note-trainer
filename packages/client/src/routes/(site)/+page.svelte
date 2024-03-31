@@ -143,7 +143,7 @@
 </script>
 
 <h1
-  class="my-8 mt-12 px-4 md:px-0 text-4xl md:text-5xl font-bold tracking-tight flex items-center justify-between"
+  class="mt-12 mb-2 md:mt-16 md:mb-4 px-4 md:px-0 text-4xl md:text-5xl font-bold tracking-tight flex items-center justify-between"
 >
   <a class="hover:underline" href="https://github.com/TeemuKoivisto/midi-note-trainer">
     MIDI Note Trainer
@@ -155,7 +155,7 @@
   </div>
 </h1>
 
-<div class="px-4 md:px-0">
+<div class="px-4 md:px-0 mb-8 md:mb-10">
   <button
     class="btn-pill border-2 border-gray-300 hover:bg-gray-200"
     on:click={() => modalActions.open('introduction', undefined)}>Introduction</button
