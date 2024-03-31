@@ -22,6 +22,7 @@
   }
 
   const { Accidental, Formatter, Renderer, Stave, StaveNote } = Vex.Flow
+
   let scoreWidth = 200
   let outputEl: HTMLDivElement
   let renderer: Vex.Renderer
@@ -71,13 +72,13 @@
 
   function init() {
     renderer = new Renderer(outputEl, Renderer.Backends.SVG)
-    renderer.resize(Math.min(window.innerWidth - 16, 732), 360)
+    renderer.resize(732, 400)
     ctx = renderer.getContext()
-    ctx.scale(2.0, 2.0)
+    ctx.scale(1.0, 1.0)
     // console.log('ctx', ctx)
     tickContext = new Vex.Flow.TickContext()
-    const tclef = new Stave(0, 0, scoreWidth).addClef('treble').addKeySignature('B')
-    const bclef = new Stave(0, 60, scoreWidth).addClef('bass').addKeySignature('B')
+    const tclef = new Stave(0, 110, scoreWidth).addClef('treble').addKeySignature('B')
+    const bclef = new Stave(0, 170, scoreWidth).addClef('bass').addKeySignature('B')
     const trebleNotes = [
       new StaveNote({ keys: ['g#/4'], duration: 'q' }),
       new StaveNote({ keys: ['b/4'], duration: 'qr' }),
@@ -209,9 +210,9 @@
     const key = scale.majorSignature.replaceAll('♭', 'b').replaceAll('♯', '#')
     scoreWidth = 200 + Math.max(scale.flats, scale.sharps) * 10
     ctx.clear()
-    ctx.scale(0.5, 0.5)
-    const tclef = new Stave(0, 0, scoreWidth).addClef('treble').addKeySignature(key)
-    const bclef = new Stave(0, 60, scoreWidth).addClef('bass') //.addKeySignature(key)
+    ctx.scale(1.0, 1.0)
+    const tclef = new Stave(0, 110, scoreWidth).addClef('treble').addKeySignature(key)
+    const bclef = new Stave(0, 170, scoreWidth).addClef('bass') //.addKeySignature(key)
     const targetNotes = notesToVexflowNotes(target, scale)
     // console.log('notes ', targetNotes)
     const playedNotes = notesToVexflowNotes(played, scale)
@@ -249,7 +250,7 @@
   }
 </script>
 
-<section class={`${$$props.class || ''} relative`}>
+<section class={`${$$props.class || ''} relative overflow-hidden`}>
   <div id="output" bind:this={outputEl}></div>
   <div class="absolute left-0 top-[18.5rem]">
     <div class="flex flex-col">
@@ -260,6 +261,30 @@
 </section>
 
 <style lang="scss">
+  #output {
+    place-content: center;
+    transform-origin: left;
+    transform: scale(1.75);
+  }
+  @media (width <= 508px) {
+    #output {
+      height: 340px;
+      transform: scale(1.5);
+    }
+  }
+  @media (width <= 438px) {
+    #output {
+      height: 280px;
+      transform: scale(1.15);
+    }
+  }
+  @media (width <= 344px) {
+    #output {
+      height: 250px;
+      overflow: hidden;
+      transform: scale(1.05);
+    }
+  }
   :global(.hidden) {
     display: none;
   }
