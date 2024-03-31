@@ -72,7 +72,7 @@
 
   function init() {
     renderer = new Renderer(outputEl, Renderer.Backends.SVG)
-    renderer.resize(732, 400)
+    renderer.resize(732, 496)
     ctx = renderer.getContext()
     ctx.scale(1.0, 1.0)
     // console.log('ctx', ctx)
@@ -211,8 +211,8 @@
     scoreWidth = 200 + Math.max(scale.flats, scale.sharps) * 10
     ctx.clear()
     ctx.scale(1.0, 1.0)
-    const tclef = new Stave(0, 110, scoreWidth).addClef('treble').addKeySignature(key)
-    const bclef = new Stave(0, 170, scoreWidth).addClef('bass') //.addKeySignature(key)
+    const tclef = new Stave(0, 170, scoreWidth).addClef('treble').addKeySignature(key)
+    const bclef = new Stave(0, 230, scoreWidth).addClef('bass') //.addKeySignature(key)
     const targetNotes = notesToVexflowNotes(target, scale)
     // console.log('notes ', targetNotes)
     const playedNotes = notesToVexflowNotes(played, scale)
@@ -268,19 +268,19 @@
   }
   @media (width <= 508px) {
     #output {
-      height: 340px;
+      height: 420px;
       transform: scale(1.5);
     }
   }
   @media (width <= 438px) {
     #output {
-      height: 280px;
+      height: 320px;
       transform: scale(1.15);
     }
   }
   @media (width <= 344px) {
     #output {
-      height: 250px;
+      height: 300px;
       overflow: hidden;
       transform: scale(1.05);
     }
