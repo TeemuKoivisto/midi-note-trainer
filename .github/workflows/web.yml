@@ -26,11 +26,11 @@ jobs:
       - name: Build the GitHub pages distribution
         run: VITE_DEPLOY_TO_GH=true pnpm --filter client build
 
-      - name: Deploy to GitHub pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          deploy_key: ${{ secrets.GH_ACTIONS_DEPLOY_KEY }}
-          publish_dir: ./packages/client/build
+      # - name: Deploy to GitHub pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     deploy_key: ${{ secrets.GH_ACTIONS_DEPLOY_KEY }}
+      #     publish_dir: ./packages/client/build
 
       - name: Build the Cloudflare distribution without base url
         run: pnpm --filter client build
