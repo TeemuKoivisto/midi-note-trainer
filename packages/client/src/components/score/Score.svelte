@@ -251,7 +251,7 @@
 </script>
 
 <section class={`${$$props.class || ''} relative overflow-hidden`}>
-  <div id="output" bind:this={outputEl}></div>
+  <div id="output" class="grid justify-start content-center" bind:this={outputEl}></div>
   <div class="absolute left-0 top-[23rem]">
     <div class="flex flex-col">
       <ReplayButton />
@@ -262,7 +262,6 @@
 
 <style lang="scss">
   #output {
-    place-content: center;
     transform-origin: left;
     transform: scale(1.75);
   }

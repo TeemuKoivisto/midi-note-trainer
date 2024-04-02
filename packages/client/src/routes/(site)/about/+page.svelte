@@ -24,7 +24,7 @@
       GitHub
     </a>
     repository or send me an email at
-    <span><address class="inline p-0 m-0">teemukoivisto.xyz ~АТ~ gmail.com</address></span>
+    <span class="italic">teemukoivisto.xyz ~АТ~ gmail.com</span>
   </p>
   <p class="mt-4">
     Check out my blog at <a class="font-bold hover:underline" href="https://teemukoivisto.xyz/"
