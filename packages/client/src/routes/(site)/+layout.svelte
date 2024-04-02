@@ -1,19 +1,28 @@
 <script>
+  import { onMount } from 'svelte'
   import { JsonLd, MetaTags } from 'svelte-meta-tags'
 
   import { SITE_METADATA } from '$config'
 
   import '../../tailwind.css'
+
+  let url = SITE_METADATA.url
+
+  onMount(() => {
+    if (typeof window !== 'undefined' && window.location.href.length > 1) {
+      url += window.location.pathname
+    }
+  })
 </script>
 
 <MetaTags
   title={SITE_METADATA.title}
   description={SITE_METADATA.description}
-  canonical={SITE_METADATA.url}
+  canonical={url}
   keywords={SITE_METADATA.tags}
   openGraph={{
     type: 'website',
-    url: SITE_METADATA.url,
+    url: url,
     title: SITE_METADATA.title,
     description: SITE_METADATA.description,
     images: [SITE_METADATA.image]
@@ -40,7 +49,7 @@
 />
 
 <div class="flex-col items-center justify-center">
-  <main class="flex-col items-center justify-center h-full min-h-screen max-w-[764px] mx-[auto]">
+  <main class="flex-col items-center justify-center h-full min-h-screen max-w-[780px] mx-[auto]">
     <slot />
   </main>
 </div>

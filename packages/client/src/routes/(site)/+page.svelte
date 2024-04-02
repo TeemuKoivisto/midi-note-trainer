@@ -7,6 +7,7 @@
   import GameControls from '$components/play/GameControls.svelte'
   import IOSettings from '$components/IOSettings.svelte'
   import KeyboardInput from '$components/KeyboardInput.svelte'
+  import NavBar from '$components/NavBar.svelte'
   import PlayForm from '$components/play/PlayForm.svelte'
   import Scales from '$components/scales/Scales.svelte'
   import ScoreOptions from '$components/play/ScoreOptions.svelte'
@@ -142,12 +143,12 @@
   }
 </script>
 
+<NavBar />
+
 <h1
-  class="mt-12 mb-4 md:mt-16 px-4 md:px-0 text-4xl md:text-5xl font-bold tracking-tight flex items-center justify-between"
+  class="mt-12 mb-4 md:mt-16 px-4 text-4xl md:text-5xl font-bold tracking-tight flex items-center justify-between"
 >
-  <a class="hover:underline" href="https://github.com/TeemuKoivisto/midi-note-trainer">
-    MIDI Note Trainer
-  </a>
+  MIDI Note Trainer
   <div class="flex items-center justify-center">
     <button class="rounded p-2 hover:bg-gray-200" on:click={handleReset}>
       <Icon icon={restore} width={24} />
@@ -155,14 +156,14 @@
   </div>
 </h1>
 
-<div class="px-4 md:px-0 mb-8 md:mb-10">
+<div class="px-4 mb-8 md:mb-10">
   <button
     class="btn-pill border-2 border-gray-300 hover:bg-gray-200"
     on:click={() => modalActions.open('introduction', undefined)}>Introduction</button
   >
 </div>
 
-<section class="mx-4 md:mx-0">
+<section class="px-4">
   <IOSettings />
   <Scales />
   <Chords />
@@ -175,7 +176,7 @@
 {#await import('$components/score/Score.svelte')}
   &nbsp;
 {:then { default: comp }}
-  <svelte:component this={comp} class="mx-4 md:mx-0" />
+  <svelte:component this={comp} class="px-4" />
 {/await}
 
 <section class="mb-8 ml-16 flex flex-col">
