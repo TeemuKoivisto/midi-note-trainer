@@ -21,6 +21,7 @@ export const LAYOUTS = {
   cs: { name: 'Czech', import: import('simple-keyboard-layouts/build/layouts/czech') },
   en: { name: 'English', import: import('simple-keyboard-layouts/build/layouts/english') },
   fa: { name: 'Farsi', import: import('simple-keyboard-layouts/build/layouts/farsi') },
+  fi: { name: 'Finnish', import: import('simple-keyboard-layouts/build/layouts/swedish') },
   fr: { name: 'French', import: import('simple-keyboard-layouts/build/layouts/french') },
   ka: { name: 'Georgian', import: import('simple-keyboard-layouts/build/layouts/georgian') },
   de: { name: 'German', import: import('simple-keyboard-layouts/build/layouts/german') },
