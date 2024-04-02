@@ -12,6 +12,7 @@
   canonical={SITE_METADATA.url}
   keywords={SITE_METADATA.tags}
   openGraph={{
+    type: 'website',
     url: SITE_METADATA.url,
     title: SITE_METADATA.title,
     description: SITE_METADATA.description,
