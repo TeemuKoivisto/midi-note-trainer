@@ -143,7 +143,7 @@
 </script>
 
 <h1
-  class="mt-12 mb-2 md:mt-16 md:mb-4 px-4 md:px-0 text-4xl md:text-5xl font-bold tracking-tight flex items-center justify-between"
+  class="mt-12 mb-4 md:mt-16 px-4 md:px-0 text-4xl md:text-5xl font-bold tracking-tight flex items-center justify-between"
 >
   <a class="hover:underline" href="https://github.com/TeemuKoivisto/midi-note-trainer">
     MIDI Note Trainer

@@ -3,12 +3,35 @@
   import x from '@iconify-icons/feather/x'
 
   import type { ModalParams } from '$stores/modal'
+  import { onMount } from 'svelte'
 
   export let params: ModalParams['introduction']
   export let hideModal: () => void = () => undefined
+
+  let originalFocusedEl: HTMLElement
+  let closeButtonEl: HTMLElement
+
+  onMount(() => {
+    // Hacky focus capture into modal and returning it back to the button when the modal is closed
+    if (document.activeElement instanceof HTMLElement) {
+      originalFocusedEl = document.activeElement
+    }
+    closeButtonEl.focus()
+    return () => {
+      originalFocusedEl.focus()
+    }
+  })
+
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      hideModal()
+    }
+  }
 </script>
 
-<div class="flex flex-col relative">
+<svelte:window on:keydown={handleKeyDown} />
+
+<div bind:this={closeButtonEl} tabindex="-1" class="flex flex-col relative focus:outline-none">
   <div class="absolute op-0 right-0">
     <button
       class="flex items-center text-sm rounded-full px-2 py-2 hover:bg-gray-200"
