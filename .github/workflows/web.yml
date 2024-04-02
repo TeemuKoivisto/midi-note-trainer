@@ -23,8 +23,8 @@ jobs:
       - name: Run tests
         run: pnpm -r test
 
-      - name: Build the GitHub pages distribution
-        run: VITE_DEPLOY_TO_GH=true pnpm --filter client build
+      # - name: Build the GitHub pages distribution
+      #   run: VITE_DEPLOY_TO_GH=true pnpm --filter client build
 
       # - name: Deploy to GitHub pages
       #   uses: peaceiris/actions-gh-pages@v3
