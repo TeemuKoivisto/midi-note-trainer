@@ -84,9 +84,9 @@
     </div>
   </div>
   <div class="flex flex-col">
-    <ul class="keyboard">
+    <ul class="keyboard overflow-scroll">
       {#each $keyboard.rows as row, ridx}
-        <li class="col-span-2">
+        <li class="col-span-2 min-w-[24px]">
           {#if settableRows[ridx] && $keyboardOptions.isCustom}
             <button
               class="flex items-center justify-center rounded w-full h-full hover:bg-gray-300"

@@ -7,10 +7,10 @@
       <a href="/" class="hover:underline">Home</a>
     </li>
     <li>
-      <a href="/about" class="ml-2 hover:underline">About</a>
+      <a href="/about" class="ml-4 hover:underline">About</a>
     </li>
     <li>
-      <a href="https://github.com/TeemuKoivisto/midi-note-trainer" class="ml-2 hover:underline"
+      <a href="https://github.com/TeemuKoivisto/midi-note-trainer" class="ml-4 hover:underline"
         >GitHub</a
       >
     </li>

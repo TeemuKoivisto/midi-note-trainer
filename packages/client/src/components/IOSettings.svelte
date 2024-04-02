@@ -77,104 +77,104 @@
   }
 </script>
 
-<div class={`${$$props.class || ''}`}>
-  <fieldset
-    class="relative flex flex-col max-w-full rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
-    class:collapsed={$hidden}
+<fieldset
+  class={`${
+    $$props.class || ''
+  } relative flex flex-col min-w-[auto] max-w-full rounded border-2 px-4 pt-2 pb-4 my-4 text-sm`}
+  class:collapsed={$hidden}
+>
+  <legend class="text-base">
+    <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
+  </legend>
+  <div
+    class="absolute top-[-0.25rem] right-[0.5rem] flex items-center justify-center"
+    class:hidden={$hidden}
   >
-    <legend class="text-base">
-      <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
-    </legend>
-    <div
-      class="absolute top-[-0.25rem] right-[0.5rem] flex items-center justify-center"
-      class:hidden={$hidden}
-    >
-      <button class="rounded px-1 py-1 hover:bg-gray-200" on:click={handleReset}>
-        <Icon icon={restore} width={16} />
-      </button>
+    <button class="rounded px-1 py-1 hover:bg-gray-200" on:click={handleReset}>
+      <Icon icon={restore} width={16} />
+    </button>
+  </div>
+  <div class="body" class:hidden={$hidden}>
+    <div class="h-full flex flex-col">
+      <label class="font-bold" for="device">Device</label>
+      <input
+        class="px-1 my-1 rounded w-50"
+        id="device"
+        disabled
+        value={'data' in $midiInput ? $midiInput.data.name : $midiInput.err}
+      />
+      <div class="flex my-[auto]">
+        <button class="btn-sm primary mr-2" on:click={inputsActions.openMidi}>Prompt</button>
+        <button class="btn-sm primary" on:click={inputsActions.disableMidi}>Disable</button>
+      </div>
     </div>
-    <div class="body" class:hidden={$hidden}>
-      <div class="h-full flex flex-col">
-        <label class="font-bold" for="device">Device</label>
-        <input
-          class="px-1 my-1 rounded w-50"
-          id="device"
-          disabled
-          value={'data' in $midiInput ? $midiInput.data.name : $midiInput.err}
+    <div class="flex flex-col h-full">
+      <div class="my-1 flex justify-between items-center mr-12">
+        <label class="font-bold" for="sound">Sound</label>
+        <Checkbox
+          id="sound"
+          checked={$inputs.useSound}
+          on:change={e => inputsActions.setInputValue('useSound', e.currentTarget.checked)}
         />
-        <div class="flex my-[auto]">
-          <button class="btn-sm primary mr-2" on:click={inputsActions.openMidi}>Prompt</button>
-          <button class="btn-sm primary" on:click={inputsActions.disableMidi}>Disable</button>
-        </div>
       </div>
-      <div class="flex flex-col h-full">
-        <div class="my-1 flex justify-between items-center mr-12">
-          <label class="font-bold" for="sound">Sound</label>
-          <Checkbox
-            id="sound"
-            checked={$inputs.useSound}
-            on:change={e => inputsActions.setInputValue('useSound', e.currentTarget.checked)}
-          />
-        </div>
-        <div class="flex justify-between">
-          <label class="font-bold" for="fixed-velocity">Fixed velocity</label>
-          <input
-            class="h-[20px] w-16"
-            id="fixed-velocity"
-            placeholder="0-127"
-            bind:value={fixedVelocity}
-            on:change={handleSetVelocity}
-          />
-        </div>
-      </div>
-      <div class="flex flex-col h-full">
-        <div class="my-1 flex justify-between items-center mr-12">
-          <label class="font-bold" for="keyboard">Keyboard</label>
-          <Checkbox
-            id="keyboard"
-            checked={$inputs.useKeyboard}
-            on:change={e => inputsActions.setInputValue('useKeyboard', e.currentTarget.checked)}
-          />
-        </div>
-        <div class="my-1 flex justify-between items-center mr-12">
-          <label class="font-bold" for="hotkeys">Hotkeys</label>
-          <Checkbox id="hotkeys" checked={$inputs.useHotkeys} on:change={handleSetUseHotkeys} />
-        </div>
-        <div class="my-1 flex justify-between items-center mr-12">
-          <label class="font-bold" for="auto-octave">Auto-octave</label>
-          <Checkbox
-            id="auto-octave"
-            checked={$inputs.useAutoOctave}
-            on:change={e => inputsActions.setInputValue('useAutoOctave', e.currentTarget.checked)}
-          />
-        </div>
-      </div>
-      <div class="flex flex-col h-full">
-        <div class="h-[28px]">&nbsp;</div>
-        <div class="my-[2px] flex justify-between">
-          <button
-            class="w-full btn-sm primary"
-            disabled={!$inputs.useHotkeys}
-            on:click={() => (setKeys = !setKeys)}>Set hotkeys</button
-          >
-        </div>
-        <div class="my-1 flex justify-between">
-          <label class="font-bold" for="fade-timeout">Fade timeout</label>
-          <input
-            class="h-[20px] w-16"
-            id="fade-timeout"
-            value={fadeMs}
-            on:input={handleSetFadeTimeout}
-          />
-        </div>
+      <div class="flex justify-between">
+        <label class="font-bold" for="fixed-velocity">Fixed velocity</label>
+        <input
+          class="h-[20px] w-16"
+          id="fixed-velocity"
+          placeholder="0-127"
+          bind:value={fixedVelocity}
+          on:change={handleSetVelocity}
+        />
       </div>
     </div>
-    {#if setKeys && !$hidden}
-      <h4 class="mt-4 font-bold text-lg">Hotkeys</h4>
-      <VirtualKeyboard />
-    {/if}
-  </fieldset>
-</div>
+    <div class="flex flex-col h-full">
+      <div class="my-1 flex justify-between items-center mr-12">
+        <label class="font-bold" for="keyboard">Keyboard</label>
+        <Checkbox
+          id="keyboard"
+          checked={$inputs.useKeyboard}
+          on:change={e => inputsActions.setInputValue('useKeyboard', e.currentTarget.checked)}
+        />
+      </div>
+      <div class="my-1 flex justify-between items-center mr-12">
+        <label class="font-bold" for="hotkeys">Hotkeys</label>
+        <Checkbox id="hotkeys" checked={$inputs.useHotkeys} on:change={handleSetUseHotkeys} />
+      </div>
+      <div class="my-1 flex justify-between items-center mr-12">
+        <label class="font-bold" for="auto-octave">Auto-octave</label>
+        <Checkbox
+          id="auto-octave"
+          checked={$inputs.useAutoOctave}
+          on:change={e => inputsActions.setInputValue('useAutoOctave', e.currentTarget.checked)}
+        />
+      </div>
+    </div>
+    <div class="flex flex-col h-full">
+      <div class="h-[28px]">&nbsp;</div>
+      <div class="my-[2px] flex justify-between">
+        <button
+          class="w-full btn-sm primary"
+          disabled={!$inputs.useHotkeys}
+          on:click={() => (setKeys = !setKeys)}>Set hotkeys</button
+        >
+      </div>
+      <div class="my-1 flex justify-between">
+        <label class="font-bold" for="fade-timeout">Fade timeout</label>
+        <input
+          class="h-[20px] w-16"
+          id="fade-timeout"
+          value={fadeMs}
+          on:input={handleSetFadeTimeout}
+        />
+      </div>
+    </div>
+  </div>
+  {#if setKeys && !$hidden}
+    <h4 class="mt-4 font-bold text-lg">Hotkeys</h4>
+    <VirtualKeyboard />
+  {/if}
+</fieldset>
 
 <style lang="scss">
   .collapsed {
