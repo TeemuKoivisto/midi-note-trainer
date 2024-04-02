@@ -15,7 +15,7 @@
     url: SITE_METADATA.url,
     title: SITE_METADATA.title,
     description: SITE_METADATA.description,
-    images: []
+    images: [SITE_METADATA.image]
   }}
   twitter={{
     title: SITE_METADATA.title,
@@ -29,6 +29,7 @@
     datePublished: SITE_METADATA.datePublished,
     dateModified: SITE_METADATA.dateModified,
     description: SITE_METADATA.description,
+    image: [SITE_METADATA.image.url],
     keywords: SITE_METADATA.tags,
     author: {
       '@type': 'Person',

@@ -172,7 +172,7 @@
     .scale-dropdown {
       --search-dropdown-width: 100%;
     }
-    @media (width <= 475px) {
+    @media (width <= 656px) {
       grid-template-columns: 1fr 1fr;
       .range {
         grid-column-end: span 2;
