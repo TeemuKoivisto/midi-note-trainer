@@ -65,9 +65,11 @@ export async function importLayout(
     layout: LAYOUTS['en'],
     index: 99
   }
+  // In Safari navigator languages are in form ["fi-FI"] only
+  const normalized = navigatorLanguages.map(l => l.split('-')[0])
   Object.entries(LAYOUTS).forEach(([code, layout]) => {
-    for (let i = 0; i < navigatorLanguages.length; i += 1) {
-      if (code === navigatorLanguages[i] && (!bestMatch || bestMatch.index > i)) {
+    for (let i = 0; i < normalized.length; i += 1) {
+      if (code === normalized[i] && (!bestMatch || bestMatch.index > i)) {
         bestMatch = { code, layout, index: i }
       }
     }

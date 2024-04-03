@@ -124,8 +124,8 @@
     class="flex flex-col rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
     class:collapsed={$hidden}
   >
-    <legend class="text-base">
-      <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>Scales</button>
+    <legend class="text-base flex w-fit">
+      <button class="px-1 rounded z-0 hover:bg-gray-100" on:click={toggleVisibility}>Scales</button>
     </legend>
     <div class="flex mb-2 input" class:hidden={$hidden}>
       <label class="mr-4 font-bold" for="scale-key">Key</label>

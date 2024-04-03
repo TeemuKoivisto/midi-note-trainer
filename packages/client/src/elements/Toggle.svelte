@@ -37,7 +37,7 @@
     }
   }
   input {
-    @apply h-0 w-0;
+    @apply appearance-none bg-transparent h-0 w-0;
     &:checked + .slider {
       @apply bg-blue-500;
       &:before {

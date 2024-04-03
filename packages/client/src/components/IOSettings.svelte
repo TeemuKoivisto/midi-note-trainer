@@ -83,8 +83,8 @@
   } relative flex flex-col min-w-[auto] max-w-full rounded border-2 px-4 pt-2 pb-4 my-4 text-sm`}
   class:collapsed={$hidden}
 >
-  <legend class="text-base">
-    <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
+  <legend class="text-base flex w-fit">
+    <button class="px-1 z-0 rounded hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
   </legend>
   <div
     class="absolute top-[-0.25rem] right-[0.5rem] flex items-center justify-center"
@@ -95,7 +95,7 @@
     </button>
   </div>
   <div class="body" class:hidden={$hidden}>
-    <div class="h-full flex flex-col">
+    <div class="flex flex-col">
       <label class="font-bold" for="device">Device</label>
       <input
         class="px-1 my-1 rounded w-50"
@@ -108,7 +108,7 @@
         <button class="btn-sm primary" on:click={inputsActions.disableMidi}>Disable</button>
       </div>
     </div>
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col">
       <div class="my-1 flex justify-between items-center mr-12">
         <label class="font-bold" for="sound">Sound</label>
         <Checkbox
@@ -128,7 +128,7 @@
         />
       </div>
     </div>
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col">
       <div class="my-1 flex justify-between items-center mr-12">
         <label class="font-bold" for="keyboard">Keyboard</label>
         <Checkbox
@@ -150,7 +150,7 @@
         />
       </div>
     </div>
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col">
       <div class="h-[28px]">&nbsp;</div>
       <div class="my-[2px] flex justify-between">
         <button

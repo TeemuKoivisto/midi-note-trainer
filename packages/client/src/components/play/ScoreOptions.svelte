@@ -89,8 +89,8 @@
   } flex flex-col rounded border-2 px-4 py-2 w-[224px] relative text-sm`}
   class:collapsed={$hidden}
 >
-  <legend class="text-base">
-    <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>Score</button>
+  <legend class="text-base flex w-fit">
+    <button class="px-1 z-0 rounded hover:bg-gray-100" on:click={toggleVisibility}>Score</button>
   </legend>
   <button
     class="absolute top-[-0.25rem] right-[0.5rem] flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"

@@ -44,7 +44,7 @@
     },
     {
       key: 'chords-diatonic',
-      value: 'Play Diatonic Triads'
+      value: 'Play Scale Trichords'
     }
   ]
   let selectedGame = options[4].key
@@ -134,7 +134,7 @@
 </script>
 
 <fieldset class={`${$$props.class || ''} flex flex-col rounded border-2 px-4 py-2 text-sm`}>
-  <legend class="px-1 text-base">Play</legend>
+  <legend class="px-1 text-base w-fit">Play</legend>
   <div class="body pb-2 h-full">
     <ul class="games">
       {#each options as { key, value }}

@@ -121,8 +121,8 @@
     class="flex flex-col relative rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
     class:collapsed={$hidden}
   >
-    <legend class="text-base">
-      <button class="px-1 rounded hover:bg-gray-100" on:click={toggleVisibility}>Chords</button>
+    <legend class="text-base flex w-fit">
+      <button class="px-1 z-0 rounded hover:bg-gray-100" on:click={toggleVisibility}>Chords</button>
     </legend>
     <div class="absolute top-[-0.25rem] right-[0.5rem] flex">
       <button
