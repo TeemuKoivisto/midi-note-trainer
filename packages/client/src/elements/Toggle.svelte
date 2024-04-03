@@ -19,7 +19,13 @@
 </script>
 
 <label class={`${$$props.containerClass || ''} toggle`}>
-  <input bind:this={inputEl} {...$$props} type="checkbox" on:change on:keydown={handleKeyDown} />
+  <input
+    bind:this={inputEl}
+    {...$$restProps}
+    type="checkbox"
+    on:change
+    on:keydown={handleKeyDown}
+  />
   <div class="slider"></div>
 </label>
 

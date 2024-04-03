@@ -3,14 +3,6 @@
   import { slide, fade } from 'svelte/transition'
 
   import type { IconifyIcon } from '@iconify/svelte/dist/OfflineIcon.svelte'
-  import type { HTMLInputAttributes } from 'svelte/elements'
-
-  interface $$Props extends HTMLInputAttributes {
-    containerClass?: string
-    options: readonly Option[]
-    selected: string
-    onSelect: (key: Key) => boolean
-  }
 
   type Key = string | number
   interface Option {
@@ -18,14 +10,11 @@
     value: string
     icon?: IconifyIcon
   }
-  const {
-    options,
-    selected,
-    containerClass,
-    onSelect,
-    class: htmlClass,
-    ...props
-  } = $$props as $$Props
+
+  export let options: readonly Option[],
+    containerClass: string | undefined = undefined,
+    selected: string | undefined = undefined,
+    onSelect: (key: Key) => boolean
 
   const DROPDOWN_DURATION = 400
 
@@ -86,9 +75,9 @@
 
 <div class={`search-dropdown relative width ${containerClass || ''}`} bind:this={containerEl}>
   <input
-    class={`${htmlClass || ''} open-btn text-justify text-sm rounded`}
+    class={`${$$restProps.class || ''} open-btn text-justify text-sm rounded`}
     class:open
-    {...props}
+    {...$$restProps}
     bind:value={input}
     on:focus={() => (open = true)}
     on:input={handleInput}
