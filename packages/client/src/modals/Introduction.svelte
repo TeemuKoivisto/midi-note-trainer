@@ -17,8 +17,11 @@
       originalFocusedEl = document.activeElement
     }
     closeButtonEl.focus()
+    // Lock scrolling of viewport behind the modal
+    document.querySelector('html')?.classList.add('scroll-lock')
     return () => {
       originalFocusedEl.focus()
+      document.querySelector('html')?.classList.remove('scroll-lock')
     }
   })
 
@@ -51,8 +54,8 @@
     <p>
       To get the full benefits of this app, I advise you to connect your MIDI keyboard to your
       computer. For most modern keyboards, you can do this directly with USB but with older models
-      you need an audio interface to work as an adapter. You can also use your computer keyboard but
-      it might not improve your piano playing as much.
+      you need an audio interface to serve as an adapter. You can also use your computer keyboard
+      but it might not improve your piano playing as much.
     </p>
     <h3>I/O</h3>
     <p>
@@ -64,7 +67,7 @@
       Enabling <b>Hotkeys</b> maps your keyboard to piano keyboard following similar format as in
       Ableton. <b>Auto-octave</b> automatically appends an octave as mapped in the hotkey map,
       pressing <i>Shift</i> at the same time increments it by 1. Having both enabled allows you to
-      play notes with single keypresses.
+      play notes instantly.
       <b>Fade timeout</b> is how long in milliseconds notes appear in score once played. It does not
       effect the suspend of the piano as that would require coding a more sophisticated MIDI piano engine.
     </p>
@@ -86,8 +89,15 @@
     <p>
       I went quite deep while coding this app to learn as much about music theory as possible 😵‍💫.
       This meant figuring out how to programmatically compute both the scales and chords without
-      resolving to crude heuristics. Incase you find any silly mistakes, please report to the GitHub
-      repository or send me email directly.
+      resolving to crude heuristics. Incase you find any silly mistakes, please report to the
+      <a
+        class="font-bold hover:underline"
+        href="https://github.com/TeemuKoivisto/midi-note-trainer"
+      >
+        GitHub
+      </a>
+      GitHub repository or send me
+      <a class="font-bold hover:underline" href="mailto:teemukoivisto.xyz@gmail.com">email</a> directly.
     </p>
     <p>
       The most confusing part has been perhaps how the used accidentals are decided. I suppose in
@@ -97,28 +107,41 @@
     </p>
     <p>
       You can input a <b>Key</b> and visualize the notes in every scale. I am also displaying the
-      <i>diatonic triads</i>
-      for each scale degree and their respective chords. This "diatonic triads" is rather odd subject
-      as there is not even a Wikipedia article about it and it's only briefly mentioned in
+      <i>scale degree trichords</i> which is rather odd subject that is described in
       <a
         href="https://en.wikibooks.org/wiki/Music_Theory/Complete_List_of_Chord_Patterns"
-        target="_blank">Wikibooks.</a
-      >
-      How I have come to understand it is, that for every note in the scale you pick the 2nd and 4th
-      next notes of the scale going up. This is the diatonic triad for that scale-degree. However, this
-      falls apart quickly outside the standard 7 modes as the triads might not contain any thirds or
-      fifths. Then you must manually check all the available options which might lead to finding multiple
-      valid chords.
+        target="_blank">Wikibooks</a
+      > with rather loose definitions. If you are not interested in theory, feel free to skip my meandering
+      explanations.
     </p>
     <p>
-      How I approach this is somewhat unscientific; I iterate every scale note and then map all the
-      other notes as its intervals. Then I use
-      major-minor-diminished-augmented-7th-6th-suspended-5th order to decide which triad to pick as
-      this seems to follow the convention the best covering all scales currently listed. <i
-        >However,</i
+      The principle of scale degree triad/trichord is sound with the all the standard 7 modes: for
+      every note in the scale you pick the 2nd and 4th next notes of the scale going up — that's a <a
+        href="https://en.wikipedia.org/wiki/Triad_(music)">diatonic triad</a
       >
-      in some weird cases, the best fit I find is a <code>sus</code> chord with no fifth in which case
-      I add one. Which makes the triad not diatonic so uhh... I'd love to hear opinions about this.
+      which represents either a <code>major/minor/augmented/diminished</code> chord. However,
+      outside the 7 modes this falls apart quickly as there might not be any diatonically viable
+      triads. I suppose you
+      <i>could</i>
+      just construct a triad without following diatonicy but I think that loses any nuance of the scale.
+    </p>
+    <p>
+      How I approached this is somewhat unscientific; I iterate every scale note and then map all
+      the other notes as its intervals. Then I use
+      major-minor-diminished-augmented-7th-6th-suspended-5th order to find the best suited <a
+        href="https://en.wikipedia.org/wiki/Trichord">trichord</a
+      >
+      to represent that scale degree as they seem to cover all the scales currently listed.
+    </p>
+    <p>
+      <i>However,</i>
+      this approach has some problems. For example, any 7th or 6th chord contains a major chord thus
+      would already be mapped as major — the reason they aren't is because they are missing a third.
+      And likewise those already mapped as major don't show if they can be extended diatonically further.
+      For some notes I can only find a major second or perfect fourth suggesting a <code>sus</code>
+      chord but then there's no fifth which leaves basically no options left. In those cases, I add a
+      fifth and call it a day but that makes the trichord non-diatonic so uhh... Any suggestions are
+      welcome.
     </p>
     <p>
       Clicking the notes or the triads will play them in the chosen key (or whatever is used in
