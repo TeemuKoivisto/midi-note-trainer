@@ -14,7 +14,7 @@ export const SITE_METADATA = {
   title: 'MIDI Note Trainer',
   description: 'Practise music notation, scales and chords using MIDI directly from browser.',
   image: {
-    url: 'https://midi-note-trainer.teemukoivisto.xyz/cover_image_1080.avif',
+    url: 'https://midi-note-trainer.teemukoivisto.xyz/cover_image_1080.jpg',
     width: 1080,
     height: 566,
     alt: 'Image of MIDI Note Trainer UI'
