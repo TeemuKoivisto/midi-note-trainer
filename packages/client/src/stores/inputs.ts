@@ -21,7 +21,7 @@ interface Inputs {
 export const midiGranted = persist(writable<boolean>(false), {
   key: 'midi-access'
 })
-export const midiInput = writable<Result<Input>>({ err: 'Uninitialized', code: 400 })
+export const midiInput = writable<Result<Input>>({ err: 'Disabled', code: 400 })
 export const midiRange = persist(writable<[number, number]>([60, 84]), {
   key: 'midi-range',
   storage: 'session'
@@ -66,7 +66,7 @@ export const inputsActions = {
   },
   disableMidi() {
     midiGranted.set(false)
-    midiInput.set({ err: 'Uninitialized', code: 400 })
+    midiInput.set({ err: 'Disabled', code: 400 })
   },
   setMidiRange(range: [number, number]) {
     midiRange.set(range)

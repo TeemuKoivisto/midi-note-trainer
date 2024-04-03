@@ -98,18 +98,18 @@
     <div class="flex flex-col">
       <label class="font-bold" for="device">Device</label>
       <input
-        class="px-1 my-1 rounded w-50"
+        class="pl-[2px] py-0.5 my-1 rounded w-50 bg-[#f9f9f9]"
         id="device"
         disabled
         value={'data' in $midiInput ? $midiInput.data.name : $midiInput.err}
       />
-      <div class="flex my-[auto]">
+      <div class="mt-1 flex my-[auto]">
         <button class="btn-sm primary mr-2" on:click={inputsActions.openMidi}>Prompt</button>
         <button class="btn-sm primary" on:click={inputsActions.disableMidi}>Disable</button>
       </div>
     </div>
     <div class="flex flex-col">
-      <div class="my-1 flex justify-between items-center mr-12">
+      <div class="mb-1 flex justify-between items-center mr-12">
         <label class="font-bold" for="sound">Sound</label>
         <Checkbox
           id="sound"
@@ -117,7 +117,7 @@
           on:change={e => inputsActions.setInputValue('useSound', e.currentTarget.checked)}
         />
       </div>
-      <div class="flex justify-between">
+      <div class="my-1 flex justify-between">
         <label class="font-bold" for="fixed-velocity">Fixed velocity</label>
         <input
           class="h-[20px] w-16"
@@ -129,7 +129,7 @@
       </div>
     </div>
     <div class="flex flex-col">
-      <div class="my-1 flex justify-between items-center mr-12">
+      <div class="mb-1 flex justify-between items-center mr-12">
         <label class="font-bold" for="keyboard">Keyboard</label>
         <Checkbox
           id="keyboard"
@@ -151,7 +151,7 @@
       </div>
     </div>
     <div class="flex flex-col">
-      <div class="h-[28px]">&nbsp;</div>
+      <div class="h-[24px]">&nbsp;</div>
       <div class="my-[2px] flex justify-between">
         <button
           class="w-full btn-sm primary"
@@ -185,7 +185,7 @@
     gap: 0.5rem;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: auto;
-    align-items: center;
+    align-items: start;
     @media (width <= 656px) {
       grid-template-columns: 1fr 1fr;
     }
