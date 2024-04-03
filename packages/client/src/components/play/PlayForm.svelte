@@ -174,7 +174,9 @@
     <div class="h-full flex flex-col justify-end">
       <button class="w-full btn hover:bg-gray-200" on:click={clearGame}>Reset</button>
       <button
-        class="w-full mt-2 flex items-center justify-center btn primary"
+        class="w-full mt-2 flex items-center justify-center btn"
+        class:primary={showQuit}
+        class:success={!showQuit}
         on:click={handleClickPlay}
       >
         <Icon class="mr-1" icon={showQuit ? stop : playIcon} width={20} />

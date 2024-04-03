@@ -252,7 +252,7 @@
 
 <section class={`${$$props.class || ''} relative overflow-hidden`}>
   <div id="output" class="grid justify-start content-center" bind:this={outputEl}></div>
-  <div class="absolute left-0 top-[23rem]">
+  <div class="absolute left-4 top-[23rem]">
     <div class="flex flex-col">
       <ReplayButton />
       <QuitButton />

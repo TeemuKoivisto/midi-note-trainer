@@ -130,7 +130,7 @@
       <div class="scale-dropdown my-1 w-full">
         <SearchDropdown
           id="score-scale"
-          class="p-1 pl-[2px]"
+          class="p-1 pl-[2px] w-full"
           selected={selectedScale}
           options={scaleOptions}
           onSelect={handleSelectScale}

@@ -11,6 +11,7 @@
   let keyboardError = ''
   let keyboardInput = ''
   let inputtedNote: ScaleNote | undefined
+  const pressedKeys = new Set()
 
   const dispatch = createEventDispatcher<{
     'guessed-key': string
@@ -28,6 +29,7 @@
       keyboardInput = parsed.data
     } else if (
       parsed &&
+      !pressedKeys.has(e.code) &&
       (parsed.e === 'guessed-key' || parsed.e === 'guessed-chord' || parsed.e === 'guessed-note')
     ) {
       keyboardInput = ''
@@ -42,10 +44,15 @@
       // When inputting hotkeys, using Space scrolls the viewport downwards
       e.preventDefault()
     }
+    pressedKeys.add(e.code)
+  }
+
+  function handleKeyUp(e: KeyboardEvent) {
+    pressedKeys.delete(e.code)
   }
 </script>
 
-<svelte:window on:keydown={handleKeyDown} />
+<svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} />
 
 <div class={`${$$props.class || ''}`}>
   {#if $inputs.useKeyboard && keyboardError}

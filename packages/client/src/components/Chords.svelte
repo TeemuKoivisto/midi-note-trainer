@@ -166,7 +166,7 @@
         <label class="font-bold" for="chords-scale">Scale</label>
         <SearchDropdown
           id="chords-scale"
-          class="bg-gray-100 pl-1"
+          class="bg-gray-100 pl-1 w-full"
           containerClass="input"
           selected={selectedScale}
           options={scaleOptions}
