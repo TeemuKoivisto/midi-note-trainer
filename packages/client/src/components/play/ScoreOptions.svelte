@@ -100,7 +100,7 @@
     <Icon icon={restore} width={16} />
   </button>
   <div class="options" class:hidden={$hidden}>
-    <div class="range flex flex-col h-full">
+    <div class="range flex flex-col">
       <label class="font-bold" for="range_min">Range</label>
       <div class="my-1 flex w-full">
         <input
@@ -125,7 +125,7 @@
         {/if}
       </div>
     </div>
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col">
       <label class="font-bold" for="score-scale">Scale</label>
       <div class="scale-dropdown my-1 w-full">
         <SearchDropdown
@@ -144,7 +144,7 @@
         </div>
       {/if}
     </div>
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col">
       <label class="font-bold" for="key">Key</label>
       <div class="my-1 flex">
         <input class="h-[28px]" id="key" bind:value={selectedKey} on:input={handleKeyChange} />

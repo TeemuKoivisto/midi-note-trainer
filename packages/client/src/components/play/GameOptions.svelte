@@ -3,40 +3,38 @@
 
   import { gameActions, gameOptions } from '$stores/game'
 
-  let count = $gameOptions.count || ''
-  let waitSeconds = $gameOptions.waitSeconds || ''
+  let count = $gameOptions.count.toString()
+  let waitSeconds = $gameOptions.waitSeconds.toString()
 
   gameOptions.subscribe(v => {
-    count = v.count || ''
-    waitSeconds = v.waitSeconds || ''
+    count = v.count.toString()
+    waitSeconds = v.waitSeconds.toString()
   })
 
-  function handleCountChanged({
-    currentTarget: { value }
-  }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+  function handleCountChanged(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
     let int
     try {
-      int = parseInt(value)
-      if (int <= 0) {
+      int = parseInt(e.currentTarget.value)
+      if (int <= 0 || isNaN(int)) {
         int = 1
       }
       gameActions.setOptionValue('count', int)
+      e.currentTarget.blur()
     } catch (err) {
-      count = $gameOptions.count
+      count = $gameOptions.count.toString()
     }
   }
-  function handleWaitChanged({
-    currentTarget: { value }
-  }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-    let int
+  function handleWaitChanged(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    let n
     try {
-      int = parseInt(value)
-      if (int < 0) {
-        int = 0
+      n = parseFloat(e.currentTarget.value)
+      if (n < 0 || isNaN(n)) {
+        n = 0
       }
-      gameActions.setOptionValue('waitSeconds', int)
+      gameActions.setOptionValue('waitSeconds', n)
+      e.currentTarget.blur()
     } catch (err) {
-      waitSeconds = $gameOptions.waitSeconds
+      waitSeconds = $gameOptions.waitSeconds.toString()
     }
   }
 </script>
@@ -49,7 +47,7 @@
       id="guess-count"
       type="number"
       bind:value={count}
-      on:input={handleCountChanged}
+      on:change={handleCountChanged}
     />
   </li>
   <li class="flex items-center justify-between items-center mr-6">
@@ -75,7 +73,7 @@
       id="wait-ms"
       type="number"
       bind:value={waitSeconds}
-      on:input={handleWaitChanged}
+      on:change={handleWaitChanged}
     />
   </li>
 </ul>

@@ -26,7 +26,7 @@ const DEFAULT_OPTIONS = {
   count: 10,
   duplicates: true,
   autoplay: true,
-  waitSeconds: 3
+  waitSeconds: 1.5
 }
 
 export const guessState = writable<GuessState>('waiting')
