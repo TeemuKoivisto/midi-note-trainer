@@ -135,16 +135,16 @@
     </p>
     <p>
       <i>However,</i>
-      this approach has some problems. For example, any 7th or 6th chord contains a major chord thus
-      would already be mapped as major — the reason they aren't is because they are missing a third.
-      And likewise those already mapped as major don't show if they can be extended diatonically further.
-      For some notes I can only find a major second or perfect fourth suggesting a <code>sus</code>
+      this approach has some problems. For example, 7th or 6th chord contains a major chord thus would
+      already be mapped as major — the reason they aren't is because they are missing a third. And likewise
+      those already mapped as major don't indicate if they can be extended diatonically further. For
+      some notes I only found a major second or perfect fourth suggesting a <code>sus</code>
       chord but then there's no fifth which leaves basically no options left. In those cases, I add a
       fifth and call it a day but that makes the trichord non-diatonic so uhh... Any suggestions are
       welcome.
     </p>
     <p>
-      Clicking the notes or the triads will play them in the chosen key (or whatever is used in
+      Clicking the notes or the trichords will play them in the chosen key (or whatever is used in
       score). I am adding the 8th interval for every scale since it'll sound awfully incomplete
       otherwise.
     </p>
@@ -191,9 +191,9 @@
     </p>
     <p>
       One big missing feature from the games are the inversions of chords as well missing notes.
-      This is after all how majority of chords are played. But since it's rather big haven't had
-      time to implement it. Also playing the given scale-degree diatonic triad would be another. As
-      well as recognizing the played scales. Oh well. Pull requests are welcome!
+      This is after all how majority of chords are played. Maybe one day I'll have time for it. Also
+      playing the given scale degree trichord would be another. As well as recognizing the played
+      scales. Oh well. Pull requests are welcome!
     </p>
     <p>
       As an end note, I hope this app will be helpful in learning music notation! I found multiple
