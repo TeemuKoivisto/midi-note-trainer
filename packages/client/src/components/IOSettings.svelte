@@ -117,7 +117,15 @@
           on:change={e => inputsActions.setInputValue('useSound', e.currentTarget.checked)}
         />
       </div>
-      <div class="my-1 flex justify-between">
+      <div class="my-1 flex justify-between items-center mr-12">
+        <label class="font-bold" for="virtual-piano">Virtual piano</label>
+        <Checkbox
+          id="virtual-piano"
+          checked={$inputs.useVirtualPiano}
+          on:change={e => inputsActions.setInputValue('useVirtualPiano', e.currentTarget.checked)}
+        />
+      </div>
+      <div class="mt-1 flex justify-between">
         <label class="font-bold" for="fixed-velocity">Fixed velocity</label>
         <input
           class="h-[20px] w-16"

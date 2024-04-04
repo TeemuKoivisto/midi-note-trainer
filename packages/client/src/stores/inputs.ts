@@ -16,6 +16,7 @@ interface Inputs {
   useKeyboard: boolean
   useHotkeys: boolean
   useAutoOctave: boolean
+  useVirtualPiano: boolean
 }
 
 export const midiGranted = persist(writable<boolean>(false), {
@@ -39,7 +40,8 @@ export const inputs = persist(
     useSound: true,
     useKeyboard: true,
     useHotkeys: true,
-    useAutoOctave: true
+    useAutoOctave: true,
+    useVirtualPiano: false
   }),
   {
     key: 'inputs'

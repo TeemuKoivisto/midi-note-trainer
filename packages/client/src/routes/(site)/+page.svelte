@@ -11,9 +11,10 @@
   import PlayForm from '$components/play/PlayForm.svelte'
   import Scales from '$components/scales/Scales.svelte'
   import ScoreOptions from '$components/play/ScoreOptions.svelte'
+  import VirtualPiano from '$components/virtual-piano/VirtualPiano.svelte'
 
   import { currentGame, gameActions, gameOptions, guessState } from '$stores/game'
-  import { inputs, inputsActions, midiGranted, midiInput, piano } from '$stores/inputs'
+  import { inputs, inputsActions, midiGranted, midiInput, midiRange, piano } from '$stores/inputs'
   import { modalActions } from '$stores/modal'
   import { scoreActions } from '$stores/score'
   import { reset } from '$stores/persist'
@@ -137,6 +138,10 @@
       handlePlayedNote(found.semitones + 12 + e.detail.octave * 12, 80)
     }
   }
+  function handlePressedVirtualKey(e: CustomEvent<number>) {
+    const semitones = $midiRange[0] + e.detail
+    handlePlayedNote(semitones, 80)
+  }
   function handleReset() {
     reset()
     window.location.reload()
@@ -189,6 +194,15 @@
   />
   <GameControls game={$currentGame} />
 </section>
+
+{#if $inputs.useVirtualPiano}
+  <section class="relative h-[208px]">
+    <VirtualPiano
+      class="absolute left-0 bottom-0 p-2 pb-4 w-[100vw]"
+      on:pressed={handlePressedVirtualKey}
+    />
+  </section>
+{/if}
 
 <style lang="scss">
   .play {
