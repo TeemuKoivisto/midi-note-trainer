@@ -35,7 +35,7 @@
 <svelte:window on:keydown={handleKeyDown} />
 
 <div bind:this={closeButtonEl} tabindex="-1" class="flex flex-col relative focus:outline-none">
-  <div class="absolute op-0 right-0">
+  <div class="absolute -top-2 -right-2">
     <button
       class="flex items-center text-sm rounded-full px-2 py-2 hover:bg-gray-200"
       on:click={hideModal}
@@ -43,7 +43,7 @@
       <Icon icon={x} width={24} />
     </button>
   </div>
-  <h2 class="pl-1.5 mt-4 mb-2 text-5xl font-semibold text-black">Introduction</h2>
+  <h2 class="pl-1.5 mt-4 mb-2 text-4xl sm:text-5xl font-semibold text-black">Introduction</h2>
   <article class="w-full p-2 pb-4">
     <p>Greetings! 👋</p>
     <p>
@@ -216,14 +216,8 @@
     p {
       @apply my-4 pl-[2px];
     }
-    & > h1 {
-      @apply font-sans mt-10 mb-6 text-5xl tracking-tight;
-    }
-    & > h2 {
-      @apply font-sans mt-10 mb-6 text-4xl tracking-tight;
-    }
     & > h3 {
-      @apply font-sans mt-10 mb-6 text-3xl tracking-tight pl-[1px];
+      @apply font-sans mt-10 mb-6 text-2xl sm:text-3xl tracking-tight pl-[1px];
     }
     pre {
       // padding-left: 6px;
