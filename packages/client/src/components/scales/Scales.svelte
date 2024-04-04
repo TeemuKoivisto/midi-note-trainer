@@ -1,22 +1,22 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { createChord, createScale, createTriadChords, scalesFromJSON } from '@/chords-and-scales'
+  import { createChord, createScale, createTrichords, scalesFromJSON } from '@/chords-and-scales'
 
   import Intervals from './Intervals.svelte'
-  import Triads from './Triads.svelte'
+  import Trichords from './Trichords.svelte'
 
   import { scoreActions, scaleData } from '$stores/score'
   import { inputs, midiRangeNotes, piano } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
-  import type { MidiNote, RawScale, Scale, ScaleNote, ScaleTriad } from '@/chords-and-scales'
+  import type { MidiNote, RawScale, Scale, ScaleNote, ScaleTrichord } from '@/chords-and-scales'
 
   interface ListItem {
     key: string
     raw: RawScale
     scale: Scale | undefined
-    triads: ScaleTriad[]
-    triadChords: string[]
+    trichords: ScaleTrichord[]
+    chords: string[]
   }
 
   const scales = scalesFromJSON()
@@ -24,8 +24,8 @@
     key: scl.names[0],
     raw: scl,
     scale: undefined,
-    triads: scl.triads,
-    triadChords: []
+    trichords: scl.trichords,
+    chords: []
   }))
   $: leftList = scalesList.filter((_, i) => i < scalesList.length / 2)
   $: rightList = scalesList.filter((_, i) => i >= scalesList.length / 2)
@@ -48,14 +48,14 @@
       const data = shownKey && 'data' in created ? created.data : undefined
       let chords: string[] = []
       if (data) {
-        chords = d.triads.map(
+        chords = d.trichords.map(
           (t, idx) =>
             `${data.scaleNotes[idx].note}${!t.suffix.includes('°') && t.minor ? 'm' : ''}${
               t.suffix
             }`
         )
       }
-      return { ...d, scale: data, triadChords: chords }
+      return { ...d, scale: data, chords }
     })
   }
   function playNote(index: number, notes: MidiNote[][], timeout: number) {
@@ -94,7 +94,7 @@
     }
     playNote(0, notes, 500)
   }
-  function handleTriadsClicked(item: ListItem) {
+  function handleTrichordsClicked(item: ListItem) {
     clearTimeout(playingNotesTimeout)
     const { intervals } = item.raw
     let notes: MidiNote[][]
@@ -107,7 +107,7 @@
       scale = $scaleData
     }
     const startingNote = $midiRangeNotes[0].midi + scale.scaleNotes[0].semitones
-    const chords = createTriadChords(item.triads)
+    const chords = createTrichords(item.trichords)
     notes = chords.map((c, idx) =>
       createChord(startingNote + scale.intervals[idx].semitones, scale, c.intervals)
     )
@@ -146,10 +146,10 @@
               intervals={scale.raw.intervals}
               on:click={() => handleIntervalsClicked(scale)}
             />
-            <Triads
-              triads={scale.triads}
-              chords={scale.triadChords}
-              on:click={() => handleTriadsClicked(scale)}
+            <Trichords
+              trichords={scale.trichords}
+              chords={scale.chords}
+              on:click={() => handleTrichordsClicked(scale)}
             />
           </li>
         {/each}
@@ -163,10 +163,10 @@
               intervals={scale.raw.intervals}
               on:click={() => handleIntervalsClicked(scale)}
             />
-            <Triads
-              triads={scale.triads}
-              chords={scale.triadChords}
-              on:click={() => handleTriadsClicked(scale)}
+            <Trichords
+              trichords={scale.trichords}
+              chords={scale.chords}
+              on:click={() => handleTrichordsClicked(scale)}
             />
           </li>
         {/each}

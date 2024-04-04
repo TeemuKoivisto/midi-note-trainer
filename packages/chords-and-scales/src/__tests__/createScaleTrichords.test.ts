@@ -1,8 +1,8 @@
-import { createScaleTriads } from '../createScaleTriads'
+import { createScaleTrichords } from '../createScaleTrichords'
 import { findScale } from '../scales'
 
-describe('createScaleTriads', () => {
-  it("should generate modes' all diatonic triads correctly", () => {
+describe('createScaleTrichords', () => {
+  it("should generate modes' all scale trichords correctly", () => {
     const correct = {
       ionian: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'],
       dorian: ['i', 'ii', 'III', 'IV', 'v', 'vi°', 'VII'],
@@ -15,9 +15,9 @@ describe('createScaleTriads', () => {
     const obj = Object.keys(correct).reduce(
       (acc, scale) => {
         const raw = findScale(scale)
-        const triads = raw && createScaleTriads(raw.intervals)
-        if (triads) {
-          acc[scale] = triads.map(t => t.roman + t.suffix)
+        const trichords = raw && createScaleTrichords(raw.intervals)
+        if (trichords) {
+          acc[scale] = trichords.map(t => t.roman + t.suffix)
         }
         return acc
       },

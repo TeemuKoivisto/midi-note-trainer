@@ -1,4 +1,4 @@
-import { createScaleTriads } from './createScaleTriads'
+import { createScaleTrichords } from './createScaleTrichords'
 import { intervalFromInteger } from './intervals'
 
 import scales from './scales.json'
@@ -16,11 +16,11 @@ export function scalesFromJSON(): RawScale[] {
   return scales.map(val => {
     const names = val[0] as string[]
     const intervals = (val[1] as number[]).map(intervalFromInteger)
-    const triads = createScaleTriads(intervals)
+    const trichords = createScaleTrichords(intervals)
     return {
       names,
       intervals,
-      triads
+      trichords
     }
   })
 }

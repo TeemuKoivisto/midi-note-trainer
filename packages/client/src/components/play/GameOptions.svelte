@@ -3,8 +3,8 @@
 
   import { gameActions, gameOptions } from '$stores/game'
 
-  let count = $gameOptions.count.toString()
-  let waitSeconds = $gameOptions.waitSeconds.toString()
+  let count = ($gameOptions.count || 0).toString()
+  let waitSeconds = ($gameOptions.waitSeconds || 0).toString()
 
   gameOptions.subscribe(v => {
     count = v.count.toString()
@@ -72,6 +72,7 @@
       class="h-[20px] w-10"
       id="wait-ms"
       type="number"
+      step="0.5"
       bind:value={waitSeconds}
       on:change={handleWaitChanged}
     />

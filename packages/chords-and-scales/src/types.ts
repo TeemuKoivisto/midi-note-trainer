@@ -34,13 +34,13 @@ export type Interval = Pitch & {
 export interface RawScale {
   names: string[]
   intervals: Interval[]
-  triads: ScaleTriad[]
+  trichords: ScaleTrichord[]
 }
 export type ScaleNote = Pitch & {
   note: string
 }
 export type MidiNote = ScaleNote & { midi: number }
-export interface ScaleTriad {
+export interface ScaleTrichord {
   degree: number
   roman: string
   suffix: string
@@ -57,7 +57,7 @@ export interface Scale {
   majorSignature: string // using standard diatonic accidentals
   intervals: Interval[]
   scaleNotes: ScaleNote[]
-  triads: ScaleTriad[]
+  trichords: ScaleTrichord[]
   notesMap: Map<number, ScaleNote> // all 12 semitones of octave
 }
 export type Ok<T> = {

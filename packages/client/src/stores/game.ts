@@ -1,5 +1,5 @@
 import { derived, get, writable } from 'svelte/store'
-import { chordsFromJSON, createScale, createTriadChords } from '@/chords-and-scales'
+import { chordsFromJSON, createScale, createTrichords } from '@/chords-and-scales'
 
 import { inputsActions, midiRange, piano } from './inputs'
 import { persist } from './persist'
@@ -71,7 +71,7 @@ export const gameActions = {
     } else if (type === 'chords-play' || type === 'chords-write') {
       game = new GuessChords(type, baseOpts, options)
     } else if (type === 'chords-diatonic') {
-      const chords = createTriadChords(scale.triads).map((c, idx) => ({
+      const chords = createTrichords(scale.trichords).map((c, idx) => ({
         ...c,
         allowed: new Set([scale.scaleNotes[idx].semitones])
       }))

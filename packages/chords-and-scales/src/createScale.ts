@@ -126,7 +126,7 @@ export function createScale(rawKey: string, scaleName: string): Result<Scale> {
       names: scale.names,
       ...getKeySignature(scaleNotes),
       intervals: scale.intervals.map(int => ({ ...int })),
-      triads: scale.triads.map(t => ({ ...t })),
+      trichords: scale.trichords.map(t => ({ ...t })),
       scaleNotes,
       notesMap
     }

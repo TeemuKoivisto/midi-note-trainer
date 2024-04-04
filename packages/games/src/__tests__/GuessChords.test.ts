@@ -1,4 +1,4 @@
-import { chordsFromJSON, createScaleUnsafe, createTriadChords } from '@/chords-and-scales'
+import { chordsFromJSON, createScaleUnsafe, createTrichords } from '@/chords-and-scales'
 
 import { GuessChords } from '../GuessChords'
 
@@ -88,7 +88,7 @@ describe('GuessChords', () => {
     expect(game.data.length).toEqual(245)
     expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(600.0)
   })
-  it('should generate C major triads correctly', () => {
+  it('should generate C major trichords correctly', () => {
     const scale = createScaleUnsafe('C', 'major')
     const count = 10
     const game = new GuessChords(
@@ -100,7 +100,7 @@ describe('GuessChords', () => {
         count
       },
       {
-        chords: createTriadChords(scale.triads).map((c, idx) => ({
+        chords: createTrichords(scale.trichords).map((c, idx) => ({
           ...c,
           allowed: new Set([scale.scaleNotes[idx].semitones])
         }))
@@ -131,7 +131,7 @@ describe('GuessChords', () => {
     ])
     expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(600.0)
   })
-  it('should generate G Locrian Natural-2 triads correctly', () => {
+  it('should generate G Locrian Natural-2 trichords correctly', () => {
     const scale = createScaleUnsafe('C#', 'Locrian Natural-2')
     const count = 10
     const game = new GuessChords(
@@ -143,7 +143,7 @@ describe('GuessChords', () => {
         count
       },
       {
-        chords: createTriadChords(scale.triads).map((c, idx) => ({
+        chords: createTrichords(scale.trichords).map((c, idx) => ({
           ...c,
           allowed: new Set([scale.scaleNotes[idx].semitones])
         }))
@@ -173,7 +173,7 @@ describe('GuessChords', () => {
     ])
     expect(game.times.reduce((acc, t) => acc + t, 0)).toBeLessThan(600.0)
   })
-  it('should generate Db Diminished Half-Whole triads correctly', () => {
+  it('should generate Db Diminished Half-Whole trichords correctly', () => {
     const scale = createScaleUnsafe('Db', 'Diminished Half-Whole')
     const count = 10
     const game = new GuessChords(
@@ -185,7 +185,7 @@ describe('GuessChords', () => {
         count
       },
       {
-        chords: createTriadChords(scale.triads).map((c, idx) => ({
+        chords: createTrichords(scale.trichords).map((c, idx) => ({
           ...c,
           allowed: new Set([scale.scaleNotes[idx].semitones])
         }))
