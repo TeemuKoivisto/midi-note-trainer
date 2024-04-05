@@ -165,9 +165,7 @@
 >
   MIDI Note Trainer
   <div class="flex items-center justify-center">
-    <button class="rounded p-2 hover:bg-gray-200" on:click={handleReset}>
-      <Icon icon={restore} width={24} />
-    </button>
+    <IconButton class="p-2" icon={restore} size={24} on:click={handleReset} />
   </div>
 </h1>
 

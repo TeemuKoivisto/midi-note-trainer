@@ -14,8 +14,8 @@
 </script>
 
 <button
-  class={`${$$props.class || ''} flex items-center justify-center rounded p-1 hover:bg-gray-200`}
   {...$$restProps}
+  class={`${$$props.class || ''} flex items-center justify-center rounded p-1 hover:bg-gray-200`}
   on:click
 >
   <Icon {icon} width={size} />
