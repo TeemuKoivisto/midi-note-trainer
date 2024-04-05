@@ -170,7 +170,7 @@
         </ul>
       {/if}
     </div>
-    <GameOptions class="game-options" />
+    <GameOptions />
     <div class="h-full flex flex-col justify-end">
       <button class="w-full btn hover:bg-gray-200" on:click={clearGame}>Reset</button>
       <button
@@ -208,9 +208,6 @@
     }
     @media (width <= 475px) {
       grid-template-columns: 1fr 1fr;
-      :global(.game-options) {
-        @apply px-2;
-      }
     }
   }
   .buttons {

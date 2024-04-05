@@ -252,7 +252,7 @@
 
 <section class={`${$$props.class || ''} relative overflow-hidden`}>
   <div id="output" class="grid justify-start content-center" bind:this={outputEl}></div>
-  <div class="absolute left-4 top-[23rem]">
+  <div class="absolute left-4 buttons">
     <div class="flex flex-col">
       <ReplayButton />
       <QuitButton />
@@ -265,10 +265,16 @@
     transform-origin: left;
     transform: scale(1.75);
   }
+  .buttons {
+    top: 23rem;
+  }
   @media (width <= 508px) {
     #output {
       height: 420px;
       transform: scale(1.5);
+    }
+    .buttons {
+      top: 20rem;
     }
   }
   @media (width <= 438px) {
@@ -276,12 +282,18 @@
       height: 320px;
       transform: scale(1.15);
     }
+    .buttons {
+      top: 15rem;
+    }
   }
   @media (width <= 344px) {
     #output {
       height: 300px;
       overflow: hidden;
       transform: scale(1.05);
+    }
+    .buttons {
+      top: 14rem;
     }
   }
   :global(.hidden) {
