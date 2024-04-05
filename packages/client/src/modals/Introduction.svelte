@@ -82,7 +82,7 @@
     <p>
       Incase it doesn't, tick the <b>Custom</b> option and map the keys manually. Press the row you
       want to set and then press the keys from your keyboard. If you want to skip a key, press
-      <code>Space</code>. You can also use two rows for the keys which enables quite impressive 4
+      <code>Space</code>. You can also use two rows for the keys which enables quite impressive 3
       octave range. Clicking a reload button resets the settings to the default values.
     </p>
     <h3>Scales</h3>
@@ -115,8 +115,8 @@
       explanations.
     </p>
     <p>
-      The principle of scale degree triad/trichord is sound with the all the standard 7 modes: for
-      every note in the scale you pick the 2nd and 4th next notes of the scale going up — that's a <a
+      The principle of scale degree triad/trichord is sound with all the standard 7 modes: for every
+      note in the scale you pick the 2nd and 4th next notes of the scale going up — that's a <a
         href="https://en.wikipedia.org/wiki/Triad_(music)">diatonic triad</a
       >
       which represents either a <code>major/minor/augmented/diminished</code> chord. However,
@@ -185,19 +185,19 @@
       useless for those who have no chance of acquiring perfect pitch but it's fun to try once in a while.
     </p>
     <p>
-      In the base settings, I am by default enabling <b>Duplicates</b> and <b>Autoplay</b>
-      as that seemed the most optimal for me. I'm using true-random sampling so <b>Duplicates</b>
+      In the base settings, I'm by default enabling <b>Duplicates</b> and <b>Autoplay</b>
+      as that seemed the most optimal for me. I am using true-random sampling so <b>Duplicates</b>
       might produce rather awkward sequential notes/chords which I might get around fixing at some point.
     </p>
     <p>
-      One big missing feature from the games are the inversions of chords as well missing notes.
-      This is after all how majority of chords are played. Maybe one day I'll have time for it. Also
+      One big missing feature from the games are the inversions of chords as well as missing notes.
+      This is after all how majority of chords are played. Maybe one day I'll find time for it. Also
       playing the given scale degree trichord would be another. As well as recognizing the played
       scales. Oh well. Pull requests are welcome!
     </p>
     <p>
-      As an end note, I hope this app will be helpful in learning music notation! I found multiple
-      existing apps but I thought they were a little too complicated and slow to use. I can
+      As an end note, I hope this app will be helpful in teaching you music notation! I found
+      multiple existing apps but I thought they were a little too complicated and slow to use. I can
       confidently say that I've noticed a significant improvement myself playing these exercises and
       now as I revisit my old sheets it doesn't require pulling (as much) hair to decipher them 😄.
     </p>

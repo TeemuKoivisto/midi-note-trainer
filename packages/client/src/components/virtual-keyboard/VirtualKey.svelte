@@ -83,7 +83,7 @@
     {#if value.note}
       <div class="absolute top-0 left-0">{value.note.note}{octave}</div>
     {/if}
-    <div>
+    <div class="text">
       {formatValue(value.key)}
     </div>
   </button>
@@ -91,6 +91,9 @@
 
 <style lang="scss">
   li {
+    @media (width <= 656px) {
+      font-size: 12px;
+    }
     &.captured {
       button {
         border: 2px solid #015fcc;
@@ -117,6 +120,9 @@
         bottom: -40px;
         height: 3px;
         @apply bg-[#ececf1];
+      }
+      .text {
+        z-index: 1;
       }
     }
     &.size-1 {
