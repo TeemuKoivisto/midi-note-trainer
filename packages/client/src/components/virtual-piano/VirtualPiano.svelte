@@ -28,7 +28,7 @@
       keyCount={keys.length}
       isFirst={idx === 0}
       isLast={idx === keys.length - 1}
-      width={windowWidth}
+      {windowWidth}
       on:pressed
     />
   {/each}
@@ -41,7 +41,7 @@
       keyCount={keys.length}
       isFirst={idx === 0}
       isLast={idx === keys.length - 1}
-      width={windowWidth}
+      {windowWidth}
       on:pressed
     />
   {/each}

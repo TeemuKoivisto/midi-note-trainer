@@ -6,7 +6,7 @@
     keyCount: number,
     isFirst: boolean,
     isLast: boolean,
-    width: number
+    windowWidth: number
 
   let keyHeld = false
   let timeout: ReturnType<typeof setTimeout> | undefined
@@ -14,8 +14,8 @@
   const dispatch = createEventDispatcher<{
     pressed: number
   }>()
-  const WHITE_WIDTH = (width - 12) / 7
-  const BLACK_WIDTH = ((width - 12) / 7) * 0.75
+  const WHITE_WIDTH = (windowWidth - 12) / 7
+  const BLACK_WIDTH = ((windowWidth - 12) / 7) * 0.75
 
   $: isWhite = key.isWhite
   $: whiteCount = key.whiteKeyCount - 1
@@ -65,11 +65,7 @@
   li {
     button {
       @apply relative shadow outline-none rounded-b top-0;
-      // -webkit-tap-highlight-color: rgba(0,0,0,0);
-      &::selection {
-        color: none;
-        background: none;
-      }
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
       &.is-first {
         @apply rounded-tl;
       }
@@ -110,7 +106,6 @@
         box-shadow:
           inset 0 -1px 2px rgba(255, 255, 255, 0.4),
           0 2px 3px rgba(0, 0, 0, 0.4);
-        top: 1px;
         &.is-held {
           border-bottom-width: 3px;
           background: linear-gradient(-20deg, #444, #222, #444);
