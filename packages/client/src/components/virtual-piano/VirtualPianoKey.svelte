@@ -2,8 +2,10 @@
   import { createEventDispatcher } from 'svelte'
 
   export let key: { idx: number; isWhite: boolean; whiteKeyCount: number },
+    keyCount: number,
     isFirst: boolean,
-    isLast: boolean
+    isLast: boolean,
+    width: number
 
   let keyHeld = false
   let timeout: ReturnType<typeof setTimeout> | undefined
@@ -11,12 +13,14 @@
   const dispatch = createEventDispatcher<{
     pressed: number
   }>()
-  const WHITE_WIDTH = 48
-  const BLACK_WIDTH = 36
+  const WHITE_WIDTH = (width - 12) / 7
+  const BLACK_WIDTH = ((width - 12) / 7) * 0.75
 
   $: isWhite = key.isWhite
   $: whiteCount = key.whiteKeyCount - 1
-  $: left = isWhite ? 6 + whiteCount * WHITE_WIDTH : 6 + (whiteCount + 1) * WHITE_WIDTH - 18
+  $: left = isWhite
+    ? 6 + whiteCount * WHITE_WIDTH
+    : 6 + (whiteCount + 1) * WHITE_WIDTH - BLACK_WIDTH / 2
   $: height = isWhite ? 'calc(100% - 6px)' : 'calc(66% - 6px)'
   $: width = isWhite ? WHITE_WIDTH : BLACK_WIDTH
   $: zIndex = isWhite ? 0 : 1
