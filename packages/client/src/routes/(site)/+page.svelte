@@ -196,7 +196,7 @@
 </section>
 
 {#if $inputs.useVirtualPiano}
-  <section class="relative h-[240px] w-full">
+  <section class="relative h-[160px] w-full">
     <VirtualPiano class="absolute left-0 bottom-0 h-full" on:pressed={handlePressedVirtualKey} />
   </section>
 {/if}
