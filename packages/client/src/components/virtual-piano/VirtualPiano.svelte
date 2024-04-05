@@ -3,7 +3,9 @@
 
   const WHITE_INDECES = [0, 2, 4, 5, 7, 9, 11]
 
-  $: windowWidth = window.innerWidth
+  let innerWidth = window.innerWidth
+  $: pianoWidth = Math.min(innerWidth, 780)
+
   let whiteKeyCount = 0
   const keys = Array.from(new Array(12)).map((_, idx) => {
     const isWhite = WHITE_INDECES.includes(idx % 12)
@@ -18,7 +20,7 @@
   })
 </script>
 
-<svelte:window bind:innerWidth={windowWidth} />
+<svelte:window bind:innerWidth />
 
 <ul class={`${$$props.class || ''} flex flex-row relative overflow-x-scroll`}>
   {#each keys as key, idx}
@@ -28,7 +30,7 @@
       keyCount={keys.length}
       isFirst={idx === 0}
       isLast={idx === keys.length - 1}
-      {windowWidth}
+      {pianoWidth}
       on:pressed
     />
   {/each}
@@ -41,7 +43,7 @@
       keyCount={keys.length}
       isFirst={idx === 0}
       isLast={idx === keys.length - 1}
-      {windowWidth}
+      {pianoWidth}
       on:pressed
     />
   {/each}

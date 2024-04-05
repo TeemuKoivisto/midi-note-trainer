@@ -6,7 +6,7 @@
     keyCount: number,
     isFirst: boolean,
     isLast: boolean,
-    windowWidth: number
+    pianoWidth: number
 
   let keyHeld = false
   let timeout: ReturnType<typeof setTimeout> | undefined
@@ -14,18 +14,18 @@
   const dispatch = createEventDispatcher<{
     pressed: number
   }>()
-  const WHITE_WIDTH = (windowWidth - 12) / 7
-  const BLACK_WIDTH = ((windowWidth - 12) / 7) * 0.75
 
   $: isWhite = key.isWhite
   $: whiteCount = key.whiteKeyCount - 1
+  $: whiteWidth = (pianoWidth - 12) / 7
+  $: blackWidth = ((pianoWidth - 12) / 7) * 0.75
   $: left = isWhite
-    ? 6 + whiteCount * WHITE_WIDTH
-    : 6 + (whiteCount + 1) * WHITE_WIDTH - BLACK_WIDTH / 2
+    ? 6 + whiteCount * whiteWidth
+    : 6 + (whiteCount + 1) * whiteWidth - blackWidth / 2
   $: height = isWhite
     ? `calc(100% - ${keyHeld ? '10px' : '6px'})`
     : `calc(66% - ${keyHeld ? '8px' : '4px'})`
-  $: width = isWhite ? WHITE_WIDTH : BLACK_WIDTH
+  $: width = isWhite ? whiteWidth : blackWidth
   $: zIndex = isWhite ? 0 : 1
 
   function handlePointerDown(e: any) {
@@ -64,8 +64,8 @@
 <style lang="scss">
   li {
     button {
-      @apply relative shadow outline-none rounded-b top-0;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      @apply relative shadow outline-none rounded-b top-0;
       &.is-first {
         @apply rounded-tl;
       }
