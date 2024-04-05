@@ -293,7 +293,7 @@
       transform: scale(1.05);
     }
     .buttons {
-      top: 14rem;
+      top: 13.75rem;
     }
   }
   :global(.hidden) {

@@ -73,6 +73,9 @@ export const inputsActions = {
   setMidiRange(range: [number, number]) {
     midiRange.set(range)
   },
+  shiftMidiRange(up: boolean) {
+    midiRange.update(v => [up ? v[0] + 12 : v[0] - 12, up ? v[1] + 12 : v[1] - 12])
+  },
   setInputValue<K extends keyof Inputs>(key: K, val: Inputs[K]) {
     inputs.update(v => ({ ...v, [key]: val }))
     if (key === 'useSound' && !val) {
