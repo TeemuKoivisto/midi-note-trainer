@@ -24,6 +24,20 @@
   {#each keys as key, idx}
     <VirtualKey
       {key}
+      row={1}
+      keyCount={keys.length}
+      isFirst={idx === 0}
+      isLast={idx === keys.length - 1}
+      width={windowWidth}
+      on:pressed
+    />
+  {/each}
+</ul>
+<ul class={`${$$props.class || ''} flex flex-row relative overflow-x-scroll`}>
+  {#each keys as key, idx}
+    <VirtualKey
+      {key}
+      row={0}
       keyCount={keys.length}
       isFirst={idx === 0}
       isLast={idx === keys.length - 1}

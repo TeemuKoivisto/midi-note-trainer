@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte'
 
   export let key: { idx: number; isWhite: boolean; whiteKeyCount: number },
+    row: number,
     keyCount: number,
     isFirst: boolean,
     isLast: boolean,
@@ -29,7 +30,7 @@
 
   function handlePointerDown(e: any) {
     if (!keyHeld && !timeout) {
-      dispatch('pressed', key.idx)
+      dispatch('pressed', key.idx + row * 12)
       keyHeld = true
     }
   }
@@ -64,6 +65,11 @@
   li {
     button {
       @apply relative shadow outline-none rounded-b top-0;
+      // -webkit-tap-highlight-color: rgba(0,0,0,0);
+      &::selection {
+        color: none;
+        background: none;
+      }
       &.is-first {
         @apply rounded-tl;
       }
