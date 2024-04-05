@@ -24,8 +24,6 @@
   import { getRootNote } from '@/chords-and-scales'
   import { keyboardActions } from '$stores/keyboard'
 
-  let status = 'Finding device...'
-
   let timeout: ReturnType<typeof setTimeout> | undefined
   let chordTimeout: ReturnType<typeof setTimeout> | undefined
 

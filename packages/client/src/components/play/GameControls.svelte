@@ -49,7 +49,7 @@
         Guessed:
       </span>
       <span>{getNoteStr(game.latestGuess.guessed || 0)}</span>
-      <span> </span>
+      <span></span>
     </div>
   {:else if game instanceof GuessKeys && ($guessState === 'correct' || $guessState === 'wrong')}
     <div class="guessed">
@@ -67,7 +67,7 @@
     </div>
   {:else if game instanceof GuessChords && ($guessState === 'correct' || $guessState === 'wrong')}
     <div class="guessed">
-      <span> Target:</span>
+      <span>Target:</span>
       <span>{game.latestGuess.target?.chord}</span>
       <span>{game.latestGuess.target?.notes.map(n => n.note).join(' ')}</span>
       <span class="relative">
@@ -120,6 +120,5 @@
     gap: 0.25rem;
     grid-template-columns: 1fr 1fr 2fr;
     grid-template-rows: auto;
-    @apply w-[28rem];
   }
 </style>

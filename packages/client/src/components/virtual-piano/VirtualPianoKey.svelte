@@ -55,8 +55,8 @@
     class:is-held={keyHeld}
     on:mousedown={handlePointerDown}
     on:mouseup={handlePointerUp}
-    on:touchstart={handlePointerDown}
-    on:touchend={handlePointerUp}
+    on:touchstart|passive={handlePointerDown}
+    on:touchend|passive={handlePointerUp}
   >
   </button>
 </li>
