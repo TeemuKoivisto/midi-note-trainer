@@ -33,7 +33,7 @@
 
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessChords, GuessKeys, GuessNotes } from '@/games'
-  import { getNoteAbsolute, getRootNote } from '@/chords-and-scales'
+  import { getNote, getNoteAbsolute, getRootNote } from '@/chords-and-scales'
   import { keyboardActions } from '$stores/keyboard'
 
   let timeout: ReturnType<typeof setTimeout> | undefined
@@ -217,7 +217,7 @@
         <div class="pl-4">{getNoteAbsolute($midiRangeNotes[0])}</div>
       </div>
       <div class="flex items-center">
-        <div class="pr-4">{getNoteAbsolute($midiRangeNotes[1])}</div>
+        <div class="pr-4">{getNoteAbsolute(getNote($midiRange[0] + 23))}</div>
         <IconButton icon={arrowUp} size={32} on:click={() => inputsActions.shiftMidiRange(true)} />
       </div>
     </div>
