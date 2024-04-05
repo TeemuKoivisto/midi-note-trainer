@@ -5,7 +5,7 @@
 
   $: windowWidth = window.innerWidth
   let whiteKeyCount = 0
-  const keys = Array.from(new Array(24)).map((_, idx) => {
+  const keys = Array.from(new Array(12)).map((_, idx) => {
     const isWhite = WHITE_INDECES.includes(idx % 12)
     if (isWhite) {
       whiteKeyCount += 1
