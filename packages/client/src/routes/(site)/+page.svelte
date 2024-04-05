@@ -14,7 +14,15 @@
   import VirtualPiano from '$components/virtual-piano/VirtualPiano.svelte'
 
   import { currentGame, gameActions, gameOptions, guessState } from '$stores/game'
-  import { inputs, inputsActions, midiGranted, midiInput, midiRange, piano } from '$stores/inputs'
+  import {
+    inputs,
+    inputsActions,
+    midiGranted,
+    midiInput,
+    midiRange,
+    piano,
+    useVirtualPiano
+  } from '$stores/inputs'
   import { modalActions } from '$stores/modal'
   import { scoreActions } from '$stores/score'
   import { reset } from '$stores/persist'
@@ -193,9 +201,9 @@
   <GameControls game={$currentGame} />
 </section>
 
-{#if $inputs.useVirtualPiano}
-  <section class="relative h-[160px] w-full">
-    <VirtualPiano class="absolute left-0 bottom-0 h-full" on:pressed={handlePressedVirtualKey} />
+{#if $useVirtualPiano}
+  <section>
+    <VirtualPiano class="h-[160px]" on:pressed={handlePressedVirtualKey} />
   </section>
 {/if}
 

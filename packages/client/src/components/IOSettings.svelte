@@ -7,7 +7,7 @@
   import Checkbox from '$elements/Checkbox.svelte'
   import VirtualKeyboard from '$components/virtual-keyboard/VirtualKeyboard.svelte'
 
-  import { inputsActions, inputs, midiInput } from '$stores/inputs'
+  import { inputsActions, inputs, midiInput, useVirtualPiano } from '$stores/inputs'
   import { reset, persist } from '$stores/persist'
   import { keyboardActions } from '$stores/keyboard'
 
@@ -121,8 +121,8 @@
         <label class="font-bold" for="virtual-piano">Virtual piano</label>
         <Checkbox
           id="virtual-piano"
-          checked={$inputs.useVirtualPiano}
-          on:change={e => inputsActions.setInputValue('useVirtualPiano', e.currentTarget.checked)}
+          checked={$useVirtualPiano}
+          on:change={e => inputsActions.setUseVirtualPiano(e.currentTarget.checked)}
         />
       </div>
       <div class="mt-1 flex justify-between">

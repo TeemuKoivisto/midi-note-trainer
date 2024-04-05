@@ -1,6 +1,7 @@
 import { derived, get, writable } from 'svelte/store'
 import { WebMidi } from 'webmidi'
 
+import { platform } from './media'
 import { persist } from './persist'
 import { getNote, type MidiNote } from '@/chords-and-scales'
 import { fetchSounds, Piano } from '@/midi-piano'
@@ -16,7 +17,6 @@ interface Inputs {
   useKeyboard: boolean
   useHotkeys: boolean
   useAutoOctave: boolean
-  useVirtualPiano: boolean
 }
 
 export const midiGranted = persist(writable<boolean>(false), {
@@ -33,6 +33,7 @@ export const midiRangeNotes = derived(
 )
 export const audioContext = writable<AudioContext | undefined>(undefined)
 export const piano = writable<Piano | undefined>(undefined)
+export const useVirtualPiano = writable<boolean>(get(platform) === 'mobile')
 export const inputs = persist(
   writable<Inputs>({
     fixedVelocity: undefined,
@@ -40,8 +41,7 @@ export const inputs = persist(
     useSound: true,
     useKeyboard: true,
     useHotkeys: true,
-    useAutoOctave: true,
-    useVirtualPiano: false
+    useAutoOctave: true
   }),
   {
     key: 'inputs'
@@ -80,6 +80,9 @@ export const inputsActions = {
     } else if (key === 'useSound' && !get(piano)) {
       this.initAudio()
     }
+  },
+  setUseVirtualPiano(val: boolean) {
+    useVirtualPiano.set(val)
   },
   async initAudio() {
     let ctx = get(audioContext)
