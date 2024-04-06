@@ -20,7 +20,7 @@ export const NOTES = [
 
 export function getOctave(note: { midi: number; flats: number; sharps: number }) {
   const norm = note.midi + note.flats - note.sharps
-  return norm === 12 ? 1 : Math.floor((norm - 12) / 12)
+  return norm === 12 ? 0 : Math.floor((norm - 12) / 12)
 }
 
 export function getNoteAbsolute(note: {

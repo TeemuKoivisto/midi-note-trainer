@@ -69,7 +69,10 @@ describe('getOctave', () => {
     expect(getOctave({ midi: 59, flats: 1, sharps: 0 })).toEqual(4)
 
     expect(getOctave({ midi: 71, flats: 1, sharps: 0 })).toEqual(5)
-    expect(getOctave({ midi: 12, flats: 0, sharps: 0 })).toEqual(1)
-    expect(getOctave({ midi: 11, flats: 1, sharps: 0 })).toEqual(1)
+    // C0
+    expect(getOctave({ midi: 12, flats: 0, sharps: 0 })).toEqual(0)
+    // Cb0
+    expect(getOctave({ midi: 11, flats: 1, sharps: 0 })).toEqual(0)
+    expect(getOctave({ midi: 0, flats: 0, sharps: 0 })).toEqual(-1)
   })
 })

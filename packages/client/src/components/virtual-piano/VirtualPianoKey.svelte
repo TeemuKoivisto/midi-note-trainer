@@ -12,7 +12,7 @@
   let timeout: ReturnType<typeof setTimeout> | undefined
 
   const dispatch = createEventDispatcher<{
-    pressed: number
+    pressed: { idx: number; row: number }
   }>()
 
   $: isWhite = key.isWhite
@@ -30,7 +30,7 @@
 
   function handlePointerDown(e: any) {
     if (!keyHeld && !timeout) {
-      dispatch('pressed', key.idx + row * 12)
+      dispatch('pressed', { idx: key.idx, row })
       keyHeld = true
     }
   }

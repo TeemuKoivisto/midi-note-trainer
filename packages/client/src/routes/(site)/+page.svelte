@@ -1,12 +1,10 @@
 <script lang="ts">
-  import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
   import restore from '@iconify-icons/mdi/restore'
-  import arrowDown from '@iconify-icons/mdi/arrow-down'
-  import arrowUp from '@iconify-icons/mdi/arrow-up'
   import { onMount } from 'svelte'
 
   import Chords from '$components/Chords.svelte'
   import GameControls from '$components/play/GameControls.svelte'
+  import IconButton from '$elements/IconButton.svelte'
   import IOSettings from '$components/IOSettings.svelte'
   import KeyboardInput from '$components/KeyboardInput.svelte'
   import NavBar from '$components/NavBar.svelte'
@@ -14,7 +12,6 @@
   import Scales from '$components/scales/Scales.svelte'
   import ScoreOptions from '$components/play/ScoreOptions.svelte'
   import VirtualPiano from '$components/virtual-piano/VirtualPiano.svelte'
-  import IconButton from '$elements/IconButton.svelte'
 
   import { currentGame, gameActions, gameOptions, guessState } from '$stores/game'
   import {
@@ -22,8 +19,6 @@
     inputsActions,
     midiGranted,
     midiInput,
-    midiRange,
-    midiRangeNotes,
     piano,
     useVirtualPiano
   } from '$stores/inputs'
@@ -33,7 +28,7 @@
 
   import type { NoteMessageEvent } from 'webmidi'
   import { GuessChords, GuessKeys, GuessNotes } from '@/games'
-  import { getNote, getNoteAbsolute, getRootNote } from '@/chords-and-scales'
+  import { getRootNote } from '@/chords-and-scales'
   import { keyboardActions } from '$stores/keyboard'
 
   let timeout: ReturnType<typeof setTimeout> | undefined
@@ -148,10 +143,6 @@
       handlePlayedNote(found.semitones + 12 + e.detail.octave * 12, 80)
     }
   }
-  function handlePressedVirtualKey(e: CustomEvent<number>) {
-    const semitones = $midiRange[0] + e.detail
-    handlePlayedNote(semitones, 80)
-  }
   function handleReset() {
     reset()
     window.location.reload()
@@ -204,23 +195,7 @@
 </section>
 
 {#if $useVirtualPiano}
-  <section>
-    <div class="flex justify-between px-1.5 pb-1">
-      <div class="flex items-center">
-        <IconButton
-          icon={arrowDown}
-          size={32}
-          on:click={() => inputsActions.shiftMidiRange(false)}
-        />
-        <div class="pl-4">{getNoteAbsolute($midiRangeNotes[0])}</div>
-      </div>
-      <div class="flex items-center">
-        <div class="pr-4">{getNoteAbsolute(getNote($midiRange[0] + 23))}</div>
-        <IconButton icon={arrowUp} size={32} on:click={() => inputsActions.shiftMidiRange(true)} />
-      </div>
-    </div>
-    <VirtualPiano class="h-[160px]" on:pressed={handlePressedVirtualKey} />
-  </section>
+  <VirtualPiano height={160} on:pressed={e => handlePlayedNote(e.detail, 80)} />
 {/if}
 
 <style lang="scss">
