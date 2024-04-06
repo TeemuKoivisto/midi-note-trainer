@@ -20,6 +20,7 @@
     midiGranted,
     midiInput,
     piano,
+    sf,
     useVirtualPiano
   } from '$stores/inputs'
   import { modalActions } from '$stores/modal'
@@ -81,7 +82,9 @@
       scoreActions.pushPlayed(value)
     }
     if ($piano) {
-      $piano.noteOn(value, $inputs.fixedVelocity ?? velocity)
+      // $piano.noteOn(value, $inputs.fixedVelocity ?? velocity)
+      // @ts-ignore
+      $sf?.play(value, undefined, { gain: 4 })
     }
   }
   function gameUpdate() {

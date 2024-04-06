@@ -1,5 +1,6 @@
 import { derived, get, writable } from 'svelte/store'
 import { WebMidi } from 'webmidi'
+import Soundfont from 'soundfont-player'
 
 import { platform } from './media'
 import { persist } from './persist'
@@ -36,6 +37,7 @@ export const midiRangeNotes = derived(
 )
 export const audioContext = writable<AudioContext | undefined>(undefined)
 export const piano = writable<Piano | undefined>(undefined)
+export const sf = writable<Soundfont.Player | undefined>(undefined)
 export const useVirtualPiano = writable<boolean>(get(platform) === 'mobile')
 export const inputs = persist(
   writable<Inputs>({
@@ -101,6 +103,8 @@ export const inputsActions = {
       const sounds = await fetchSounds(`${GH_BASE_URL}audio`, ctx)
       p.load(sounds)
       piano.set(p)
+      const gpiano = await Soundfont.instrument(ctx, 'acoustic_grand_piano')
+      sf.set(gpiano)
     }
   }
 }

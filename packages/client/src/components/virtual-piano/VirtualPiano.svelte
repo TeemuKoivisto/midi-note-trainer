@@ -15,7 +15,7 @@
 
   const WHITE_INDECES = [0, 2, 4, 5, 7, 9, 11]
   const C0_MIDI = 12
-  const C8_MIDI = 108
+  const C7_MIDI = 96
 
   let innerWidth = window.innerWidth
   $: pianoWidth = Math.min(innerWidth, 780)
@@ -50,7 +50,7 @@
   }
 
   function shiftRange(up: boolean) {
-    bottomNoteMidi.update(v => (up ? Math.min(v + 12, C8_MIDI) : Math.max(v - 12, C0_MIDI)))
+    bottomNoteMidi.update(v => (up ? Math.min(v + 12, C7_MIDI) : Math.max(v - 12, C0_MIDI)))
   }
 
   function handleKeyPressed(e: CustomEvent<{ idx: number; row: number }>) {
