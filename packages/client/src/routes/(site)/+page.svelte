@@ -81,7 +81,7 @@
       scoreActions.pushPlayed(value)
     }
     if ($piano) {
-      inputsActions.play(value, velocity)
+      inputsActions.play(value, $inputs.fixedVelocity ?? velocity)
     }
   }
   function gameUpdate() {

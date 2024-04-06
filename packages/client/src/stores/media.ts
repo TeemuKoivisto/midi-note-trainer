@@ -44,13 +44,10 @@ export const breakpoint = readable('l', set => {
   }
 })
 
-export const platform = derived(breakpoint, $breakpoint => {
-  if ($breakpoint == 'xs' || $breakpoint == 's') {
-    return 'mobile'
-  } else {
-    return 'desktop'
-  }
-})
+export const isTabletOrPhone = derived(
+  breakpoint,
+  b => (b === 'xs' || b === 's' || b === 'm') && navigator.maxTouchPoints > 0
+)
 
 export const orientation = readable('landscape', set => {
   const orientations = [

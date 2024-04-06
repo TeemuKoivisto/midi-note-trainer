@@ -2,10 +2,9 @@ import { derived, get, writable } from 'svelte/store'
 import { WebMidi } from 'webmidi'
 import { SplendidGrandPiano } from 'smplr'
 
-import { platform } from './media'
+import { isTabletOrPhone } from './media'
 import { persist } from './persist'
 import { getNote, type MidiNote } from '@/chords-and-scales'
-import { GH_BASE_URL } from '$config'
 
 import type { Input } from 'webmidi'
 import type { Result } from '@/types'
@@ -36,7 +35,7 @@ export const midiRangeNotes = derived(
 )
 export const audioContext = writable<AudioContext | undefined>(undefined)
 export const piano = writable<SplendidGrandPiano | undefined>(undefined)
-export const useVirtualPiano = writable<boolean>(get(platform) === 'mobile')
+export const useVirtualPiano = writable<boolean>(get(isTabletOrPhone))
 export const inputs = persist(
   writable<Inputs>({
     fixedVelocity: undefined,
@@ -92,7 +91,9 @@ export const inputsActions = {
   },
   play(value: number | number[], velocity?: number) {
     const p = get(piano)
+    console.log('velocity ', velocity)
     const v = velocity ?? get(inputs).fixedVelocity
+    console.log(v)
     if (p && Array.isArray(value)) {
       value.forEach(midi => {
         p.start({ note: midi, velocity: v })
