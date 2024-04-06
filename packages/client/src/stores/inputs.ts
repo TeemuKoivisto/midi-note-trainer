@@ -19,6 +19,9 @@ interface Inputs {
   useAutoOctave: boolean
 }
 
+const A0_MIDI = 21
+const C8_MIDI = 108
+
 export const midiGranted = persist(writable<boolean>(false), {
   key: 'midi-access'
 })
@@ -71,7 +74,7 @@ export const inputsActions = {
     midiInput.set({ err: 'Disabled', code: 400 })
   },
   setMidiRange(range: [number, number]) {
-    midiRange.set(range)
+    midiRange.set([Math.max(range[0], A0_MIDI), Math.min(range[1], C8_MIDI)])
   },
   shiftMidiRange(up: boolean) {
     midiRange.update(v => [up ? v[0] + 12 : v[0] - 12, up ? v[1] + 12 : v[1] - 12])
