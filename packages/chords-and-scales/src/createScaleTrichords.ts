@@ -68,7 +68,7 @@ export function createTrichords(trichords: ScaleTrichord[]): Chord[] {
 
 export function getTrichord(degree: number, semitones: Set<number>) {
   let major = semitones.has(4) && semitones.has(7)
-  let minor = semitones.has(3) && semitones.has(7)
+  let minor = !major && semitones.has(3) && semitones.has(7)
   const num = toRomanNumeral(degree)
   let suffix = ''
   if (major || minor) {

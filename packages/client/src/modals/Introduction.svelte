@@ -64,6 +64,11 @@
       The default velocity without MIDI keyboard is 80.
     </p>
     <p>
+      Under <b>Virtual piano</b> you can toggle the crude virtual piano incase you are using a tablet
+      or phone. It's not that sophisticated and I'd advice you to use a laptop keyboard if possible for
+      better ergonomics.
+    </p>
+    <p>
       Enabling <b>Hotkeys</b> maps your keyboard to piano keyboard following similar format as in
       Ableton. <b>Auto-octave</b> automatically appends an octave as mapped in the hotkey map,
       pressing <i>Shift</i> at the same time increments it by 1. Having both enabled allows you to
@@ -96,8 +101,7 @@
       >
         GitHub
       </a>
-      GitHub repository or send me
-      <a class="font-bold hover:underline" href="mailto:teemukoivisto.xyz@gmail.com">email</a> directly.
+      GitHub repository or send me email directly (see About).
     </p>
     <p>
       The most confusing part has been perhaps how the used accidentals are decided. I suppose in

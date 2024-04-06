@@ -91,9 +91,7 @@ export const inputsActions = {
   },
   play(value: number | number[], velocity?: number) {
     const p = get(piano)
-    console.log('velocity ', velocity)
     const v = velocity ?? get(inputs).fixedVelocity
-    console.log(v)
     if (p && Array.isArray(value)) {
       value.forEach(midi => {
         p.start({ note: midi, velocity: v })
@@ -102,16 +100,14 @@ export const inputsActions = {
       p.start({ note: value, velocity: v })
     }
   },
-  async initAudio() {
+  initAudio() {
     let ctx = get(audioContext)
     if (!ctx) {
       ctx = new AudioContext()
       audioContext.set(ctx)
     }
     if (!get(piano)) {
-      const p = new SplendidGrandPiano(ctx)
-      // gpiano.output.addEffect("reverb", new Reverb(context), 0.2);
-      piano.set(p)
+      piano.set(new SplendidGrandPiano(ctx))
     }
   }
 }

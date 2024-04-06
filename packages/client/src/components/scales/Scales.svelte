@@ -1,6 +1,12 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
-  import { createChord, createScale, createTrichords, scalesFromJSON } from '@/chords-and-scales'
+  import {
+    createChord,
+    createScale,
+    createScaleUnsafe,
+    createTrichords,
+    scalesFromJSON
+  } from '@/chords-and-scales'
 
   import Intervals from './Intervals.svelte'
   import Trichords from './Trichords.svelte'
@@ -23,7 +29,7 @@
   let scalesList: ListItem[] = scales.map(scl => ({
     key: scl.names[0],
     raw: scl,
-    scale: undefined,
+    scale: createScaleUnsafe($scaleData.key, scl.names[0]),
     trichords: scl.trichords,
     chords: []
   }))
