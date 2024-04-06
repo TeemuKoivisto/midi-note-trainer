@@ -3,7 +3,7 @@
   import volume from '@iconify-icons/mdi/volume-high'
 
   import { currentGame, guessState } from '$stores/game'
-  import { piano } from '$stores/inputs'
+  import { inputsActions } from '$stores/inputs'
   import { GuessChords, GuessNotes } from '@/games'
 
   $: shown = $currentGame instanceof GuessChords || $currentGame instanceof GuessNotes
@@ -11,13 +11,19 @@
   function replay() {
     const game = $currentGame
     if (game instanceof GuessChords && $guessState === 'waiting') {
-      $piano?.playChord(game.current.notes.map(n => n.midi))
+      inputsActions.play(
+        game.current.notes.map(n => n.midi),
+        80
+      )
     } else if (game instanceof GuessChords) {
-      $piano?.playChord((game.latestGuess.target?.notes || []).map(n => n.midi))
+      inputsActions.play(
+        (game.latestGuess.target?.notes || []).map(n => n.midi),
+        80
+      )
     } else if (game instanceof GuessNotes && $guessState === 'waiting') {
-      $piano?.noteOn(game.current)
+      inputsActions.play(game.current, 80)
     } else if (game instanceof GuessNotes) {
-      $piano?.noteOn(game.latestGuess.target || 0)
+      inputsActions.play(game.latestGuess.target || 0, 80)
     }
   }
 </script>

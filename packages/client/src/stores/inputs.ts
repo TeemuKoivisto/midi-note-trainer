@@ -1,11 +1,10 @@
 import { derived, get, writable } from 'svelte/store'
 import { WebMidi } from 'webmidi'
-import Soundfont from 'soundfont-player'
+import { SplendidGrandPiano } from 'smplr'
 
 import { platform } from './media'
 import { persist } from './persist'
 import { getNote, type MidiNote } from '@/chords-and-scales'
-import { fetchSounds, Piano } from '@/midi-piano'
 import { GH_BASE_URL } from '$config'
 
 import type { Input } from 'webmidi'
@@ -36,8 +35,7 @@ export const midiRangeNotes = derived(
   r => [getNote(r[0]), getNote(r[1])] as [MidiNote, MidiNote]
 )
 export const audioContext = writable<AudioContext | undefined>(undefined)
-export const piano = writable<Piano | undefined>(undefined)
-export const sf = writable<Soundfont.Player | undefined>(undefined)
+export const piano = writable<SplendidGrandPiano | undefined>(undefined)
 export const useVirtualPiano = writable<boolean>(get(platform) === 'mobile')
 export const inputs = persist(
   writable<Inputs>({
@@ -92,6 +90,17 @@ export const inputsActions = {
   setUseVirtualPiano(val: boolean) {
     useVirtualPiano.set(val)
   },
+  play(value: number | number[], velocity?: number) {
+    const p = get(piano)
+    const v = velocity ?? get(inputs).fixedVelocity
+    if (p && Array.isArray(value)) {
+      value.forEach(midi => {
+        p.start({ note: midi, velocity: v })
+      })
+    } else if (p && typeof value === 'number') {
+      p.start({ note: value, velocity: v })
+    }
+  },
   async initAudio() {
     let ctx = get(audioContext)
     if (!ctx) {
@@ -99,12 +108,9 @@ export const inputsActions = {
       audioContext.set(ctx)
     }
     if (!get(piano)) {
-      const p = new Piano(ctx)
-      const sounds = await fetchSounds(`${GH_BASE_URL}audio`, ctx)
-      p.load(sounds)
+      const p = new SplendidGrandPiano(ctx)
+      // gpiano.output.addEffect("reverb", new Reverb(context), 0.2);
       piano.set(p)
-      const gpiano = await Soundfont.instrument(ctx, 'acoustic_grand_piano')
-      sf.set(gpiano)
     }
   }
 }

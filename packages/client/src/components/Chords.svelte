@@ -21,7 +21,7 @@
   } from '@/chords-and-scales'
 
   import { gameActions, selectedChords, type SelectedChord } from '$stores/game'
-  import { inputs, midiRangeNotes, piano } from '$stores/inputs'
+  import { inputsActions, midiRangeNotes } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
   $: chords = $selectedChords
@@ -109,10 +109,7 @@
     }
     const startingNote = $midiRangeNotes[0].midi + (scaleNote?.semitones || 0)
     const notes = createChord(startingNote, scale.data, chord.intervals)
-    $piano?.playChord(
-      notes.map(m => m.midi),
-      $inputs.fixedVelocity
-    )
+    inputsActions.play(notes.map(n => n.midi))
   }
 </script>
 

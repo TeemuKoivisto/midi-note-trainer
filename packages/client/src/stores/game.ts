@@ -59,12 +59,12 @@ export const gameActions = {
     if (type === 'notes') {
       game = new GuessNotes(type, baseOpts)
       scoreActions.setTarget([scoreActions.getNote(game.current)])
-      get(piano)?.noteOn(game.current)
+      inputsActions.play(game.current, 80)
     } else if (type === 'pitches') {
       game = new GuessNotes(type, baseOpts)
       scoreActions.setTarget()
       inputsActions.setInputValue('useSound', true)
-      get(piano)?.noteOn(game.current)
+      inputsActions.play(game.current, 80)
     } else if (type === 'keys-major' || type == 'keys-minor') {
       game = new GuessKeys(type, baseOpts)
       keyAndScale = [game.current, type === 'keys-major' ? 'major' : 'minor']
@@ -82,7 +82,10 @@ export const gameActions = {
       throw Error('Unknown game type: ' + type)
     }
     if (typeof game.current !== 'number' && typeof game.current !== 'string') {
-      get(piano)?.playChord(game.current.notes.map(n => n.midi))
+      inputsActions.play(
+        game.current.notes.map(n => n.midi),
+        80
+      )
       scoreActions.setTarget(game.current.notes)
     }
     scoreActions.setKeyAndScale(keyAndScale[0], keyAndScale[1])
@@ -111,13 +114,13 @@ export const gameActions = {
         scoreActions.setTarget()
       }
       scoreActions.clearPlayed()
-      get(piano)?.noteOn(game.current)
+      inputsActions.play(game.current, 80)
       gameActions.updateState('waiting')
       game.startTime()
     } else if (game instanceof GuessChords) {
       scoreActions.setTarget(game.current.notes)
       scoreActions.clearPlayed()
-      get(piano)?.playChord(game?.current.notes.map(n => n.midi))
+      inputsActions.play(game?.current.notes.map(n => n.midi), 80)
       guessState.set('waiting')
       game.startTime()
     } else if (game instanceof GuessKeys) {

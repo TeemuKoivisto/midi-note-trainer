@@ -6,7 +6,7 @@
   import Trichords from './Trichords.svelte'
 
   import { scoreActions, scaleData } from '$stores/score'
-  import { inputs, midiRangeNotes, piano } from '$stores/inputs'
+  import { inputsActions, midiRangeNotes } from '$stores/inputs'
   import { persist } from '$stores/persist'
 
   import type { MidiNote, RawScale, Scale, ScaleNote, ScaleTrichord } from '@/chords-and-scales'
@@ -62,10 +62,7 @@
     if (index < notes.length) {
       const midi = notes[index++]
       scoreActions.setPlayed(midi)
-      $piano?.playChord(
-        midi.map(m => m.midi),
-        $inputs.fixedVelocity
-      )
+      inputsActions.play(midi.map(m => m.midi))
       playingNotesTimeout = setTimeout(() => playNote(index, notes, timeout), timeout)
     } else {
       scoreActions.setPlayed([])
