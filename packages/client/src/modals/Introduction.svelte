@@ -53,9 +53,9 @@
     </p>
     <p>
       To get the full benefits of this app, I advise you to connect your MIDI keyboard to your
-      computer. For most modern keyboards, you can do this directly with USB but with older models
-      you need an audio interface to serve as an adapter. You can also use your computer keyboard
-      but it might not improve your piano playing as much.
+      computer or phone. For most modern keyboards, you can do this directly with USB but with older
+      models you need an audio interface to serve as an adapter. You can also use a virtual piano or
+      computer keyboard but it might not improve your piano playing as much.
     </p>
     <h3>I/O</h3>
     <p>
@@ -65,16 +65,16 @@
     </p>
     <p>
       Under <b>Virtual piano</b> you can toggle the crude virtual piano incase you are using a tablet
-      or phone. It's not that sophisticated and I'd advice you to use a laptop keyboard if possible for
-      better ergonomics.
+      or phone. It's not that sophisticated and I'd advice you to use at least laptop keyboard if possible
+      for better ergonomics.
     </p>
     <p>
       Enabling <b>Hotkeys</b> maps your keyboard to piano keyboard following similar format as in
       Ableton. <b>Auto-octave</b> automatically appends an octave as mapped in the hotkey map,
       pressing <i>Shift</i> at the same time increments it by 1. Having both enabled allows you to
       play notes instantly.
-      <b>Fade timeout</b> is how long in milliseconds notes appear in score once played. It does not
-      effect the suspend of the piano as that would require coding a more sophisticated MIDI piano engine.
+      <b>Fade timeout</b> is how long in milliseconds notes appear in score once played but it does not
+      effect the suspend of the piano.
     </p>
     <p>
       With <b>Set Hotkeys</b> you can visualize and customize the mapping. I explored keyboard
@@ -161,9 +161,9 @@
     </p>
     <h3>Score</h3>
     <p>
-      You can here set the played range of the keyboard notes and what's used in the games. I have
-      only used C as the start/end note so there might be bugs lurking there. The scale and key
-      determines the notation of the notes as well as the key signature.
+      You can here set the played range of the keyboard notes and what's used in the games. The
+      arrow buttons shift the start or end of the range by 1 octave. The scale and key determines
+      the notation of the notes as well as the key signature.
     </p>
     <p>
       The topic of the key signature (the added accidentals next to the clef) is rather ambiguous

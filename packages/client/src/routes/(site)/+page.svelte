@@ -185,7 +185,6 @@
 
 <section class="mb-8 ml-16 flex flex-col">
   <KeyboardInput
-    class="min-h-32"
     debounced={!!timeout}
     on:guessed-chord={handleGuessedChord}
     on:guessed-key={handleGuessedKey}
