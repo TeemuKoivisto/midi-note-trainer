@@ -8,6 +8,9 @@
     isLast: boolean,
     pianoWidth: number
 
+  type Mouse = MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
+  type Touch = TouchEvent & { currentTarget: EventTarget & HTMLButtonElement }
+
   let keyHeld = false
   let timeout: ReturnType<typeof setTimeout> | undefined
 
@@ -28,13 +31,13 @@
   $: width = isWhite ? whiteWidth : blackWidth
   $: zIndex = isWhite ? 0 : 1
 
-  function handlePointerDown(e: any) {
+  function handlePointerDown(_e: Mouse | Touch) {
     if (!keyHeld && !timeout) {
       dispatch('pressed', { idx: key.idx, row })
       keyHeld = true
     }
   }
-  function handlePointerUp(e: any) {
+  function handlePointerUp(_e: Mouse | Touch) {
     keyHeld = false
     timeout = setTimeout(() => {
       timeout = undefined
@@ -55,6 +58,7 @@
     class:is-held={keyHeld}
     on:mousedown={handlePointerDown}
     on:mouseup={handlePointerUp}
+    on:mouseleave={handlePointerUp}
     on:touchstart|passive={handlePointerDown}
     on:touchend|passive={handlePointerUp}
   >

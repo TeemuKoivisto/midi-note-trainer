@@ -17,7 +17,7 @@
   const C0_MIDI = 12
   const C7_MIDI = 96
 
-  let innerWidth = window.innerWidth
+  let innerWidth = typeof window !== 'undefined' ? window.innerWidth : 500
   $: pianoWidth = Math.min(innerWidth, 780)
 
   const bottomNoteMidi = writable(findClosestC($midiRange[0]))
