@@ -20,7 +20,7 @@
   interface ListItem {
     key: string
     raw: RawScale
-    scale: Scale | undefined
+    scale: Scale
     trichords: ScaleTrichord[]
     chords: string[]
   }
@@ -51,17 +51,19 @@
     shownKey = `${value.charAt(0).toUpperCase()}${value.charAt(1).toLowerCase()}`
     scalesList = scalesList.map(d => {
       const created = createScale(shownKey, d.key)
-      const data = shownKey && 'data' in created ? created.data : undefined
+      let scl = shownKey && 'data' in created ? created.data : undefined
       let chords: string[] = []
-      if (data) {
+      if (scl) {
         chords = d.trichords.map(
           (t, idx) =>
-            `${data.scaleNotes[idx].note}${!t.suffix.includes('°') && t.minor ? 'm' : ''}${
+            `${scl!.scaleNotes[idx].note}${!t.suffix.includes('°') && t.minor ? 'm' : ''}${
               t.suffix
             }`
         )
+      } else {
+        scl = createScaleUnsafe($scaleData.key, d.key)
       }
-      return { ...d, scale: data, chords }
+      return { ...d, scale: scl, chords }
     })
   }
   function playNote(index: number, notes: MidiNote[][], timeout: number) {

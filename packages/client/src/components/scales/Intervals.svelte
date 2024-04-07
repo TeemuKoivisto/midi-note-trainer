@@ -1,20 +1,21 @@
 <script lang="ts">
   import type { Interval, Scale } from '@/chords-and-scales'
 
-  export let scale: Scale | undefined, intervals: Interval[]
+  export let scale: Scale, intervals: Interval[]
 </script>
 
-<div class={`${$$props.class || ''} `} title={intervals.map(i => i.interval).join('-')}>
-  <button class="intervals" on:click>
-    {#if scale}
+<div class={`${$$props.class || ''} `}>
+  <button class="flex flex-wrap justify-between w-full" on:click>
+    <div class="intervals text-left">
       {#each scale.scaleNotes || [] as scaleNote}
         <span>{scaleNote.note}</span>
       {/each}
-    {:else}
+    </div>
+    <div class="intervals text-right">
       {#each intervals as interval}
         <span>{interval.interval}</span>
       {/each}
-    {/if}
+    </div>
   </button>
 </div>
 

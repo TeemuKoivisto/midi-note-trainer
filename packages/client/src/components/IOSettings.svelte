@@ -55,6 +55,10 @@
       keyboardActions.cancelCapture()
     }
   }
+  function handleToggleSetHotkeys() {
+    setKeys = !setKeys
+    keyboardActions.cancelCapture()
+  }
   function handleSetFadeTimeout(
     e: Event & {
       currentTarget: EventTarget & HTMLInputElement
@@ -164,7 +168,7 @@
         <button
           class="w-full btn-sm primary"
           disabled={!$inputs.useHotkeys}
-          on:click={() => (setKeys = !setKeys)}>Set hotkeys</button
+          on:click={handleToggleSetHotkeys}>Set hotkeys</button
         >
       </div>
       <div class="my-1 flex justify-between">
