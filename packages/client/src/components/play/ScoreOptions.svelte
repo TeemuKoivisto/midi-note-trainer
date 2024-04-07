@@ -1,6 +1,9 @@
 <script lang="ts">
   import Icon from '@iconify/svelte/dist/OfflineIcon.svelte'
   import restore from '@iconify-icons/mdi/restore'
+  import arrowUp from '@iconify-icons/mdi/arrow-up'
+  import arrowDown from '@iconify-icons/mdi/arrow-down'
+
   import { writable } from 'svelte/store'
   import { getNoteAbsolute, parseNote, scalesFromJSON } from '@/chords-and-scales'
 
@@ -102,22 +105,50 @@
   <div class="options" class:hidden={$hidden}>
     <div class="range flex flex-col">
       <label class="font-bold" for="range_min">Range</label>
-      <div class="my-1 flex w-full">
+      <div class="my-1 flex items-center w-full">
+        <div class="mr-2 flex flex-col items-center rounded">
+          <button
+            class="p-2 rounded hover:bg-gray-200"
+            on:click={() => inputsActions.shiftMidiRange(true, true)}
+          >
+            <Icon icon={arrowUp} width={20} />
+          </button>
+          <button
+            class="mt-1 p-2 rounded hover:bg-gray-200"
+            on:click={() => inputsActions.shiftMidiRange(true, false)}
+          >
+            <Icon icon={arrowDown} width={20} />
+          </button>
+        </div>
         <input
-          class="h-[28px] w-full"
           id="range_min"
+          class="h-[28px] w-full min-w-[2rem] text-right p-1 bg-transparent rounded"
           bind:value={rangeMin}
           on:change={e => handleRangeChanged('min', e)}
           on:focus={rangeFocus}
         />
-        <span class="mx-2 mt-1">—</span>
+        <span class="mx-2">—</span>
         <input
-          class="h-[28px] w-full"
           id="range_max"
+          class="w-full min-w-[2rem] p-1 bg-transparent rounded"
           bind:value={rangeMax}
           on:change={e => handleRangeChanged('max', e)}
           on:focus={rangeFocus}
         />
+        <div class="ml-2 flex flex-col items-center rounded">
+          <button
+            class="p-2 rounded hover:bg-gray-200"
+            on:click={() => inputsActions.shiftMidiRange(false, true)}
+          >
+            <Icon icon={arrowUp} width={20} />
+          </button>
+          <button
+            class="mt-1 p-2 rounded hover:bg-gray-200"
+            on:click={() => inputsActions.shiftMidiRange(false, false)}
+          >
+            <Icon icon={arrowDown} width={20} />
+          </button>
+        </div>
       </div>
       <div class="flex justify-between my-1">
         {#if rangeError}

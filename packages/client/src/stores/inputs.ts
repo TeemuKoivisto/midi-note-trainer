@@ -75,8 +75,11 @@ export const inputsActions = {
   setMidiRange(range: [number, number]) {
     midiRange.set([Math.max(range[0], A0_MIDI), Math.min(range[1], C8_MIDI)])
   },
-  shiftMidiRange(up: boolean) {
-    midiRange.update(v => [up ? v[0] + 12 : v[0] - 12, up ? v[1] + 12 : v[1] - 12])
+  shiftMidiRange(start: boolean, up: boolean) {
+    midiRange.update(v => [
+      !start ? v[0] : up ? Math.min(v[0] + 12, v[1]) : Math.max(v[0] - 12, A0_MIDI),
+      start ? v[1] : up ? Math.min(v[1] + 12, C8_MIDI) : Math.max(v[1] - 12, v[0])
+    ])
   },
   setInputValue<K extends keyof Inputs>(key: K, val: Inputs[K]) {
     inputs.update(v => ({ ...v, [key]: val }))
