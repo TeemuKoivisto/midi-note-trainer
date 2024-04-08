@@ -98,6 +98,7 @@
       <a
         class="font-bold hover:underline"
         href="https://github.com/TeemuKoivisto/midi-note-trainer"
+        target="_blank"
       >
         GitHub
       </a>
@@ -115,13 +116,17 @@
       <a
         href="https://en.wikibooks.org/wiki/Music_Theory/Complete_List_of_Chord_Patterns"
         target="_blank">Wikibooks</a
-      > with rather loose definitions. If you are not interested in theory, feel free to skip my meandering
-      explanations.
+      >
+      and
+      <a href="https://en.wikipedia.org/wiki/Roman_numeral_analysis" target="_blank">Wikipedia</a> but
+      I find their definitions rather abstract. If you are not interested in theory, feel free to skip
+      my meandering explanations.
     </p>
     <p>
       The principle of scale degree triad/trichord is sound with all the standard 7 modes: for every
       note in the scale you pick the 2nd and 4th next notes of the scale going up — that's a <a
-        href="https://en.wikipedia.org/wiki/Triad_(music)">diatonic triad</a
+        href="https://en.wikipedia.org/wiki/Triad_(music)"
+        target="_blank">diatonic triad</a
       >
       which represents either a <code>major/minor/augmented/diminished</code> chord. However,
       outside the 7 modes this falls apart quickly as there might not be any diatonically viable
@@ -133,7 +138,8 @@
       How I approached this is somewhat unscientific; I iterate every scale note and then map all
       the other notes as its intervals. Then I use
       major-minor-diminished-augmented-7th-6th-suspended-5th order to find the best suited <a
-        href="https://en.wikipedia.org/wiki/Trichord">trichord</a
+        href="https://en.wikipedia.org/wiki/Trichord"
+        target="_blank">trichord</a
       >
       to represent that scale degree as they seem to cover all the scales currently listed.
     </p>

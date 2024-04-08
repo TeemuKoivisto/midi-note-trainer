@@ -17,10 +17,12 @@
     as well.
   </p>
   <p class="mt-4">
-    If you have suggestions or general feedback feel free to submit an issue to the <a
-      class="font-bold hover:underline"
-      href="https://github.com/TeemuKoivisto/midi-note-trainer"
-    >
+    This is an open-source project utilizing many other open-source libraries such as
+    <a class="font-bold hover:underline" href="https://github.com/vexflow/vexflow">vexflow</a>,
+    <a class="font-bold hover:underline" href="https://github.com/danigb/smplr">smplr</a> and
+    <a class="font-bold hover:underline" href="https://svelte.dev/">Svelte</a> to name a few. If you
+    have suggestions or general feedback feel free to submit an issue to the
+    <a class="font-bold hover:underline" href="https://github.com/TeemuKoivisto/midi-note-trainer">
       GitHub
     </a>
     repository or send me an email at
