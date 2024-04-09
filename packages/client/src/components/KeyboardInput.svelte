@@ -56,8 +56,22 @@
   function handleKeyUp(e: KeyboardEvent) {
     pressedKeys.delete(e.code)
   }
+  function handleInput(
+    e: Event & {
+      currentTarget: EventTarget & HTMLInputElement
+    }
+  ) {
+    if (e instanceof InputEvent && e.inputType === 'insertText') {
+      handleKeyDown(new KeyboardEvent('down', { key: e.data ?? '' }))
+    } else if (e instanceof InputEvent && e.inputType === 'deleteContentBackward') {
+      handleKeyDown(new KeyboardEvent('down', { code: `Backspace` }))
+    }
+  }
+  function handleChange() {
+    handleKeyDown(new KeyboardEvent('down', { code: 'Enter' }))
+  }
   function handleInputSubmit() {
-    handleKeyDown(new KeyboardEvent('down', { code: 'Enter', key: 'Enter', shiftKey: false }))
+    handleKeyDown(new KeyboardEvent('down', { code: 'Enter' }))
   }
 </script>
 
@@ -73,7 +87,8 @@
         class="w-full px-1 py-[3px] bg-transparent rounded outline-none"
         value={keyboardInput}
         autocomplete="off"
-        on:keydown|preventDefault={handleKeyDown}
+        on:input|preventDefault={handleInput}
+        on:change|preventDefault={handleChange}
       />
       <button class="px-1 py-[3px] rounded-r hover:bg-gray-300" on:click={handleInputSubmit}>
         <Icon icon={arrowRight} width={24} />
