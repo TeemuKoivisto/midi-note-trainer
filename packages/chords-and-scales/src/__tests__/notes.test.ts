@@ -1,4 +1,24 @@
-import { getOctave, getRootNote } from '../notes'
+import { getOctave, getRootNote, normalizeKey } from '../notes'
+
+describe('normalizeKey', () => {
+  it('should parse raw and normalize raw keys', () => {
+    expect(normalizeKey('C')).toEqual('C')
+    expect(normalizeKey('Cb')).toEqual('C♭')
+    expect(normalizeKey('D#')).toEqual('D♯')
+    expect(normalizeKey('B#b')).toEqual('B♯♭')
+    expect(normalizeKey('Hss')).toEqual('')
+    expect(normalizeKey('Css')).toEqual('C♯♯')
+    expect(normalizeKey('F♭')).toEqual('F♭')
+    expect(normalizeKey('F♭4')).toEqual('F♭')
+    expect(normalizeKey('F4#')).toEqual('F♯')
+    expect(normalizeKey('H')).toEqual('')
+    expect(normalizeKey('GB♭b')).toEqual('G♭♭♭')
+    expect(normalizeKey('BBBBBBs')).toEqual('B♭♭♭♭♭♯')
+    expect(normalizeKey('asSSABCS')).toEqual('A♯♯♯♭♯')
+    expect(normalizeKey('axblöegpa')).toEqual('A♭')
+    expect(normalizeKey('xblöegpa')).toEqual('')
+  })
+})
 
 describe('getRootNote', () => {
   it('should generate correct root notes', () => {

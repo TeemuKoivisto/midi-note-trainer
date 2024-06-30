@@ -24,13 +24,15 @@ export const NOTES = [
 
 export const isValidKey = (raw: string) => regexKey.test(raw)
 export const normalizeKey = (raw: string) =>
-  [
-    regexKeyLetter.test(raw[0] || '') ? raw[0].toUpperCase() : '',
-    ...raw
-      .slice(1)
-      .split('')
-      .map(c => (flatAccidental.test(c) ? '♭' : sharpAccidental.test(c) ? '♯' : ''))
-  ].join('')
+  regexKeyLetter.test(raw[0] || '')
+    ? [
+        raw[0].toUpperCase(),
+        ...raw
+          .slice(1)
+          .split('')
+          .map(c => (flatAccidental.test(c) ? '♭' : sharpAccidental.test(c) ? '♯' : ''))
+      ].join('')
+    : ''
 
 export function getOctave(note: { midi: number; flats: number; sharps: number }) {
   const norm = note.midi + note.flats - note.sharps
