@@ -1,7 +1,11 @@
 import type { MidiNote, Result, ScaleNote } from './types'
 
-const regexKey = /^[a-gA-G][♭Bb#♯sS]*[0-9]?$/
+const flatAccidental = /^[♭Bb]$/
+const sharpAccidental = /^[#♯sS]$/
+const regexKeyLetter = /^[a-gA-G]$/
 const regexPosInt = /^[0-9]$/
+const regexKey = /^[a-gA-G][♭Bb#♯sS]*$/
+const regexKeyOctave = /^[a-gA-G][♭Bb#♯sS]*[0-9]?$/
 
 export const NOTES = [
   { note: 'C', semitones: 0, sharps: 0, flats: 0 },
@@ -17,6 +21,16 @@ export const NOTES = [
   { note: 'B♭', semitones: 10, sharps: 0, flats: 1 },
   { note: 'B', semitones: 11, sharps: 0, flats: 0 }
 ]
+
+export const isValidKey = (raw: string) => regexKey.test(raw)
+export const normalizeKey = (raw: string) =>
+  [
+    regexKeyLetter.test(raw[0] || '') ? raw[0].toUpperCase() : '',
+    ...raw
+      .slice(1)
+      .split('')
+      .map(c => (flatAccidental.test(c) ? '♭' : sharpAccidental.test(c) ? '♯' : ''))
+  ].join('')
 
 export function getOctave(note: { midi: number; flats: number; sharps: number }) {
   const norm = note.midi + note.flats - note.sharps
@@ -47,7 +61,7 @@ export function getNote(midi: number): MidiNote {
 }
 
 export function parseNote(raw: string, strict = true, requireOctave = false): Result<MidiNote> {
-  if (strict && !regexKey.test(raw)) {
+  if (strict && !regexKeyOctave.test(raw)) {
     return { err: `Unrecognized note "${raw}"`, code: 400 }
   }
   const note = raw.trim()
@@ -59,11 +73,7 @@ export function parseNote(raw: string, strict = true, requireOctave = false): Re
   const shifted = note
     .slice(1)
     .split('')
-    .reduce(
-      (acc, c) =>
-        acc + (c.toLowerCase() === 'b' || c === '♭' ? -1 : c === '#' || c === '♯' ? 1 : 0),
-      0
-    )
+    .reduce((acc, c) => acc + (flatAccidental.test(c) ? -1 : sharpAccidental.test(c) ? 1 : 0), 0)
   let octave: number | undefined
   if (regexPosInt.test(note.charAt(note.length - 1))) {
     try {
@@ -96,11 +106,7 @@ export function getRootNote(note: string): ScaleNote | undefined {
     const shifted = note
       .slice(1)
       .split('')
-      .reduce(
-        (acc, c) =>
-          acc + (c.toLowerCase() === 'b' || c === '♭' ? -1 : c === '#' || c === '♯' ? 1 : 0),
-        0
-      )
+      .reduce((acc, c) => acc + (flatAccidental.test(c) ? -1 : sharpAccidental.test(c) ? 1 : 0), 0)
     const semitones = (rootNote.semitones + shifted) % 12
     return {
       note,

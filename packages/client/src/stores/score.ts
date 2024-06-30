@@ -1,5 +1,5 @@
 import { derived, get, readable, writable } from 'svelte/store'
-import { createScale } from '@/chords-and-scales'
+import { createScale, createScaleUnsafe } from '@/chords-and-scales'
 
 import { inputs } from './inputs'
 
@@ -12,24 +12,15 @@ export interface PlayedNote extends MidiNote {
 
 let timeout: ReturnType<typeof setTimeout> | undefined
 
+const C_MAJOR = createScaleUnsafe('C', 'Major')
+
 export const keyAndScale = writable<[string, string]>(['C', 'Major'])
 export const scaleData = derived(keyAndScale, (val): Scale => {
   const res = createScale(val[0], val[1])
   if ('data' in res) {
     return res.data
   }
-  return {
-    key: val[0],
-    scale: val[1],
-    names: ['major'],
-    flats: 0,
-    sharps: 0,
-    majorSignature: 'C',
-    intervals: [],
-    scaleNotes: [],
-    trichords: [],
-    notesMap: new Map()
-  } as Scale
+  return C_MAJOR
 })
 export const target = writable<MidiNote[]>([])
 export const played = writable<PlayedNote[]>([])

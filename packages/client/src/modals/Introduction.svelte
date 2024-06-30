@@ -101,14 +101,14 @@
         target="_blank"
       >
         GitHub
-      </a>
-      GitHub repository or send me email directly (see About).
+      </a> repository or send me email directly (see About).
     </p>
     <p>
-      The most confusing part has been perhaps how the used accidentals are decided. I suppose in
-      most cases you use either all flats or sharps but since sometimes a note is specified as
-      either flat or sharp interval, I ultimately resolve to use its accidental. I'm not sure if
-      this is always the correct way but it was the most programming-friendly.
+      The most confusing part has been perhaps how the used accidentals (♭♯) are decided. I suppose
+      in most cases you use either all flats or sharps for the notes in a specific scale (eg C♯) but
+      since sometimes a note is specified as either flat or sharp interval (minor third 3♭), I
+      ultimately resolve to use its accidental. I'm not sure if this is always the correct way but
+      it was the most programming-friendly.
     </p>
     <p>
       You can input a <b>Key</b> and visualize the notes in every scale. I am also displaying the
@@ -185,7 +185,8 @@
       for flats and
       <b>F♯, C♯, G♯, D♯, A♯, E♯, B♯</b> for sharps. So if there were Bb, Eb, Db and Gb flats in the scale,
       the key signature would only include Bb, Eb and then use accidentals for the rest. I could add
-      5 flats to the signature and then naturalize the As but that starts to get convoluted.
+      5 flats to the signature and then naturalize the As but that starts to get convoluted. Only reason
+      I see for doing so is when the scale is altered from an existing one (D♭ major natural-3)
     </p>
     <h3>Play</h3>
     <p>
@@ -201,7 +202,7 @@
     </p>
     <p>
       One big missing feature from the games are the inversions of chords as well as missing notes.
-      This is after all how majority of chords are played. Maybe one day I'll find time for it. Also
+      This is after all how majority of chords are played. Maybe I'll one day find time for it. Also
       playing the given scale degree trichord would be another. As well as recognizing the played
       scales. Oh well. Pull requests are welcome!
     </p>

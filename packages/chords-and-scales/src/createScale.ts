@@ -1,10 +1,9 @@
 import { getKeySignature } from './getKeySignature'
 import { findScale } from './scales'
-import { NOTES, getRootNote } from './notes'
+import { isValidKey, normalizeKey, NOTES, getRootNote } from './notes'
 
 import type { Interval, Pitch, Result, Scale, ScaleNote } from './types'
 
-const regexKey = /^[a-gA-G][♭b#♯]?$/
 const alphabet = 'ABCDEFG'
 
 /**
@@ -87,22 +86,19 @@ function createScaleNotes(startingOrder: number, letters: string[], intervals: P
 /**
  * Creates a scale from 2-length key and scale name
  *
- * @param rawKey Key comprising of [a-gA-G][♭b#♯]?
+ * @param rawKey Key adhering to [a-gA-G][♭Bb#♯sS] regex
  * @param scaleName
  * @returns
  */
 export function createScale(rawKey: string, scaleName: string): Result<Scale> {
-  if (!regexKey.test(rawKey)) {
+  if (!isValidKey(rawKey)) {
     return { err: `Unknown key: ${rawKey}`, code: 400 }
   }
   const scale = findScale(scaleName)
   if (!scale) {
     return { err: `Unknown scale: ${scaleName}`, code: 404 }
   }
-  const key = `${rawKey.charAt(0).toUpperCase()}${rawKey
-    .charAt(1)
-    .replace('b', '♭')
-    .replace('#', '♯')}`
+  const key = normalizeKey(rawKey)
   const foundRoot = getRootNote(key)
   if (!foundRoot) {
     return { err: `Unable to find root for note: ${key}`, code: 404 }

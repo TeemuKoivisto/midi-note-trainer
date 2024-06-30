@@ -5,7 +5,7 @@
   import arrowDown from '@iconify-icons/mdi/arrow-down'
 
   import { writable } from 'svelte/store'
-  import { getNoteAbsolute, parseNote, scalesFromJSON } from '@/chords-and-scales'
+  import { getNoteAbsolute, normalizeKey, parseNote, scalesFromJSON } from '@/chords-and-scales'
 
   import { currentGame } from '$stores/game'
   import { inputsActions, midiRangeNotes } from '$stores/inputs'
@@ -69,7 +69,8 @@
   function handleKeyChange({
     currentTarget: { value }
   }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-    selectedKey = `${value.charAt(0).toUpperCase()}${value.charAt(1).toLowerCase()}`
+    const norm = normalizeKey(value)
+    selectedKey = norm
     scoreActions.setKey(selectedKey)
   }
   function handleSelectScale(key: string | number) {
