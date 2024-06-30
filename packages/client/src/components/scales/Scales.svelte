@@ -5,6 +5,7 @@
     createScale,
     createScaleUnsafe,
     createTrichords,
+    normalizeKey,
     scalesFromJSON
   } from '@/chords-and-scales'
 
@@ -33,8 +34,36 @@
     trichords: scl.trichords,
     chords: []
   }))
-  $: leftList = scalesList.filter((_, i) => i < scalesList.length / 2)
-  $: rightList = scalesList.filter((_, i) => i >= scalesList.length / 2)
+  let leftList: ListItem[] = []
+  let rightList: ListItem[] = []
+  $: {
+    let where = 'Major'
+    leftList = []
+    rightList = []
+    // Show both Major and Minor keys in split list view so you don't have to scroll
+    scalesList.forEach(v => {
+      if (v.key === 'Minor') {
+        where = v.key
+      } else if (v.key === 'Ionian') {
+        where = 'modes'
+      } else if (v.key === 'Enigmatic Major') {
+        where = 'rest'
+      }
+      if (where === 'Major') {
+        leftList.push(v)
+      } else if (where === 'Minor') {
+        rightList.push(v)
+      } else if (where === 'modes') {
+        leftList.push(v)
+      } else {
+        if (rightList.length > leftList.length) {
+          leftList.push(v)
+        } else {
+          rightList.push(v)
+        }
+      }
+    })
+  }
 
   let shownKey = ''
   let oldKeyAndScale = [$scaleData.key, $scaleData.scale]
@@ -48,7 +77,7 @@
   function handleKeyChange({
     currentTarget: { value }
   }: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-    shownKey = `${value.charAt(0).toUpperCase()}${value.charAt(1).toLowerCase()}`
+    shownKey = normalizeKey(value)
     scalesList = scalesList.map(d => {
       const created = createScale(shownKey, d.key)
       let scl = shownKey && 'data' in created ? created.data : undefined
@@ -142,7 +171,7 @@
       />
     </div>
     <div class="body max-h-[30rem] overflow-scroll" class:hidden={$hidden}>
-      <ul class="list odd w-full">
+      <ul class="list split-list odd w-full">
         {#each leftList as scale}
           <li>
             <div class="text-xs font-bold">{scale.raw.names[0]}</div>
@@ -159,8 +188,25 @@
           </li>
         {/each}
       </ul>
-      <ul class="list even w-full">
+      <ul class="list split-list even w-full">
         {#each rightList as scale}
+          <li>
+            <div class="text-xs font-bold">{scale.raw.names[0]}</div>
+            <Intervals
+              scale={scale.scale}
+              intervals={scale.raw.intervals}
+              on:click={() => handleIntervalsClicked(scale)}
+            />
+            <Trichords
+              trichords={scale.trichords}
+              chords={scale.chords}
+              on:click={() => handleTrichordsClicked(scale)}
+            />
+          </li>
+        {/each}
+      </ul>
+      <ul class="list full-list odd w-full">
+        {#each scalesList as scale}
           <li>
             <div class="text-xs font-bold">{scale.raw.names[0]}</div>
             <Intervals
@@ -191,6 +237,12 @@
     grid-template-rows: auto;
     @media (width <= 600px) {
       grid-template-columns: 1fr;
+      & > .split-list {
+        display: none;
+      }
+      & > .full-list {
+        display: flex;
+      }
     }
     &.hidden {
       display: none;
@@ -223,6 +275,9 @@
         @apply bg-gray-100;
       }
     }
+  }
+  .full-list {
+    display: none;
   }
   .error {
     @apply text-xs text-red-500;

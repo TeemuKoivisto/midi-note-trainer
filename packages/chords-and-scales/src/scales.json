@@ -5,11 +5,11 @@
     [1, 2, 3, 5, 6]
   ],
   [["Major Pentatonic Blues"], [1, 2, -3, 3, 5, 6]],
+  [["Scottish Pentatonic"], [1, 2, 4, 5, 6]],
   [
     ["Suspended Pentatonic", "Egyptian"],
     [1, 2, 4, 5, -7]
   ],
-  [["Scottish Pentatonic"], [1, 2, 4, 5, 6]],
   [["Harmonic Major"], [1, 2, 3, 4, 5, -6, 7]],
   [
     ["Double Harmonic", "Byzantine", "Arabic"],
