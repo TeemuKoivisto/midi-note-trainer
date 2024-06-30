@@ -45,22 +45,16 @@
       if (v.key === 'Minor') {
         where = v.key
       } else if (v.key === 'Ionian') {
-        where = 'modes'
-      } else if (v.key === 'Enigmatic Major') {
         where = 'rest'
       }
       if (where === 'Major') {
         leftList.push(v)
       } else if (where === 'Minor') {
         rightList.push(v)
-      } else if (where === 'modes') {
-        leftList.push(v)
+      } else if (rightList.length < leftList.length) {
+        rightList.push(v)
       } else {
-        if (rightList.length > leftList.length) {
-          leftList.push(v)
-        } else {
-          rightList.push(v)
-        }
+        leftList.push(v)
       }
     })
   }
