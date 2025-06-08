@@ -30,9 +30,12 @@
   import { GuessChords, GuessKeys, GuessNotes } from '@/games'
   import { getRootNote } from '@/chords-and-scales'
   import { keyboardActions } from '$stores/keyboard'
+  import { KeyboardInputState } from '$stores/keyboard/KeyboardInputState'
+  import type { ParsedChord, ParsedKey, ParsedNote } from '$stores/keyboard/parseInput'
 
   let timeout: ReturnType<typeof setTimeout> | undefined
   let chordTimeout: ReturnType<typeof setTimeout> | undefined
+  let inputState = new KeyboardInputState(handleKeyInput)
 
   onMount(() => {
     if ($midiGranted) {
@@ -108,6 +111,28 @@
     }
     chordTimeout = undefined
   }
+  function handleKeyInput({ e: event, data }: ParsedKey | ParsedChord | ParsedNote) {
+    const game = $currentGame
+    if (event === 'guessed-chord') {
+      if (game instanceof GuessChords && $guessState === 'waiting') {
+        const correct = game.guessWrittenChord(data)
+        gameActions.updateState(correct ? 'correct' : 'wrong')
+        gameUpdate()
+      }
+    } else if (event === 'guessed-key') {
+      if (game instanceof GuessKeys && $guessState === 'waiting') {
+        const note = data.replaceAll('♭', 'b').replaceAll('♯', '#')
+        const correct = game.guess(note)
+        gameActions.updateState(correct ? 'correct' : 'wrong')
+        gameUpdate()
+      }
+    } else if (event === 'guessed-note') {
+      const found = keyboardActions.findNote(data.note) ?? getRootNote(data.note)
+      if (found) {
+        handlePlayedNote(found.semitones + 12 + data.octave * 12, 80)
+      }
+    }
+  }
   function handleGuessedNote(value: number) {
     const game = $currentGame
     if (game instanceof GuessNotes && $guessState === 'waiting') {
@@ -116,31 +141,6 @@
       gameActions.updateState(correct ? 'correct' : 'wrong')
       scoreActions.pushPlayed(value, correct, 4000)
       gameUpdate()
-    }
-  }
-  function handleGuessedChord(
-    e: CustomEvent<{ note: string; flats: number; sharps: number; chord: string }>
-  ) {
-    const game = $currentGame
-    if (game instanceof GuessChords && $guessState === 'waiting') {
-      const correct = game.guessWrittenChord(e.detail)
-      gameActions.updateState(correct ? 'correct' : 'wrong')
-      gameUpdate()
-    }
-  }
-  function handleGuessedKey(e: CustomEvent<string>) {
-    const game = $currentGame
-    if (game instanceof GuessKeys && $guessState === 'waiting') {
-      const note = e.detail.replaceAll('♭', 'b').replaceAll('♯', '#')
-      const correct = game.guess(note)
-      gameActions.updateState(correct ? 'correct' : 'wrong')
-      gameUpdate()
-    }
-  }
-  function handleNote(e: CustomEvent<{ note: string; octave: number }>) {
-    const found = keyboardActions.findNote(e.detail.note) ?? getRootNote(e.detail.note)
-    if (found) {
-      handlePlayedNote(found.semitones + 12 + e.detail.octave * 12, 80)
     }
   }
   function handleReset() {
@@ -184,12 +184,7 @@
 {/await}
 
 <section class="mb-8 ml-16 flex flex-col">
-  <KeyboardInput
-    debounced={!!timeout}
-    on:guessed-chord={handleGuessedChord}
-    on:guessed-key={handleGuessedKey}
-    on:guessed-note={handleNote}
-  />
+  <KeyboardInput debounced={!!timeout} state={inputState} />
   <GameControls game={$currentGame} />
 </section>
 

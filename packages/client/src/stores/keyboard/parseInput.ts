@@ -11,26 +11,26 @@ const regexPosInt = /^[0-9]$/
 let keyboardInput = ''
 let inputtedNote: ScaleNote | undefined
 
-interface ParsedKey {
+export interface ParsedKey {
   e: 'guessed-key'
   data: string
 }
-interface ParsedChord {
+export interface ParsedChord {
   e: 'guessed-chord'
   data: { note: string; flats: number; sharps: number; chord: string }
 }
-interface ParsedNote {
+export interface ParsedNote {
   e: 'guessed-note'
   data: {
     note: string
     octave: number
   }
 }
-interface InputtedNote {
+export interface InputtedNote {
   e: 'note'
   data: ScaleNote
 }
-interface InputtedString {
+export interface InputtedString {
   e: 'string'
   data: string
 }
