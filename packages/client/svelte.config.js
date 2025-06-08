@@ -24,6 +24,9 @@ export default {
       pages: 'build',
       assets: 'build',
       fallback: '200.html'
-    })
+    }),
+    serviceWorker: process.env.NODE_ENV === 'development' ? {
+      register: false
+    } : undefined
   }
 }

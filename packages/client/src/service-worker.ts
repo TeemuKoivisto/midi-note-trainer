@@ -5,7 +5,6 @@
 
 declare let self: ServiceWorkerGlobalScope
 
-import { dev } from '$app/environment'
 import { build, files, version } from '$service-worker'
 
 // Create a unique cache name for this deployment
@@ -17,7 +16,6 @@ const ASSETS = [
 ]
 
 self.addEventListener('install', event => {
-  if (dev) return
   // Create a new cache and add all files to it
   async function addFilesToCache() {
     const cache = await caches.open(CACHE)
@@ -28,7 +26,6 @@ self.addEventListener('install', event => {
 })
 
 self.addEventListener('activate', event => {
-  if (dev) return
   // Remove previous cached data from disk
   async function deleteOldCaches() {
     for (const key of await caches.keys()) {
@@ -40,7 +37,6 @@ self.addEventListener('activate', event => {
 })
 
 self.addEventListener('fetch', event => {
-  if (dev) return
   // ignore POST requests etc
   if (event.request.method !== 'GET') return
 
