@@ -1,0 +1,28 @@
+{
+  "short_name": "MIDI Trainer",
+  "name": "MIDI Note Trainer",
+  "description": "Musical Notation trainer with virtual piano and MIDI support",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "scope": "/",
+  "start_url": "/?source=pwa",
+  "id": "/?source=pwa",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
