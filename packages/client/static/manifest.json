@@ -1,5 +1,5 @@
 {
-  "short_name": "MIDI Trainer",
+  "short_name": "MIDI Note Trainer",
   "name": "MIDI Note Trainer",
   "description": "Musical Notation trainer with virtual piano and MIDI support",
   "background_color": "#ffffff",
@@ -17,7 +17,7 @@
     {
       "src": "/android-chrome-192x192.png",
       "type": "image/png",
-      "sizes": "256x256"
+      "sizes": "192x192"
     },
     {
       "src": "/android-chrome-512x512.png",
