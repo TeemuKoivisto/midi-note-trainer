@@ -4,6 +4,7 @@
   import close from '@iconify-icons/mdi/close'
 
   import { gameActions, gameOptions, guessState } from '$stores/game'
+  import { inputState, keyboardActions } from '$stores/keyboard'
   import { scaleData, played } from '$stores/score'
 
   import { getNoteAbsolute, type ScaleNote } from '@/chords-and-scales'
@@ -14,7 +15,20 @@
   export let game: GameInstance | undefined
 
   function nextGuess() {
-    gameActions.nextGuess()
+    const state = $inputState
+    if (state?.isEmpty) {
+      gameActions.nextGuess()
+    } else {
+      const e = new KeyboardEvent('down', { code: 'Enter' })
+      const parsed = keyboardActions.handleInput(e.code, e.key, e.shiftKey)
+      if (
+        parsed &&
+        (parsed.e === 'guessed-key' || parsed.e === 'guessed-chord' || parsed.e === 'guessed-note')
+      ) {
+        // @TODO lol, needs a better input management system
+        state?.submit(parsed)
+      }
+    }
   }
   function autoplay() {
     gameActions.setOptionValue('autoplay', true)

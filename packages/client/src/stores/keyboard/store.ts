@@ -10,6 +10,7 @@ import { captureHotkey, type ParsedHotkey } from './captureHotkey'
 import { parseKey, type Parsed, parseChord, parseNotes } from './parseInput'
 
 import { GuessChords, GuessKeys } from '@/games'
+import { KeyboardInputState } from './KeyboardInputState'
 import type { HotkeydRows, KeyboardKey, KeyboardOptions, Layout, Rows } from '@/keyboard'
 import type { ScaleNote } from '@/chords-and-scales'
 
@@ -37,6 +38,7 @@ const DEFAULT_KEYBOARD = new Keyboard({
   layout: ENGLISH_LAYOUT
 })
 
+export const inputState = writable<KeyboardInputState | undefined>()
 export const capturingHotkeys = writable<Captured | undefined>(undefined)
 export const nextCaptured = derived(capturingHotkeys, c =>
   c ? [c.rowIndex, c.nextIndex] : [-1, -1]
@@ -108,6 +110,9 @@ export const keyboardActions = {
     } else {
       this.setLayout(navigator.languages)
     }
+  },
+  setInputState(state?: KeyboardInputState) {
+    inputState.set(state)
   },
   toggleRows(rows?: HotkeydRows) {
     keyboardOptions.update(v => ({

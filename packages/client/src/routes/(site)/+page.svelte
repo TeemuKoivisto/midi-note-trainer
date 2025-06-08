@@ -35,16 +35,18 @@
 
   let timeout: ReturnType<typeof setTimeout> | undefined
   let chordTimeout: ReturnType<typeof setTimeout> | undefined
-  let inputState = new KeyboardInputState(handleKeyInput)
+  const inputState = new KeyboardInputState(handleKeyInput)
 
   onMount(() => {
     if ($midiGranted) {
       inputsActions.openMidi()
     }
+    keyboardActions.setInputState(inputState)
     window.addEventListener('keydown', initAudio)
     window.addEventListener('mousedown', initAudio)
     window.addEventListener('touchstart', initAudio)
     return () => {
+      keyboardActions.setInputState()
       window.removeEventListener('keydown', initAudio)
       window.removeEventListener('mousedown', initAudio)
       window.removeEventListener('touchstart', initAudio)

@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store'
+import { get, writable } from 'svelte/store'
 
 import type { ScaleNote } from '@/chords-and-scales'
 import type { ParsedChord, ParsedKey, ParsedNote } from './parseInput'
@@ -19,6 +19,10 @@ export class KeyboardInputState {
 
   constructor(fn: SubmitFn) {
     this.onSubmit = fn
+  }
+
+  get isEmpty() {
+    return get(this.keyboardInput).length === 0 && get(this.inputtedNote) === undefined
   }
 
   submit(parsed: ParsedKey | ParsedChord | ParsedNote) {
