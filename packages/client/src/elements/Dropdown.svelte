@@ -34,7 +34,7 @@
 
 <div class={`relative ${containerClass || ''}`} {id} bind:this={containerEl}>
   <button
-    class={`${$$props.class || ''} open-btn w-full text-justify text-sm rounded hover:bg-[#eee]`}
+    class={`${$$props.class || ''} open-btn w-full rounded text-justify text-sm hover:bg-[#eee]`}
     class:disabled
     class:open
     title={$$props.title || ''}
@@ -45,13 +45,13 @@
   {#if open}
     <button
       transition:fade={{ duration: DROPDOWN_DURATION }}
-      class="fixed z-20 inset-0 h-full w-full outline-none cursor-default"
+      class="fixed inset-0 z-20 h-full w-full cursor-default outline-none"
       on:click={handleOpen}
       tabindex="-1"
     />
     <ul
       transition:slide={{ duration: DROPDOWN_DURATION }}
-      class={`items-list bg-white py-1.5 py-2 h-64 overflow-y-scroll text-sm absolute left-0 z-30 rounded-b shadow-xl ${
+      class={`items-list absolute left-0 z-30 h-64 overflow-y-scroll rounded-b bg-white py-1.5 py-2 text-sm shadow-xl ${
         containerClass || ''
       }`}
     >
@@ -61,7 +61,7 @@
       {#each options as { key, value, icon }, idx}
         <li>
           <button
-            class="px-2 py-1 text-justify w-full h-full hover:bg-[#eee]"
+            class="h-full w-full px-2 py-1 text-justify hover:bg-[#eee]"
             class:selected={key === selected}
             on:click={() => handleSelect(key)}
           >
@@ -80,7 +80,9 @@
   {/if}
 </div>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   .items-list {
     box-shadow: 0 2px 6px 2px rgba(60, 64, 67, 0.15);
   }

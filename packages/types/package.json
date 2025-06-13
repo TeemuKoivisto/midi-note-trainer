@@ -20,6 +20,6 @@
   ],
   "scripts": {
     "build": "vite build",
-    "watch": "rimraf dist && vite build --watch"
+    "watch": "vite build --watch"
   }
 }

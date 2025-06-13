@@ -71,7 +71,7 @@
       <IconButton icon={arrowUp} size={32} on:click={() => shiftRange(true)} />
     </div>
   </div>
-  <ul class="flex flex-row relative overflow-x-scroll" style="height: {height}px;">
+  <ul class="relative flex flex-row overflow-x-scroll" style="height: {height}px;">
     {#each keys as key, idx}
       <VirtualKey
         {key}
@@ -84,7 +84,7 @@
       />
     {/each}
   </ul>
-  <ul class="flex flex-row relative overflow-x-scroll" style="height: {height}px;">
+  <ul class="relative flex flex-row overflow-x-scroll" style="height: {height}px;">
     {#each keys as key, idx}
       <VirtualKey
         {key}
@@ -99,5 +99,5 @@
   </ul>
 </section>
 
-<style lang="scss">
+<style lang="postcss">
 </style>

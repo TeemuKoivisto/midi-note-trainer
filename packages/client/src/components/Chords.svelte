@@ -115,13 +115,13 @@
 
 <div class={`${$$props.class || ''}`}>
   <fieldset
-    class="flex flex-col relative rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
+    class="relative my-4 flex flex-col rounded border-2 px-4 pb-4 pt-2 text-sm"
     class:collapsed={$hidden}
   >
-    <legend class="text-base flex w-fit">
-      <button class="px-1 z-0 rounded hover:bg-gray-100" on:click={toggleVisibility}>Chords</button>
+    <legend class="flex w-fit text-base">
+      <button class="z-0 rounded px-1 hover:bg-gray-100" on:click={toggleVisibility}>Chords</button>
     </legend>
-    <div class="absolute top-[-0.25rem] right-[0.5rem] flex">
+    <div class="absolute right-[0.5rem] top-[-0.25rem] flex">
       <button
         class="flex items-center justify-center rounded px-0.5 hover:bg-gray-200"
         class:hidden={$hidden}
@@ -152,10 +152,10 @@
       </button>
     </div>
     <div class="body" class:hidden={$hidden}>
-      <div class="flex mb-2 options">
+      <div class="options mb-2 flex">
         <label class="mr-4 font-bold" for="chords-key">Key</label>
         <input
-          class="input bg-gray-100 w-12 px-1 rounded"
+          class="input w-12 rounded bg-gray-100 px-1"
           id="chords-key"
           value={selectedKey}
           on:input={handleKeyChange}
@@ -163,7 +163,7 @@
         <label class="font-bold" for="chords-scale">Scale</label>
         <SearchDropdown
           id="chords-scale"
-          class="bg-gray-100 pl-1 w-full"
+          class="w-full bg-gray-100 pl-1"
           containerClass="input"
           selected={selectedScale}
           options={scaleOptions}
@@ -171,7 +171,7 @@
         />
         <label class="font-bold" for="chords-note">Note</label>
         <input
-          class="input bg-gray-100 w-12 px-1 rounded"
+          class="input w-12 rounded bg-gray-100 px-1"
           id="chords-note"
           value={rootNote}
           on:input={handleNoteChange}
@@ -181,18 +181,18 @@
         {#each leftList as chord, idx}
           <li>
             <button
-              class="flex items-center justify-center w-full select-btn"
+              class="select-btn flex w-full items-center justify-center"
               class:hidden={$hidden}
               on:click={() => handleSelectChord(chord)}
             >
               <span
-                class="px-1 py-1 rounded"
+                class="rounded px-1 py-1"
                 class:text-green-500={chord.selected}
                 class:text-gray-400={!chord.selected}
               >
                 <Icon icon={chord.selected ? circle : circleOut} width={12} />
               </span>
-              <div class="ml-1 px-1 w-full bg-gray-200">{chord.suffixes[0]}</div>
+              <div class="ml-1 w-full bg-gray-200 px-1">{chord.suffixes[0]}</div>
             </button>
           </li>
           <li class="intervals" title={chord.intervals.map(i => i.interval).join('-')}>
@@ -215,18 +215,18 @@
         {#each rightList as chord, idx}
           <li>
             <button
-              class="flex items-center justify-center w-full select-btn"
+              class="select-btn flex w-full items-center justify-center"
               class:hidden={$hidden}
               on:click={() => handleSelectChord(chord)}
             >
               <span
-                class="px-1 py-1 rounded"
+                class="rounded px-1 py-1"
                 class:text-green-500={chord.selected}
                 class:text-gray-400={!chord.selected}
               >
                 <Icon icon={chord.selected ? circle : circleOut} width={12} />
               </span>
-              <div class="ml-1 px-1 w-full bg-gray-200">{chord.suffixes[0]}</div>
+              <div class="ml-1 w-full bg-gray-200 px-1">{chord.suffixes[0]}</div>
             </button>
           </li>
           <li class="intervals" title={chord.intervals.map(i => i.interval).join('-')}>
@@ -249,7 +249,9 @@
   </fieldset>
 </div>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   .collapsed {
     @apply py-0.5;
   }
@@ -300,7 +302,7 @@
   .intervals {
     & > span + span::before {
       content: '-';
-      @apply text-xs mx-[1px];
+      @apply mx-[1px] text-xs;
     }
   }
   .error {

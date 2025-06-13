@@ -21,7 +21,7 @@
             {tc.roman}
           </span>
           <sup
-            class="block text-sm leading-none top-[-0.3rem]"
+            class="top-[-0.3rem] block text-sm leading-none"
             class:super-text={tc.suffix.length > 2}>{tc.suffix}</sup
           >
         </span>
@@ -30,7 +30,9 @@
   </button>
 </div>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   .trichords {
     & > span + span::before {
       content: '-';

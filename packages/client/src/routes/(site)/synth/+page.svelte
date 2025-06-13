@@ -80,13 +80,13 @@
   }
 </script>
 
-<h1 class="my-8 md:text-5xl mt-12 px-4 md:px-0 text-3xl font-cursive tracking-tight">Synth</h1>
+<h1 class="font-cursive my-8 mt-12 px-4 text-3xl tracking-tight md:px-0 md:text-5xl">Synth</h1>
 
 <section class="px-4 md:px-0">
   <button class="btn primary" on:click={play}>Play</button>
 </section>
 
-<style lang="scss">
+<style lang="postcss">
   .objective {
     display: flex;
   }

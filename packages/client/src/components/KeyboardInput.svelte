@@ -70,17 +70,17 @@
 <div class={`${$$props.class || ''} min-h-[32px]`}>
   {#if $isTabletOrPhone && $currentGame?.type === 'chords-write' && $guessState === 'waiting'}
     <div
-      class="w-48 flex items-center relative rounded border border-gray-400 bg-gray-100 focus-within:ring-2 focus-within:ring-blue-500"
+      class="relative flex w-48 items-center rounded border border-gray-400 bg-gray-100 focus-within:ring-2 focus-within:ring-blue-500"
     >
       <input
         id="mobile-input"
-        class="w-full px-1 py-[3px] bg-transparent rounded outline-none"
+        class="w-full rounded bg-transparent px-1 py-[3px] outline-none"
         value={$keyboardInput}
         autocomplete="off"
         on:input|preventDefault={handleInput}
         on:change|preventDefault={handleChange}
       />
-      <button class="px-1 py-[3px] rounded-r hover:bg-gray-300" on:click={handleInputSubmit}>
+      <button class="rounded-r px-1 py-[3px] hover:bg-gray-300" on:click={handleInputSubmit}>
         <Icon icon={arrowRight} width={24} />
       </button>
     </div>
@@ -95,5 +95,5 @@
   {/if}
 </div>
 
-<style lang="scss">
+<style lang="postcss">
 </style>

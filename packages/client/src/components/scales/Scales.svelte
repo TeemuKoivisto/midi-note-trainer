@@ -149,16 +149,16 @@
 
 <div class={`${$$props.class || ''}`}>
   <fieldset
-    class="flex flex-col rounded border-2 px-4 pt-2 pb-4 my-4 text-sm"
+    class="my-4 flex flex-col rounded border-2 px-4 pb-4 pt-2 text-sm"
     class:collapsed={$hidden}
   >
-    <legend class="text-base flex w-fit">
-      <button class="px-1 rounded z-0 hover:bg-gray-100" on:click={toggleVisibility}>Scales</button>
+    <legend class="flex w-fit text-base">
+      <button class="z-0 rounded px-1 hover:bg-gray-100" on:click={toggleVisibility}>Scales</button>
     </legend>
-    <div class="flex mb-2 input" class:hidden={$hidden}>
+    <div class="input mb-2 flex" class:hidden={$hidden}>
       <label class="mr-4 font-bold" for="scale-key">Key</label>
       <input
-        class="bg-gray-100 w-16 px-1 rounded"
+        class="w-16 rounded bg-gray-100 px-1"
         id="scale-key"
         value={shownKey}
         on:input={handleKeyChange}
@@ -220,7 +220,9 @@
   </fieldset>
 </div>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   .collapsed {
     @apply py-0.5;
   }

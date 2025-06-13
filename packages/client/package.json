@@ -1,41 +1,47 @@
 {
-  "name": "client",
+  "name": "@/client",
   "version": "0.0.1",
   "private": true,
   "type": "module",
+  "imports": {
+    "#app.pcss": "./src/app.pcss"
+  },
   "scripts": {
     "install": "svelte-kit sync || true",
-    "dev": "vite dev",
     "build": "vite build",
+    "dev": "vite",
     "preview": "vite preview",
+    "svelte-check": "svelte-check",
     "test": "vitest run"
   },
   "devDependencies": {
-    "@sveltejs/adapter-static": "2.0.3",
-    "@sveltejs/kit": "^1.26.0",
-    "autoprefixer": "^10.4.16",
-    "cross-fetch": "^4.0.0",
-    "postcss": "^8.4.30",
-    "postcss-load-config": "^4.0.1",
-    "sass": "^1.68.0",
-    "svelte": "^4.2.1",
-    "svelte-check": "^3.5.2",
-    "svelte-meta-tags": "^3.1.1",
-    "svelte-preprocess": "^5.0.4",
-    "vitest": "^1.0.4"
+    "@sveltejs/adapter-static": "^3.0.8",
+    "@sveltejs/kit": "^2.21.5",
+    "@sveltejs/vite-plugin-svelte": "^5.1.0",
+    "@tailwindcss/postcss": "^4.1.10",
+    "@types/node": "^24.0.1",
+    "cross-fetch": "^4.1.0",
+    "postcss": "^8.5.5",
+    "postcss-load-config": "^6.0.1",
+    "sass": "^1.89.2",
+    "svelte": "^5.34.1",
+    "svelte-check": "^4.2.1",
+    "svelte-meta-tags": "^4.4.0",
+    "svelte-preprocess": "^6.0.3",
+    "vitest": "^3.2.3"
   },
   "dependencies": {
     "@/chords-and-scales": "workspace:*",
     "@/games": "workspace:*",
     "@/keyboard": "workspace:*",
     "@/types": "workspace:*",
-    "@iconify-icons/fe": "^1.2.5",
     "@iconify-icons/feather": "^1.2.3",
+    "@iconify-icons/lucide": "^1.2.135",
     "@iconify-icons/mdi": "^1.2.48",
-    "@iconify/svelte": "^3.1.4",
-    "smplr": "^0.12.3",
-    "tailwindcss": "^3.3.3",
+    "@iconify/svelte": "^5.0.0",
+    "smplr": "^0.16.3",
+    "tailwindcss": "^4.1.10",
     "vexflow": "^4.2.3",
-    "webmidi": "^3.1.8"
+    "webmidi": "^3.1.12"
   }
 }

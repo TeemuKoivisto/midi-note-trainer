@@ -29,15 +29,17 @@
   <div class="slider"></div>
 </label>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   .toggle {
-    @apply relative rounded h-[22px] w-[40px] min-w-[40px];
+    @apply relative h-[22px] w-[40px] min-w-[40px] rounded;
     &:focus-within {
-      @apply outline outline-2 ring-1 outline-blue-700;
+      @apply outline outline-2 outline-blue-700 ring-1;
     }
   }
   input {
-    @apply appearance-none bg-transparent h-0 w-0;
+    @apply h-0 w-0 appearance-none bg-transparent;
     &:checked + .slider {
       @apply bg-blue-500;
       &:before {
@@ -47,7 +49,7 @@
   }
   .slider {
     border-radius: 34px;
-    @apply absolute inset-0 cursor-pointer transition-all duration-300 bg-gray-300;
+    @apply absolute inset-0 cursor-pointer bg-gray-300 transition-all duration-300;
     &:before {
       content: '';
       border-radius: 50%;
@@ -55,7 +57,7 @@
       width: 16px;
       left: 3px;
       bottom: 3px;
-      @apply absolute transition-all duration-300 bg-white;
+      @apply absolute bg-white transition-all duration-300;
     }
   }
 </style>

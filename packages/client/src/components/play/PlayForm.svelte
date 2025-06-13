@@ -134,20 +134,20 @@
 </script>
 
 <fieldset class={`${$$props.class || ''} flex flex-col rounded border-2 px-4 py-2 text-sm`}>
-  <legend class="px-1 text-base w-fit">Play</legend>
-  <div class="body pb-2 h-full">
+  <legend class="w-fit px-1 text-base">Play</legend>
+  <div class="body h-full pb-2">
     <ul class="games">
       {#each options as { key, value }}
         <li class="flex">
           <button
-            class="px-2 py-1 mr-1 flex items-center w-full h-full rounded text-left hover:bg-[#eee]"
+            class="mr-1 flex h-full w-full items-center rounded px-2 py-1 text-left hover:bg-[#eee]"
             class:selected={key === selectedGame}
             on:click={() => handleSelectGame(key)}
           >
             {value}
           </button>
           <button
-            class="px-1 py-1 flex items-center justify-center rounded text-[#222] hover:bg-blue-500 hover:text-white"
+            class="flex items-center justify-center rounded px-1 py-1 text-[#222] hover:bg-blue-500 hover:text-white"
             on:click={e => handleQuickPlay(e, key)}
           >
             <Icon icon={playIcon} width={20} />
@@ -161,7 +161,7 @@
           {#each chordsOptions as { key, value }}
             <li>
               <button
-                class="px-2 py-1 mr-1 flex items-center w-full h-full rounded text-left hover:bg-[#eee]"
+                class="mr-1 flex h-full w-full items-center rounded px-2 py-1 text-left hover:bg-[#eee]"
                 class:selected={key === chordsSelection}
                 on:click={() => handleSelectChords(key)}>{value}</button
               >
@@ -171,10 +171,10 @@
       {/if}
     </div>
     <GameOptions />
-    <div class="h-full flex flex-col justify-end">
-      <button class="w-full btn hover:bg-gray-200" on:click={clearGame}>Reset</button>
+    <div class="flex h-full flex-col justify-end">
+      <button class="btn w-full hover:bg-gray-200" on:click={clearGame}>Reset</button>
       <button
-        class="w-full mt-2 flex items-center justify-center btn"
+        class="btn mt-2 flex w-full items-center justify-center"
         class:primary={showQuit}
         class:success={!showQuit}
         on:click={handleClickPlay}
@@ -186,7 +186,9 @@
   </div>
 </fieldset>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   ul {
     li + li {
       @apply mt-1;

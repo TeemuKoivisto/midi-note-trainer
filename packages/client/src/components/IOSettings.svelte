@@ -84,14 +84,14 @@
 <fieldset
   class={`${
     $$props.class || ''
-  } relative flex flex-col min-w-[auto] max-w-full rounded border-2 px-4 pt-2 pb-4 my-4 text-sm`}
+  } relative my-4 flex min-w-[auto] max-w-full flex-col rounded border-2 px-4 pb-4 pt-2 text-sm`}
   class:collapsed={$hidden}
 >
-  <legend class="text-base flex w-fit">
-    <button class="px-1 z-0 rounded hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
+  <legend class="flex w-fit text-base">
+    <button class="z-0 rounded px-1 hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
   </legend>
   <div
-    class="absolute top-[-0.25rem] right-[0.5rem] flex items-center justify-center"
+    class="absolute right-[0.5rem] top-[-0.25rem] flex items-center justify-center"
     class:hidden={$hidden}
   >
     <button class="rounded px-1 py-1 hover:bg-gray-200" on:click={handleReset}>
@@ -102,18 +102,18 @@
     <div class="flex flex-col">
       <label class="font-bold" for="device">Device</label>
       <input
-        class="pl-[2px] py-0.5 my-1 rounded w-50 bg-[#f9f9f9]"
+        class="w-50 my-1 rounded bg-[#f9f9f9] py-0.5 pl-[2px]"
         id="device"
         disabled
         value={'data' in $midiInput ? $midiInput.data.name : $midiInput.err}
       />
-      <div class="mt-1 flex my-[auto]">
+      <div class="my-[auto] mt-1 flex">
         <button class="btn-sm primary mr-2" on:click={inputsActions.openMidi}>Prompt</button>
         <button class="btn-sm primary" on:click={inputsActions.disableMidi}>Disable</button>
       </div>
     </div>
     <div class="flex flex-col">
-      <div class="mb-1 flex justify-between items-center mr-12">
+      <div class="mb-1 mr-12 flex items-center justify-between">
         <label class="font-bold" for="sound">Sound</label>
         <Checkbox
           id="sound"
@@ -121,7 +121,7 @@
           on:change={e => inputsActions.setInputValue('useSound', e.currentTarget.checked)}
         />
       </div>
-      <div class="my-1 flex justify-between items-center mr-12">
+      <div class="my-1 mr-12 flex items-center justify-between">
         <label class="font-bold" for="virtual-piano">Virtual piano</label>
         <Checkbox
           id="virtual-piano"
@@ -141,7 +141,7 @@
       </div>
     </div>
     <div class="flex flex-col">
-      <div class="mb-1 flex justify-between items-center mr-12">
+      <div class="mb-1 mr-12 flex items-center justify-between">
         <label class="font-bold" for="keyboard">Keyboard</label>
         <Checkbox
           id="keyboard"
@@ -149,11 +149,11 @@
           on:change={e => inputsActions.setInputValue('useKeyboard', e.currentTarget.checked)}
         />
       </div>
-      <div class="my-1 flex justify-between items-center mr-12">
+      <div class="my-1 mr-12 flex items-center justify-between">
         <label class="font-bold" for="hotkeys">Hotkeys</label>
         <Checkbox id="hotkeys" checked={$inputs.useHotkeys} on:change={handleSetUseHotkeys} />
       </div>
-      <div class="my-1 flex justify-between items-center mr-12">
+      <div class="my-1 mr-12 flex items-center justify-between">
         <label class="font-bold" for="auto-octave">Auto-octave</label>
         <Checkbox
           id="auto-octave"
@@ -166,7 +166,7 @@
       <div class="h-[24px]">&nbsp;</div>
       <div class="my-[2px] flex justify-between">
         <button
-          class="w-full btn-sm primary"
+          class="btn-sm primary w-full"
           disabled={!$inputs.useHotkeys}
           on:click={handleToggleSetHotkeys}>Set hotkeys</button
         >
@@ -183,12 +183,14 @@
     </div>
   </div>
   {#if setKeys && !$hidden}
-    <h4 class="mt-4 font-bold text-lg">Hotkeys</h4>
+    <h4 class="mt-4 text-lg font-bold">Hotkeys</h4>
     <VirtualKeyboard />
   {/if}
 </fieldset>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   .collapsed {
     @apply py-0.5;
   }

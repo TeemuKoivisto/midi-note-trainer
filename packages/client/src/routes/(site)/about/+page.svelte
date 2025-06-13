@@ -5,7 +5,7 @@
 <NavBar />
 
 <h1
-  class="mt-12 mb-8 md:mt-16 px-4 text-4xl md:text-5xl font-bold tracking-tight flex items-center justify-between"
+  class="mb-8 mt-12 flex items-center justify-between px-4 text-4xl font-bold tracking-tight md:mt-16 md:text-5xl"
 >
   About
 </h1>
@@ -35,5 +35,5 @@
   </p>
 </article>
 
-<style lang="scss">
+<style lang="postcss">
 </style>

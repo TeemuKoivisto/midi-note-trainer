@@ -50,7 +50,7 @@
   style="left: {left}px; height: {height}; width: {width}px; z-index: {zIndex};"
 >
   <button
-    class="relative w-full h-full shadow bg-white border border-gray-600 flex justify-center"
+    class="relative flex h-full w-full justify-center border border-gray-600 bg-white shadow"
     class:is-first={isFirst}
     class:is-last={isLast}
     class:white-key={isWhite}
@@ -65,11 +65,13 @@
   </button>
 </li>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   li {
     button {
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      @apply relative shadow outline-none rounded-b top-0;
+      @apply relative top-0 rounded-b shadow outline-none;
       &.is-first {
         @apply rounded-tl;
       }

@@ -25,7 +25,9 @@
   {...$$props}
 />
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   /** https://moderncss.dev/pure-css-custom-checkbox-style/ */
   input[type='checkbox'] {
     /* Add if not using autoprefixer */
@@ -38,10 +40,10 @@
     display: grid;
     place-content: center;
     position: relative;
-    @apply w-4 h-4 m-0 rounded-sm border border-gray-500;
+    @apply m-0 h-4 w-4 rounded-sm border border-gray-500;
 
     &:checked {
-      @apply bg-blue-500 border-blue-500;
+      @apply border-blue-500 bg-blue-500;
       &:before {
         transform: scale(1);
       }
@@ -52,10 +54,9 @@
       transform: scale(0);
       transform-origin: bottom left;
       transition: 120ms transform ease-in-out;
-      // box-shadow: inset 1em 1em rgba(0, 0, 0, 0.06);
       /* Windows High Contrast Mode */
       background-color: CanvasText;
-      @apply w-[0.65rem] h-[0.65rem] bg-white;
+      @apply h-[0.65rem] w-[0.65rem] bg-white;
     }
     &:after {
       background: transparent;
@@ -65,7 +66,7 @@
       pointer-events: none;
       top: -1px;
       left: -1px;
-      @apply h-4 w-4 scale-0 transition-[box-shadow_0.2s,transform_0.2s] rounded-full shadow-[0px_0px_0px_11px_rgba(0,0,0,0.1)];
+      @apply h-4 w-4 scale-0 rounded-full shadow-[0px_0px_0px_11px_rgba(0,0,0,0.1)] transition-[box-shadow_0.2s,transform_0.2s];
     }
     &:focus-visible {
       @apply outline-none;
@@ -74,8 +75,6 @@
       }
     }
     &:disabled {
-      // --form-control-color: var(--form-control-disabled);
-      // color: var(--form-control-disabled);
       cursor: not-allowed;
     }
   }

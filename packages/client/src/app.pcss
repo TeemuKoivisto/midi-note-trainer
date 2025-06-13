@@ -1,0 +1,54 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Syne:wght@400..800&family=Outfit:wght@100..900&display=swap'); */
+@import 'tailwindcss';
+
+@font-face {
+  /* https://github.com/steinbergmedia/bravura/blob/02e8ed29a29115df35007d1178cebaeee26c20e1/redist/otf/BravuraText.otf */
+  font-family: 'Bravura Text';
+  src: url('/BravuraText.otf');
+}
+
+@font-face {
+  /* https://fonts.google.com/noto/specimen/Noto+Music */
+  font-family: 'Noto Music';
+  src: url('/NotoMusic-Regular.ttf');
+}
+
+@theme {
+  --font-sans: Syne, ui-sans-serif, system-ui, sans-serif;
+  --font-heading: Nunito Sans, sans-serif;
+  --font-yahtzee: Outfit, sans-serif;
+}
+
+.scroll-lock {
+  overflow: hidden;
+}
+
+@layer components {
+  .btn {
+    @apply rounded px-4 py-1 font-bold;
+  }
+  .btn-sm {
+    @apply rounded px-2 py-0.5 text-sm;
+  }
+  .btn-pill {
+    @apply rounded-full px-4 py-1 font-bold;
+  }
+  .primary {
+    @apply bg-blue-500 text-white hover:bg-blue-700;
+    &:disabled {
+      @apply bg-gray-300 hover:bg-gray-300;
+    }
+  }
+  .success {
+    @apply bg-green-500 text-white hover:bg-green-700;
+    &:disabled {
+      @apply bg-gray-300 hover:bg-gray-300;
+    }
+  }
+  .danger {
+    @apply bg-red-500 text-white hover:bg-red-700;
+    &:disabled {
+      @apply bg-gray-300 hover:bg-gray-300;
+    }
+  }
+}

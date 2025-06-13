@@ -16,19 +16,19 @@
 </script>
 
 {#if $openModal}
-  <div class="fixed z-40 w-full h-full top-0 left-0 flex items-center justify-center">
+  <div class="fixed left-0 top-0 z-40 flex h-full w-full items-center justify-center">
     <button
       transition:fade={{ duration: MODAL_DURATION }}
-      class="fixed z-40 inset-0 h-full w-full bg-black bg-opacity-50 outline-none cursor-default"
+      class="fixed inset-0 z-40 h-full w-full cursor-default bg-black bg-opacity-50 outline-none"
       on:click={handleOverlayClick}
       tabindex="-1"
     />
 
     <div
       transition:scale={{ duration: MODAL_DURATION }}
-      class="absolute top-4 bottom-0 mb-4 z-50 bg-gray-100 w-11/12 mx-auto rounded-xl shadow-lg overflow-y-auto md:max-w-3xl"
+      class="absolute bottom-0 top-4 z-50 mx-auto mb-4 w-11/12 overflow-y-auto rounded-xl bg-gray-100 shadow-lg md:max-w-3xl"
     >
-      <div class="relative flex flex-col p-6 text-left bg-gray-100">
+      <div class="relative flex flex-col bg-gray-100 p-6 text-left">
         <svelte:component
           this={components[$openModal]}
           params={$modals[$openModal]}

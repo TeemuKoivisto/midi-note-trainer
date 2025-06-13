@@ -5,8 +5,12 @@
   import type { ModalParams } from '$stores/modal'
   import { onMount } from 'svelte'
 
-  export let params: ModalParams['introduction']
-  export let hideModal: () => void = () => undefined
+  interface Props {
+    params: ModalParams['introduction']
+    hideModal?: () => void
+  }
+
+  let { params, hideModal = () => undefined }: Props = $props()
 
   let originalFocusedEl: HTMLElement
   let closeButtonEl: HTMLElement
@@ -34,16 +38,16 @@
 
 <svelte:window on:keydown={handleKeyDown} />
 
-<div bind:this={closeButtonEl} tabindex="-1" class="flex flex-col relative focus:outline-none">
-  <div class="absolute -top-2 -right-2">
+<div bind:this={closeButtonEl} tabindex="-1" class="relative flex flex-col focus:outline-none">
+  <div class="absolute -right-2 -top-2">
     <button
-      class="flex items-center text-sm rounded-full px-2 py-2 hover:bg-gray-200"
+      class="flex items-center rounded-full px-2 py-2 text-sm hover:bg-gray-200"
       on:click={hideModal}
     >
       <Icon icon={x} width={24} />
     </button>
   </div>
-  <h2 class="pl-1.5 mt-4 mb-2 text-4xl sm:text-5xl font-semibold text-black">Introduction</h2>
+  <h2 class="mb-2 mt-4 pl-1.5 text-4xl font-semibold text-black sm:text-5xl">Introduction</h2>
   <article class="w-full p-2 pb-4">
     <p>Greetings! 👋</p>
     <p>
@@ -215,11 +219,13 @@
   </article>
 </div>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   article {
     a {
       font-weight: 600;
-      @apply underline text-[#0000ff] break-all;
+      @apply break-all text-[#0000ff] underline;
     }
     hr {
       @apply my-16 border-gray-900;
@@ -228,13 +234,12 @@
       @apply my-4 pl-[2px];
     }
     & > h3 {
-      @apply font-sans mt-10 mb-6 text-2xl sm:text-3xl tracking-tight pl-[1px];
+      @apply mb-6 mt-10 pl-[1px] font-sans text-2xl tracking-tight sm:text-3xl;
     }
     pre {
-      // padding-left: 6px;
       @apply my-4;
       code {
-        @apply p-4 block bg-white rounded overflow-y-auto;
+        @apply block overflow-y-auto rounded bg-white p-4;
       }
     }
   }

@@ -16,5 +16,5 @@
   >
 </div>
 
-<style lang="scss">
+<style lang="postcss">
 </style>

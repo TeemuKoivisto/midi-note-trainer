@@ -51,12 +51,12 @@
 <div class={`${$$props.class || ''} relative`}>
   <div class="flex justify-between">
     <div class="options">
-      <div class="my-1 flex items-center justify-between mr-2">
-        <label class="font-bold mr-4" for="middle-row">Layout</label>
+      <div class="my-1 mr-2 flex items-center justify-between">
+        <label class="mr-4 font-bold" for="middle-row">Layout</label>
         <Dropdown
           id="keyboard-lang"
           containerClass="w-36"
-          class="p-1 w-36"
+          class="w-36 p-1"
           options={langOptions}
           onSelect={handleSelectLanguage}
         >
@@ -64,7 +64,7 @@
         </Dropdown>
       </div>
       <div class="my-1 flex items-center">
-        <label class="font-bold mr-4" for="custom-layout">Custom</label>
+        <label class="mr-4 font-bold" for="custom-layout">Custom</label>
         <Checkbox
           id="custom-layout"
           checked={$keyboardOptions.isCustom}
@@ -72,9 +72,9 @@
         />
       </div>
       <div class="my-1 flex items-center">
-        <label class="font-bold mr-4" for="two-rows">One row</label>
+        <label class="mr-4 font-bold" for="two-rows">One row</label>
         <Toggle checked={!useMiddleRow} on:change={handleToggleRows} />
-        <label class="font-bold ml-4" for="two-rows">Two rows</label>
+        <label class="ml-4 font-bold" for="two-rows">Two rows</label>
       </div>
     </div>
     <div class="flex items-center justify-center">
@@ -89,7 +89,7 @@
         <li class="col-span-2 min-w-[24px]">
           {#if settableRows[ridx] && $keyboardOptions.isCustom}
             <button
-              class="flex items-center justify-center rounded w-full h-full hover:bg-gray-300"
+              class="flex h-full w-full items-center justify-center rounded hover:bg-gray-300"
               on:click={() => handleSetRowKeys(ridx)}
             >
               <Icon icon={circle} width={20} />
@@ -104,11 +104,13 @@
   </div>
 </div>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   ul {
     @apply h-48;
     li {
-      @apply m-[0.175rem] shadow bg-[#ececf1] rounded flex items-center justify-center;
+      @apply m-[0.175rem] flex items-center justify-center rounded bg-[#ececf1] shadow;
     }
   }
   .options {

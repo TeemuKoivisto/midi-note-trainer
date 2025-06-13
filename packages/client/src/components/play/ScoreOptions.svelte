@@ -90,14 +90,14 @@
 <fieldset
   class={`${
     $$props.class || ''
-  } flex flex-col rounded border-2 px-4 py-2 w-[224px] relative text-sm`}
+  } relative flex w-[224px] flex-col rounded border-2 px-4 py-2 text-sm`}
   class:collapsed={$hidden}
 >
-  <legend class="text-base flex w-fit">
-    <button class="px-1 z-0 rounded hover:bg-gray-100" on:click={toggleVisibility}>Score</button>
+  <legend class="flex w-fit text-base">
+    <button class="z-0 rounded px-1 hover:bg-gray-100" on:click={toggleVisibility}>Score</button>
   </legend>
   <button
-    class="absolute top-[-0.25rem] right-[0.5rem] flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
+    class="absolute right-[0.5rem] top-[-0.25rem] flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
     class:hidden={$hidden}
     on:click={resetKeyAndScale}
   >
@@ -106,16 +106,16 @@
   <div class="options" class:hidden={$hidden}>
     <div class="range flex flex-col">
       <label class="font-bold" for="range_min">Range</label>
-      <div class="my-1 flex items-center w-full">
+      <div class="my-1 flex w-full items-center">
         <div class="mr-2 flex flex-col items-center rounded">
           <button
-            class="p-2 rounded hover:bg-gray-200"
+            class="rounded p-2 hover:bg-gray-200"
             on:click={() => inputsActions.shiftMidiRange(true, true)}
           >
             <Icon icon={arrowUp} width={20} />
           </button>
           <button
-            class="mt-1 p-2 rounded hover:bg-gray-200"
+            class="mt-1 rounded p-2 hover:bg-gray-200"
             on:click={() => inputsActions.shiftMidiRange(true, false)}
           >
             <Icon icon={arrowDown} width={20} />
@@ -123,7 +123,7 @@
         </div>
         <input
           id="range_min"
-          class="h-[28px] w-full min-w-[2rem] text-right p-1 bg-transparent rounded"
+          class="h-[28px] w-full min-w-[2rem] rounded bg-transparent p-1 text-right"
           bind:value={rangeMin}
           on:change={e => handleRangeChanged('min', e)}
           on:focus={rangeFocus}
@@ -131,27 +131,27 @@
         <span class="mx-2">—</span>
         <input
           id="range_max"
-          class="w-full min-w-[2rem] p-1 bg-transparent rounded"
+          class="w-full min-w-[2rem] rounded bg-transparent p-1"
           bind:value={rangeMax}
           on:change={e => handleRangeChanged('max', e)}
           on:focus={rangeFocus}
         />
         <div class="ml-2 flex flex-col items-center rounded">
           <button
-            class="p-2 rounded hover:bg-gray-200"
+            class="rounded p-2 hover:bg-gray-200"
             on:click={() => inputsActions.shiftMidiRange(false, true)}
           >
             <Icon icon={arrowUp} width={20} />
           </button>
           <button
-            class="mt-1 p-2 rounded hover:bg-gray-200"
+            class="mt-1 rounded p-2 hover:bg-gray-200"
             on:click={() => inputsActions.shiftMidiRange(false, false)}
           >
             <Icon icon={arrowDown} width={20} />
           </button>
         </div>
       </div>
-      <div class="flex justify-between my-1">
+      <div class="my-1 flex justify-between">
         {#if rangeError}
           <div class="error">{rangeError}</div>
         {/if}
@@ -162,7 +162,7 @@
       <div class="scale-dropdown my-1 w-full">
         <SearchDropdown
           id="score-scale"
-          class="p-1 pl-[2px] w-full"
+          class="w-full p-1 pl-[2px]"
           selected={selectedScale}
           options={scaleOptions}
           onSelect={handleSelectScale}
@@ -192,7 +192,9 @@
   </div>
 </fieldset>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   .collapsed {
     @apply h-8 py-0.5;
   }
