@@ -7,7 +7,7 @@ import { persist } from './persist'
 import { getNote, type MidiNote } from '@/chords-and-scales'
 
 import type { Input } from 'webmidi'
-import type { Result } from '@/types'
+import type { Result } from '@/lib'
 
 interface Inputs {
   fixedVelocity: number | undefined

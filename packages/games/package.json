@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@/chords-and-scales": "workspace:*",
-    "@/types": "workspace:*",
+    "@/lib": "workspace:*",
     "vitest": "^3.2.3"
   }
 }

@@ -34,7 +34,7 @@
     "@/chords-and-scales": "workspace:*",
     "@/games": "workspace:*",
     "@/keyboard": "workspace:*",
-    "@/types": "workspace:*",
+    "@/lib": "workspace:*",
     "@iconify-icons/feather": "^1.2.3",
     "@iconify-icons/lucide": "^1.2.135",
     "@iconify-icons/mdi": "^1.2.48",

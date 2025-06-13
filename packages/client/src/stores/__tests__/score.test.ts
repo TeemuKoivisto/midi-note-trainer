@@ -40,7 +40,7 @@ describe('score', () => {
       interval: 50
     })
     expect(get(played).length).toBe(0)
-    expect(timeoutSpy).toBeCalledTimes(2)
+    expect(timeoutSpy).toBeCalledTimes(3)
 
     scoreActions.pushPlayed(60, undefined, 500)
     setTimeout(() => {

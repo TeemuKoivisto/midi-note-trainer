@@ -1,9 +1,20 @@
+import { version } from '$app/environment'
+
 const getEnv = (env: string | undefined) => {
   if (!env) {
     throw new Error('Undefined environment variable!')
   }
   return env
 }
+
+const parseInteger = (str?: string) => {
+  try {
+    return parseInt(str || '')
+  } catch (err) {}
+  return undefined
+}
+
+const buildTime = parseInteger(version)
 
 export const DEV = import.meta.env.DEV
 export const GH_BASE_URL = import.meta.env.VITE_DEPLOY_TO_GH ? '/midi-note-trainer/' : '/'
@@ -31,7 +42,7 @@ export const SITE_METADATA = {
     'chords'
   ],
   datePublished: '2024-04-02T12:01:30.978Z',
-  dateModified: new Date().toISOString(),
+  dateModified: buildTime ? new Date(buildTime).toISOString() : null,
   author: {
     name: 'Teemu Koivisto'
   }
