@@ -17,7 +17,7 @@ export const SITE_METADATA = {
     url: 'https://midi-note-trainer.teemukoivisto.xyz/cover_image_1080.jpg',
     width: 1080,
     height: 566,
-    alt: 'Image of MIDI Note Trainer UI'
+    alt: 'MIDI Note Trainer frontpage UI'
   },
   tags: [
     'music',
