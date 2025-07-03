@@ -1,6 +1,5 @@
 <script lang="ts">
   import { fade, scale } from 'svelte/transition'
-  import { onMount } from 'svelte'
 
   import Introduction from './Introduction.svelte'
   import ModalContent from './ModalContent.svelte'
@@ -19,6 +18,12 @@
       if (document.activeElement instanceof HTMLElement) {
         originalFocusedEl = document.activeElement
       }
+      focusableElements = Array.from(
+        modalContainer.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+      )
+      if (focusableElements[0]) focusableElements[0].focus()
       document.querySelector('html')!.style.overflow = 'hidden'
     } else {
       originalFocusedEl?.focus()
@@ -34,16 +39,6 @@
 
   function handleOverlayClick() {
     modalActions.close()
-  }
-
-  function updateFocusableElements() {
-    if (modalContainer) {
-      focusableElements = Array.from(
-        modalContainer.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        )
-      ) as HTMLElement[]
-    }
   }
 
   function handleTabKey(e: KeyboardEvent) {
@@ -84,12 +79,7 @@
 {#if $openModal}
   <div
     class="fixed inset-0 z-50 flex items-center justify-center"
-    role="dialog"
-    tabindex="-1"
     transition:fade={{ duration: MODAL_DURATION }}
-    bind:this={modalContainer}
-    onkeydown={handleModalKeyDown}
-    onfocusin={updateFocusableElements}
   >
     <button
       class="absolute inset-0 bg-black/50"
@@ -101,7 +91,11 @@
     <div
       transition:scale={{ duration: MODAL_DURATION }}
       class="absolute bottom-0 top-0 mx-auto flex items-center justify-center overflow-y-auto sm:bottom-4 sm:top-4 md:max-w-3xl"
+      role="dialog"
+      tabindex={-1}
+      bind:this={modalContainer}
       onclick={clickContainer}
+      onkeydown={handleModalKeyDown}
     >
       <div
         class="relative flex h-full w-screen max-w-2xl bg-white shadow-lg sm:w-full sm:min-w-[512px] sm:rounded-xl"
@@ -124,5 +118,4 @@
 {/if}
 
 <style lang="postcss">
-  /* Additional styles can be added here if needed */
 </style>
