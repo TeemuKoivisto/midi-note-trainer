@@ -1,7 +1,7 @@
 <script lang="ts">
   import Modal from '$modals/Modal.svelte'
 
-  import '../tailwind.css'
+  import '../app.pcss'
 </script>
 
 <slot />

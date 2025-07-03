@@ -143,8 +143,8 @@ export const keyboardActions = {
               (c.toLowerCase() === 'b' || c === '♭'
                 ? -1
                 : c.toLowerCase() === 's' || c === '#' || c === '♯'
-                ? 1
-                : 0),
+                  ? 1
+                  : 0),
             0
           )
         if (shifted > 0) {

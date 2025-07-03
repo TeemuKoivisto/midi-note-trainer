@@ -112,7 +112,7 @@
     &nbsp;
   {/if}
 </div>
-<div class="mt-2 h-8 flex items-center">
+<div class="mt-2 flex h-8 items-center">
   {#if game && $guessState === 'ended'}
     <button class="btn primary mr-1" on:click={tryAgain}>Try Again</button>
     <button class="btn primary" on:click={clearGame}>Clear</button>
@@ -128,7 +128,9 @@
   {/if}
 </div>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   .guessed {
     display: grid;
     gap: 0.25rem;

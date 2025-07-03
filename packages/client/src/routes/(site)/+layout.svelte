@@ -4,7 +4,7 @@
 
   import { SITE_METADATA } from '$config'
 
-  import '../../tailwind.css'
+  import '../../app.pcss'
 
   let url = SITE_METADATA.url
 
@@ -49,7 +49,7 @@
 />
 
 <div class="flex-col items-center justify-center">
-  <main class="flex-col items-center justify-center h-full min-h-screen max-w-[780px] mx-[auto]">
+  <main class="mx-[auto] h-full min-h-screen max-w-[780px] flex-col items-center justify-center">
     <slot />
   </main>
 </div>

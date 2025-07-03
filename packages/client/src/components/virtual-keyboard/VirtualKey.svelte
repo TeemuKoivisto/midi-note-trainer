@@ -70,18 +70,18 @@
   class:captured
 >
   <button
-    class="relative w-full h-full shadow bg-[#ececf1] rounded flex justify-center"
+    class="relative flex h-full w-full justify-center rounded bg-[#ececf1] shadow"
     class:items-center={!value.note}
     class:items-end={value.note}
     on:click
   >
     {#if value.key === '{enter}'}
       <div
-        class="enter-part bg-[#ececf1] rounded-l absolute top-[-2px] left-[-12px] w-[13px] h-[2.8rem]"
+        class="enter-part absolute left-[-12px] top-[-2px] h-[2.8rem] w-[13px] rounded-l bg-[#ececf1]"
       ></div>
     {/if}
     {#if value.note}
-      <div class="absolute top-0 left-0">{value.note.note}{octave}</div>
+      <div class="absolute left-0 top-0">{value.note.note}{octave}</div>
     {/if}
     <div class="text">
       {formatValue(value.key)}
@@ -89,7 +89,9 @@
   </button>
 </li>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   li {
     @media (width <= 656px) {
       font-size: 12px;

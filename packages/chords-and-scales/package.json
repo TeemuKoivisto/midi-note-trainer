@@ -19,10 +19,10 @@
   ],
   "scripts": {
     "build": "vite build",
-    "watch": "rimraf dist && vite build --watch",
+    "watch": "vite build --watch",
     "test": "vitest run"
   },
   "devDependencies": {
-    "vitest": "^1.0.4"
+    "vitest": "^3.2.3"
   }
 }

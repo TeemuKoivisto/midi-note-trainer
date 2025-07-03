@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<nav class={`${$$props.class || ''} mx-4 my-2 pb-2 border-b-2`}>
+<nav class={`${$$props.class || ''} mx-4 my-2 border-b-2 pb-2`}>
   <ul class="flex">
     <li>
       <a href="/" class="hover:underline">Home</a>
@@ -17,5 +17,5 @@
   </ul>
 </nav>
 
-<style lang="scss">
+<style lang="postcss">
 </style>

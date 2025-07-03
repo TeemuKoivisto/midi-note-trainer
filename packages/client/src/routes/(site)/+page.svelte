@@ -154,7 +154,7 @@
 <NavBar />
 
 <h1
-  class="mt-12 mb-4 md:mt-16 px-4 text-4xl md:text-5xl font-bold tracking-tight flex items-center justify-between"
+  class="mb-4 mt-12 flex items-center justify-between px-4 text-4xl font-bold tracking-tight md:mt-16 md:text-5xl"
 >
   MIDI Note Trainer
   <div class="flex items-center justify-center">
@@ -162,7 +162,7 @@
   </div>
 </h1>
 
-<div class="px-4 mb-8 md:mb-10">
+<div class="mb-8 px-4 md:mb-10">
   <button
     class="btn-pill border-2 border-gray-300 hover:bg-gray-200"
     on:click={() => modalActions.open('introduction', undefined)}>Introduction</button
@@ -194,7 +194,9 @@
   <VirtualPiano height={160} on:pressed={e => handlePlayedNote(e.detail, 80)} />
 {/if}
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   .play {
     display: grid;
     grid-template-columns: 1fr 3fr;

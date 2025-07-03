@@ -40,7 +40,7 @@ describe('score', () => {
       interval: 50
     })
     expect(get(played).length).toBe(0)
-    expect(timeoutSpy).toBeCalledTimes(2)
+    expect(timeoutSpy).toBeCalledTimes(3)
 
     scoreActions.pushPlayed(60, undefined, 500)
     setTimeout(() => {
@@ -66,7 +66,7 @@ describe('score', () => {
 
     const p = get(played)
     expect(p).toEqual([{ ...arr[0], started: p[0].started }])
-    expect(timeoutSpy).toBeCalledTimes(8)
+    expect(timeoutSpy).toBeCalledTimes(9)
 
     await vi.waitFor(() => new Promise(res => setTimeout(res, 2000)), {
       timeout: 4000,

@@ -5,7 +5,7 @@
 </script>
 
 <div class={`${$$props.class || ''} `}>
-  <button class="flex flex-wrap justify-between w-full" on:click>
+  <button class="flex w-full flex-wrap justify-between" on:click>
     <div class="intervals text-left">
       {#each scale.scaleNotes || [] as scaleNote}
         <span>{scaleNote.note}</span>
@@ -19,11 +19,13 @@
   </button>
 </div>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   .intervals {
     & > span + span::before {
       content: '-';
-      @apply text-xs mx-[1px];
+      @apply mx-[1px] text-xs;
     }
   }
 </style>

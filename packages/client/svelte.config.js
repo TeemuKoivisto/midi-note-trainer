@@ -1,32 +1,39 @@
-import adapter from '@sveltejs/adapter-static'
-import preprocess from 'svelte-preprocess'
+import adapterStatic from '@sveltejs/adapter-static'
+import { sveltePreprocess } from 'svelte-preprocess'
 
 /** @type {import('@sveltejs/kit').Config} */
 export default {
   // Consult https://github.com/sveltejs/svelte-preprocess
   // for more information about preprocessors
-  preprocess: [
-    preprocess({
-      postcss: true
-    })
-  ],
+  preprocess: sveltePreprocess({
+    // postcss: {
+    //   // @TODO you are not supposed to need both configFilePath & plugins but the intellisense doesn't
+    //   // work with configFilePath and providing plugins directly doesn't load Tailwind so...
+    //   configFilePath: resolve('postcss.config.js'),
+    //   plugins: [tailwindcss, autoprefixer, nested],
+    // },
+  }),
 
   kit: {
     files: {
       routes: './src/routes',
       lib: './src/lib'
     },
-    paths: {
-      base: process.env.VITE_DEPLOY_TO_GH ? '/midi-note-trainer' : ''
-    },
-    adapter: adapter({
-      // default options are shown
+    adapter: adapterStatic({
       pages: 'build',
       assets: 'build',
-      fallback: '200.html'
+      fallback: '404.html'
     }),
-    serviceWorker: process.env.NODE_ENV === 'development' ? {
-      register: false
-    } : undefined
+    alias: {
+      $api: 'src/api',
+      $components: 'src/components',
+      $config: 'src/config',
+      $elements: 'src/elements',
+      $hooks: 'src/hooks',
+      $lib: 'src/lib',
+      $modals: 'src/modals',
+      $stores: 'src/stores',
+      $utils: 'src/utils'
+    }
   }
 }

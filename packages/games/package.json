@@ -19,12 +19,12 @@
   ],
   "scripts": {
     "build": "vite build",
-    "watch": "rimraf dist && vite build --watch",
+    "watch": "vite build --watch",
     "test": "vitest run"
   },
   "devDependencies": {
     "@/chords-and-scales": "workspace:*",
-    "@/types": "workspace:*",
-    "vitest": "^1.0.4"
+    "@/lib": "workspace:*",
+    "vitest": "^3.2.3"
   }
 }

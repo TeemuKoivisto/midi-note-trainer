@@ -120,7 +120,10 @@ export const gameActions = {
     } else if (game instanceof GuessChords) {
       scoreActions.setTarget(game.current.notes)
       scoreActions.clearPlayed()
-      inputsActions.play(game?.current.notes.map(n => n.midi), 80)
+      inputsActions.play(
+        game?.current.notes.map(n => n.midi),
+        80
+      )
       guessState.set('waiting')
       game.startTime()
     } else if (game instanceof GuessKeys) {

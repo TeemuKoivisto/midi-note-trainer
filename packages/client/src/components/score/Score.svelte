@@ -251,8 +251,8 @@
 </script>
 
 <section class={`${$$props.class || ''} relative overflow-hidden`}>
-  <div id="output" class="grid justify-start content-center" bind:this={outputEl}></div>
-  <div class="absolute left-4 buttons">
+  <div id="output" class="grid content-center justify-start" bind:this={outputEl}></div>
+  <div class="buttons absolute left-4">
     <div class="flex flex-col">
       <ReplayButton />
       <QuitButton />
@@ -260,7 +260,9 @@
   </div>
 </section>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   #output {
     transform-origin: left;
     transform: scale(1.75);
@@ -302,7 +304,4 @@
   :global(.vf-stave path) {
     stroke: #000;
   }
-  // :global(.vf-stave path:nth-of-type(2)) {
-  //   stroke: #222;
-  // }
 </style>

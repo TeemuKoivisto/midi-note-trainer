@@ -50,7 +50,7 @@
       on:change={handleCountChanged}
     />
   </li>
-  <li class="flex items-center justify-between items-center mr-6">
+  <li class="mr-6 flex items-center items-center justify-between">
     <label class="font-bold" for="duplicates">Duplicates</label>
     <Checkbox
       id="duplicates"
@@ -58,7 +58,7 @@
       on:input={e => gameActions.setOptionValue('duplicates', e.currentTarget.checked)}
     />
   </li>
-  <li class="flex items-center justify-between items-center mr-6">
+  <li class="mr-6 flex items-center items-center justify-between">
     <label class="font-bold" for="autoplay">Autoplay</label>
     <Checkbox
       id="autoplay"
@@ -79,7 +79,9 @@
   </li>
 </ul>
 
-<style lang="scss">
+<style lang="postcss">
+  @reference "#app.pcss";
+
   ul {
     li + li {
       @apply mt-1;
