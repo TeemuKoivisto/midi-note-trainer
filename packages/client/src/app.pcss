@@ -19,8 +19,15 @@
   --font-yahtzee: Outfit, sans-serif;
 }
 
-.scroll-lock {
-  overflow: hidden;
+@layer base {
+  *,
+  ::before,
+  ::after {
+    @apply dark:border-gray-200;
+  }
+  button {
+    @apply cursor-pointer;
+  }
 }
 
 @layer components {
@@ -51,4 +58,8 @@
       @apply bg-gray-300 hover:bg-gray-300;
     }
   }
+}
+
+.scroll-lock {
+  overflow: hidden;
 }
