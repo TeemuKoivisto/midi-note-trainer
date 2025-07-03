@@ -12,7 +12,8 @@
     "dev": "vite",
     "preview": "vite preview",
     "svelte-check": "svelte-check",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test2": "vitest run -t score"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.8",
