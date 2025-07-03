@@ -86,8 +86,6 @@
       aria-label="Close modal"
       onclick={handleOverlayClick}
     ></button>
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
       transition:scale={{ duration: MODAL_DURATION }}
       class="absolute bottom-0 top-0 mx-auto flex items-center justify-center overflow-y-auto sm:bottom-4 sm:top-4 md:max-w-3xl"
