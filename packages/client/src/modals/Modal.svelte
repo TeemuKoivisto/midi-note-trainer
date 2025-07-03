@@ -13,15 +13,16 @@
   let focusableElements: HTMLElement[]
   let contentEl: HTMLDivElement
 
-  onMount(() => {
-    // Capture the currently focused element to restore focus when modal closes
-    if (document.activeElement instanceof HTMLElement) {
-      originalFocusedEl = document.activeElement
-    }
-    document.querySelector('html')?.classList.add('scroll-lock')
-    return () => {
+  $effect(() => {
+    if ($openModal) {
+      // Capture the currently focused element to restore focus when modal closes
+      if (document.activeElement instanceof HTMLElement) {
+        originalFocusedEl = document.activeElement
+      }
+      document.querySelector('html')!.style.overflow = 'hidden'
+    } else {
       originalFocusedEl?.focus()
-      document.querySelector('html')?.classList.remove('scroll-lock')
+      document.querySelector('html')!.style.overflow = ''
     }
   })
 
