@@ -48,7 +48,8 @@
       class="fixed inset-0 z-20 h-full w-full cursor-default outline-none"
       on:click={handleOpen}
       tabindex="-1"
-    />
+      aria-label="Overlay"
+    ></button>
     <ul
       transition:slide={{ duration: DROPDOWN_DURATION }}
       class={`items-list absolute left-0 z-30 h-64 overflow-y-scroll rounded-b bg-white py-1.5 py-2 text-sm shadow-xl ${

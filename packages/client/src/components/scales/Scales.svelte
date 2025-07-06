@@ -17,6 +17,11 @@
   import { persist } from '$stores/persist'
 
   import type { MidiNote, RawScale, Scale, ScaleNote, ScaleTrichord } from '@/chords-and-scales'
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLDivElement> {}
+
+  let { ...rest }: Props = $props()
 
   interface ListItem {
     key: string
@@ -26,42 +31,46 @@
     chords: string[]
   }
 
-  const scales = scalesFromJSON()
-  let scalesList: ListItem[] = scales.map(scl => ({
-    key: scl.names[0],
-    raw: scl,
-    scale: createScaleUnsafe($scaleData.key, scl.names[0]),
-    trichords: scl.trichords,
-    chords: []
-  }))
-  let leftList: ListItem[] = []
-  let rightList: ListItem[] = []
-  $: {
-    let where = 'Major'
-    leftList = []
-    rightList = []
-    // Show both Major and Minor keys in split list view so you don't have to scroll
-    scalesList.forEach(v => {
-      if (v.key === 'Minor') {
-        where = v.key
-      } else if (v.key === 'Ionian') {
-        where = 'rest'
-      }
-      if (where === 'Major') {
-        leftList.push(v)
-      } else if (where === 'Minor') {
-        rightList.push(v)
-      } else if (rightList.length < leftList.length) {
-        rightList.push(v)
-      } else {
-        leftList.push(v)
-      }
-    })
+  const scales = $derived(scalesFromJSON())
+  let scalesList = $state<ListItem[]>(
+    scales.map(scl => ({
+      key: scl.names[0],
+      raw: scl,
+      scale: createScaleUnsafe($scaleData.key, scl.names[0]),
+      trichords: scl.trichords,
+      chords: []
+    }))
+  )
+  type Lists = {
+    where: string
+    leftList: ListItem[]
+    rightList: ListItem[]
   }
-
-  let shownKey = ''
-  let oldKeyAndScale = [$scaleData.key, $scaleData.scale]
-  let playingNotesTimeout: ReturnType<typeof setTimeout> | undefined
+  let { leftList, rightList } = $derived(
+    scalesList.reduce<Lists>(
+      (acc, v) => {
+        if (v.key === 'Minor') {
+          acc.where = v.key
+        } else if (v.key === 'Ionian') {
+          acc.where = 'rest'
+        }
+        if (acc.where === 'Major') {
+          acc.leftList.push(v)
+        } else if (acc.where === 'Minor') {
+          acc.rightList.push(v)
+        } else if (acc.rightList.length < acc.leftList.length) {
+          acc.rightList.push(v)
+        } else {
+          acc.leftList.push(v)
+        }
+        return acc
+      },
+      { where: 'Major', leftList: [], rightList: [] }
+    )
+  )
+  let shownKey = $state('')
+  let oldKeyAndScale = $state([$scaleData.key, $scaleData.scale])
+  let playingNotesTimeout = $state<ReturnType<typeof setTimeout> | undefined>()
 
   const hidden = persist(writable(true), { key: 'scales-hidden' })
 
@@ -147,13 +156,13 @@
   }
 </script>
 
-<div class={`${$$props.class || ''}`}>
+<div {...rest} class={`${rest.class || ''}`}>
   <fieldset
     class="my-4 flex flex-col rounded border-2 px-4 pb-4 pt-2 text-sm"
     class:collapsed={$hidden}
   >
     <legend class="flex w-fit text-base">
-      <button class="z-0 rounded px-1 hover:bg-gray-100" on:click={toggleVisibility}>Scales</button>
+      <button class="z-0 rounded px-1 hover:bg-gray-100" onclick={toggleVisibility}>Scales</button>
     </legend>
     <div class="input mb-2 flex" class:hidden={$hidden}>
       <label class="mr-4 font-bold" for="scale-key">Key</label>
@@ -161,7 +170,7 @@
         class="w-16 rounded bg-gray-100 px-1"
         id="scale-key"
         value={shownKey}
-        on:input={handleKeyChange}
+        oninput={handleKeyChange}
       />
     </div>
     <div class="body max-h-[30rem] overflow-scroll" class:hidden={$hidden}>
@@ -172,12 +181,12 @@
             <Intervals
               scale={scale.scale}
               intervals={scale.raw.intervals}
-              on:click={() => handleIntervalsClicked(scale)}
+              onClick={() => handleIntervalsClicked(scale)}
             />
             <Trichords
               trichords={scale.trichords}
               chords={scale.chords}
-              on:click={() => handleTrichordsClicked(scale)}
+              onClick={() => handleTrichordsClicked(scale)}
             />
           </li>
         {/each}
@@ -189,12 +198,12 @@
             <Intervals
               scale={scale.scale}
               intervals={scale.raw.intervals}
-              on:click={() => handleIntervalsClicked(scale)}
+              onClick={() => handleIntervalsClicked(scale)}
             />
             <Trichords
               trichords={scale.trichords}
               chords={scale.chords}
-              on:click={() => handleTrichordsClicked(scale)}
+              onClick={() => handleTrichordsClicked(scale)}
             />
           </li>
         {/each}
@@ -206,12 +215,12 @@
             <Intervals
               scale={scale.scale}
               intervals={scale.raw.intervals}
-              on:click={() => handleIntervalsClicked(scale)}
+              onClick={() => handleIntervalsClicked(scale)}
             />
             <Trichords
               trichords={scale.trichords}
               chords={scale.chords}
-              on:click={() => handleTrichordsClicked(scale)}
+              onClick={() => handleTrichordsClicked(scale)}
             />
           </li>
         {/each}

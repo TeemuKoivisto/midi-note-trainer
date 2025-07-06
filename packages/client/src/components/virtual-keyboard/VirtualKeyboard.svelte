@@ -12,6 +12,11 @@
   import VirtualKey from './VirtualKey.svelte'
 
   import { keyboard, keyboardOptions, rows, keyboardActions } from '$stores/keyboard'
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLDivElement> {}
+
+  let props: Props = $props()
 
   onMount(() => {
     if (!$keyboard.opts.isCustom) {
@@ -19,10 +24,12 @@
     }
   })
 
-  $: settableRows = $rows.map((_, idx) =>
-    $keyboardOptions.hotkeydRows === 'middle-row' ? idx === 1 || idx === 2 : true
+  let settableRows = $derived(
+    $rows.map((_, idx) =>
+      $keyboardOptions.hotkeydRows === 'middle-row' ? idx === 1 || idx === 2 : true
+    )
   )
-  $: useMiddleRow = $keyboardOptions.hotkeydRows === 'middle-row'
+  let useMiddleRow = $derived($keyboardOptions.hotkeydRows === 'middle-row')
 
   const langOptions = Object.entries(LAYOUTS).map(([k, v]) => ({
     key: k,
@@ -48,7 +55,7 @@
   }
 </script>
 
-<div class={`${$$props.class || ''} relative`}>
+<div {...props} class={`${props.class || ''} relative`}>
   <div class="flex justify-between">
     <div class="options">
       <div class="my-1 mr-2 flex items-center justify-between">
@@ -68,17 +75,17 @@
         <Checkbox
           id="custom-layout"
           checked={$keyboardOptions.isCustom}
-          on:change={handleUseCustomLayout}
+          onchange={handleUseCustomLayout}
         />
       </div>
       <div class="my-1 flex items-center">
         <label class="mr-4 font-bold" for="two-rows">One row</label>
-        <Toggle checked={!useMiddleRow} on:change={handleToggleRows} />
+        <Toggle checked={!useMiddleRow} onchange={handleToggleRows} />
         <label class="ml-4 font-bold" for="two-rows">Two rows</label>
       </div>
     </div>
     <div class="flex items-center justify-center">
-      <button class="rounded px-1 py-1 hover:bg-gray-200" on:click={handleReset}>
+      <button class="rounded px-1 py-1 hover:bg-gray-200" onclick={handleReset}>
         <Icon icon={restore} width={16} />
       </button>
     </div>
@@ -90,7 +97,7 @@
           {#if settableRows[ridx] && $keyboardOptions.isCustom}
             <button
               class="flex h-full w-full items-center justify-center rounded hover:bg-gray-300"
-              on:click={() => handleSetRowKeys(ridx)}
+              onclick={() => handleSetRowKeys(ridx)}
             >
               <Icon icon={circle} width={20} />
             </button>

@@ -11,14 +11,20 @@
   import { midiRange } from '$stores/inputs'
   import { getNote, getNoteAbsolute } from '@/chords-and-scales'
 
-  export let height: number
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLElement> {
+    height: number
+  }
+
+  let { height, ...rest }: Props = $props()
 
   const WHITE_INDECES = [0, 2, 4, 5, 7, 9, 11]
   const C0_MIDI = 12
   const C7_MIDI = 96
 
-  let innerWidth = typeof window !== 'undefined' ? window.innerWidth : 500
-  $: pianoWidth = Math.min(innerWidth, 780)
+  let innerWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 500)
+  let pianoWidth = $derived(Math.min(innerWidth, 780))
 
   const bottomNoteMidi = writable(findClosestC($midiRange[0]))
   const bottomNote = derived(bottomNoteMidi, v => getNoteAbsolute(getNote(v)))
@@ -27,18 +33,20 @@
     pressed: number
   }>()
 
-  let whiteKeyCount = 0
-  const keys = Array.from(new Array(12)).map((_, idx) => {
-    const isWhite = WHITE_INDECES.includes(idx % 12)
-    if (isWhite) {
-      whiteKeyCount += 1
-    }
-    return {
-      idx,
-      isWhite,
-      whiteKeyCount
-    }
-  })
+  let whiteKeyCount = $state(0)
+  let keys = $state(
+    Array.from(new Array(12)).map((_, idx) => {
+      const isWhite = WHITE_INDECES.includes(idx % 12)
+      if (isWhite) {
+        whiteKeyCount += 1
+      }
+      return {
+        idx,
+        isWhite,
+        whiteKeyCount
+      }
+    })
+  )
 
   midiRange.subscribe(v => {
     // Reset to range lowest C note when changed
@@ -60,15 +68,15 @@
 
 <svelte:window bind:innerWidth />
 
-<section>
+<section {...rest}>
   <div class="flex justify-between px-1.5 pb-1">
     <div class="flex items-center">
-      <IconButton icon={arrowDown} size={32} on:click={() => shiftRange(false)} />
+      <IconButton icon={arrowDown} size={32} onclick={() => shiftRange(false)} />
       <div class="pl-4">{$bottomNote}</div>
     </div>
     <div class="flex items-center">
       <div class="pr-4">{$topNote}</div>
-      <IconButton icon={arrowUp} size={32} on:click={() => shiftRange(true)} />
+      <IconButton icon={arrowUp} size={32} onclick={() => shiftRange(true)} />
     </div>
   </div>
   <ul class="relative flex flex-row overflow-x-scroll" style="height: {height}px;">

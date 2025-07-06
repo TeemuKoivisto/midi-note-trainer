@@ -8,12 +8,19 @@
   import { keyboardActions } from '$stores/keyboard'
   import { KeyboardInputState } from '$stores/keyboard/KeyboardInputState'
 
-  export let debounced: boolean, state: KeyboardInputState
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLDivElement> {
+    debounced: boolean
+    state: KeyboardInputState
+  }
+
+  let { debounced, state, ...rest }: Props = $props()
 
   // @TODO this error is not used
   let keyboardError = ''
-  $: keyboardInput = state.keyboardInput
-  $: inputtedNote = state.inputtedNote
+  let keyboardInput = $derived(state.keyboardInput)
+  let inputtedNote = $derived(state.inputtedNote)
 
   function handleWindowKeyDown(e: KeyboardEvent) {
     const target = e.target
@@ -51,13 +58,15 @@
       currentTarget: EventTarget & HTMLInputElement
     }
   ) {
+    e.preventDefault()
     if (e instanceof InputEvent && e.inputType === 'insertText') {
       handleKeyDown(new KeyboardEvent('down', { key: e.data ?? '' }))
     } else if (e instanceof InputEvent && e.inputType === 'deleteContentBackward') {
       handleKeyDown(new KeyboardEvent('down', { code: `Backspace` }))
     }
   }
-  function handleChange() {
+  function handleChange(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+    e.preventDefault()
     // handleKeyDown(new KeyboardEvent('down', { code: 'Enter' }))
   }
   function handleInputSubmit() {
@@ -67,7 +76,7 @@
 
 <svelte:window on:keydown={handleWindowKeyDown} on:keyup={handleKeyUp} />
 
-<div class={`${$$props.class || ''} min-h-[32px]`}>
+<div {...rest} class={`${rest.class || ''} min-h-[32px]`}>
   {#if $isTabletOrPhone && $currentGame?.type === 'chords-write' && $guessState === 'waiting'}
     <div
       class="relative flex w-48 items-center rounded border border-gray-400 bg-gray-100 focus-within:ring-2 focus-within:ring-blue-500"
@@ -77,10 +86,10 @@
         class="w-full rounded bg-transparent px-1 py-[3px] outline-none"
         value={$keyboardInput}
         autocomplete="off"
-        on:input|preventDefault={handleInput}
-        on:change|preventDefault={handleChange}
+        oninput={handleInput}
+        onchange={handleChange}
       />
-      <button class="rounded-r px-1 py-[3px] hover:bg-gray-300" on:click={handleInputSubmit}>
+      <button class="rounded-r px-1 py-[3px] hover:bg-gray-300" onclick={handleInputSubmit}>
         <Icon icon={arrowRight} width={24} />
       </button>
     </div>

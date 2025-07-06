@@ -23,19 +23,23 @@
   import { gameActions, selectedChords, type SelectedChord } from '$stores/game'
   import { inputsActions, midiRangeNotes } from '$stores/inputs'
   import { persist } from '$stores/persist'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  $: chords = $selectedChords
-  $: leftList = chords.filter((_, i) => i < chords.length / 2)
-  $: rightList = chords.filter((_, i) => i >= chords.length / 2)
-  $: allSelected = chords.every(c => c.selected)
+  interface Props extends HTMLAttributes<HTMLElement> {}
 
-  let selectedKey = 'C'
-  let selectedScale = 'Major'
-  let scale = createScale(selectedKey, selectedScale)
-  let rootNote = ''
-  let scaleNote: ScaleNote | undefined
-  let leftChords: MidiNote[][] = []
-  let rightChords: MidiNote[][] = []
+  let props: Props = $props()
+  let chords = $derived($selectedChords)
+  let leftList = $derived(chords.filter((_, i) => i < chords.length / 2))
+  let rightList = $derived(chords.filter((_, i) => i >= chords.length / 2))
+  let allSelected = $derived(chords.every(c => c.selected))
+
+  let selectedKey = $state('C')
+  let selectedScale = $state('Major')
+  let scale = $state(createScale(selectedKey, selectedScale))
+  let rootNote = $state('')
+  let scaleNote: ScaleNote | undefined = $state(undefined)
+  let leftChords: MidiNote[][] = $state([])
+  let rightChords: MidiNote[][] = $state([])
 
   const scales = scalesFromJSON()
   const scaleOptions = scales.map(scl => ({
@@ -113,40 +117,40 @@
   }
 </script>
 
-<div class={`${$$props.class || ''}`}>
+<div {...props} class={`${props.class || ''}`}>
   <fieldset
     class="relative my-4 flex flex-col rounded border-2 px-4 pb-4 pt-2 text-sm"
     class:collapsed={$hidden}
   >
     <legend class="flex w-fit text-base">
-      <button class="z-0 rounded px-1 hover:bg-gray-100" on:click={toggleVisibility}>Chords</button>
+      <button class="z-0 rounded px-1 hover:bg-gray-100" onclick={toggleVisibility}>Chords</button>
     </legend>
     <div class="absolute right-[0.5rem] top-[-0.25rem] flex">
       <button
         class="flex items-center justify-center rounded px-0.5 hover:bg-gray-200"
         class:hidden={$hidden}
-        on:click={handleSelectBasicChords}
+        onclick={handleSelectBasicChords}
       >
         <Icon icon={alphaB} width={20} />
       </button>
       <button
         class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
         class:hidden={$hidden}
-        on:click={handleSelect7Chords}
+        onclick={handleSelect7Chords}
       >
         <Icon icon={num7} width={16} />
       </button>
       <button
         class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
         class:hidden={$hidden}
-        on:click={handleSelectAll}
+        onclick={handleSelectAll}
       >
         <Icon icon={allSelected ? selectOff : select} width={16} />
       </button>
       <button
         class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
         class:hidden={$hidden}
-        on:click={reset}
+        onclick={reset}
       >
         <Icon icon={restore} width={16} />
       </button>
@@ -158,7 +162,7 @@
           class="input w-12 rounded bg-gray-100 px-1"
           id="chords-key"
           value={selectedKey}
-          on:input={handleKeyChange}
+          oninput={handleKeyChange}
         />
         <label class="font-bold" for="chords-scale">Scale</label>
         <SearchDropdown
@@ -174,7 +178,7 @@
           class="input w-12 rounded bg-gray-100 px-1"
           id="chords-note"
           value={rootNote}
-          on:input={handleNoteChange}
+          oninput={handleNoteChange}
         />
       </div>
       <ul class="chord-list w-full">
@@ -183,7 +187,7 @@
             <button
               class="select-btn flex w-full items-center justify-center"
               class:hidden={$hidden}
-              on:click={() => handleSelectChord(chord)}
+              onclick={() => handleSelectChord(chord)}
             >
               <span
                 class="rounded px-1 py-1"
@@ -207,7 +211,7 @@
             {/if}
           </li>
           <li class="text-xs">
-            <button class="text-start" on:click={() => handlePlayChord(chord)}>{chord.name}</button>
+            <button class="text-start" onclick={() => handlePlayChord(chord)}>{chord.name}</button>
           </li>
         {/each}
       </ul>
@@ -217,7 +221,7 @@
             <button
               class="select-btn flex w-full items-center justify-center"
               class:hidden={$hidden}
-              on:click={() => handleSelectChord(chord)}
+              onclick={() => handleSelectChord(chord)}
             >
               <span
                 class="rounded px-1 py-1"
@@ -241,7 +245,7 @@
             {/if}
           </li>
           <li class="text-xs">
-            <button class="text-start" on:click={() => handlePlayChord(chord)}>{chord.name}</button>
+            <button class="text-start" onclick={() => handlePlayChord(chord)}>{chord.name}</button>
           </li>
         {/each}
       </ul>

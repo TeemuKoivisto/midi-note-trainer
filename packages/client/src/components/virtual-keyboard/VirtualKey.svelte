@@ -4,19 +4,27 @@
   import { midiRange } from '$stores/inputs'
   import { capturingHotkeys, rows } from '$stores/keyboard'
 
-  export let rowIndex: number, keyIndex: number
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  $: value = $rows[rowIndex].keys[keyIndex]
-  $: octave = value.note
-    ? getOctave({ midi: value.note.semitones + $midiRange[0], flats: 0, sharps: 0 })
-    : 0
-  $: captured =
+  interface Props extends HTMLAttributes<HTMLLIElement> {
+    rowIndex: number
+    keyIndex: number
+  }
+
+  let { rowIndex, keyIndex, ...rest }: Props = $props()
+
+  let value = $derived($rows[rowIndex].keys[keyIndex])
+  let octave = $derived(
+    value.note ? getOctave({ midi: value.note.semitones + $midiRange[0], flats: 0, sharps: 0 }) : 0
+  )
+  let captured = $derived(
     $capturingHotkeys &&
-    $capturingHotkeys.rowIndex === rowIndex &&
-    $capturingHotkeys.nextIndex === keyIndex
+      $capturingHotkeys.rowIndex === rowIndex &&
+      $capturingHotkeys.nextIndex === keyIndex
+  )
+  let size = $state(1)
 
-  let size: number
-  $: {
+  $effect(() => {
     if (value.key === '{bksp}') {
       size = 2
     } else if (value.key === '{tab}') {
@@ -32,7 +40,7 @@
     } else {
       size = 1
     }
-  }
+  })
 
   function sizeClass(size?: number) {
     if (size && Number.isInteger(size)) {
@@ -65,7 +73,8 @@
   <li class="m-[0.175rem] mr-0"></li>
 {/if}
 <li
-  class={`${$$props.class || ''} m-[0.175rem] ${sizeClass(size)} min-w-[32px]`}
+  {...rest}
+  class={`${rest.class || ''} m-[0.175rem] ${sizeClass(size)} min-w-[32px]`}
   class:enter={value.key === '{enter}'}
   class:captured
 >
@@ -73,7 +82,6 @@
     class="relative flex h-full w-full justify-center rounded bg-[#ececf1] shadow"
     class:items-center={!value.note}
     class:items-end={value.note}
-    on:click
   >
     {#if value.key === '{enter}'}
       <div

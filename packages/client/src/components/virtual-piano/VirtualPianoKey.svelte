@@ -1,35 +1,41 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
 
-  export let key: { idx: number; isWhite: boolean; whiteKeyCount: number },
-    row: number,
-    keyCount: number,
-    isFirst: boolean,
-    isLast: boolean,
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLLIElement> {
+    key: { idx: number; isWhite: boolean; whiteKeyCount: number }
+    row: number
+    keyCount: number
+    isFirst: boolean
+    isLast: boolean
     pianoWidth: number
+  }
+
+  let { key, row, keyCount, isFirst, isLast, pianoWidth, ...rest }: Props = $props()
 
   type Mouse = MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
   type Touch = TouchEvent & { currentTarget: EventTarget & HTMLButtonElement }
 
-  let keyHeld = false
-  let timeout: ReturnType<typeof setTimeout> | undefined
+  let keyHeld = $state(false)
+  let timeout = $state<ReturnType<typeof setTimeout> | undefined>()
 
   const dispatch = createEventDispatcher<{
     pressed: { idx: number; row: number }
   }>()
 
-  $: isWhite = key.isWhite
-  $: whiteCount = key.whiteKeyCount - 1
-  $: whiteWidth = (pianoWidth - 12) / 7
-  $: blackWidth = ((pianoWidth - 12) / 7) * 0.75
-  $: left = isWhite
-    ? 6 + whiteCount * whiteWidth
-    : 6 + (whiteCount + 1) * whiteWidth - blackWidth / 2
-  $: height = isWhite
-    ? `calc(100% - ${keyHeld ? '10px' : '6px'})`
-    : `calc(66% - ${keyHeld ? '8px' : '4px'})`
-  $: width = isWhite ? whiteWidth : blackWidth
-  $: zIndex = isWhite ? 0 : 1
+  let isWhite = $derived(key.isWhite)
+  let whiteCount = $derived(key.whiteKeyCount - 1)
+  let whiteWidth = $derived((pianoWidth - 12) / 7)
+  let blackWidth = $derived(((pianoWidth - 12) / 7) * 0.75)
+  let left = $derived(
+    isWhite ? 6 + whiteCount * whiteWidth : 6 + (whiteCount + 1) * whiteWidth - blackWidth / 2
+  )
+  let height = $derived(
+    isWhite ? `calc(100% - ${keyHeld ? '10px' : '6px'})` : `calc(66% - ${keyHeld ? '8px' : '4px'})`
+  )
+  let width = $derived(isWhite ? whiteWidth : blackWidth)
+  let zIndex = $derived(isWhite ? 0 : 1)
 
   function handlePointerDown(_e: Mouse | Touch) {
     if (!keyHeld && !timeout) {
@@ -46,7 +52,8 @@
 </script>
 
 <li
-  class={`${$$props.class || ''} absolute`}
+  {...rest}
+  class={`${rest.class || ''} absolute`}
   style="left: {left}px; height: {height}; width: {width}px; z-index: {zIndex};"
 >
   <button
@@ -56,13 +63,13 @@
     class:white-key={isWhite}
     class:black-key={!isWhite}
     class:is-held={keyHeld}
-    on:mousedown={handlePointerDown}
-    on:mouseup={handlePointerUp}
-    on:mouseleave={handlePointerUp}
-    on:touchstart|passive={handlePointerDown}
-    on:touchend|passive={handlePointerUp}
-  >
-  </button>
+    onmousedown={handlePointerDown}
+    onmouseup={handlePointerUp}
+    onmouseleave={handlePointerUp}
+    ontouchstart={handlePointerDown}
+    ontouchend={handlePointerUp}
+    aria-label="Piano key"
+  ></button>
 </li>
 
 <style lang="postcss">

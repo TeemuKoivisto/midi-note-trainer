@@ -1,11 +1,18 @@
 <script lang="ts">
   import type { Interval, Scale } from '@/chords-and-scales'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  export let scale: Scale, intervals: Interval[]
+  interface Props extends HTMLAttributes<HTMLDivElement> {
+    scale: Scale
+    intervals: Interval[]
+    onClick: () => void
+  }
+
+  let { scale, intervals, onClick, ...rest }: Props = $props()
 </script>
 
-<div class={`${$$props.class || ''} `}>
-  <button class="flex w-full flex-wrap justify-between" on:click>
+<div {...rest} class={`${rest.class || ''} `}>
+  <button class="flex w-full flex-wrap justify-between" onclick={onClick}>
     <div class="intervals text-left">
       {#each scale.scaleNotes || [] as scaleNote}
         <span>{scaleNote.note}</span>

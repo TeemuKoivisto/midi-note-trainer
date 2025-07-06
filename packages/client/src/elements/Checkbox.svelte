@@ -1,12 +1,9 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from 'svelte/elements'
 
-  interface $$Props extends HTMLInputAttributes {}
-  interface $$Events {
-    change: Event & { currentTarget: EventTarget & HTMLInputElement }
-    input: Event & { currentTarget: EventTarget & HTMLInputElement }
-  }
+  type Props = Exclude<HTMLInputAttributes, 'keydown'>
 
+  let { ...rest }: Props = $props()
   let inputEl: HTMLInputElement
 
   function handleKeyDown(ev: KeyboardEvent) {
@@ -16,14 +13,7 @@
   }
 </script>
 
-<input
-  bind:this={inputEl}
-  type="checkbox"
-  on:change
-  on:input
-  on:keydown={handleKeyDown}
-  {...$$props}
-/>
+<input {...rest} bind:this={inputEl} type="checkbox" onkeydown={handleKeyDown} />
 
 <style lang="postcss">
   @reference "#app.pcss";

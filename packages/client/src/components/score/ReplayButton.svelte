@@ -6,7 +6,13 @@
   import { inputsActions } from '$stores/inputs'
   import { GuessChords, GuessNotes } from '@/games'
 
-  $: shown = $currentGame instanceof GuessChords || $currentGame instanceof GuessNotes
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLDivElement> {}
+
+  let { ...rest }: Props = $props()
+
+  let shown = $derived($currentGame instanceof GuessChords || $currentGame instanceof GuessNotes)
 
   function replay() {
     const game = $currentGame
@@ -28,10 +34,10 @@
   }
 </script>
 
-<div class={`${$$props.class || ''}`} class:hidden={!shown}>
+<div {...rest} class={`${rest.class || ''}`} class:hidden={!shown}>
   <button
     class="flex items-center justify-center rounded px-1 py-1 hover:bg-gray-200"
-    on:click={replay}><Icon icon={volume} width={32} /></button
+    onclick={replay}><Icon icon={volume} width={32} /></button
   >
 </div>
 

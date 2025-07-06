@@ -11,10 +11,15 @@
   import { reset, persist } from '$stores/persist'
   import { keyboardActions } from '$stores/keyboard'
 
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLFieldSetElement> {}
+
+  let props: Props = $props()
   const hidden = persist(writable(false), { key: 'inputs-hidden' })
-  let fixedVelocity = $inputs.fixedVelocity ?? ''
-  let fadeMs = $inputs.keyFadeTimeout
-  let setKeys = false
+  let fixedVelocity = $state($inputs.fixedVelocity ?? '')
+  let fadeMs = $state($inputs.keyFadeTimeout)
+  let setKeys = $state(false)
 
   inputs.subscribe(inp => {
     fixedVelocity = inp.fixedVelocity ?? ''
@@ -82,19 +87,20 @@
 </script>
 
 <fieldset
+  {...props}
   class={`${
-    $$props.class || ''
+    props.class || ''
   } relative my-4 flex min-w-[auto] max-w-full flex-col rounded border-2 px-4 pb-4 pt-2 text-sm`}
   class:collapsed={$hidden}
 >
   <legend class="flex w-fit text-base">
-    <button class="z-0 rounded px-1 hover:bg-gray-100" on:click={toggleVisibility}>I/O</button>
+    <button class="z-0 rounded px-1 hover:bg-gray-100" onclick={toggleVisibility}>I/O</button>
   </legend>
   <div
     class="absolute right-[0.5rem] top-[-0.25rem] flex items-center justify-center"
     class:hidden={$hidden}
   >
-    <button class="rounded px-1 py-1 hover:bg-gray-200" on:click={handleReset}>
+    <button class="rounded px-1 py-1 hover:bg-gray-200" onclick={handleReset}>
       <Icon icon={restore} width={16} />
     </button>
   </div>
@@ -108,8 +114,8 @@
         value={'data' in $midiInput ? $midiInput.data.name : $midiInput.err}
       />
       <div class="my-[auto] mt-1 flex">
-        <button class="btn-sm primary mr-2" on:click={inputsActions.openMidi}>Prompt</button>
-        <button class="btn-sm primary" on:click={inputsActions.disableMidi}>Disable</button>
+        <button class="btn-sm primary mr-2" onclick={inputsActions.openMidi}>Prompt</button>
+        <button class="btn-sm primary" onclick={inputsActions.disableMidi}>Disable</button>
       </div>
     </div>
     <div class="flex flex-col">
@@ -118,7 +124,7 @@
         <Checkbox
           id="sound"
           checked={$inputs.useSound}
-          on:change={e => inputsActions.setInputValue('useSound', e.currentTarget.checked)}
+          onchange={e => inputsActions.setInputValue('useSound', e.currentTarget.checked)}
         />
       </div>
       <div class="my-1 mr-12 flex items-center justify-between">
@@ -126,7 +132,7 @@
         <Checkbox
           id="virtual-piano"
           checked={$useVirtualPiano}
-          on:change={e => inputsActions.setUseVirtualPiano(e.currentTarget.checked)}
+          onchange={e => inputsActions.setUseVirtualPiano(e.currentTarget.checked)}
         />
       </div>
       <div class="mt-1 flex justify-between">
@@ -136,7 +142,7 @@
           id="fixed-velocity"
           placeholder="0-127"
           bind:value={fixedVelocity}
-          on:change={handleSetVelocity}
+          onchange={handleSetVelocity}
         />
       </div>
     </div>
@@ -146,19 +152,19 @@
         <Checkbox
           id="keyboard"
           checked={$inputs.useKeyboard}
-          on:change={e => inputsActions.setInputValue('useKeyboard', e.currentTarget.checked)}
+          onchange={e => inputsActions.setInputValue('useKeyboard', e.currentTarget.checked)}
         />
       </div>
       <div class="my-1 mr-12 flex items-center justify-between">
         <label class="font-bold" for="hotkeys">Hotkeys</label>
-        <Checkbox id="hotkeys" checked={$inputs.useHotkeys} on:change={handleSetUseHotkeys} />
+        <Checkbox id="hotkeys" checked={$inputs.useHotkeys} onchange={handleSetUseHotkeys} />
       </div>
       <div class="my-1 mr-12 flex items-center justify-between">
         <label class="font-bold" for="auto-octave">Auto-octave</label>
         <Checkbox
           id="auto-octave"
           checked={$inputs.useAutoOctave}
-          on:change={e => inputsActions.setInputValue('useAutoOctave', e.currentTarget.checked)}
+          onchange={e => inputsActions.setInputValue('useAutoOctave', e.currentTarget.checked)}
         />
       </div>
     </div>
@@ -168,7 +174,7 @@
         <button
           class="btn-sm primary w-full"
           disabled={!$inputs.useHotkeys}
-          on:click={handleToggleSetHotkeys}>Set hotkeys</button
+          onclick={handleToggleSetHotkeys}>Set hotkeys</button
         >
       </div>
       <div class="my-1 flex justify-between">
@@ -177,7 +183,7 @@
           class="h-[20px] w-16"
           id="fade-timeout"
           value={fadeMs}
-          on:input={handleSetFadeTimeout}
+          oninput={handleSetFadeTimeout}
         />
       </div>
     </div>

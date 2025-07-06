@@ -1,11 +1,22 @@
 <script lang="ts">
   import type { ScaleTrichord } from '@/chords-and-scales'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  export let trichords: ScaleTrichord[], chords: string[]
+  interface Props extends HTMLAttributes<HTMLDivElement> {
+    trichords: ScaleTrichord[]
+    chords: string[]
+    onClick: () => void
+  }
+
+  let { trichords, chords, onClick, ...rest }: Props = $props()
 </script>
 
-<div class={`${$$props.class || ''} `} title={trichords.map(t => t.roman + t.suffix).join('-')}>
-  <button class="trichords flex flex-wrap" on:click>
+<div
+  {...rest}
+  class={`${rest.class || ''} `}
+  title={trichords.map(t => t.roman + t.suffix).join('-')}
+>
+  <button class="trichords flex flex-wrap" onclick={onClick}>
     {#if chords.length > 0}
       {#each chords as chord}
         <span class="inline-flex items-baseline">

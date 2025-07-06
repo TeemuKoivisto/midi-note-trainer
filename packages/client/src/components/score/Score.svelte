@@ -12,6 +12,11 @@
 
   import type { MidiNote, Scale } from '@/chords-and-scales'
   import type { GameInstance } from '@/games'
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLElement> {}
+
+  let { ...rest }: Props = $props()
 
   interface Data {
     game: GameInstance | undefined
@@ -23,11 +28,11 @@
 
   const { Accidental, Formatter, Renderer, Stave, StaveNote } = Vex.Flow
 
-  let scoreWidth = 200
-  let outputEl: HTMLDivElement
-  let renderer: Vex.Renderer
-  let ctx: Vex.RenderContext
-  let tickContext: Vex.TickContext
+  let scoreWidth = $state(200)
+  let outputEl = $state<HTMLDivElement>()
+  let renderer = $state<Vex.Renderer>()
+  let ctx = $state<Vex.RenderContext>()
+  let tickContext = $state<Vex.TickContext>()
 
   const data = derived(
     [currentGame, guessState, scaleData, played, target],
@@ -71,6 +76,7 @@
   }
 
   function init() {
+    if (!outputEl) return
     renderer = new Renderer(outputEl, Renderer.Backends.SVG)
     renderer.resize(732, 496)
     ctx = renderer.getContext()
@@ -207,6 +213,7 @@
   function updateNotes({ game, guessed, scale, played, target }: Data) {
     // console.log('hello target', target)
     // console.log('hello played', played)
+    if (!ctx) return
     const key = scale.majorSignature.replaceAll('♭', 'b').replaceAll('♯', '#')
     scoreWidth = 200 + Math.max(scale.flats, scale.sharps) * 10
     ctx.clear()
@@ -250,7 +257,7 @@
   }
 </script>
 
-<section class={`${$$props.class || ''} relative overflow-hidden`}>
+<section {...rest} class={`${rest.class || ''} relative overflow-hidden`}>
   <div id="output" class="grid content-center justify-start" bind:this={outputEl}></div>
   <div class="buttons absolute left-4">
     <div class="flex flex-col">

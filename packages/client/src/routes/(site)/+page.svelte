@@ -33,9 +33,9 @@
   import { KeyboardInputState } from '$stores/keyboard/KeyboardInputState'
   import type { ParsedChord, ParsedKey, ParsedNote } from '$stores/keyboard/parseInput'
 
-  let timeout: ReturnType<typeof setTimeout> | undefined
-  let chordTimeout: ReturnType<typeof setTimeout> | undefined
-  const inputState = new KeyboardInputState(handleKeyInput)
+  let timeout: ReturnType<typeof setTimeout> | undefined = $state()
+  let chordTimeout: ReturnType<typeof setTimeout> | undefined = $state()
+  const inputState = $state(new KeyboardInputState(handleKeyInput))
 
   onMount(() => {
     if ($midiGranted) {
@@ -158,14 +158,14 @@
 >
   MIDI Note Trainer
   <div class="flex items-center justify-center">
-    <IconButton class="p-2" icon={restore} size={24} on:click={handleReset} />
+    <IconButton class="p-2" icon={restore} size={24} onclick={handleReset} />
   </div>
 </h1>
 
 <div class="mb-8 px-4 md:mb-10">
   <button
     class="btn-pill border-2 border-gray-300 hover:bg-gray-200"
-    on:click={() => modalActions.open('introduction', undefined)}>Introduction</button
+    onclick={() => modalActions.open('introduction', undefined)}>Introduction</button
   >
 </div>
 

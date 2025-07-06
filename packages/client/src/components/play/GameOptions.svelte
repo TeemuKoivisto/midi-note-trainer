@@ -2,9 +2,13 @@
   import Checkbox from '$elements/Checkbox.svelte'
 
   import { gameActions, gameOptions } from '$stores/game'
+  import type { HTMLAttributes } from 'svelte/elements'
 
-  let count = ($gameOptions.count || 0).toString()
-  let waitSeconds = ($gameOptions.waitSeconds || 0).toString()
+  interface Props extends HTMLAttributes<HTMLElement> {}
+
+  let props: Props = $props()
+  let count = $state(($gameOptions.count || 0).toString())
+  let waitSeconds = $state(($gameOptions.waitSeconds || 0).toString())
 
   gameOptions.subscribe(v => {
     count = v.count.toString()
@@ -39,7 +43,7 @@
   }
 </script>
 
-<ul class={`${$$props.class || ''}`}>
+<ul {...props} class={`${props.class || ''}`}>
   <li class="flex items-center justify-between">
     <label class="font-bold" for="guess-count">Count</label>
     <input
@@ -47,7 +51,7 @@
       id="guess-count"
       type="number"
       bind:value={count}
-      on:change={handleCountChanged}
+      onchange={handleCountChanged}
     />
   </li>
   <li class="mr-6 flex items-center items-center justify-between">
@@ -55,7 +59,7 @@
     <Checkbox
       id="duplicates"
       checked={$gameOptions.duplicates}
-      on:input={e => gameActions.setOptionValue('duplicates', e.currentTarget.checked)}
+      oninput={e => gameActions.setOptionValue('duplicates', e.currentTarget.checked)}
     />
   </li>
   <li class="mr-6 flex items-center items-center justify-between">
@@ -63,7 +67,7 @@
     <Checkbox
       id="autoplay"
       checked={$gameOptions.autoplay}
-      on:input={e => gameActions.setOptionValue('autoplay', e.currentTarget.checked)}
+      oninput={e => gameActions.setOptionValue('autoplay', e.currentTarget.checked)}
     />
   </li>
   <li class="flex items-center justify-between">
@@ -74,7 +78,7 @@
       type="number"
       step="0.5"
       bind:value={waitSeconds}
-      on:change={handleWaitChanged}
+      onchange={handleWaitChanged}
     />
   </li>
 </ul>

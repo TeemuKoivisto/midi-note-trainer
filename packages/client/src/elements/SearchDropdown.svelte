@@ -3,6 +3,16 @@
   import { slide, fade } from 'svelte/transition'
 
   import type { IconifyIcon } from '@iconify/svelte/dist/OfflineIcon.svelte'
+  import type { HTMLInputAttributes } from 'svelte/elements'
+  import type { Snippet } from 'svelte'
+
+  type Props = Exclude<HTMLInputAttributes, 'onfocus' | 'oninput' | 'onkeydown'> & {
+    header?: Snippet<[{ class: string }]>
+    options: readonly Option[]
+    containerClass?: string
+    selected?: string
+    onSelect: (key: Key) => boolean
+  }
 
   type Key = string | number
   interface Option {
@@ -11,24 +21,13 @@
     icon?: IconifyIcon
   }
 
-  export let options: readonly Option[],
-    containerClass: string | undefined = undefined,
-    selected: string | undefined = undefined,
-    onSelect: (key: Key) => boolean
-
   const DROPDOWN_DURATION = 400
 
-  let containerEl: HTMLElement,
-    open = false,
-    input = selected,
-    filtered = options.map(_ => false)
-
-  $: {
-    input = selected
-  }
-  $: {
-    filtered = options.map(_ => false)
-  }
+  let { header, containerClass, options, selected, onSelect, ...rest }: Props = $props()
+  let containerEl: HTMLElement
+  let open = $state(false)
+  let input = $derived(selected)
+  let filtered = $state(options.map(_ => false))
 
   function handleBlur(e: FocusEvent) {
     open = containerEl.contains(e.relatedTarget as Node | null)
@@ -75,36 +74,39 @@
 
 <div class={`search-dropdown width relative ${containerClass || ''}`} bind:this={containerEl}>
   <input
-    class={`${$$restProps.class || ''} open-btn rounded text-justify text-sm`}
+    {...rest}
+    class={`${rest.class || ''} open-btn rounded text-justify text-sm`}
     class:open
-    {...$$restProps}
     bind:value={input}
-    on:focus={() => (open = true)}
-    on:input={handleInput}
-    on:keydown={handleKeyDown}
+    onfocus={() => (open = true)}
+    oninput={handleInput}
+    onkeydown={handleKeyDown}
   />
   {#if open}
     <button
       transition:fade={{ duration: DROPDOWN_DURATION }}
       class="fixed inset-0 z-20 h-full w-full cursor-default outline-none"
-      on:click={handleCancel}
+      onclick={handleCancel}
+      aria-label="Overlay"
       tabindex="-1"
-    />
+    ></button>
     <ul
       transition:slide={{ duration: DROPDOWN_DURATION }}
       class="items-list width absolute left-0 z-30 max-h-64 overflow-y-scroll rounded-b bg-white py-1.5 py-2 text-sm shadow-xl"
     >
-      <li>
-        <slot name="header" />
-      </li>
+      {#if header}
+        <li>
+          {@render header({ class: '' })}
+        </li>
+      {/if}
       {#each options as { key, value, icon }, idx}
         {#if !filtered[idx]}
           <li>
             <button
               class="h-full w-full px-2 py-1 text-justify hover:bg-[#eee]"
               class:selected={key === selected}
-              on:click={() => handleSelect(key)}
-              on:blur={handleBlur}
+              onclick={() => handleSelect(key)}
+              onblur={handleBlur}
             >
               {#if icon}
                 <Icon class="mr-2" {icon} width={16} />

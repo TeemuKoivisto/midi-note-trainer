@@ -1,22 +1,19 @@
 <script lang="ts">
-  import type { HTMLButtonAttributes } from 'svelte/elements'
   import Icon, { type IconifyIcon } from '@iconify/svelte/dist/OfflineIcon.svelte'
 
-  interface $$Props extends HTMLButtonAttributes {
+  import type { HTMLAttributes } from 'svelte/elements'
+
+  interface Props extends HTMLAttributes<HTMLButtonElement> {
     icon: IconifyIcon
     size: number
   }
-  interface $$Events {
-    click: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
-  }
 
-  export let icon: IconifyIcon, size: number
+  let { icon, size, ...rest }: Props = $props()
 </script>
 
 <button
-  {...$$restProps}
-  class={`${$$props.class || ''} flex items-center justify-center rounded p-1 hover:bg-gray-200`}
-  on:click
+  {...rest}
+  class={`${rest.class || ''} flex items-center justify-center rounded p-1 hover:bg-gray-200`}
 >
   <Icon {icon} width={size} />
 </button>
