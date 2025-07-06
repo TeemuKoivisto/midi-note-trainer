@@ -74,7 +74,7 @@
 {/if}
 <li
   {...rest}
-  class={`${rest.class || ''} m-[0.175rem] ${sizeClass(size)} min-w-[32px]`}
+  class={`${rest.class || ''} m-[0.175rem] ${sizeClass(size)} h-auto w-auto min-w-[32px]`}
   class:enter={value.key === '{enter}'}
   class:captured
 >
